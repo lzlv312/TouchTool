@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/task">
+
+    <fragment
+        android:id="@+id/task"
+        android:name="top.bogey.touch_tool.ui.task.TaskView"
+        android:label="@string/task"
+        tools:layout="@layout/view_task">
+        <action
+            android:id="@+id/action_task_to_blueprint"
+            app:destination="@id/blueprint" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/shortcut"
+        android:name="top.bogey.touch_tool.ui.shortcut.ShortcutView"
+        android:label="@string/shortcut"
+        tools:layout="@layout/view_shortcut" />
+
+    <fragment
+        android:id="@+id/setting"
+        android:name="top.bogey.touch_tool.ui.setting.SettingView"
+        android:label="@string/setting"
+        tools:layout="@layout/view_setting" />
+
+    <fragment
+        android:id="@+id/blueprint"
+        android:name="top.bogey.touch_tool.ui.blueprint.BlueprintView"
+        tools:layout="@layout/view_blueprint">
+
+        <argument
+            android:name="taskId"
+            app:argType="string" />
+    </fragment>
+</navigation>

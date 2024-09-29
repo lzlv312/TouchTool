@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="?attr/materialCardViewFilledStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
+    android:checkable="true"
+    app:checkedIconGravity="BOTTOM_END"
+    app:checkedIconMargin="8dp"
+    app:checkedIconSize="24dp"
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/taskName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                tools:ignore="NestedWeights" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/helpButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:icon="@drawable/icon_info" />
+
+        </LinearLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/taskDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/typeBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:visibility="gone">
+
+            <Spinner
+                android:id="@+id/typeSpinner"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_spinner"
+                android:dropDownWidth="match_parent"
+                android:gravity="center_horizontal"
+                android:popupBackground="@drawable/shape_spinner_background"
+                android:spinnerMode="dropdown" />
+
+            <Spinner
+                android:id="@+id/subTypeSpinner"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_spinner_right"
+                android:dropDownWidth="match_parent"
+                android:gravity="center_horizontal"
+                android:popupBackground="@drawable/shape_spinner_background"
+                android:spinnerMode="dropdown"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/varBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:visibility="gone">
+
+            <Spinner
+                android:id="@+id/keySpinner"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_spinner"
+                android:dropDownWidth="match_parent"
+                android:gravity="center_horizontal"
+                android:popupBackground="@drawable/shape_spinner_background"
+                android:spinnerMode="dropdown" />
+
+            <Spinner
+                android:id="@+id/valueSpinner"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_spinner_right"
+                android:dropDownWidth="match_parent"
+                android:gravity="center_horizontal"
+                android:popupBackground="@drawable/shape_spinner_background"
+                android:spinnerMode="dropdown"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/editButton"
+                    style="@style/Theme.TouchTool.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:visibility="gone"
+                    app:icon="@drawable/icon_edit" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/copyButton"
+                    style="@style/Theme.TouchTool.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:visibility="gone"
+                    app:icon="@drawable/icon_copy" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/exchangeButton"
+                    style="@style/Theme.TouchTool.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:visibility="gone"
+                    app:icon="@drawable/icon_refresh" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/getVarValue"
+                    style="@style/Theme.TouchTool.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:visibility="gone"
+                    app:icon="@drawable/icon_get_value" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/setVarValue"
+                    style="@style/Theme.TouchTool.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:visibility="gone"
+                    app:icon="@drawable/icon_set_value" />
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/deleteButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:backgroundTint="@color/fill_button_background_error_check"
+                android:checkable="true"
+                android:visibility="gone"
+                app:icon="@drawable/icon_delete"
+                app:iconTint="@color/button_container_check" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/timeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:maxLines="1"
+        android:textSize="11sp" />
+
+</com.google.android.material.card.MaterialCardView>

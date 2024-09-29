@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="24dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/taskDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:maxLines="2"
+        android:textSize="11sp"/>
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/enableSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="-12dp"
+        android:scaleX="0.5"
+        android:scaleY="0.5" />
+
+</LinearLayout>

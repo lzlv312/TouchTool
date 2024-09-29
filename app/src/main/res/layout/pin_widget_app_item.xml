@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="?attr/colorSurface"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/exclude"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:alpha="0.75"
+        android:background="@color/HalfAlpha"
+        android:visibility="gone"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small"
+        app:srcCompat="@drawable/icon_close"
+        app:tint="?attr/colorError" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/numberBox"
+        style="?attr/materialCardViewFilledStyle"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_gravity="top|end"
+        app:cardBackgroundColor="?attr/colorTertiary">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/numberText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="?attr/colorOnTertiary"
+            android:textSize="9sp"
+            tools:ignore="SmallSp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+</FrameLayout>

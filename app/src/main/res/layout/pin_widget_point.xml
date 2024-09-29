@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="24dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:hint="@string/point_x"
+        app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
+        app:shapeAppearanceOverlay="@style/Theme.TouchTool.ShapeAppearance.LeftCorner.Small">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/xEdit"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginEnd="-0.5dp"
+            android:gravity="start|center_vertical"
+            android:inputType="numberSigned"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="0dp"
+            android:textSize="9sp"
+            tools:ignore="SmallSp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:hint="@string/point_y"
+        app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
+        app:shapeAppearanceOverlay="@style/Theme.TouchTool.ShapeAppearance.RightCorner.Small">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/yEdit"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginStart="-0.5dp"
+            android:gravity="end|center_vertical"
+            android:inputType="numberSigned"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="0dp"
+            android:textSize="9sp"
+            tools:ignore="SmallSp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pickButton"
+        style="@style/Theme.TouchTool.IconButton.Filled"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginHorizontal="4dp"
+        app:icon="@drawable/icon_position"
+        app:iconSize="16dp" />
+
+</LinearLayout>
+

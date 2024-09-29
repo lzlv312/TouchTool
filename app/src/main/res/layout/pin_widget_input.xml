@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:maxWidth="192dp"
+        android:minHeight="24dp"
+        app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:breakStrategy="simple"
+            android:inputType="text"
+            android:maxLines="1"
+            android:minHeight="20dp"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="0dp"
+            android:textSize="9sp"
+            tools:ignore="SmallSp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pickButton"
+        style="@style/Theme.TouchTool.IconButton.Filled"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginHorizontal="4dp"
+        android:visibility="gone"
+        app:iconSize="16dp" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:background="@drawable/shape_spinner"
+        android:dropDownWidth="wrap_content"
+        android:popupBackground="@drawable/shape_spinner_background"
+        android:spinnerMode="dropdown"
+        android:visibility="gone" />
+
+</LinearLayout>

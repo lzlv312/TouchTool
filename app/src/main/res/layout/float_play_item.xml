@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="?attr/materialCardViewFilledStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    app:cardBackgroundColor="?attr/colorSurface"
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/icon"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center"
+        android:tint="?attr/colorPrimary" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        app:indicatorInset="0dp"
+        app:indicatorSize="28dp"
+        app:trackCornerRadius="1dp"
+        app:trackThickness="3dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/percent"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="13sp" />
+
+</com.google.android.material.card.MaterialCardView>

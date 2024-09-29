@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="action_group">
+        <item>开始</item>
+        <item>逻辑</item>
+        <item>通用</item>
+    </string-array>
+
+    <string-array name="pin_type">
+        <item>无</item>
+        <item>执行</item>
+        <item>添加</item>
+        <item>对象</item>
+        <item>数组</item>
+        <item>字典</item>
+        <item>文本</item>
+        <item>数值</item>
+        <item>条件</item>
+        <item>值域</item>
+        <item>位置</item>
+        <item>区域</item>
+        <item>手势</item>
+        <item>控件</item>
+        <item>图片</item>
+        <item>颜色</item>
+        <item>应用</item>
+    </string-array>
+
+    <string-array name="pin_sub_type">
+        <item>普通</item>
+        <item>链接</item>
+        <item>快捷方式</item>
+        <item>铃声路径</item>
+        <item>自动针脚</item>
+        <item>多行文本</item>
+        <item>控件路径</item>
+        <item>日志</item>
+        <item>任务</item>
+        <item>单选</item>
+        <item>整数</item>
+        <item>小数</item>
+        <item>长整数</item>
+        <item>日期</item>
+        <item>时间</item>
+        <item>间隔</item>
+        <item>应用</item>
+        <item>应用或界面</item>
+        <item>界面</item>
+        <item>导出界面</item>
+        <item>分享界面</item>
+        <item>应用</item>
+        <item>应用或界面</item>
+        <item>导出界面</item>
+        <item>带图标</item>
+        <item>带文字</item>
+        <item>OCR</item>
+    </string-array>
+
+    <string-array name="charging_state">
+        <item>充电中</item>
+        <item>放电中</item>
+        <item>未充电</item>
+        <item>充满了</item>
+    </string-array>
+
+    <string-array name="network_state">
+        <item>无网络</item>
+        <item>移动网络</item>
+        <item>WIFI</item>
+        <item>VPN</item>
+    </string-array>
+
+    <string-array name="screen_state">
+        <item>息屏</item>
+        <item>锁屏</item>
+        <item>已解锁</item>
+    </string-array>
+
+    <string-array name="super_user_type">
+        <item>不启用</item>
+        <item>Shizuku模式</item>
+        <item>Root模式</item>
+    </string-array>
+
+    <string-array name="manual_play_type">
+        <item>不启用</item>
+        <item>解锁后</item>
+        <item>全场景</item>
+    </string-array>
+
+    <string-array name="capture_type">
+        <item>不启用</item>
+        <item>录制截图</item>
+        <item>无障碍截图</item>
+    </string-array>
+
+    <string-array name="theme_type">
+        <item>跟随系统</item>
+        <item>跟随时间</item>
+        <item>总是关闭</item>
+        <item>总是开启</item>
+    </string-array>
+
+    <string-array name="restart_type">
+        <item>重新执行</item>
+        <item>放弃执行</item>
+        <item>新的执行</item>
+    </string-array>
+
+    <string-array name="share_type">
+        <item>文字</item>
+        <item>文件</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="24dp">
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/shape_spinner"
+        android:dropDownWidth="wrap_content"
+        android:popupBackground="@drawable/shape_spinner_background"
+        android:spinnerMode="dropdown" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editTextBox"
+        android:layout_width="wrap_content"
+        android:minWidth="108dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:clipChildren="false"
+        android:hint="@string/pin_select_hint"
+        android:visibility="gone"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/icon_check_circle"
+        app:endIconMinSize="8dp"
+        app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="0dp"
+            android:textSize="9sp"
+            tools:ignore="SmallSp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

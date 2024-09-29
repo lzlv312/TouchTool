@@ -1,0 +1,418 @@
+<resources>
+    <string name="common_package">top.bogey.common</string>
+    <string name="common_name">通用</string>
+
+    <!-- 提示 -->
+    <string name="dialog_title">提示</string>
+    <string name="enter">确定</string>
+    <string name="cancel">取消</string>
+
+    <!-- 复制 -->
+    <string name="copy_tips">已复制</string>
+    <string name="copy_ttp_url">任务连接</string>
+
+    <!-- 时间 -->
+    <string name="hours">%d小时</string>
+    <string name="minutes">%d分钟</string>
+
+    <!-- 任务标签 -->
+    <string name="tag_empty">未分类</string>
+    <string name="tag_shortcut">快捷方式</string>
+    <string name="tag_add">添加新的标签</string>
+    <string name="tag_remove">确认要删除这个标签吗？</string>
+
+    <!-- 标题 -->
+    <string name="task">任务</string>
+    <string name="shortcut">快捷键</string>
+    <string name="blueprint">蓝图</string>
+    <string name="setting">设置</string>
+
+    <!-- 底部菜单 -->
+    <string name="select_all">全选</string>
+    <string name="remove_task">删除</string>
+    <string name="remove_task_tips">任务删除之后无法撤回，确定要删除选中的任务吗？</string>
+    <string name="export_task">导出</string>
+    <string name="export_task_tips">导出并发送</string>
+    <string name="move_task">标签</string>
+    <string name="copy_task">复制</string>
+
+    <!-- 任务界面相关 -->
+    <string name="task_add">添加任务</string>
+    <string name="task_update">修改任务</string>
+    <string name="task_title">标题</string>
+    <string name="task_des">描述</string>
+    <string name="task_search">搜索任务</string>
+    <string name="task_copy_title">%s_复制</string>
+    <string name="task_tag_add">添加分类</string>
+
+    <string name="task_import">导入任务</string>
+    <string name="task_import_desc">从你选择的文件中选择需要导入的任务配置和通用自定义卡片</string>
+
+    <string name="task_export">导出任务</string>
+    <string name="task_export_desc">选择需要导出的任务配置和通用自定义卡片到你选择的文件夹中</string>
+
+
+    <!-- 蓝图界面相关 -->
+    <string name="task_running_log">任务日志</string>
+    <string name="task_running_log_clear">清除日志</string>
+    <string name="task_capture">任务截图</string>
+    <string name="task_capture_tips">保存任务截图还是分享任务截图？</string>
+
+    <string name="select_action_group_preset">预设</string>
+    <string name="select_action_group_task">任务</string>
+    <string name="select_action_group_task_global">全局任务</string>
+    <string name="select_action_group_task_private">私有任务</string>
+    <string name="select_action_group_variable">变量</string>
+    <string name="select_action_group_card">现有动作</string>
+
+    <string name="select_app_search">搜索应用</string>
+    <string name="select_app_third">第三方应用：%d</string>
+    <string name="select_app_all">所有应用：%d</string>
+    <string name="select_app_activity">选择活动</string>
+    <string name="select_app_search_activity">搜索活动</string>
+
+    <string name="select_icon_search">搜索图标</string>
+    <string name="select_icon_preset">预设</string>
+    <string name="select_icon_app">应用</string>
+    <string name="select_icon_system_app">系统应用</string>
+
+    <!-- 错误 -->
+    <string name="card_check_error_tips">存在%d个问题卡片</string>
+
+    <!-- 任务 -->
+    <string name="action_add_pin">添加针脚</string>
+    <string name="action_add_execute">添加执行</string>
+    <string name="action_add_des">修改备注</string>
+
+    <!-- 动作-Start -->
+    <string name="start_action_enable">启用</string>
+    <string name="start_action_restart">任务重入</string>
+    <string name="start_action_break">中断条件</string>
+
+    <string name="manual_start_action">手动执行</string>
+    <string name="manual_start_action_app">触发界面</string>
+
+    <string name="application_start_action">进应用或界面时执行</string>
+    <string name="application_start_action_break">自动中断</string>
+    <string name="application_start_action_app">触发界面</string>
+
+    <string name="time_start_action">定时执行</string>
+    <string name="time_start_action_date">日期</string>
+    <string name="time_start_action_time">时间</string>
+    <string name="time_start_action_periodic">间隔</string>
+    <string name="time_start_action_tips">未设置间隔时设置00:00为间隔24小时\n有间隔时设置00:00为移除间隔</string>
+
+    <string name="notification_start_action">收到新通知时执行</string>
+    <string name="notification_start_action_match">匹配文本</string>
+    <string name="notification_start_action_notify_app">通知应用</string>
+    <string name="notification_start_action_notify_text">通知文本</string>
+
+    <string name="network_start_action">网络状态变更时执行</string>
+    <string name="network_start_action_state">网络</string>
+
+    <string name="battery_start_action">电池状态变更时执行</string>
+    <string name="battery_start_action_state">状态</string>
+    <string name="battery_start_action_value">电量</string>
+
+    <string name="screen_start_action">屏幕状态变更时执行</string>
+    <string name="screen_start_action_state">状态</string>
+
+    <string name="bluetooth_start_action">蓝牙连接变更时执行</string>
+    <string name="bluetooth_start_action_device">设备名</string>
+    <string name="bluetooth_start_action_state">连接或断开</string>
+
+    <string name="out_call_start_action">外部调用</string>
+    <string name="out_call_start_action_url">链接</string>
+    <string name="out_call_start_action_shortcut">快捷方式</string>
+
+    <!-- 动作-Logic -->
+    <string name="if_action">如果…就…</string>
+    <string name="if_action_desc">满足条件时执行，否则执行未达成节点</string>
+    <string name="if_action_else">未达成</string>
+
+    <string name="wait_if_action">等待条件成立</string>
+    <string name="wait_if_action_desc">在一定时间内满足条件就执行，否则执行未达成节点</string>
+    <string name="wait_if_action_timeout">超时(ms)</string>
+    <string name="wait_if_action_else">未达成</string>
+
+    <string name="switch_action">选择执行</string>
+    <string name="switch_action_desc">根据文本值执行对应针脚</string>
+    <string name="switch_action_default">默认</string>
+
+    <string name="choice_action">手动选择执行</string>
+    <string name="choice_action_desc">弹出选择窗口供使用者手动选择</string>
+    <string name="choice_action_default">默认</string>
+
+    <string name="for_loop_action">循环执行…次</string>
+    <string name="for_loop_action_desc">循环多次执行节点</string>
+    <string name="for_loop_action_help">从开始值执行，当前值每次执行后增加步长量，直到当前值大于结束值</string>
+    <string name="for_loop_action_break">提前退出</string>
+    <string name="for_loop_action_start">开始值</string>
+    <string name="for_loop_action_end">结束值</string>
+    <string name="for_loop_action_step">步长</string>
+    <string name="for_loop_action_current">当前值</string>
+    <string name="for_loop_action_complete">完成</string>
+
+    <string name="while_loop_action">条件循环执行</string>
+    <string name="while_loop_action_desc">满足条件时执行，否则执行完成节点</string>
+    <string name="while_loop_action_break">提前退出</string>
+    <string name="while_loop_action_complete">完成</string>
+
+    <string name="sequence_action">顺序执行</string>
+    <string name="sequence_action_desc">执行针脚从左到右顺序执行</string>
+
+    <string name="random_action">随机执行</string>
+    <string name="random_action_desc">从所有执行针脚中随机一个执行</string>
+    <string name="random_action_times">执行次数</string>
+    <string name="random_action_allow_repeat">允许重复</string>
+    <string name="random_action_complete">完成</string>
+
+    <string name="parallel_action">并行执行</string>
+    <string name="parallel_action_desc">多条执行并行执行，直到超时或者达成指定完成数量</string>
+    <string name="parallel_action_count">完成数</string>
+    <string name="parallel_action_timeout">超时(ms)</string>
+    <string name="parallel_action_result">结果</string>
+    <string name="parallel_action_complete">结束</string>
+
+
+    <!-- 动作-Task -->
+    <string name="execute_task_action">执行任务</string>
+    <string name="execute_task_action_task_id">任务</string>
+    <string name="execute_task_action_with_execute">执行针脚</string>
+
+    <!-- 动作-Normal -->
+    <string name="delay_action">延时</string>
+    <string name="delay_action_desc">等待一段时间后再继续执行</string>
+    <string name="delay_action_help">任务执行到该节点时，等待配置的时间后再继续执行之后的节点</string>
+    <string name="delay_action_time">时长(ms)</string>
+
+    <string name="log_action">输出日志</string>
+    <string name="log_action_desc">输出日志到日志界面</string>
+    <string name="log_action_text">日志</string>
+    <string name="log_action_show">弹出提示</string>
+    <string name="log_action_show_pos">提示位置</string>
+    <string name="log_action_save">保存日志</string>
+
+    <string name="stick_screen_action">贴图到屏幕上</string>
+    <string name="stick_screen_action_pos">位置</string>
+    <string name="stick_screen_action_id">标志</string>
+
+    <string name="stick_close_action">关闭贴图</string>
+    <string name="stick_close_action_id">标志</string>
+
+    <string name="stick_close_all_action">关闭所有贴图</string>
+
+
+    <!-- 动作-System -->
+    <string name="open_app_action">打开应用</string>
+    <string name="open_app_action_desc">打开选定的应用</string>
+    <string name="open_app_action_params">参数</string>
+
+    <string name="open_uri_action">打开链接</string>
+    <string name="open_uri_action_desc">打开URL Scheme链接</string>
+    <string name="open_uri_action_uri">链接</string>
+
+    <string name="play_ringtone_action">播放铃声</string>
+    <string name="play_ringtone_action_desc">播放选定的铃声</string>
+    <string name="play_ringtone_action_ringtone">铃声</string>
+
+    <string name="stop_ringtone_action">停止铃声</string>
+    <string name="stop_ringtone_action_desc">停止播放铃声</string>
+
+    <string name="text_to_speak_action">文本转语音</string>
+    <string name="text_to_speak_action_desc">将文本转为语音并播放</string>
+
+    <string name="share_to_action">分享到</string>
+    <string name="share_to_action_desc">将针脚值分享到选定的应用</string>
+    <string name="share_to_action_as">作为</string>
+
+    <string name="capture_switch_action">屏幕录制开关</string>
+    <string name="capture_switch_action_desc">打开或关闭屏幕录制</string>
+    <string name="capture_switch_action_switch">关/开</string>
+    <string name="capture_switch_action_wait">等待授权</string>
+
+    <string name="check_capture_ready_action">屏幕录制状态</string>
+    <string name="check_capture_ready_action_desc">判断屏幕录制是否开启</string>
+
+    <string name="get_date_action">获取日期</string>
+    <string name="get_date_action_desc">获取当前日期</string>
+    <string name="get_date_action_year">年</string>
+    <string name="get_date_action_month">月</string>
+    <string name="get_date_action_day">日</string>
+    <string name="get_date_action_week">星期</string>
+
+    <string name="get_time_action">获取时间</string>
+    <string name="get_time_action_desc">获取当前时间</string>
+    <string name="get_time_action_hour">时</string>
+    <string name="get_time_action_minute">分</string>
+    <string name="get_time_action_second">秒</string>
+    <string name="get_time_action_millisecond">毫秒</string>
+    <string name="get_time_action_timestamp">时间戳</string>
+
+    <string name="get_current_app_action">获取当前应用</string>
+    <string name="get_current_app_action_desc">获取当前运行的应用与界面</string>
+
+    <string name="check_in_app_action">是否在应用内</string>
+    <string name="check_in_app_action_desc">判断待测应用或界面是否被包含</string>
+    <string name="check_in_app_action_package">待测应用</string>
+
+    <!-- 动作-Number -->
+    <string name="math_expression_action">数学公式</string>
+    <string name="math_expression_action_desc">支持复杂的公式计算</string>
+    <string name="math_expression_action_express">公式</string>
+    <string name="math_expression_action_result">结果</string>
+
+    <!-- 针脚名 -->
+    <string name="pin_execute">执行</string>
+
+    <string name="pin_add_pin">添加针脚</string>
+    <string name="pin_add_execute">添加执行</string>
+
+    <string name="pin_object">对象</string>
+
+    <string name="pin_list">数组</string>
+
+    <string name="pin_map">字典</string>
+
+    <string name="pin_string">文本</string>
+
+    <string name="pin_number_integer">数值</string>
+    <string name="pin_number_float">小数</string>
+
+    <string name="pin_boolean_condition">条件</string>
+    <string name="pin_boolean_result">结果</string>
+
+    <string name="Pin_value_area">数值区域</string>
+    <string name="Pin_value_area_min">最小</string>
+    <string name="Pin_value_area_max">最大</string>
+
+    <string name="Pin_point">位置</string>
+    <string name="Pin_area">区域</string>
+
+    <string name="Pin_select">单选</string>
+    <string name="pin_select_hint">选项(逗号分隔)</string>
+    <string name="Pin_touch">手势</string>
+    <string name="pin_node">控件</string>
+
+    <string name="pin_image">图片</string>
+    <string name="pin_color">颜色</string>
+
+    <string name="pin_app">应用或界面</string>
+
+
+    <!-- 采集器 -->
+    <string name="picker_test_title">测试</string>
+    <string name="picker_area_title">选择区域</string>
+    <string name="picker_color_title">选择颜色</string>
+    <string name="picker_color_offset">偏移：%d</string>
+    <string name="picker_image_title">选择图片</string>
+    <string name="picker_image_offset">相似度：%d</string>
+    <string name="picker_point_title">选择位置</string>
+    <string name="picker_touch_title">采集手势</string>
+
+    <!-- 位置 -->
+    <string name="point_x">X</string>
+    <string name="point_y">Y</string>
+
+    <!-- 区域 -->
+    <string name="area_left">左</string>
+    <string name="area_top">上</string>
+    <string name="area_right">右</string>
+    <string name="area_bottom">下</string>
+
+    <!-- 颜色 -->
+    <string name="color_red">R</string>
+    <string name="color_green">G</string>
+    <string name="color_blue">B</string>
+
+    <!-- 系统按键 -->
+    <string name="device_not_support_lock">当前设备不支持调用锁屏功能</string>
+    <string name="device_not_support_snap">当前设备不支持调用系统截图</string>
+    <string name="device_not_support_shortcut">当前设备不支持创建快捷方式</string>
+
+    <!-- 设置 -->
+    <string name="setting_need_notification_desc">前台服务和录屏服务需要发送通知，请授予应用发送通知的权限</string>
+    <string name="setting_reload_accessibility_service">重启无障碍服务</string>
+    <string name="setting_write_secure_setting">写入安全设置</string>
+    <string name="setting_write_secure_setting_des">授予 写入安全设置 权限能够使应用自动重启无障碍服务</string>
+    <string name="setting_auto_give_capture_permission">自动开启录屏</string>
+    <string name="setting_auto_give_capture_permission_des">授予 自动开启录屏 权限能够在需要使用录屏时自动授权，这样可以更方便快捷的执行各种自动化无人值守任务</string>
+    <string name="setting_copy_code">复制Shell指令</string>
+    <string name="setting_rin_code">执行Shell指令</string>
+
+    <!-- 设置-应用设置 -->
+    <string name="app_setting">应用设置</string>
+
+    <string name="app_setting_enable">功能启用</string>
+    <string name="app_setting_enable_desc">在设置中启用功能后才能使用软件提供的各种能力</string>
+    <string name="app_setting_enable_tips">需要开启无障碍服务才能启用功能。请依次点击“已下载的应用”->“%s”，然后开启服务。</string>
+
+    <string name="app_setting_hide_back">隐藏后台</string>
+    <string name="app_setting_hide_back_desc">在最近任务列表里隐藏本应用</string>
+
+    <string name="app_setting_ignore_battery">忽略电量限制</string>
+    <string name="app_setting_ignore_battery_desc">忽略电量限制来加强应用后台存活能力</string>
+
+    <string name="app_setting_forge_service">前台服务</string>
+    <string name="app_setting_forge_service_desc">在通知栏显示一条前台服务通知加强应用后台存活能力</string>
+    <string name="app_setting_forge_service_channel_title">前台服务通知</string>
+    <string name="app_setting_forge_service_channel_desc">软件服务正在前台运行的通知，禁用可隐藏通知</string>
+
+    <string name="app_setting_auto_start">开机自启</string>
+    <string name="app_setting_auto_start_desc">手机开机后就能立即使用点击助手，无需打开软件</string>
+
+    <string name="app_setting_clean_cache">清理缓存</string>
+    <string name="app_setting_clean_cache_desc">点击清理缓存。当前: %s</string>
+
+
+    <!-- 设置-权限设置 -->
+    <string name="permission_setting">权限设置</string>
+
+    <string name="permission_setting_super_user">超级用户</string>
+    <string name="permission_setting_super_user_desc">启用超级用户可以使用Shell指令</string>
+    <string name="permission_setting_super_user_no_shizuku">未开启/授权Shizuku</string>
+    <string name="permission_setting_super_user_no_root">没有Root权限</string>
+
+    <string name="permission_setting_manual_play">手动执行</string>
+    <string name="permission_setting_manual_play_desc">启用手动执行决定手动执行悬浮窗是否或何时显示，手动执行悬浮窗只在关联应用或界面打开时才显示</string>
+
+    <string name="permission_setting_capture">屏幕截图</string>
+    <string name="permission_setting_capture_desc">启用屏幕截图可以使用图片、颜色、文字识别等相关能力</string>
+    <string name="permission_setting_capture_channel_name">录屏服务快捷关闭通知</string>
+    <string name="permission_setting_capture_channel_tips">能在通知栏快速关闭录屏服务</string>
+    <string name="permission_setting_capture_channel_title">录屏服务 正在运行</string>
+    <string name="permission_setting_capture_channel_desc">点按即可关闭服务和通知</string>
+    <string name="permission_setting_capture_low_sdk">Android版本过低，无法使用</string>
+
+    <string name="permission_setting_ocr">文字识别</string>
+    <string name="permission_setting_ocr_desc">启用文字识别能使用识别图片内文字的能力</string>
+
+    <string name="permission_setting_alarm">精确定时</string>
+    <string name="permission_setting_alarm_desc">启用精确定时能使用定时执行的能力</string>
+
+    <string name="permission_setting_bluetooth">蓝牙监听</string>
+    <string name="permission_setting_bluetooth_desc">启用蓝牙监听能使用蓝牙变动时执行的能力</string>
+
+
+    <!-- 设置-任务设置 -->
+    <string name="task_setting">任务设置</string>
+
+    <string name="task_setting_show_touch">手势轨迹</string>
+    <string name="task_setting_show_touch_desc">执行点击或手势时，在界面上显示轨迹</string>
+
+    <string name="task_setting_start_tips">任务运行提示</string>
+    <string name="task_setting_start_tips_desc">任务开始运行时，在屏幕顶部中间位置显示一个小圆点提示</string>
+
+
+    <!-- 设置-偏好设置 -->
+    <string name="preference_setting">偏好设置</string>
+
+    <string name="preference_setting_theme">深色模式</string>
+
+    <string name="preference_setting_color">动态颜色</string>
+    <string name="preference_setting_color_desc">在支持的Android版本上，开启后应用将使用壁纸颜色作为主色调</string>
+
+    <string name="preference_setting_look_first">默认查看蓝图</string>
+    <string name="preference_setting_look_first_desc">打开蓝图时默认为查看模式，而不是编辑模式</string>
+
+</resources>

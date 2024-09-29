@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="?attr/materialCardViewFilledStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/picker_area_title"
+                android:textSize="11sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/switchButton"
+                style="@style/Theme.TouchTool.IconButton.Filled"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:icon="@drawable/icon_swap" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="4dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:clipChildren="false"
+                android:hint="@string/area_top"
+                app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/topEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:inputType="numberSigned"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="0dp"
+                    android:textSize="9sp"
+                    tools:ignore="SmallSp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center_vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:hint="@string/area_left"
+                    app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/leftEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:gravity="center"
+                        android:inputType="numberSigned"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="0dp"
+                        android:textSize="9sp"
+                        tools:ignore="SmallSp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:hint="@string/area_right"
+                    app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/rightEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:gravity="center"
+                        android:inputType="numberSigned"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="0dp"
+                        android:textSize="9sp"
+                        tools:ignore="SmallSp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:clipChildren="false"
+                android:hint="@string/area_bottom"
+                app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/bottomEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:inputType="numberSigned"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="0dp"
+                    android:textSize="9sp"
+                    tools:ignore="SmallSp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/buttonBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/backButton"
+                    style="@style/Theme.TouchTool.IconButton.Filled"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    app:icon="@drawable/icon_back" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/saveButton"
+                    style="@style/Theme.TouchTool.IconButton.Filled"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginHorizontal="8dp"
+                    app:icon="@drawable/icon_menu_save" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/pickerButton"
+                    style="@style/Theme.TouchTool.IconButton.Filled"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:rotation="45"
+                    app:icon="@drawable/icon_zoom_out" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/testBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/testButton"
+                    style="@style/Theme.TouchTool.IconButton.Filled"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end"
+                    app:icon="@drawable/icon_text" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/ocrResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </FrameLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/back"
+        android:icon="@drawable/icon_menu_history_back"
+        android:title=""
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/forward"
+        android:icon="@drawable/icon_menu_history_forward"
+        android:title=""
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/save"
+        android:icon="@drawable/icon_menu_save"
+        android:title=""
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/taskRunningLog"
+        android:icon="@drawable/icon_log"
+        android:title="@string/task_running_log"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/taskCapture"
+        android:icon="@drawable/icon_capture"
+        android:title="@string/task_capture"
+        app:showAsAction="never" />
+
+</menu>

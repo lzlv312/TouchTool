@@ -1,0 +1,41 @@
+package top.bogey.touch_tool.bean.action;
+
+import com.google.gson.JsonObject;
+
+import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.task.TaskRunnable;
+
+public abstract class ExecuteAction extends Action {
+    protected final transient Pin inPin = new Pin(new PinExecute(), R.string.pin_execute);
+    protected final transient Pin outPin = new Pin(new PinExecute(), R.string.pin_execute, true);
+
+    public ExecuteAction(ActionType type) {
+        super(type);
+        addPins(inPin, outPin);
+    }
+
+    public ExecuteAction(JsonObject jsonObject) {
+        super(jsonObject);
+        reAddPins(inPin, outPin);
+    }
+
+    public Pin getInPin() {
+        return inPin;
+    }
+
+    public Pin getOutPin() {
+        return outPin;
+    }
+
+    @Override
+    public final void calculate(TaskRunnable runnable, Pin pin) {
+
+    }
+
+    @Override
+    public final void resetReturnValue() {
+
+    }
+}

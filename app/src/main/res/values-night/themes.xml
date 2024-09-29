@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="Theme.TouchTool" parent="Theme.TouchTool.Base">
+        <item name="colorPrimaryLight">?attr/colorPrimary</item>
+    </style>
+
+</resources>

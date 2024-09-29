@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="32dp"
+    android:layout_height="24dp">
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/enableSwitch"
+        android:layout_width="52dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:scaleX="0.5"
+        android:scaleY="0.5" />
+
+</FrameLayout>

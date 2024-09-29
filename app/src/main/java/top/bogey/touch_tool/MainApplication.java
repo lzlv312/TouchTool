@@ -1,0 +1,71 @@
+package top.bogey.touch_tool;
+
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+
+import com.tencent.mmkv.MMKV;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.ref.WeakReference;
+
+import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.ui.MainActivity;
+import top.bogey.touch_tool.ui.setting.SettingSaver;
+
+public class MainApplication extends Application implements Thread.UncaughtExceptionHandler {
+    private static MainApplication instance;
+
+    private WeakReference<MainActivity> activity = new WeakReference<>(null);
+    private WeakReference<MainAccessibilityService> service = new WeakReference<>(null);
+
+    public static MainApplication getInstance() {
+        return instance;
+    }
+
+    private Thread.UncaughtExceptionHandler handler;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        instance = this;
+
+        MMKV.initialize(this);
+        SettingSaver.getInstance().addRunTimes();
+        SettingSaver.getInstance().initColor(this);
+
+        handler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(this);
+    }
+
+    public void setActivity(MainActivity activity) {
+        this.activity = new WeakReference<>(activity);
+    }
+
+    public MainActivity getActivity() {
+        return activity.get();
+    }
+
+    public void setService(MainAccessibilityService service) {
+        this.service = new WeakReference<>(service);
+    }
+
+    public MainAccessibilityService getService() {
+        return service.get();
+    }
+
+    @Override
+    public void uncaughtException(@NonNull Thread t, @NonNull Throwable e) {
+        String errorInfo = e.toString();
+        try {
+            StringWriter stringWriter = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(stringWriter);
+            e.printStackTrace(printWriter);
+            errorInfo = stringWriter.toString();
+        } catch (Exception ignored) {
+        }
+        SettingSaver.getInstance().setRunningError(errorInfo);
+        handler.uncaughtException(t, e);
+    }
+}

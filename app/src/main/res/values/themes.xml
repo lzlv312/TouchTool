@@ -1,0 +1,20 @@
+<resources>
+    <attr name="colorPrimaryLight" format="color" />
+    <color name="launcherBackgroundColor">#FFFAFAFA</color>
+
+    <style name="Theme.TouchTool.Base" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.TouchTool.Transparent" parent="Theme.TouchTool.Base">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="Theme.TouchTool" parent="Theme.TouchTool.Base">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimaryLight">?attr/colorPrimaryInverse</item>
+    </style>
+
+</resources>

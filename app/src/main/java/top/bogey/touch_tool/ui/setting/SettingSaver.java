@@ -1,0 +1,265 @@
+package top.bogey.touch_tool.ui.setting;
+
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.Application;
+import android.content.Context;
+import android.graphics.Point;
+
+import androidx.appcompat.app.AppCompatDelegate;
+
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
+import com.tencent.mmkv.MMKV;
+
+import java.util.List;
+
+import top.bogey.touch_tool.MainApplication;
+
+public class SettingSaver {
+    private static SettingSaver instance;
+
+    public static SettingSaver getInstance() {
+        synchronized (SettingSaver.class) {
+            if (instance == null) {
+                instance = new SettingSaver();
+            }
+        }
+        return instance;
+    }
+
+    // 记录
+    private static final String RUN_TIMES = "RUN_TIMES";                                // 运行次数
+    private static final String RUNNING_ERROR = "RUNNING_ERROR";                        // 运行错误
+
+    private static final String ENABLE_TIPS = "ENABLE_TIPS";                            // 功能启用提示
+    private static final String PLAY_VIEW_STATE = "PLAY_VIEW_STATE";                    // 手动执行悬浮窗状态
+    private static final String PLAY_VIEW_POS = "PLAY_VIEW_POS";                        // 手动执行悬浮窗位置
+    private static final String CHOICE_VIEW_POS = "CHOICE_VIEW_POS";                    // 选择执行悬浮窗位置
+    private static final String SELECT_NODE_TYPE = "SELECT_NODE_TYPE";                  // 选择控件方式
+
+    // 设置
+    private static final String ENABLED = "ENABLED";                                    // 功能是否开启
+    private static final String HIDE_BACK = "HIDE_BACK";                                // 隐藏后台
+    private static final String FORGE_SERVICE = "FORGE_SERVICE";                        // 前台服务
+    private static final String AUTO_START = "AUTO_START";                              // 自启动
+
+    private static final String SUPER_USER = "SUPER_USER";                              // 超级用户
+    private static final String MANUAL_PLAY = "MANUAL_PLAY";                            // 手动执行
+    private static final String CAPTURE = "CAPTURE";                                    // 屏幕截图
+    private static final String OCR = "OCR";                                            // 文字识别
+    private static final String ALARM = "ALARM";                                        // 精确定时
+    private static final String BLUETOOTH = "BLUETOOTH";                                // 蓝牙监听
+
+    private static final String SHOW_TOUCH = "SHOW_TOUCH";                              // 手势轨迹
+    private static final String START_TIPS = "START_TIPS";                              // 任务运行提示
+
+    private static final String THEME = "THEME";                                        // 深色模式
+    private static final String COLOR = "COLOR";                                        // 动态颜色
+    private static final String LOOK_FIRST = "LOOK_FIRST";                              // 首次查看
+
+    private static final MMKV mmkv = MMKV.defaultMMKV();
+
+    public void init(Activity activity) {
+        setHideBack(activity, isHideBack());
+        setTheme(getTheme());
+        setForgeService(activity, isForgeService());
+    }
+
+    public void initColor(Application application) {
+        DynamicColors.applyToActivitiesIfAvailable(application, new DynamicColorsOptions.Builder().setPrecondition((act, theme) -> isColor()).build());
+    }
+
+    public int getRunTimes() {
+        return mmkv.decodeInt(RUN_TIMES, 0);
+    }
+
+    public void addRunTimes() {
+        mmkv.encode(RUN_TIMES, getRunTimes() + 1);
+    }
+
+    public String getRunningError() {
+        return mmkv.decodeString(RUNNING_ERROR, "");
+    }
+
+    public void setRunningError(String error) {
+        mmkv.encode(RUNNING_ERROR, error);
+    }
+
+    public boolean isEnableTips() {
+        return mmkv.decodeBool(ENABLE_TIPS, false);
+    }
+
+    public void setEnableTips(boolean enable) {
+        mmkv.encode(ENABLE_TIPS, enable);
+    }
+
+    public boolean isPlayViewState() {
+        return mmkv.decodeBool(PLAY_VIEW_STATE, false);
+    }
+
+    public void setPlayViewState(boolean enable) {
+        mmkv.encode(PLAY_VIEW_STATE, enable);
+    }
+
+    public Point getPlayViewPos() {
+        return mmkv.decodeParcelable(PLAY_VIEW_POS, Point.class, new Point(0, 0));
+    }
+
+    public void setPlayViewPos(Point pos) {
+        mmkv.encode(PLAY_VIEW_POS, pos);
+    }
+
+    public Point getChoiceViewPos() {
+        return mmkv.decodeParcelable(CHOICE_VIEW_POS, Point.class, new Point(0, 0));
+    }
+
+    public void setChoiceViewPos(Point pos) {
+        mmkv.encode(CHOICE_VIEW_POS, pos);
+    }
+
+    public int getSelectNodeType() {
+        return mmkv.decodeInt(SELECT_NODE_TYPE, 0);
+    }
+
+    public void setSelectNodeType(int type) {
+        mmkv.encode(SELECT_NODE_TYPE, type);
+    }
+
+
+    public boolean isEnabled() {
+        return mmkv.decodeBool(ENABLED, false);
+    }
+
+    public void setEnabled(boolean enable) {
+        mmkv.encode(ENABLED, enable);
+    }
+
+    public boolean isHideBack() {
+        return mmkv.decodeBool(HIDE_BACK, false);
+    }
+
+    public void setHideBack(Activity activity, boolean enable) {
+        mmkv.encode(HIDE_BACK, enable);
+        int taskId = activity.getTaskId();
+        ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager != null) {
+            List<ActivityManager.AppTask> taskList = manager.getAppTasks();
+            if (taskList != null) {
+                for (ActivityManager.AppTask task : taskList) {
+                    if (task.getTaskInfo().id == taskId) task.setExcludeFromRecents(enable);
+                }
+            }
+        }
+    }
+
+    public boolean isForgeService() {
+        return mmkv.decodeBool(FORGE_SERVICE, false);
+    }
+
+    public void setForgeService(Context context, boolean enable) {
+        mmkv.encode(FORGE_SERVICE, enable);
+    }
+
+    public boolean isAutoStart() {
+        return mmkv.decodeBool(AUTO_START, false);
+    }
+
+    public void setAutoStart(boolean enable) {
+        mmkv.encode(AUTO_START, enable);
+    }
+
+
+    public int getSuperUser() {
+        return mmkv.decodeInt(SUPER_USER, 0);
+    }
+
+    public void setSuperUser(int type) {
+        mmkv.encode(SUPER_USER, type);
+    }
+
+    public int getManualPlay() {
+        return mmkv.decodeInt(MANUAL_PLAY, 1);
+    }
+
+    public void setManualPlay(int type) {
+        mmkv.encode(MANUAL_PLAY, type);
+    }
+
+    public int getCapture() {
+        return mmkv.decodeInt(CAPTURE, 0);
+    }
+
+    public void setCapture(int type) {
+        mmkv.encode(CAPTURE, type);
+    }
+
+    public boolean isOcr() {
+        return mmkv.decodeBool(OCR, false);
+    }
+
+    public void setOcr(boolean enable) {
+        mmkv.encode(OCR, enable);
+    }
+
+    public boolean isAlarm() {
+        return mmkv.decodeBool(ALARM, false);
+    }
+
+    public void setAlarm(boolean enable) {
+        mmkv.encode(ALARM, enable);
+    }
+
+    public boolean isBluetooth() {
+        return mmkv.decodeBool(BLUETOOTH, false);
+    }
+
+    public void setBluetooth(boolean enable) {
+        mmkv.encode(BLUETOOTH, enable);
+    }
+
+
+    public boolean isShowTouch() {
+        return mmkv.decodeBool(SHOW_TOUCH, false);
+    }
+
+    public void setShowTouch(boolean enable) {
+        mmkv.encode(SHOW_TOUCH, enable);
+    }
+
+    public boolean isStartTips() {
+        return mmkv.decodeBool(START_TIPS, true);
+    }
+
+    public void setStartTips(boolean enable) {
+        mmkv.encode(START_TIPS, enable);
+    }
+
+
+    public int getTheme() {
+        return mmkv.decodeInt(THEME, 0);
+    }
+
+    public void setTheme(int theme) {
+        mmkv.encode(THEME, theme);
+        AppCompatDelegate.setDefaultNightMode(theme - 1);
+    }
+
+    public boolean isColor() {
+        return mmkv.decodeBool(COLOR, true);
+    }
+
+    public void setColor(Activity activity, boolean enable) {
+        mmkv.encode(COLOR, enable);
+        activity.recreate();
+    }
+
+    public boolean isLookFirst() {
+        return mmkv.decodeBool(LOOK_FIRST, false);
+    }
+
+    public void setLookFirst(boolean enable) {
+        mmkv.encode(LOOK_FIRST, enable);
+    }
+
+}
