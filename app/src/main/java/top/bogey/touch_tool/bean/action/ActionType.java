@@ -44,7 +44,7 @@ public enum ActionType {
 
     // 系统动作
     OPEN_APP,
-    OPEN_URI,
+    OPEN_URI_SCHEME,
     SHARE_TO,
 
     PLAY_RINGTONE,
@@ -57,7 +57,6 @@ public enum ActionType {
 
     SWITCH_SCREEN,
     GET_SCREEN_STATUS,
-    CHECK_IN_SCREEN_STATUS,
 
     SWITCH_CAPTURE,
     CHECK_CAPTURE_READY,
@@ -66,27 +65,44 @@ public enum ActionType {
     CHECK_IN_APPLICATION,
 
     GET_BATTERY_STATUS,
-    CHECK_IN_BATTERY_STATUS,
 
     GET_NETWORK_STATUS,
-    CHECK_IN_NETWORK_STATUS,
 
     GET_CURRENT_DATE,
     GET_CURRENT_TIME,
 
-
-
     // 文本获取与检测
-    OCR_SCREEN_TEXT,
-    GET_NODE_BY_TEXT,
-    GET_NODES_BY_TEXT,
-    GET_AREA_BY_OCR_TEXT,
-    
     STRING_FROM_OBJECT,
     STRING_TO_NUMBER,
     STRING_APPEND,
     STRING_REGEX,
-    
+    STRING_SPLIT,
+    STRING_EQUAL,
+    STRING_REPLACE,
+
+
+    OCR_SCREEN_TEXT,
+    GET_NODE_BY_TEXT,
+    GET_NODES_BY_TEXT,
+    GET_AREA_BY_OCR_TEXT,
+
+    // 数值
+    NUMBER_ADD,
+    NUMBER_SUB,
+    NUMBER_MUL,
+    NUMBER_DIV,
+    NUMBER_MOD,
+    NUMBER_EQUAL,
+    NUMBER_LESS,
+    NUMBER_GREATER,
+    NUMBER_RANDOM,
+    NUMBER_TO_INT,
+
+    CHECK_NUMBER_IN_VALUE_AREA,
+    NUMBER_TO_VALUE_AREA,
+
+    MATH_EXPRESSION,
+
     // 图片
     GET_IMAGE,
     GET_IMAGE_IN_AREA,
@@ -115,23 +131,7 @@ public enum ActionType {
     BOOLEAN_OR,
     BOOLEAN_AND,
     BOOLEAN_NOT,
-    
-    // 数值
-    INT_ADD,
-    INT_SUB,
-    INT_MUL,
-    INT_DIV,
-    INT_MOD,
-    INT_EQUAL,
-    INT_LESS,
-    INT_GREATER,
-    INT_RANDOM,
-    
-    CHECK_INT_IN_VALUE_AREA,
-    INT_TO_VALUE_AREA,
-    
-    FLOAT_TO_INT,
-    MATH_EXPRESSION,
+
     
     // 位置
     POSITION_FROM_INT,

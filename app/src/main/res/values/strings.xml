@@ -135,6 +135,10 @@
     <string name="wait_if_action_timeout">超时(ms)</string>
     <string name="wait_if_action_else">未达成</string>
 
+    <string name="find_execute_action">搜索查找</string>
+    <string name="find_execute_action_timeout">超时(ms)"</string>
+    <string name="find_execute_action_interval">检查间隔(ms)"</string>
+
     <string name="switch_action">选择执行</string>
     <string name="switch_action_desc">根据文本值执行对应针脚</string>
     <string name="switch_action_default">默认</string>
@@ -191,10 +195,12 @@
     <string name="log_action_text">日志</string>
     <string name="log_action_show">弹出提示</string>
     <string name="log_action_show_pos">提示位置</string>
+    <string name="log_action_show_anchor">位置锚点</string>
     <string name="log_action_save">保存日志</string>
 
     <string name="stick_screen_action">贴图到屏幕上</string>
     <string name="stick_screen_action_pos">位置</string>
+    <string name="stick_screen_action_anchor">位置锚点</string>
     <string name="stick_screen_action_id">标志</string>
 
     <string name="stick_close_action">关闭贴图</string>
@@ -208,9 +214,9 @@
     <string name="open_app_action_desc">打开选定的应用</string>
     <string name="open_app_action_params">参数</string>
 
-    <string name="open_uri_action">打开链接</string>
-    <string name="open_uri_action_desc">打开URL Scheme链接</string>
-    <string name="open_uri_action_uri">链接</string>
+    <string name="open_uri_scheme_action">打开链接</string>
+    <string name="open_uri_scheme_action_desc">打开Uri Scheme链接</string>
+    <string name="open_uri_scheme_action_uri">链接</string>
 
     <string name="play_ringtone_action">播放铃声</string>
     <string name="play_ringtone_action_desc">播放选定的铃声</string>
@@ -256,11 +262,93 @@
     <string name="check_in_app_action_desc">判断待测应用或界面是否被包含</string>
     <string name="check_in_app_action_package">待测应用</string>
 
+    <string name="switch_screen_action">开关屏幕</string>
+    <string name="switch_screen_action_desc">打开或关闭屏幕</string>
+    <string name="switch_screen_action_switch">开关</string>
+
+    <string name="get_screen_status_action">获取屏幕状态</string>
+    <string name="get_screen_status_action_desc">获取屏幕当前开关或锁定状态</string>
+    <string name="get_screen_status_action_state">状态</string>
+
+    <string name="get_battery_status_action">获取电池状态</string>
+    <string name="get_battery_status_action_desc">获取电池电量与充放电状态</string>
+    <string name="get_battery_status_action_state">状态</string>
+    <string name="get_battery_status_action_percent">电量</string>
+
+    <string name="get_network_status_action">获取网络状态</string>
+    <string name="get_network_status_action_desc">获取当前网络状态</string>
+    <string name="get_network_status_action_state">状态</string>
+
     <!-- 动作-Number -->
     <string name="math_expression_action">数学公式</string>
     <string name="math_expression_action_desc">支持复杂的公式计算</string>
     <string name="math_expression_action_express">公式</string>
     <string name="math_expression_action_result">结果</string>
+    <string name="math_expression_action_tips">表达式错误</string>
+    
+    <string name="number_add_action">数值相加</string>
+    <string name="number_add_action_desc">将多个数值相加</string>
+
+    <string name="number_subtract_action">数值相减</string>
+    <string name="number_subtract_action_desc">两个数值相减</string>
+
+    <string name="number_multiply_action">数值相乘</string>
+    <string name="number_multiply_action_desc">将多个数值相乘</string>
+
+    <string name="number_divide_action">数值相除</string>
+    <string name="number_divide_action_desc">两个数值相除</string>
+
+    <string name="number_mod_action">取余数</string>
+    <string name="number_mod_action_desc">取两个数值的余数</string>
+
+    <string name="number_equal_action">数值比较 =</string>
+    <string name="number_equal_action_desc">判断两个数值是否相等</string>
+    <string name="number_equal_action_offset">精度</string>
+
+    <string name="number_less_action">数值比较 &lt;</string>
+    <string name="number_less_action_desc">判断第一个数值是否小于第二个数值</string>
+
+    <string name="number_greater_action">数值比较 &gt;</string>
+    <string name="number_greater_action_desc">判断第一个数值是否大于第二个数值</string>
+
+    <string name="number_random_action">随机数</string>
+    <string name="number_random_action_desc">生成一个随机数值</string>
+
+    <string name="number_to_integer_action">取整</string>
+    <string name="number_to_integer_action_desc">将数值按规则取整</string>
+    <string name="number_to_integer_action_type">取整方式</string>
+
+
+    <!-- 动作-String -->
+    <string name="string_to_number_action">文本转数值</string>
+    <string name="string_to_number_action_desc">提取文本中的第一个数值</string>
+
+    <string name="string_match_action">文本正则匹配</string>
+    <string name="string_match_action_desc">执行正则匹配，判断是否包含特定文本</string>
+    <string name="string_match_action_match">匹配文本</string>
+    <string name="string_match_action_match_result">匹配结果</string>
+
+    <string name="string_append_action">文本拼接</string>
+    <string name="string_append_action_desc">将多个文本拼接成一个文本</string>
+
+    <string name="string_split_action">文本分割</string>
+    <string name="string_split_action_desc">将文本按特定字符分割为多个文本</string>
+    <string name="string_split_action_split">分割符</string>
+    <string name="string_split_action_empty">剔除空字符</string>
+
+    <string name="string_from_object_action">转换为文本</string>
+    <string name="string_from_object_action_desc">将任意对象转换为文本</string>
+
+    <string name="string_equal_action">文本比较</string>
+    <string name="string_equal_action_desc">判断两个文本是否相等</string>
+    <string name="string_equal_action_ignore_case">忽略大小写</string>
+
+    <string name="string_replace_action">文本替换</string>
+    <string name="string_replace_action_desc">将文本中的特定文本替换为另一个文本</string>
+    <string name="string_replace_action_find">查找文本</string>
+    <string name="string_replace_action_replace">替换文本</string>
+    <string name="string_replace_action_result">替换结果</string>
+
 
     <!-- 针脚名 -->
     <string name="pin_execute">执行</string>

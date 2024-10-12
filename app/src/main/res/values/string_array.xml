@@ -56,6 +56,18 @@
         <item>OCR</item>
     </string-array>
 
+    <string-array name="anchor">
+        <item>左上</item>
+        <item>上</item>
+        <item>右上</item>
+        <item>左</item>
+        <item>中</item>
+        <item>右</item>
+        <item>左下</item>
+        <item>下</item>
+        <item>右下</item>
+    </string-array>
+
     <string-array name="charging_state">
         <item>充电中</item>
         <item>放电中</item>
@@ -110,6 +122,12 @@
     <string-array name="share_type">
         <item>文字</item>
         <item>文件</item>
+    </string-array>
+
+    <string-array name="to_int_type">
+        <item>四舍五入</item>
+        <item>向上取整</item>
+        <item>向下取整</item>
     </string-array>
 
 </resources>

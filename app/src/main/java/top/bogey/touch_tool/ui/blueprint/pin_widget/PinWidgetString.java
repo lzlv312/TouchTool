@@ -30,13 +30,14 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.number.MathExpressionAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.pin_number.PinFloat;
+import top.bogey.touch_tool.bean.pin.pins.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pins.pin_string.PinString;
 import top.bogey.touch_tool.databinding.PinWidgetInputBinding;
 import top.bogey.touch_tool.ui.InstantActivity;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
@@ -179,8 +180,8 @@ public class PinWidgetString extends PinWidget<PinString> {
         if (card.getAction() instanceof DynamicPinsAction dynamicPinsAction) {
             Matcher matcher = null;
             if (dynamicPinsAction instanceof MathExpressionAction) {
-                Pattern pattern = Pattern.compile("\\b([a-zA-Z])\\b");
-                matcher = pattern.matcher(value);
+                Pattern pattern = AppUtil.getPattern("\\b([a-zA-Z])\\b");
+                if (pattern != null) matcher = pattern.matcher(value);
             }
 
             List<String> keys = new ArrayList<>();
@@ -199,7 +200,11 @@ public class PinWidgetString extends PinWidget<PinString> {
             removePins.forEach(card::removePin);
 
             for (String key : keys) {
-                Pin pin = new Pin(new PinFloat(), 0, false, true, false);
+                Pin pin = null;
+                if (dynamicPinsAction instanceof MathExpressionAction) {
+                    pin = new Pin(new PinDouble(), 0, false, true, false);
+                }
+                if (pin == null) break;
                 pin.setTitle(key);
                 card.addPin(pin);
             }

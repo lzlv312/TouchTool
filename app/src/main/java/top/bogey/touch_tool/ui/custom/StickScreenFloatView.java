@@ -18,6 +18,7 @@ import top.bogey.touch_tool.bean.pin.pins.PinObject;
 import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinColor;
 import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinImage;
 import top.bogey.touch_tool.databinding.FloatStickScreenBinding;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
@@ -29,14 +30,14 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
 
     private boolean needDelete = false;
 
-    public static String showStick(PinObject object, Point location) {
+    public static String showStick(PinObject object, EAnchor anchor, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return null;
         String tag = UUID.randomUUID().toString();
         new Handler(Looper.getMainLooper()).post(() -> {
             StickScreenFloatView stickView = new StickScreenFloatView(keepView.getContext(), tag);
             stickView.show();
-            stickView.innerShowStick(object, location);
+            stickView.innerShowStick(object, anchor, location);
         });
         return tag;
     }
@@ -56,11 +57,12 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         });
     }
 
-    public void innerShowStick(PinObject object, Point location) {
-        if (location.x == 0 && location.y == 0) {
-            FloatWindow.setLocation(KeepAliveFloatView.class.getName(), EAnchor.CENTER, location);
+    public void innerShowStick(PinObject object, EAnchor anchor, Point location) {
+        if (location.x < 0 || location.y < 0) {
+            Point screenSize = DisplayUtil.getScreenSize(getContext());
+            FloatWindow.setLocation(KeepAliveFloatView.class.getName(), EAnchor.CENTER, new Point(screenSize.x / 2, screenSize.y / 2));
         } else {
-            FloatWindow.setLocation(KeepAliveFloatView.class.getName(), EAnchor.TOP_LEFT, location);
+            FloatWindow.setLocation(KeepAliveFloatView.class.getName(), anchor, location);
         }
         if (object instanceof PinImage pinImage) {
             binding.image.setVisibility(VISIBLE);

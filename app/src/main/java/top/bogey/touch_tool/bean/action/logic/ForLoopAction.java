@@ -13,9 +13,9 @@ import top.bogey.touch_tool.bean.task.TaskRunnable;
 
 public class ForLoopAction extends ExecuteAction {
     private final transient Pin breakPin = new Pin(new PinExecute(), R.string.for_loop_action_break);
-    private final transient Pin startPin = new Pin(new PinInteger(), R.string.for_loop_action_start);
-    private final transient Pin endPin = new Pin(new PinInteger(), R.string.for_loop_action_end);
-    private final transient Pin stepPin = new Pin(new PinInteger(), R.string.for_loop_action_step, false, false, true);
+    private final transient Pin startPin = new Pin(new PinInteger(1), R.string.for_loop_action_start);
+    private final transient Pin endPin = new Pin(new PinInteger(5), R.string.for_loop_action_end);
+    private final transient Pin stepPin = new Pin(new PinInteger(1), R.string.for_loop_action_step, false, false, true);
     private final transient Pin currentPin = new Pin(new PinInteger(), R.string.for_loop_action_current, true);
     private final transient Pin completePin = new Pin(new PinExecute(), R.string.for_loop_action_complete, true);
 

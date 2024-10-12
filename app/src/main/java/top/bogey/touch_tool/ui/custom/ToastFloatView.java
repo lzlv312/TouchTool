@@ -23,7 +23,7 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
     private final FloatToastBinding binding;
     private final Handler handler;
 
-    public static void showToast(String msg, Point pos) {
+    public static void showToast(String msg, EAnchor anchor,  Point pos) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
@@ -32,7 +32,7 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
                 toastView = new ToastFloatView(keepView.getContext());
                 toastView.show();
             }
-            toastView.innerShowToast(msg, pos);
+            toastView.innerShowToast(msg, anchor, pos);
         });
     }
 
@@ -42,12 +42,12 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
         handler = new Handler();
     }
 
-    public void innerShowToast(String msg, Point pos) {
-        if (pos.x == 0 && pos.y == 0) {
+    public void innerShowToast(String msg, EAnchor anchor, Point pos) {
+        if (pos.x < 0 || pos.y < 0) {
             Point screenSize = DisplayUtil.getScreenSize(getContext());
             FloatWindow.setLocation(ToastFloatView.class.getName(), EAnchor.BOTTOM_CENTER, new Point(0, -screenSize.y / 5));
         } else {
-            FloatWindow.setLocation(ToastFloatView.class.getName(), EAnchor.TOP_LEFT, pos);
+            FloatWindow.setLocation(ToastFloatView.class.getName(), anchor, pos);
         }
         handler.removeCallbacksAndMessages(null);
         binding.title.setText(msg);

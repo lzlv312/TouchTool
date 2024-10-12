@@ -12,6 +12,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pins.PinAdd;
+import top.bogey.touch_tool.bean.pin.pins.PinObject;
 import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinStringExecute;
 import top.bogey.touch_tool.bean.pin.pins.pin_string.PinLogString;
@@ -40,10 +41,10 @@ public class SwitchAction extends Action implements DynamicPinsAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
-        PinString flag = getPinValue(runnable, flagPin);
+        PinObject flag = getPinValue(runnable, flagPin);
         Pin nextPin = defaultPin;
         for (Pin dynamicPin : getDynamicPins()) {
-            if (Objects.equals(dynamicPin.getValue(PinStringExecute.class).getValue(), flag.getValue())) {
+            if (Objects.equals(dynamicPin.getValue(PinStringExecute.class).getValue(), flag.toString())) {
                 nextPin = dynamicPin;
                 break;
             }

@@ -29,7 +29,7 @@ public class SequenceExecuteAction extends ExecuteAction implements DynamicPinsA
         super(jsonObject);
         reAddPin(secondPin);
         reAddPins(morePin);
-        reAddPins(addPin);
+        reAddPin(addPin);
     }
 
     @Override

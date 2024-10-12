@@ -10,38 +10,42 @@ import top.bogey.touch_tool.bean.pin.pins.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pins.PinObject;
 import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinPoint;
 import top.bogey.touch_tool.bean.pin.pins.pin_string.PinLogString;
+import top.bogey.touch_tool.bean.pin.pins.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.save.TaskSaver;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 import top.bogey.touch_tool.ui.custom.ToastFloatView;
+import top.bogey.touch_tool.utils.EAnchor;
 
 public class LoggerAction extends ExecuteAction {
-    private final transient Pin log = new Pin(new PinLogString(), R.string.log_action_text);
-    private final transient Pin show = new Pin(new PinBoolean(true), R.string.log_action_show, false, false, true);
-    private final transient Pin showPos = new Pin(new PinPoint(), R.string.log_action_show_pos, false, false, true);
-    private final transient Pin save = new Pin(new PinBoolean(true), R.string.log_action_save, false, false, true);
+    private final transient Pin logPin = new Pin(new PinLogString(), R.string.log_action_text);
+    private final transient Pin showPin = new Pin(new PinBoolean(true), R.string.log_action_show, false, false, true);
+    private final transient Pin showPosPin = new Pin(new PinPoint(-1, -1), R.string.log_action_show_pos, false, false, true);
+    private final transient Pin anchorPin = new Pin(new PinSingleSelect(R.array.anchor, 4), R.string.log_action_show_anchor, false, false, true);
+    private final transient Pin savePin = new Pin(new PinBoolean(true), R.string.log_action_save, false, false, true);
 
     public LoggerAction() {
         super(ActionType.LOG);
-        addPins(log, show, showPos, save);
+        addPins(logPin, showPin, showPosPin, anchorPin, savePin);
     }
 
     public LoggerAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(log, show, showPos, save);
+        reAddPins(logPin, showPin, showPosPin, anchorPin, savePin);
     }
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
-        PinObject logObject = getPinValue(runnable, log);
-        PinBoolean showLog = getPinValue(runnable, show);
-        PinPoint showLogPos = getPinValue(runnable, showPos);
-        PinBoolean saveLog = getPinValue(runnable, save);
+        PinObject logObject = getPinValue(runnable, logPin);
+        PinBoolean show = getPinValue(runnable, showPin);
+        PinPoint showPos = getPinValue(runnable, showPosPin);
+        PinSingleSelect anchor = getPinValue(runnable, anchorPin);
+        PinBoolean save = getPinValue(runnable, savePin);
 
-        if (showLog.getValue()) {
-            ToastFloatView.showToast(logObject.toString(), showLogPos.getValue());
+        if (show.getValue()) {
+            ToastFloatView.showToast(logObject.toString(), EAnchor.values()[anchor.getIndex()], showPos.getValue());
         }
 
-        if (saveLog.getValue()) {
+        if (save.getValue()) {
             TaskSaver.getInstance().addLog(runnable.getStartTask().getId(), logObject.toString());
         }
 

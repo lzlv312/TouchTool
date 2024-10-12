@@ -17,15 +17,28 @@ import top.bogey.touch_tool.utils.GsonUtil;
 
 public class PinSingleSelect extends PinString {
     private List<String> options = new ArrayList<>();
+    private boolean dynamic = false;
 
     public PinSingleSelect() {
         super(PinSubType.SINGLE_SELECT);
+    }
+
+    public PinSingleSelect(boolean dynamic) {
+        this();
+        this.dynamic = dynamic;
     }
 
     public PinSingleSelect(@ArrayRes int optionsResId) {
         this();
         String[] strings = MainApplication.getInstance().getResources().getStringArray(optionsResId);
         options.addAll(Arrays.asList(strings));
+    }
+
+    public PinSingleSelect(@ArrayRes int optionsResId, int defaultIndex) {
+        this();
+        String[] strings = MainApplication.getInstance().getResources().getStringArray(optionsResId);
+        options.addAll(Arrays.asList(strings));
+        setValue(options.get(defaultIndex));
     }
 
     public PinSingleSelect(List<String> options) {
@@ -41,12 +54,14 @@ public class PinSingleSelect extends PinString {
     @Override
     public void reset() {
         super.reset();
+        if (dynamic) options.clear();
     }
 
     @Override
     public boolean isInstance(PinBase pin) {
         if (super.isInstance(pin)) {
             if (pin instanceof PinSingleSelect pinSingleSelect) {
+                if (dynamic) return true;
                 return options.equals(pinSingleSelect.getOptions());
             }
         }
@@ -69,14 +84,32 @@ public class PinSingleSelect extends PinString {
         return Math.max(index, 0);
     }
 
+    public void setIndex(int index) {
+        if (index < 0 || index >= options.size()) return;
+        setValue(options.get(index));
+    }
+
     public List<String> getOptions() {
         return options;
     }
 
     public void setOptions(List<String> options) {
         this.options = options;
+        reset();
     }
 
+    @Override
+    public String getValue() {
+        if (options.isEmpty()) return "";
+        String string = super.getValue();
+        if (string == null || string.isEmpty()) return getOptions().get(0);
+        return string;
+    }
+
+    @Override
+    public void setValue(String value) {
+        if (options.contains(value)) super.setValue(value);
+    }
 
     @Override
     public boolean equals(Object object) {

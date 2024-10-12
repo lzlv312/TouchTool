@@ -11,15 +11,15 @@ import top.bogey.touch_tool.bean.pin.pins.pin_string.PinString;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
-public class OpenUriAction extends ExecuteAction {
-    private final transient Pin uriPin = new Pin(new PinString(), R.string.open_uri_action_uri);
+public class OpenUriSchemeAction extends ExecuteAction {
+    private final transient Pin uriPin = new Pin(new PinString(), R.string.open_url_scheme_action_uri);
 
-    public OpenUriAction() {
-        super(ActionType.OPEN_URI);
+    public OpenUriSchemeAction() {
+        super(ActionType.OPEN_URI_SCHEME);
         addPins(uriPin);
     }
 
-    public OpenUriAction(JsonObject jsonObject) {
+    public OpenUriSchemeAction(JsonObject jsonObject) {
         super(jsonObject);
         reAddPins(uriPin);
     }
