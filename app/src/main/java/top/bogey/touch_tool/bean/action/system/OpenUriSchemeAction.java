@@ -12,7 +12,7 @@ import top.bogey.touch_tool.bean.task.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class OpenUriSchemeAction extends ExecuteAction {
-    private final transient Pin uriPin = new Pin(new PinString(), R.string.open_url_scheme_action_uri);
+    private final transient Pin uriPin = new Pin(new PinString(), R.string.open_uri_scheme_action_uri);
 
     public OpenUriSchemeAction() {
         super(ActionType.OPEN_URI_SCHEME);
