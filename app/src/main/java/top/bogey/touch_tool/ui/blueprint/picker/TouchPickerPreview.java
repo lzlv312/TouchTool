@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.MainApplication;
-import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinTouchPath;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
 import top.bogey.touch_tool.databinding.FloatPickerTouchPreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.utils.callback.ResultCallback;

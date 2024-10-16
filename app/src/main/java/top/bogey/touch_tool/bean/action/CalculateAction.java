@@ -3,7 +3,7 @@ package top.bogey.touch_tool.bean.action;
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 
 public abstract class CalculateAction extends Action{

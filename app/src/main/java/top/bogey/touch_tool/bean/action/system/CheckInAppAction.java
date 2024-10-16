@@ -6,9 +6,9 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinBoolean;
-import top.bogey.touch_tool.bean.pin.pins.pin_application.PinApplication;
-import top.bogey.touch_tool.bean.pin.pins.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 
 public class CheckInAppAction extends CalculateAction {

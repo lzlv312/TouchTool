@@ -10,7 +10,7 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.OutCallStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;

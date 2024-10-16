@@ -3,15 +3,14 @@ package top.bogey.touch_tool.bean.action.number;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinAdd;
-import top.bogey.touch_tool.bean.pin.pins.pin_number.PinDouble;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 
 public abstract class DynamicNumberAction extends NumberAction implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinDouble(), R.string.pin_number_integer);

@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import java.util.Arrays;
 import java.util.List;
 
-import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinColor;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
 import top.bogey.touch_tool.databinding.FloatPickerColorBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;

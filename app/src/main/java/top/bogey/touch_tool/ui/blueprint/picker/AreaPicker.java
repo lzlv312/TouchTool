@@ -10,6 +10,8 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +21,7 @@ import androidx.annotation.NonNull;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.databinding.FloatPickerAreaBinding;
+import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
@@ -40,6 +43,15 @@ public class AreaPicker extends FullScreenPicker<Rect> {
 
     private float lastX, lastY;
     private int mode = MODE_NONE;
+
+    public static void showPicker(ResultCallback<Rect> callback) {
+        KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
+        if (keepView == null) return;
+        new Handler(Looper.getMainLooper()).post(() -> {
+            AreaPicker areaPicker = new AreaPicker(keepView.getContext(), callback, new Rect());
+            areaPicker.show();
+        });
+    }
 
     public AreaPicker(@NonNull Context context, ResultCallback<Rect> callback, Rect rect) {
         super(context, callback);

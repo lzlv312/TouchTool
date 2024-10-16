@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.pin.pins.PinValueArea;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinValueArea;
 import top.bogey.touch_tool.databinding.PinWidgetValueAreaBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;

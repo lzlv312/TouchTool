@@ -16,7 +16,7 @@ import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinColor;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
 import top.bogey.touch_tool.databinding.FloatPickerColorPreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.utils.DisplayUtil;

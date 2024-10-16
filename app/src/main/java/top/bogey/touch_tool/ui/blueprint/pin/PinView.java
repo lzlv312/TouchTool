@@ -16,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinListener;
-import top.bogey.touch_tool.bean.pin.pins.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.pin_slot.PinSlotView;
@@ -117,19 +117,20 @@ public abstract class PinView extends FrameLayout implements PinListener {
         }
     }
 
-    public PointF getSlotPosInLayout() {
+    public PointF getSlotPosInLayout(float scale) {
         View view = getSlotBox();
-        float scale = getScaleX();
         PointF pos = DisplayUtil.getLocationRelativeToView(view, card);
+        pos.x *= scale;
+        pos.y *= scale;
         if (pin.isVertical()) {
             pos.x += view.getWidth() * scale / 2;
             if (pin.isOut()) {
-                pos.y += view.getHeight();
+                pos.y += view.getHeight() * scale;
             }
         } else {
             pos.y += view.getHeight() * scale / 2;
             if (pin.isOut()) {
-                pos.x += view.getWidth();
+                pos.x += view.getWidth() * scale;
             }
         }
         pos.offset(card.getX(), card.getY());

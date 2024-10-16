@@ -13,9 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
-import top.bogey.touch_tool.bean.pin.pins.pin_application.PinApplication;
-import top.bogey.touch_tool.bean.pin.pins.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
 import top.bogey.touch_tool.databinding.PinWidgetAppBinding;
 import top.bogey.touch_tool.databinding.PinWidgetAppItemBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;

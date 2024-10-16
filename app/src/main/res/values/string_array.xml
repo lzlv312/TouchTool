@@ -130,4 +130,15 @@
         <item>向下取整</item>
     </string-array>
 
+    <string-array name="ocr_type">
+        <item>中文</item>
+        <item>英文</item>
+    </string-array>
+
+    <string-array name="area_relation">
+        <item>包含</item>
+        <item>相交</item>
+        <item>不相交</item>
+    </string-array>
+
 </resources>

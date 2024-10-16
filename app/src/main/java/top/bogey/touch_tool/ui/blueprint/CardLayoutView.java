@@ -43,7 +43,7 @@ import top.bogey.touch_tool.bean.action.ActionInfo;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinInfo;
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.TaskSaveListener;
 import top.bogey.touch_tool.bean.save.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
@@ -61,6 +61,7 @@ import top.bogey.touch_tool.ui.blueprint.history.edit.PinLinkHistory;
 import top.bogey.touch_tool.ui.blueprint.history.edit.PinRemoveHistory;
 import top.bogey.touch_tool.ui.blueprint.history.edit.PinUpdateHistory;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
+import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHistoryOwner {
@@ -95,6 +96,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
     private RectF selectArea = new RectF();
     private final CardEditView editView;
+    private SelectActionDialog actionDialog = null;
 
     private float startX, startY;
     private float lastX, lastY;
@@ -232,16 +234,16 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         return card;
     }
 
-    public void addNewCard(ActionType actionType) {
+    public ActionCard addNewCard(ActionType actionType) {
         ActionInfo info = ActionInfo.getActionInfo(actionType);
-        if (info == null) return;
-        addNewCard(info.getClazz());
+        if (info == null) return null;
+        return addNewCard(info.getClazz());
     }
 
-    public void addNewCard(Class<? extends Action> actionClass) {
+    public ActionCard addNewCard(Class<? extends Action> actionClass) {
         try {
             Action action = actionClass.newInstance();
-            addNewCard(action);
+            return addNewCard(action);
         } catch (IllegalAccessException | InstantiationException e) {
             throw new RuntimeException(e);
         }
@@ -291,7 +293,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         cards.values().forEach(this::updateCardPos);
     }
 
-    private ActionCard getCard(float x, float y) {
+    private ActionCard getActionCard(float x, float y) {
         List<ActionCard> cards = new ArrayList<>(this.cards.values());
         cards.sort((o1, o2) -> indexOfChild(o2) - indexOfChild(o1));
         for (ActionCard card : cards) {
@@ -390,13 +392,13 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 lastY = y;
 
                 if (editAble) {
-                    ActionCard card = getCard(x, y);
+                    ActionCard card = getActionCard(x, y);
                     if (card != null) {
                         touchState = TOUCH_CARD;
                         touchedCard = card;
 
                         card.bringToFront();
-                        PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY());
+                        PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY(), scale);
                         if (pinView != null) {
                             touchState = TOUCH_PIN;
                             touchedPin = pinView;
@@ -489,7 +491,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                         lastY += dy * gridSize;
                     }
 
-                    case TOUCH_DRAG_PIN -> {
+                    case TOUCH_DRAG_PIN, TOUCH_DRAG_LINK -> {
                         float offset = gridSize * 2;
                         float gridSize = getScaleGridSize();
                         if (x <= offset) {
@@ -534,10 +536,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                     }
 
                     case TOUCH_DRAG_PIN, TOUCH_DRAG_LINK -> {
-                        ActionCard card = getCard(x, y);
+                        ActionCard card = getActionCard(x, y);
                         if (card != null) {
                             boolean flag = true;
-                            PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY());
+                            PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY(), scale);
                             if (pinView != null) {
                                 Pin pin = pinView.getPin();
                                 if (touchState == TOUCH_DRAG_PIN) {
@@ -563,18 +565,26 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         return true;
     }
 
-    public void tryLink(Action action) {
+    private void tryLink(Action action) {
+        tryLink(touchState, action);
+    }
+
+    public void tryLink(int touchState, Action action) {
         if (touchedPin == null) return;
+        Pin p = touchedPin.getPin();
         if (touchState == TOUCH_DRAG_PIN) {
+            if (p.isSingleLink()) p.clearLinks(task);
             for (Pin pin : action.getPins()) {
-                if (pin.linkAble(touchedPin.getPin())) {
-                    pin.mutualAddLink(touchedPin.getPin());
+                if (pin.linkAble() && pin.linkAble(p)) {
+                    if (pin.isSingleLink()) pin.clearLinks(task);
+                    pin.mutualAddLink(p);
                     break;
                 }
             }
         } else if (touchState == TOUCH_DRAG_LINK) {
             for (Pin pin : action.getPins()) {
-                if (pin.linkAble(touchedPin.getPin().getValue())) {
+                if (pin.linkAble() && pin.linkAble(p.getValue())) {
+                    if (pin.isSingleLink()) pin.clearLinks(task);
                     pin.addLinks(task, selectedLinks);
                 }
             }
@@ -582,11 +592,19 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
     }
 
     private void showActionSelector() {
+        int touchState = this.touchState;
+        Pin pin = touchedPin.getPin();
+        if (touchState == TOUCH_DRAG_PIN) {
+            pin = new Pin(pin.getValue(), 0, pin.isOut());
+        } else {
+            pin = new Pin(pin.getValue(), 0, !pin.isOut());
+        }
 
-    }
-
-    public void dismissActionSelector() {
-
+        actionDialog = new SelectActionDialog(getContext(), this, pin, card -> {
+            tryLink(touchState, card.getAction());
+            if (actionDialog != null) actionDialog.dismiss();
+        });
+        actionDialog.show();
     }
 
     @Override
@@ -741,9 +759,9 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 linkPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryInverse));
 
                 PinView currPosPinView = null;
-                ActionCard card = getCard(lastX, lastY);
+                ActionCard card = getActionCard(lastX, lastY);
                 if (card != null) {
-                    currPosPinView = card.getLinkAblePinView(lastX - card.getX(), lastY - card.getY());
+                    currPosPinView = card.getLinkAblePinView(lastX - card.getX(), lastY - card.getY(), scale);
                 }
 
                 if (touchState == TOUCH_DRAG_PIN) {
@@ -794,13 +812,13 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
     }
 
     private Path calculateLinkPath(PinView start, PinView end) {
-        PointF startPoint = start.getSlotPosInLayout();
-        PointF endPoint = end.getSlotPosInLayout();
+        PointF startPoint = start.getSlotPosInLayout(scale);
+        PointF endPoint = end.getSlotPosInLayout(scale);
         return calculateLinkPath(startPoint, endPoint, start.getPin().isVertical());
     }
 
     private Path calculateLinkPath(PinView pinView) {
-        PointF pos = pinView.getSlotPosInLayout();
+        PointF pos = pinView.getSlotPosInLayout(scale);
         if (pinView.getPin().isOut()) {
             return calculateLinkPath(pos, new PointF(lastX, lastY), pinView.getPin().isVertical());
         } else {

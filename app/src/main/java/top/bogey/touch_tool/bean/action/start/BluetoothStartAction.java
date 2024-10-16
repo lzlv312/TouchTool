@@ -5,8 +5,8 @@ import com.google.gson.JsonObject;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinBoolean;
-import top.bogey.touch_tool.bean.pin.pins.pin_string.PinString;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 

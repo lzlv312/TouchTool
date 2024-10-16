@@ -15,32 +15,33 @@ import java.util.List;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionInfo;
 import top.bogey.touch_tool.bean.action.ActionType;
-import top.bogey.touch_tool.bean.pin.pins.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.PinInfo;
-import top.bogey.touch_tool.bean.pin.pins.PinList;
-import top.bogey.touch_tool.bean.pin.pins.PinMap;
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
-import top.bogey.touch_tool.bean.pin.pins.PinSubType;
-import top.bogey.touch_tool.bean.pin.pins.PinType;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.DialogSelectActionPageItemBinding;
 import top.bogey.touch_tool.ui.blueprint.CardLayoutView;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.listener.SpinnerSelectedListener;
 
 public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapter<SelectActionPageItemRecyclerViewAdapter.ViewHolder> {
     private final static List<PinType> PIN_INFO_LIST = PinInfo.getValuePinTypes();
 
     private final CardLayoutView cardLayoutView;
-    private final boolean singleSelect;
+    private final ResultCallback<ActionCard> callback;
 
     private List<Object> data;
 
-    public SelectActionPageItemRecyclerViewAdapter(CardLayoutView cardLayoutView, boolean singleSelect) {
+    public SelectActionPageItemRecyclerViewAdapter(CardLayoutView cardLayoutView, ResultCallback<ActionCard> callback) {
         this.cardLayoutView = cardLayoutView;
-        this.singleSelect = singleSelect;
+        this.callback = callback;
     }
 
     @NonNull
@@ -245,8 +246,7 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
 
                 if (object instanceof VariableInfo var) {
                     PinBase copy = var.getValue().newCopy();
-                    VariableInfo info = new VariableInfo(context.getString(R.string.task_copy_title, var.getName()), null, var.getOwner(), var.isOut());
-                    info.setValue((PinObject) copy);
+                    VariableInfo info = new VariableInfo(var.getOwner(), context.getString(R.string.task_copy_title, var.getName()), (PinObject) copy);
                     data.add(index + 1, info);
                     notifyItemInserted(index + 1);
                 }
@@ -301,9 +301,11 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
             binding.getRoot().setOnClickListener(v -> {
                 int index = getBindingAdapterPosition();
                 Object object = data.get(index);
+                ActionCard card = null;
                 if (object instanceof ActionType actionType) {
-                    cardLayoutView.addNewCard(actionType);
+                    card = cardLayoutView.addNewCard(actionType);
                 }
+                if (callback != null) callback.onResult(card);
             });
         }
 

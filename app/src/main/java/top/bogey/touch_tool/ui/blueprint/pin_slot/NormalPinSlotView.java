@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinBase;
 import top.bogey.touch_tool.databinding.PinSlotNormalBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 

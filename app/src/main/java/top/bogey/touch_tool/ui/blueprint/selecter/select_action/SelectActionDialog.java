@@ -24,6 +24,8 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.databinding.DialogSelectActionBinding;
 import top.bogey.touch_tool.databinding.WidgetSettingSelectButtonBinding;
 import top.bogey.touch_tool.ui.blueprint.CardLayoutView;
+import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
+import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 public class SelectActionDialog extends BottomSheetDialog {
@@ -31,7 +33,7 @@ public class SelectActionDialog extends BottomSheetDialog {
     private final SelectActionPageAdapter adapter;
     private final Map<String, Map<String, List<Object>>> dataMap = new LinkedHashMap<>();
 
-    public SelectActionDialog(@NonNull Context context, CardLayoutView cardLayoutView, VariableInfo variableInfo) {
+    public SelectActionDialog(@NonNull Context context, CardLayoutView cardLayoutView, Pin touchedPin, ResultCallback<ActionCard> callback) {
         super(context);
         binding = DialogSelectActionBinding.inflate(LayoutInflater.from(context));
         setContentView(binding.getRoot());
@@ -43,7 +45,7 @@ public class SelectActionDialog extends BottomSheetDialog {
             }
         });
 
-        adapter = new SelectActionPageAdapter(cardLayoutView, variableInfo != null);
+        adapter = new SelectActionPageAdapter(cardLayoutView, callback);
         binding.actionsBox.setAdapter(adapter);
 
         new TabLayoutMediator(binding.tabBox, binding.actionsBox, (tab, position) -> {
@@ -52,7 +54,7 @@ public class SelectActionDialog extends BottomSheetDialog {
             }
         }).attach();
 
-        calculateShowData(variableInfo);
+        calculateShowData(touchedPin);
         dataMap.forEach((key, value) -> {
             WidgetSettingSelectButtonBinding buttonBinding = WidgetSettingSelectButtonBinding.inflate(LayoutInflater.from(context), binding.group, true);
             buttonBinding.getRoot().setId(View.generateViewId());
@@ -94,11 +96,11 @@ public class SelectActionDialog extends BottomSheetDialog {
         }
     }
 
-    public void calculateShowData(VariableInfo variableInfo) {
+    public void calculateShowData(Pin touchedPin) {
         dataMap.clear();
         // 第一部分：预设Action
         Map<String, List<Object>> preset = new LinkedHashMap<>();
-        if (variableInfo == null) {
+        if (touchedPin == null) {
             for (ActionMap.ActionGroupType groupType : ActionMap.ActionGroupType.values()) {
                 List<Object> types = new ArrayList<>(ActionMap.getTypes(groupType));
                 preset.put(groupType.getName(), types);
@@ -111,7 +113,7 @@ public class SelectActionDialog extends BottomSheetDialog {
                     if (info == null) continue;
                     Action action = info.getAction();
                     if (action == null) continue;
-                    Pin pin = action.findConnectToAblePin(new Pin(variableInfo.getValue(), variableInfo.isOut()));
+                    Pin pin = action.findConnectToAblePin(touchedPin);
                     if (pin == null) continue;
                     types.add(type);
                 }

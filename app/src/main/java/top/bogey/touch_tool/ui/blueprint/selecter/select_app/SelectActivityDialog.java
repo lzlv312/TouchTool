@@ -15,8 +15,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import top.bogey.touch_tool.bean.pin.pins.pin_application.PinApplication;
-import top.bogey.touch_tool.bean.pin.pins.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
 import top.bogey.touch_tool.databinding.DialogSelectActivityBinding;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;

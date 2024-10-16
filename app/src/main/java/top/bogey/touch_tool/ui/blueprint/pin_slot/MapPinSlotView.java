@@ -9,9 +9,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinBase;
 import top.bogey.touch_tool.bean.pin.PinInfo;
-import top.bogey.touch_tool.bean.pin.pins.PinMap;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.databinding.PinSlotMapBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 

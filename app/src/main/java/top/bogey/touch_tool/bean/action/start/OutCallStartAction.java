@@ -5,23 +5,13 @@ import com.google.gson.JsonObject;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.pin_string.PinShortcutString;
-import top.bogey.touch_tool.bean.pin.pins.pin_string.PinUrlString;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinShortcutString;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinUrlString;
+import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 
 public class OutCallStartAction extends StartAction {
-    private final transient Pin urlPin = new Pin(new PinUrlString(), R.string.out_call_start_action_url) {
-        @Override
-        public boolean linkAble() {
-            return false;
-        }
-    };
-
-    private final transient Pin shortcutPin = new Pin(new PinShortcutString(), R.string.out_call_start_action_shortcut) {
-        @Override
-        public boolean linkAble() {
-            return false;
-        }
-    };
+    private final transient Pin urlPin = new NotLinkAblePin(new PinUrlString(), R.string.out_call_start_action_url);
+    private final transient Pin shortcutPin = new NotLinkAblePin(new PinShortcutString(), R.string.out_call_start_action_shortcut);
 
     public OutCallStartAction() {
         super(ActionType.OUT_CALL_START);

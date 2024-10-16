@@ -6,25 +6,16 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinBoolean;
-import top.bogey.touch_tool.bean.pin.pins.pin_string.PinSingleSelect;
-import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 
 public abstract class StartAction extends Action {
 
-    private final transient Pin enablePin = new Pin(new PinBoolean(true), R.string.start_action_enable) {
-        @Override
-        public boolean linkAble() {
-            return false;
-        }
-    };
-    private final transient Pin restartPin = new Pin(new PinSingleSelect(R.array.restart_type), R.string.start_action_restart) {
-        @Override
-        public boolean linkAble() {
-            return false;
-        }
-    };
+    private final static Pin enablePin = new NotLinkAblePin(new PinBoolean(true), R.string.start_action_enable);
+    private final static Pin restartPin = new NotLinkAblePin(new PinSingleSelect(R.array.restart_type), R.string.start_action_restart);
     private final transient Pin breakPin = new Pin(new PinBoolean(false), R.string.start_action_break);
     protected transient Pin executePin = new Pin(new PinExecute(), R.string.pin_execute, true);
 

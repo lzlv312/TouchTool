@@ -16,8 +16,8 @@ import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.base.Identity;
-import top.bogey.touch_tool.bean.pin.pins.PinBase;
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.TaskSaver;
 import top.bogey.touch_tool.utils.GsonUtil;
 

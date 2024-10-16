@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 
-import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinImage;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.databinding.PinWidgetImageBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.picker.ImagePickerPreview;

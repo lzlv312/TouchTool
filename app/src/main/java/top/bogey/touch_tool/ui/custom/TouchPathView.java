@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinTouchPath;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class TouchPathView extends View {

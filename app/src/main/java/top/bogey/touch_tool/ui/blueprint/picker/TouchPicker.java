@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinTouchPath;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
 import top.bogey.touch_tool.databinding.FloatPickerTouchBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;

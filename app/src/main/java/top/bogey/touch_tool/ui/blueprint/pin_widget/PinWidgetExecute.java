@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
-import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinExecute;
-import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinIconExecute;
-import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinStringExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinIconExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinStringExecute;
 import top.bogey.touch_tool.databinding.PinWidgetExecuteBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;

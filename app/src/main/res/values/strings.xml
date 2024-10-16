@@ -349,6 +349,27 @@
     <string name="string_replace_action_replace">替换文本</string>
     <string name="string_replace_action_result">替换结果</string>
 
+    <string name="get_ocr_text_action">OCR识别文本</string>
+    <string name="get_ocr_text_action_desc">识别屏幕中指定区域文字</string>
+    <string name="get_ocr_text_action_type">模型</string>
+    <string name="get_ocr_text_action_text">所有文字</string>
+
+    <!-- 动作-Area -->
+    <string name="area_to_integer_action">区域转数值</string>
+    <string name="area_to_integer_action_desc">提取区域的上下左右数值</string>
+
+    <string name="area_from_integer_action">数值转区域</string>
+    <string name="area_from_integer_action_desc">将数值转换为区域</string>
+
+    <string name="check_area_contain_pos_action">位置是否在区域里</string>
+    <string name="check_area_contain_pos_action_desc">判断一个位置是否在指定区域内</string>
+
+    <string name="check_area_relation_action">区域关系</string>
+    <string name="check_area_relation_action_desc">判断两个区域是否包含、相交、不相交</string>
+    <string name="check_area_relation_action_relation">关系</string>
+
+    <string name="get_area_intersection_action">取区域交集</string>
+    <string name="get_area_intersection_action_desc">取两个区域相交的区域</string>
 
     <!-- 针脚名 -->
     <string name="pin_execute">执行</string>
@@ -370,14 +391,14 @@
     <string name="pin_boolean_condition">条件</string>
     <string name="pin_boolean_result">结果</string>
 
-    <string name="Pin_value_area">数值区域</string>
-    <string name="Pin_value_area_min">最小</string>
-    <string name="Pin_value_area_max">最大</string>
+    <string name="pin_value_area">数值区域</string>
+    <string name="pin_value_area_min">最小</string>
+    <string name="pin_value_area_max">最大</string>
 
-    <string name="Pin_point">位置</string>
-    <string name="Pin_area">区域</string>
+    <string name="pin_point">位置</string>
+    <string name="pin_area">区域</string>
 
-    <string name="Pin_select">单选</string>
+    <string name="pin_select">单选</string>
     <string name="pin_select_hint">选项(逗号分隔)</string>
     <string name="Pin_touch">手势</string>
     <string name="pin_node">控件</string>

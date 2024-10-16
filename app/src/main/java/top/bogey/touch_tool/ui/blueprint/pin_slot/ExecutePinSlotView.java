@@ -10,8 +10,6 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinBase;
-import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinExecute;
 import top.bogey.touch_tool.databinding.PinSlotNormalBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 

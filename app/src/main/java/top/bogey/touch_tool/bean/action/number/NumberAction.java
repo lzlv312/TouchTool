@@ -6,7 +6,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.pin_number.PinDouble;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 
 public abstract class NumberAction extends CalculateAction {
     protected final transient Pin firstPin = new Pin(new PinDouble(), R.string.pin_number_integer);

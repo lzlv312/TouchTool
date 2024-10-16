@@ -11,12 +11,11 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinAdd;
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
-import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinExecute;
-import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinStringExecute;
-import top.bogey.touch_tool.bean.pin.pins.pin_string.PinLogString;
-import top.bogey.touch_tool.bean.pin.pins.pin_string.PinString;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinStringExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 
 public class SwitchAction extends Action implements DynamicPinsAction {

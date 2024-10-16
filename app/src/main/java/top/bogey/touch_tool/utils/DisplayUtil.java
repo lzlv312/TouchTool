@@ -16,6 +16,7 @@ import android.util.TypedValue;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.WindowManager;
 
 import androidx.annotation.ColorInt;
@@ -93,15 +94,13 @@ public class DisplayUtil {
     }
 
     public static PointF getLocationRelativeToView(View view, View relativeView) {
-        PointF pointF = new PointF();
-        int[] location = new int[2];
-        int[] relativeLocation = new int[2];
-        // 获取当前view在屏幕上的位置
-        view.getLocationOnScreen(location);
-        // 获取相对view在屏幕上的位置
-        relativeView.getLocationOnScreen(relativeLocation);
-        pointF.x = location[0] - relativeLocation[0];
-        pointF.y = location[1] - relativeLocation[1];
+        PointF pointF = new PointF(view.getX(), view.getY());
+        ViewParent viewParent = view.getParent();
+        while (viewParent != null && viewParent != relativeView) {
+            View parentView = (View) viewParent;
+            pointF.offset(parentView.getX(), parentView.getY());
+            viewParent = viewParent.getParent();
+        }
         return pointF;
     }
 

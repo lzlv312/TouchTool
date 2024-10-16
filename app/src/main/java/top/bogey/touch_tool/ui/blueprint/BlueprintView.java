@@ -106,7 +106,7 @@ public class BlueprintView extends Fragment {
 
         binding = ViewBlueprintBinding.inflate(inflater, container, false);
 
-        binding.addButton.setOnClickListener(v -> new SelectActionDialog(requireContext(), binding.cardLayout, null).show());
+        binding.addButton.setOnClickListener(v -> new SelectActionDialog(requireContext(), binding.cardLayout, null, null).show());
 
         binding.lockEditButton.setOnClickListener(v -> {
 

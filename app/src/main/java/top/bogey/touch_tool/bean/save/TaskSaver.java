@@ -12,13 +12,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
-import top.bogey.touch_tool.bean.pin.pins.PinBase;
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.GsonUtil;

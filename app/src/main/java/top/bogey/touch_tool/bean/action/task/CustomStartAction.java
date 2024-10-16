@@ -4,12 +4,11 @@ import com.google.gson.JsonObject;
 
 import java.util.Map;
 
-import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
-import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 
 public class CustomStartAction extends Action {

@@ -8,8 +8,8 @@ import java.lang.reflect.Type;
 
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinBase;
-import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinTouchPath;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
 
 public class GsonUtil {
     public static final Gson gson = new GsonBuilder()

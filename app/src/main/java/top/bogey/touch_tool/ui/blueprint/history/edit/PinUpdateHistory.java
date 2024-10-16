@@ -1,6 +1,6 @@
 package top.bogey.touch_tool.ui.blueprint.history.edit;
 
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 
 public class PinUpdateHistory extends EditHistory {
     private final String actionId;

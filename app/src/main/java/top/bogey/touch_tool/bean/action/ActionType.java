@@ -79,9 +79,9 @@ public enum ActionType {
     STRING_SPLIT,
     STRING_EQUAL,
     STRING_REPLACE,
+    GET_OCR_TEXT,
 
 
-    OCR_SCREEN_TEXT,
     GET_NODE_BY_TEXT,
     GET_NODES_BY_TEXT,
     GET_AREA_BY_OCR_TEXT,
@@ -132,18 +132,19 @@ public enum ActionType {
     BOOLEAN_AND,
     BOOLEAN_NOT,
 
-    
+    // 区域
+    AREA_TO_INT,
+    AREA_FROM_INT,
+    CHECK_AREA_CONTAIN_POS,
+    CHECK_AREA_RELATION,
+    GET_AREA_INTERSECTION,
+    GET_AREA_CENTER,
+    PICK_AREA,
+
     // 位置
     POSITION_FROM_INT,
     POSITION_TO_INT,
     POS_OFFSET,
-    CHECK_POS_IN_AREA,
-    POS_TO_AREA,
-
-    GET_AREA_CENTER,
-    AREA_TO_INT,
-    PICK_AREA,
-
     POS_TO_TOUCH,
 
     // 数组

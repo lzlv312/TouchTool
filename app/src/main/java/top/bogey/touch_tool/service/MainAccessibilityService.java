@@ -468,8 +468,9 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     public void tryGetScreenShot(BitmapResultCallback callback) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            takeScreenshot(0, Executors.newSingleThreadExecutor(), new TakeScreenshotCallback() {
+            takeScreenshot(0, executorService, new TakeScreenshotCallback() {
                 @Override
                 public void onSuccess(@NonNull ScreenshotResult screenshot) {
                     Bitmap bitmap = Bitmap.wrapHardwareBuffer(screenshot.getHardwareBuffer(), screenshot.getColorSpace());
@@ -485,8 +486,10 @@ public class MainAccessibilityService extends AccessibilityService {
                 }
             });
         } else {
-            if (binder != null) callback.onResult(binder.getScreenShot());
-            else callback.onResult(null);
+            executorService.submit(() -> {
+                if (binder != null) callback.onResult(binder.getScreenShot());
+                else callback.onResult(null);
+            });
         }
     }
 

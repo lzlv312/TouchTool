@@ -27,19 +27,17 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
     private final FloatChoiceExecuteBinding binding;
     private StringResultCallback callback;
 
-    public static String showChoice(List<Choice> choices, StringResultCallback callback, Point location) {
+    public static void showChoice(List<Choice> choices, StringResultCallback callback, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
-        if (keepView == null) return null;
-        String tag = UUID.randomUUID().toString();
+        if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
-            ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getContext(), tag);
+            ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getContext());
             choiceView.show();
             choiceView.innerShowChoice(choices, callback, location);
         });
-        return tag;
     }
 
-    public ChoiceExecuteFloatView(@NonNull Context context, String tag) {
+    public ChoiceExecuteFloatView(@NonNull Context context) {
         super(context);
         binding = FloatChoiceExecuteBinding.inflate(LayoutInflater.from(context), this, true);
 

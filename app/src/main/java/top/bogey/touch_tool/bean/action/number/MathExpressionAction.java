@@ -16,14 +16,15 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinSubType;
-import top.bogey.touch_tool.bean.pin.pins.pin_number.PinDouble;
-import top.bogey.touch_tool.bean.pin.pins.pin_number.PinNumber;
-import top.bogey.touch_tool.bean.pin.pins.pin_string.PinString;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
+import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 
 public class MathExpressionAction extends CalculateAction implements DynamicPinsAction {
-    private final transient Pin expressionPin = new Pin(new PinString(PinSubType.AUTO_PIN), R.string.math_expression_action_express);
+    private final transient Pin expressionPin = new NotLinkAblePin(new PinString(PinSubType.AUTO_PIN), R.string.math_expression_action_express);
     private final transient Pin resultPin = new Pin(new PinDouble(), R.string.math_expression_action_result, true);
 
     public MathExpressionAction() {

@@ -14,8 +14,8 @@ import com.google.android.material.radiobutton.MaterialRadioButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import top.bogey.touch_tool.bean.pin.pins.pin_application.PinApplication;
-import top.bogey.touch_tool.bean.pin.pins.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 

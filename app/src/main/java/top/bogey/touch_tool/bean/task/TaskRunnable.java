@@ -132,6 +132,10 @@ public class TaskRunnable implements Runnable {
         }
     }
 
+    public boolean isPaused() {
+        return paused;
+    }
+
     public boolean isInterrupt() {
         return interrupt;
     }

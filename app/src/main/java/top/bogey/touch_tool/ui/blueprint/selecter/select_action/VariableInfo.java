@@ -1,19 +1,17 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_action;
 
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.task.Task;
 
 public final class VariableInfo {
+    private final Task owner;
     private String name;
     private PinObject value;
-    private final Task owner;
-    private final boolean out;
 
-    public VariableInfo(String name, PinObject value, Task owner, boolean out) {
+    public VariableInfo(Task owner, String name, PinObject value) {
+        this.owner = owner;
         this.name = name;
         this.value = value;
-        this.owner = owner;
-        this.out = out;
     }
 
     public String getName() {
@@ -37,9 +35,5 @@ public final class VariableInfo {
 
     public Task getOwner() {
         return owner;
-    }
-
-    public boolean isOut() {
-        return out;
     }
 }

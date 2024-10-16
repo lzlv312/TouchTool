@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.pin.pins.pin_string.PinSingleSelect;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.databinding.PinWidgetSelectBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;

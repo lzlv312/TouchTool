@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinTouchPath;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
 import top.bogey.touch_tool.databinding.PinWidgetTouchBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.picker.TouchPickerPreview;

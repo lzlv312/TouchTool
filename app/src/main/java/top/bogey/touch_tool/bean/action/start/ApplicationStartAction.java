@@ -8,26 +8,17 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinBoolean;
-import top.bogey.touch_tool.bean.pin.pins.PinSubType;
-import top.bogey.touch_tool.bean.pin.pins.pin_application.PinApplication;
-import top.bogey.touch_tool.bean.pin.pins.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 
 public class ApplicationStartAction extends StartAction {
-    private final transient Pin appsPin = new Pin(new PinApplications(PinSubType.MULTI_APP_WITH_ACTIVITY, MainApplication.getInstance().getString(R.string.common_package)), R.string.pin_app) {
-        @Override
-        public boolean linkAble() {
-            return false;
-        }
-    };
-    private final transient Pin breakPin = new Pin(new PinBoolean(true), R.string.application_start_action_break) {
-        @Override
-        public boolean linkAble() {
-            return false;
-        }
-    };
+    private final transient Pin appsPin = new NotLinkAblePin(new PinApplications(PinSubType.MULTI_APP_WITH_ACTIVITY, MainApplication.getInstance().getString(R.string.common_package)), R.string.pin_app);
+    private final transient Pin breakPin = new NotLinkAblePin(new PinBoolean(true), R.string.application_start_action_break);
     private final transient Pin appPin = new Pin(new PinApplication(), R.string.application_start_action_app, true);
 
     public ApplicationStartAction() {

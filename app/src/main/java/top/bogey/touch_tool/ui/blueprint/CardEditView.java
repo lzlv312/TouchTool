@@ -41,14 +41,7 @@ public class CardEditView extends MaterialCardView {
 
         binding = ViewCardEditBinding.inflate(LayoutInflater.from(context), this, true);
 
-        binding.expandButton.setOnClickListener(v -> {
-            for (ActionCard card : cardLayout.selectedCards) {
-                card.expand();
-            }
-        });
-
         binding.copyButton.setOnClickListener(v -> {
-
 
         });
 

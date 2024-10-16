@@ -5,13 +5,13 @@ import com.google.gson.JsonObject;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinBoolean;
-import top.bogey.touch_tool.bean.pin.pins.pin_number.PinDouble;
-import top.bogey.touch_tool.bean.pin.pins.pin_number.PinNumber;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 
 public class NumberEqualAction extends NumberResultAction {
-    private final transient Pin offsetPin = new Pin(new PinDouble(0.0001), R.string.number_equal_action_offset);
+    private final transient Pin offsetPin = new Pin(new PinDouble(0.0001), R.string.number_equal_action_offset, false, false, true);
 
     public NumberEqualAction() {
         super(ActionType.NUMBER_EQUAL);

@@ -20,11 +20,11 @@ import java.util.Set;
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinListener;
-import top.bogey.touch_tool.bean.pin.pins.PinAdd;
-import top.bogey.touch_tool.bean.pin.pins.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.PinInfo;
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
-import top.bogey.touch_tool.bean.pin.pins.PinType;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 import top.bogey.touch_tool.utils.GsonUtil;
@@ -187,7 +187,7 @@ public abstract class Action extends Identity implements PinListener {
     }
 
     public Pin findConnectToAblePin(Pin pin) {
-        return pins.stream().filter(p -> p.linkAble(pin)).findFirst().orElse(null);
+        return pins.stream().filter(p -> p.linkAble() && p.linkAble(pin)).findFirst().orElse(null);
     }
 
     public boolean withCapture() {

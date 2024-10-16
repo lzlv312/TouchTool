@@ -14,9 +14,9 @@ import androidx.annotation.NonNull;
 import java.util.UUID;
 
 import top.bogey.touch_tool.MainApplication;
-import top.bogey.touch_tool.bean.pin.pins.PinObject;
-import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinColor;
-import top.bogey.touch_tool.bean.pin.pins.pin_scale_able.PinImage;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.databinding.FloatStickScreenBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;

@@ -10,8 +10,8 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinAdd;
-import top.bogey.touch_tool.bean.pin.pins.pin_string.PinString;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 
 public class StringAppendAction extends CalculateAction implements DynamicPinsAction {

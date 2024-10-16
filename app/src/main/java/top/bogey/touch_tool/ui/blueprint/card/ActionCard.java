@@ -134,9 +134,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         return pinViews.get(pinId);
     }
 
-    public PinView getLinkAblePinView(float x, float y) {
-        float scale = getScaleX();
-
+    public PinView getLinkAblePinView(float x, float y, float scale) {
         for (Map.Entry<String, PinView> entry : pinViews.entrySet()) {
             PinView pinView = entry.getValue();
             if (pinView.getVisibility() != VISIBLE) continue;

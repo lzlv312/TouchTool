@@ -10,8 +10,8 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pins.PinAdd;
-import top.bogey.touch_tool.bean.pin.pins.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 
 public class SequenceExecuteAction extends ExecuteAction implements DynamicPinsAction {
