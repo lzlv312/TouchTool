@@ -15,7 +15,7 @@ import top.bogey.touch_tool.bean.task.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 
 public class NetworkStartAction extends StartAction {
-    private final transient Pin statePin = new Pin(new PinList(PinType.STRING), R.string.network_start_action_state, true);
+    private final transient Pin statePin = new Pin(new PinList(PinType.STRING, false), R.string.network_start_action_state, true);
 
     public NetworkStartAction() {
         super(ActionType.NETWORK_START);
@@ -29,11 +29,11 @@ public class NetworkStartAction extends StartAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
-        List<PinObject> values = statePin.getValue(PinList.class).getValues();
+        PinList states = statePin.getValue();
         List<TaskInfoSummary.NotworkState> networkState = TaskInfoSummary.getInstance().getNetworkState();
-        values.clear();
+        states.clear();
         for (TaskInfoSummary.NotworkState state : networkState) {
-            values.add(new PinString(state.name()));
+            states.add(new PinString(state.name()));
         }
         super.execute(runnable, pin);
     }

@@ -112,19 +112,19 @@ public class PinSingleSelect extends PinString {
     }
 
     @Override
-    public boolean equals(Object object) {
+    public final boolean equals(Object object) {
         if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
+        if (!(object instanceof PinSingleSelect that)) return false;
         if (!super.equals(object)) return false;
 
-        PinSingleSelect pinSingleSelect = (PinSingleSelect) object;
-        return Objects.equals(getOptions(), pinSingleSelect.getOptions());
+        return dynamic == that.dynamic && getOptions().equals(that.getOptions());
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + Objects.hashCode(getOptions());
+        result = 31 * result + getOptions().hashCode();
+        result = 31 * result + Boolean.hashCode(dynamic);
         return result;
     }
 }

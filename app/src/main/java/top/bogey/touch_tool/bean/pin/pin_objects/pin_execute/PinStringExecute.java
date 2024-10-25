@@ -34,19 +34,18 @@ public class PinStringExecute extends PinExecute {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public final boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PinStringExecute that)) return false;
+        if (!super.equals(object)) return false;
 
-        PinStringExecute that = (PinStringExecute) o;
-        return Objects.equals(value, that.value);
+        return Objects.equals(getValue(), that.getValue());
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + Objects.hashCode(value);
+        result = 31 * result + Objects.hashCode(getValue());
         return result;
     }
 }

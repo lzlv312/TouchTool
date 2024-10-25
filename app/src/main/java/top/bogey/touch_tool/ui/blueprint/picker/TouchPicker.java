@@ -51,7 +51,7 @@ public class TouchPicker extends FullScreenPicker<PinTouchPath> {
 
     public TouchPicker(@NonNull Context context, ResultCallback<PinTouchPath> callback, PinTouchPath path) {
         super(context, callback);
-        pathParts.addAll(path.getValue());
+        pathParts.addAll(path.getPathParts());
         anchor = path.getAnchor();
         pathMap = getPathMap();
         mode = pathParts.isEmpty() ? MODE_NONE : MODE_MARKED;

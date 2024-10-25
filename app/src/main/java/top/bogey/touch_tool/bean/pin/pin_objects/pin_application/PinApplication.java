@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
@@ -82,22 +83,19 @@ public class PinApplication extends PinObject {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public final boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PinApplication that)) return false;
+        if (!super.equals(object)) return false;
 
-        PinApplication that = (PinApplication) o;
-
-        if (getPackageName() != null ? !getPackageName().equals(that.getPackageName()) : that.getPackageName() != null) return false;
-        return getActivityClasses() != null ? getActivityClasses().equals(that.getActivityClasses()) : that.getActivityClasses() == null;
+        return Objects.equals(getPackageName(), that.getPackageName()) && Objects.equals(getActivityClasses(), that.getActivityClasses());
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (getPackageName() != null ? getPackageName().hashCode() : 0);
-        result = 31 * result + (getActivityClasses() != null ? getActivityClasses().hashCode() : 0);
+        result = 31 * result + Objects.hashCode(getPackageName());
+        result = 31 * result + Objects.hashCode(getActivityClasses());
         return result;
     }
 }

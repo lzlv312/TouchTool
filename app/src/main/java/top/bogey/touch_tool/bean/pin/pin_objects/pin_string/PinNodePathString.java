@@ -84,7 +84,7 @@ public class PinNodePathString extends PinString {
             clazz = nodeInfo.clazz;
             id = nodeInfo.id;
 
-            if (nodeInfo.parent != null && nodeInfo.parent.children != null) {
+            if (nodeInfo.parent != null) {
                 for (int i = 0; i < nodeInfo.parent.children.size(); i++) {
                     NodeInfo info = nodeInfo.parent.children.get(i);
                     if (info == nodeInfo) {
@@ -141,7 +141,6 @@ public class PinNodePathString extends PinString {
 
         public NodeInfo findChild(NodeInfo nodeInfo) {
             List<NodeInfo> children = nodeInfo.children;
-            if (children == null) return null;
             NodeInfo child = null;
             // 先根据class,id,index一起查找
             if (index > 0 && index <= children.size()) {

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
@@ -93,16 +95,12 @@ public abstract class PinScaleAble<T> extends PinObject {
     public abstract void setValue(EAnchor anchor, T value);
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public final boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PinScaleAble<?> that)) return false;
+        if (!super.equals(object)) return false;
 
-        PinScaleAble<?> that = (PinScaleAble<?>) o;
-
-        if (getScreen() != that.getScreen()) return false;
-        if (getAnchor() != that.getAnchor()) return false;
-        return getValue() != null ? getValue().equals(that.getValue()) : that.getValue() == null;
+        return getScreen() == that.getScreen() && getAnchor() == that.getAnchor() && Objects.equals(getValue(), that.getValue());
     }
 
     @Override
@@ -110,7 +108,7 @@ public abstract class PinScaleAble<T> extends PinObject {
         int result = super.hashCode();
         result = 31 * result + getScreen();
         result = 31 * result + getAnchor().hashCode();
-        result = 31 * result + (getValue() != null ? getValue().hashCode() : 0);
+        result = 31 * result + Objects.hashCode(getValue());
         return result;
     }
 }

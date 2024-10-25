@@ -52,20 +52,18 @@ public class PinBoolean extends PinObject {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public final boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PinBoolean that)) return false;
+        if (!super.equals(object)) return false;
 
-        PinBoolean that = (PinBoolean) o;
-
-        return value == that.value;
+        return getValue() == that.getValue();
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (value ? 1 : 0);
+        result = 31 * result + Boolean.hashCode(getValue());
         return result;
     }
 }

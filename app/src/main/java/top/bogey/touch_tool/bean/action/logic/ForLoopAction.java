@@ -37,11 +37,18 @@ public class ForLoopAction extends ExecuteAction {
             PinNumber<?> start = getPinValue(runnable, startPin);
             PinNumber<?> end = getPinValue(runnable, endPin);
             PinNumber<?> step = getPinValue(runnable, stepPin);
+            int startValue = start.intValue();
+            int endValue = end.intValue();
+            int stepValue = step.intValue();
+            if (stepValue == 0) stepValue = 1;
 
-            for (int i = start.intValue(); i <= end.intValue(); i += step.intValue()) {
-                if (isBreak || runnable.isInterrupt()) break;
-                currentPin.getValue(PinInteger.class).setValue(i);
+            int currentValue = startValue;
+            while (startValue <= endValue ? currentValue <= endValue : currentValue >= endValue) {
+                if (runnable.isInterrupt()) return;
+                if (isBreak) break;
+                currentPin.getValue(PinInteger.class).setValue(currentValue);
                 executeNext(runnable, outPin);
+                currentValue += stepValue;
             }
             executeNext(runnable, completePin);
         } else {

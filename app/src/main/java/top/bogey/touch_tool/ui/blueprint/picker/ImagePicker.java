@@ -139,7 +139,7 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
             if (mode == MODE_NONE) {
                 for (int i = screenInfo.getRootNodes().size() - 1; i >= 0; i--) {
                     NodeInfo nodeInfo = screenInfo.getRootNodes().get(i);
-                    NodeInfo child = NodeInfo.findChild(nodeInfo, (int) x, (int) y);
+                    NodeInfo child = nodeInfo.findUsableChild((int) x, (int) y);
                     if (child != null) {
                         area.set(child.area);
                         break;

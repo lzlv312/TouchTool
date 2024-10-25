@@ -38,7 +38,8 @@ public class ActionMap {
                     ActionType.LOG,
                     ActionType.STICK,
                     ActionType.CLOSE_STICK,
-                    ActionType.CLOSE_ALL_STICK
+                    ActionType.CLOSE_ALL_STICK,
+                    ActionType.FIND_COLORS
             ));
         }
         return list;

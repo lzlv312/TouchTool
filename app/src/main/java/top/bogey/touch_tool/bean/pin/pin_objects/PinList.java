@@ -1,34 +1,39 @@
 package top.bogey.touch_tool.bean.pin.pin_objects;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import top.bogey.touch_tool.utils.GsonUtil;
 
-public class PinList extends PinObject {
+public class PinList extends PinObject implements List<PinObject> {
     protected PinType valueType = PinType.OBJECT;
     protected List<PinObject> values = new ArrayList<>();
-    protected boolean changeAble;
+    protected boolean changeAble = false;
+    protected boolean dynamic = true;
 
     public PinList() {
         super(PinType.LIST);
-        changeAble = true;
     }
 
-    public PinList(PinType valueType) {
-        this();
-        this.valueType = valueType;
-    }
-
-    public PinList(PinType valueType, boolean changeAble) {
+    public PinList(PinType valueType, boolean changeAble, boolean dynamic) {
         this();
         this.valueType = valueType;
         this.changeAble = changeAble;
+        this.dynamic = dynamic;
     }
 
     protected PinList(PinSubType subType) {
@@ -50,22 +55,19 @@ public class PinList extends PinObject {
         super(jsonObject);
         valueType = GsonUtil.getAsObject(jsonObject, "valueType", PinType.class, PinType.OBJECT);
         changeAble = GsonUtil.getAsBoolean(jsonObject, "changeAble", true);
-        values = GsonUtil.getAsObject(jsonObject, "list", TypeToken.getParameterized(ArrayList.class, PinBase.class).getType(), new ArrayList<>());
-    }
-
-    public boolean contains(PinObject pinObject) {
-        return values.contains(pinObject);
+        dynamic = GsonUtil.getAsBoolean(jsonObject, "dynamic", false);
+        values = GsonUtil.getAsObject(jsonObject, "values", TypeToken.getParameterized(ArrayList.class, PinBase.class).getType(), new ArrayList<>());
     }
 
     @Override
     public void reset() {
         super.reset();
-        values.clear();
+        clear();
     }
 
     @Override
     public PinList copy() {
-        PinList pinList = new PinList(valueType, changeAble);
+        PinList pinList = new PinList(subType, valueType, changeAble);
         for (PinObject value : values) {
             pinList.values.add((PinObject) value.copy());
         }
@@ -76,8 +78,8 @@ public class PinList extends PinObject {
     public boolean isInstance(PinBase pin) {
         if (super.isInstance(pin)) {
             if (pin instanceof PinList pinList) {
-                // 自己为OBJECT，那么可以任意类型连上我
-                if (valueType == PinType.OBJECT) return true;
+                // 自己为OBJECT，且是动态的，那么可以任意类型连上我
+                if (dynamic && valueType == PinType.OBJECT) return true;
                 return pinList.valueType == valueType;
             }
         }
@@ -96,44 +98,166 @@ public class PinList extends PinObject {
 
     public void setValueType(PinType valueType) {
         this.valueType = valueType;
-        reset();
-    }
-
-    public List<PinObject> getValues() {
-        return values;
-    }
-
-    public void setValues(List<PinObject> values) {
-        this.values = values;
     }
 
     public boolean isChangeAble() {
         return changeAble;
     }
 
-    public void setChangeAble(boolean changeAble) {
-        this.changeAble = changeAble;
+    public boolean isDynamic() {
+        return dynamic;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public final boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PinList that)) return false;
+        if (!super.equals(object)) return false;
 
-        PinList pinList = (PinList) o;
-
-        if (isChangeAble() != pinList.isChangeAble()) return false;
-        if (getValueType() != pinList.getValueType()) return false;
-        return getValues().equals(pinList.getValues());
+        return isChangeAble() == that.isChangeAble() && getValueType() == that.getValueType() && values.equals(that.values);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + getValueType().hashCode();
-        result = 31 * result + getValues().hashCode();
-        result = 31 * result + (isChangeAble() ? 1 : 0);
+        result = 31 * result + values.hashCode();
+        result = 31 * result + Boolean.hashCode(isChangeAble());
         return result;
+    }
+
+    @Override
+    public int size() {
+        return values.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return values.isEmpty();
+    }
+
+    @Override
+    public boolean contains(@Nullable Object o) {
+        return values.contains(o);
+    }
+
+    @NonNull
+    @Override
+    public Iterator<PinObject> iterator() {
+        return values.iterator();
+    }
+
+    @NonNull
+    @Override
+    public Object[] toArray() {
+        return values.toArray();
+    }
+
+    @NonNull
+    @Override
+    public <T> T[] toArray(@NonNull T[] a) {
+        return values.toArray(a);
+    }
+
+    @Override
+    public boolean add(PinObject pinObject) {
+        return values.add(pinObject);
+    }
+
+    @Override
+    public boolean remove(@Nullable Object o) {
+        return values.remove(o);
+    }
+
+    @Override
+    public boolean containsAll(@NonNull Collection<?> c) {
+        return new HashSet<>(values).containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(@NonNull Collection<? extends PinObject> c) {
+        return values.addAll(c);
+    }
+
+    @Override
+    public boolean addAll(int index, @NonNull Collection<? extends PinObject> c) {
+        return values.addAll(index, c);
+    }
+
+    @Override
+    public boolean removeAll(@NonNull Collection<?> c) {
+        return values.removeAll(c);
+    }
+
+    @Override
+    public boolean retainAll(@NonNull Collection<?> c) {
+        return values.retainAll(c);
+    }
+
+    @Override
+    public void clear() {
+        values.clear();
+    }
+
+    @Override
+    public PinObject get(int index) {
+        return values.get(index);
+    }
+
+    @Override
+    public PinObject set(int index, PinObject element) {
+        return values.set(index, element);
+    }
+
+    @Override
+    public void add(int index, PinObject element) {
+        values.add(index, element);
+    }
+
+    @Override
+    public PinObject remove(int index) {
+        return values.remove(index);
+    }
+
+    @Override
+    public int indexOf(@Nullable Object o) {
+        return values.indexOf(o);
+    }
+
+    @Override
+    public int lastIndexOf(@Nullable Object o) {
+        return values.lastIndexOf(o);
+    }
+
+    @NonNull
+    @Override
+    public ListIterator<PinObject> listIterator() {
+        return values.listIterator();
+    }
+
+    @NonNull
+    @Override
+    public ListIterator<PinObject> listIterator(int index) {
+        return values.listIterator(index);
+    }
+
+    @NonNull
+    @Override
+    public List<PinObject> subList(int fromIndex, int toIndex) {
+        return values.subList(fromIndex, toIndex);
+    }
+
+    public static class PinListSerializer implements JsonSerializer<PinList> {
+        @Override
+        public JsonElement serialize(PinList src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("type", src.getType().name());
+            jsonObject.addProperty("subType", src.getSubType().name());
+            jsonObject.addProperty("valueType", src.getValueType().name());
+            jsonObject.add("values", context.serialize(src.values));
+            jsonObject.addProperty("changeAble", src.isChangeAble());
+            jsonObject.addProperty("dynamic", src.dynamic);
+            return jsonObject;
+        }
     }
 }

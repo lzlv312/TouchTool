@@ -8,63 +8,45 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.utils.EAnchor;
-import top.bogey.touch_tool.utils.GsonUtil;
 
-public class PinTouchPath extends PinScaleAble<List<PinTouchPath.PathPart>> {
+public class PinTouchPath extends PinScaleAble<String> {
+    private transient List<PathPart> pathParts = new ArrayList<>();
+
     public PinTouchPath() {
         super(PinType.TOUCH);
-        value = new ArrayList<>();
+    }
+
+    public PinTouchPath(String value) {
+        super(PinType.TOUCH);
+        setValue(value);
+        pathParts = deserialize(value);
     }
 
     public PinTouchPath(List<PathPart> paths) {
-        this();
-        value = paths;
+        super(PinType.TOUCH);
+        pathParts = paths;
+        value = serialize(pathParts);
     }
 
     public PinTouchPath(JsonObject jsonObject) {
         super(jsonObject);
-        value = deserialize(GsonUtil.getAsString(jsonObject, "paths", null));
-    }
-
-    private String serialize() {
-        if (value.isEmpty()) return null;
-        StringBuilder builder = new StringBuilder();
-        for (PathPart part : value) {
-            builder.append(part.toString()).append("|");
-        }
-        builder.deleteCharAt(builder.length() - 1);
-        return builder.toString();
-    }
-
-    private List<PathPart> deserialize(String info) {
-        List<PathPart> list = new ArrayList<>();
-        if (info == null || info.isEmpty()) return list;
-        String[] split = info.split("\\|");
-        for (String s : split) {
-            list.add(new PathPart(s));
-        }
-        return list;
+        pathParts = deserialize(value);
     }
 
     // 返回手势路径，这个手势是平滑的，不会出现突然跳变的情况
     public Set<GestureDescription.StrokeDescription> getStrokes(float timeScale, int offset) {
-        List<PathPart> paths = getValue(EAnchor.TOP_LEFT);
+        List<PathPart> paths = getPathParts(EAnchor.TOP_LEFT);
 
         int offsetX = (int) (Math.random() * 2 * offset - offset);
         int offsetY = (int) (Math.random() * 2 * offset - offset);
@@ -113,7 +95,7 @@ public class PinTouchPath extends PinScaleAble<List<PinTouchPath.PathPart>> {
     // 返回手势路径，这个手势是不平滑的，会出现突然跳变的情况，能更好的模拟真人手势
     @RequiresApi(api = Build.VERSION_CODES.O)
     public List<Set<GestureDescription.StrokeDescription>> getStrokesList(float timeScale, int offset) {
-        List<PathPart> paths = getValue(EAnchor.TOP_LEFT);
+        List<PathPart> paths = getPathParts(EAnchor.TOP_LEFT);
 
         List<Set<GestureDescription.StrokeDescription>> strokes = new ArrayList<>();
         Map<Integer, Point> prePointMap = new HashMap<>();
@@ -176,63 +158,88 @@ public class PinTouchPath extends PinScaleAble<List<PinTouchPath.PathPart>> {
     @Override
     public void reset() {
         super.reset();
-        value.clear();
+        value = null;
+        pathParts.clear();
     }
 
     @NonNull
     @Override
     public String toString() {
-        return super.toString() + "[" + serialize() + "]";
+        return super.toString() + "[" + value + "]";
     }
 
     @Override
-    public List<PathPart> getValue() {
-        List<PathPart> paths = super.getValue();
-        float scale = getScale();
-        List<PathPart> newPaths = new ArrayList<>();
-        if (scale == 1) {
-            for (PathPart path : paths) {
-                newPaths.add(new PathPart(path));
-            }
-        } else {
-            for (PathPart path : paths) {
-                PathPart newPath = new PathPart(path);
-                newPath.scale(scale);
-                newPaths.add(newPath);
-            }
-        }
-
-        return newPaths;
+    public String getValue(EAnchor anchor) {
+        List<PathPart> pathParts = getPathParts(anchor);
+        return serialize(pathParts);
     }
 
     @Override
-    public List<PathPart> getValue(EAnchor anchor) {
-        List<PathPart> paths = getValue();
-        if (anchor == this.anchor) return paths;
-        Point anchorPoint = this.anchor.getAnchorPoint();
-        for (PathPart path : paths) {
-            path.offset(anchorPoint.x, anchorPoint.y);
-        }
-        anchorPoint = anchor.getAnchorPoint();
-        for (PathPart path : paths) {
-            path.offset(-anchorPoint.x, -anchorPoint.y);
-        }
-        return paths;
+    public void setValue(String value) {
+        setValue(EAnchor.TOP_LEFT, value);
     }
 
     @Override
-    public void setValue(List<PathPart> value) {
-        super.setValue(value);
+    public void setValue(EAnchor anchor, String value) {
+        setPathParts(anchor, deserialize(value));
     }
 
-    @Override
-    public void setValue(EAnchor anchor, List<PathPart> value) {
+    public List<PathPart> getPathParts() {
         Point anchorPoint = anchor.getAnchorPoint();
-        for (PathPart path : value) {
-            path.offset(-anchorPoint.x, -anchorPoint.y);
+        List<PathPart> pathParts = new ArrayList<>();
+        float scale = getScale();
+        this.pathParts.forEach(part -> {
+            PathPart newPart = new PathPart(part);
+            if (scale != 1) newPart.scale(scale);
+            newPart.offset(anchorPoint.x, anchorPoint.y);
+            pathParts.add(newPart);
+        });
+        return pathParts;
+    }
+
+    public void setPathParts(List<PathPart> pathParts) {
+        setPathParts(EAnchor.TOP_LEFT, pathParts);
+    }
+
+    public List<PathPart> getPathParts(EAnchor anchor) {
+        List<PathPart> pathParts = getPathParts();
+        if (anchor == this.anchor) return pathParts;
+        Point thisAnchorPoint = this.anchor.getAnchorPoint();
+        pathParts.forEach(part -> part.offset(-thisAnchorPoint.x, -thisAnchorPoint.y));
+        Point thatAnchorPoint = anchor.getAnchorPoint();
+        pathParts.forEach(part -> part.offset(thatAnchorPoint.x, thatAnchorPoint.y));
+        return pathParts;
+    }
+
+    public void setPathParts(EAnchor anchor, List<PathPart> pathParts) {
+        setAnchor(anchor);
+        if (pathParts == null) {
+            reset();
+            return;
         }
-        setValue(value);
-        this.anchor = anchor;
+        Point anchorPoint = anchor.getAnchorPoint();
+        pathParts.forEach(part -> part.offset(-anchorPoint.x, -anchorPoint.y));
+        this.pathParts = pathParts;
+        value = serialize(pathParts);
+    }
+
+    private static String serialize(List<PathPart> pathParts) {
+        StringBuilder builder = new StringBuilder();
+        for (PathPart part : pathParts) {
+            builder.append(part.toString()).append("|");
+        }
+        builder.deleteCharAt(builder.length() - 1);
+        return builder.toString();
+    }
+
+    private static List<PathPart> deserialize(String info) {
+        List<PathPart> list = new ArrayList<>();
+        if (info == null || info.isEmpty()) return list;
+        String[] split = info.split("\\|");
+        for (String s : split) {
+            list.add(new PathPart(s));
+        }
+        return list;
     }
 
     // 路径片段，格式为 time;[id.x.y,id.x.y,...]
@@ -326,18 +333,17 @@ public class PinTouchPath extends PinScaleAble<List<PinTouchPath.PathPart>> {
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+        public final boolean equals(Object object) {
+            if (this == object) return true;
+            if (!(object instanceof PathPart pathPart)) return false;
 
-            PathPart pathPart = (PathPart) o;
-            return getTime() == pathPart.getTime() && Objects.equals(getPoints(), pathPart.getPoints());
+            return getTime() == pathPart.getTime() && getPoints().equals(pathPart.getPoints());
         }
 
         @Override
         public int hashCode() {
             int result = getTime();
-            result = 31 * result + Objects.hashCode(getPoints());
+            result = 31 * result + getPoints().hashCode();
             return result;
         }
 
@@ -407,36 +413,20 @@ public class PinTouchPath extends PinScaleAble<List<PinTouchPath.PathPart>> {
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            if (!super.equals(o)) return false;
+        public final boolean equals(Object object) {
+            if (this == object) return true;
+            if (!(object instanceof PathPoint pathPoint)) return false;
+            if (!super.equals(object)) return false;
 
-            PathPoint pathPoint = (PathPoint) o;
-
-            if (getId() != pathPoint.getId()) return false;
-            return isEnd() == pathPoint.isEnd();
+            return getId() == pathPoint.getId() && isEnd() == pathPoint.isEnd();
         }
 
         @Override
         public int hashCode() {
             int result = super.hashCode();
             result = 31 * result + getId();
-            result = 31 * result + (isEnd() ? 1 : 0);
+            result = 31 * result + Boolean.hashCode(isEnd());
             return result;
-        }
-    }
-
-    public static class PinTouchPathSerializer implements JsonSerializer<PinTouchPath> {
-        @Override
-        public JsonElement serialize(PinTouchPath src, Type typeOfSrc, JsonSerializationContext context) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("type", src.getType().name());
-            jsonObject.addProperty("subType", src.getSubType().name());
-            jsonObject.addProperty("screen", src.getScreen());
-            jsonObject.addProperty("anchor", src.getAnchor().name());
-            jsonObject.addProperty("paths", src.serialize());
-            return jsonObject;
         }
     }
 }

@@ -48,7 +48,7 @@ public class StringSplitAction extends CalculateAction {
                     s = s.trim();
                     if (s.isEmpty()) return;
                 }
-                value.getValues().add(new PinString(s));
+                value.add(new PinString(s));
             });
         } else {
             String[] split = text.getValue().split(separator.getValue());
@@ -57,7 +57,7 @@ public class StringSplitAction extends CalculateAction {
                     s = s.trim();
                     if (s.isEmpty()) return;
                 }
-                value.getValues().add(new PinString(s));
+                value.add(new PinString(s));
             }
         }
     }

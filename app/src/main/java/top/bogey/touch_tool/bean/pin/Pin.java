@@ -109,14 +109,15 @@ public class Pin extends Identity {
         return null;
     }
 
-    private void addLink(Pin pin) {
+    private void addLink(Task task, Pin pin) {
+        if (isSingleLink()) clearLinks(task);
         links.put(pin.getId(), pin.getOwnerId());
-        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onLinkedTo(this, pin));
+        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onLinkedTo(task, this, pin));
     }
 
-    public void mutualAddLink(Pin pin) {
-        addLink(pin);
-        pin.addLink(this);
+    public void mutualAddLink(Task task, Pin pin) {
+        addLink(task, pin);
+        pin.addLink(task, this);
     }
 
     public boolean addLinks(Task task, Map<String, String> links) {
@@ -129,24 +130,20 @@ public class Pin extends Identity {
             Pin pin = action.getPinById(pinId);
             if (pin == null) continue;
             if (!linkAble(pin)) continue;
-            mutualAddLink(pin);
+            mutualAddLink(task, pin);
             linked = true;
         }
         return linked;
     }
 
-    private void removeLink(Pin pin) {
+    private void removeLink(Task task, Pin pin) {
         links.remove(pin.getId());
-        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onUnLinkedFrom(this, pin));
+        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onUnLinkedFrom(task, this, pin));
     }
 
-    public void mutualRemoveLink(Pin pin) {
-        removeLink(pin);
-        pin.removeLink(this);
-    }
-
-    public void clearLinks() {
-        links.clear();
+    public void mutualRemoveLink(Task task, Pin pin) {
+        removeLink(task, pin);
+        pin.removeLink(task, this);
     }
 
     public void clearLinks(Task task) {
@@ -158,9 +155,9 @@ public class Pin extends Identity {
             if (action == null) continue;
             Pin pin = action.getPinById(pinId);
             if (pin == null) continue;
-            mutualRemoveLink(pin);
+            mutualRemoveLink(task, pin);
         }
-        clearLinks();
+        links.clear();
     }
 
     public Class<? extends PinBase> getPinClass() {
@@ -207,6 +204,7 @@ public class Pin extends Identity {
         if (out) return value.isInstance(this.value);
         return this.value.isInstance(value);
     }
+
     public boolean linkAble() {
         return true;
     }
@@ -233,7 +231,7 @@ public class Pin extends Identity {
     public Pin newCopy() {
         Pin copy = copy();
         copy.setId(UUID.randomUUID().toString());
-        copy.clearLinks();
+        copy.links.clear();
         return copy;
     }
 

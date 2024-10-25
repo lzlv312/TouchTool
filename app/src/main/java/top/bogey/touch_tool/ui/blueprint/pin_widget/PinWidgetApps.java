@@ -48,12 +48,11 @@ public class PinWidgetApps extends PinWidget<PinApplications>{
     private void refreshApps() {
         binding.iconBox.removeAllViews();
 
-        List<PinObject> values = pinBase.getValues();
-        if (values == null || values.isEmpty()) return;
+        if (pinBase.isEmpty()) return;
 
         PackageManager manager = getContext().getPackageManager();
         String commonPackageName = getContext().getString(R.string.common_package);
-        PinApplication commonApplication = values.stream().filter(value -> value instanceof PinApplication).map(value -> (PinApplication) value).filter(app -> app.getPackageName().equals(commonPackageName)).findFirst().orElse(null);
+        PinApplication commonApplication = pinBase.stream().filter(value -> value instanceof PinApplication).map(value -> (PinApplication) value).filter(app -> app.getPackageName().equals(commonPackageName)).findFirst().orElse(null);
 
         int count = 0;
         if (commonApplication != null) {
@@ -61,24 +60,24 @@ public class PinWidgetApps extends PinWidget<PinApplications>{
             itemBinding.icon.setImageDrawable(getContext().getApplicationInfo().loadIcon(manager));
             itemBinding.numberBox.setVisibility(GONE);
             itemBinding.getRoot().setOnClickListener(v -> {
-                pinBase.getValues().remove(commonApplication);
+                pinBase.remove(commonApplication);
                 refreshApps();
             });
             count++;
 
-            if (values.size() == 1) return;
+            if (pinBase.size() == 1) return;
         }
 
-        for (PinObject value : values) {
+        for (PinObject value : pinBase) {
             if (value instanceof PinApplication app) {
                 if (app.getPackageName().equals(commonPackageName)) continue;
 
                 PinWidgetAppItemBinding itemBinding = PinWidgetAppItemBinding.inflate(LayoutInflater.from(getContext()), binding.iconBox, true);
                 itemBinding.exclude.setVisibility(commonApplication == null ? GONE : VISIBLE);
-                if (values.size() > 5 && count == 4) {
+                if (pinBase.size() > 5 && count == 4) {
                     itemBinding.icon.setImageResource(R.drawable.icon_more);
                     itemBinding.icon.setImageTintList(ColorStateList.valueOf(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimary)));
-                    itemBinding.numberText.setText(String.valueOf(values.size() - count));
+                    itemBinding.numberText.setText(String.valueOf(pinBase.size() - count));
                     break;
                 } else {
                     PackageInfo info = TaskInfoSummary.getInstance().getAppInfo(app.getPackageName());
@@ -94,7 +93,7 @@ public class PinWidgetApps extends PinWidget<PinApplications>{
                         itemBinding.numberText.setText(String.valueOf(classes.size()));
                     }
                     itemBinding.getRoot().setOnClickListener(v -> {
-                        pinBase.getValues().remove(value);
+                        pinBase.remove(value);
                         refreshApps();
                     });
                 }

@@ -41,7 +41,6 @@ public enum ActionType {
     SAVE,
     LOAD,
 
-
     // 系统动作
     OPEN_APP,
     OPEN_URI_SCHEME,
@@ -71,21 +70,6 @@ public enum ActionType {
     GET_CURRENT_DATE,
     GET_CURRENT_TIME,
 
-    // 文本获取与检测
-    STRING_FROM_OBJECT,
-    STRING_TO_NUMBER,
-    STRING_APPEND,
-    STRING_REGEX,
-    STRING_SPLIT,
-    STRING_EQUAL,
-    STRING_REPLACE,
-    GET_OCR_TEXT,
-
-
-    GET_NODE_BY_TEXT,
-    GET_NODES_BY_TEXT,
-    GET_AREA_BY_OCR_TEXT,
-
     // 数值
     NUMBER_ADD,
     NUMBER_SUB,
@@ -103,34 +87,38 @@ public enum ActionType {
 
     MATH_EXPRESSION,
 
-    // 图片
-    GET_IMAGE,
-    GET_IMAGE_IN_AREA,
-    SAVE_IMAGE,
-    GET_AREA_BY_IMAGE,
-    GET_AREAS_BY_IMAGE,
-    GET_AREA_IN_IMAGE,
-    
+    // 文本获取与检测
+    STRING_FROM_OBJECT,
+    STRING_TO_NUMBER,
+    STRING_APPEND,
+    STRING_REGEX,
+    STRING_SPLIT,
+    STRING_EQUAL,
+    STRING_REPLACE,
+    GET_OCR_TEXT,
+    FIND_OCR_TEXT,
+
     // 控件
-    GET_NODE,
-    GET_NODES,
+    FIND_NODE_BY_PATH,
+    FIND_NODES_BY_TEXT,
+    FIND_NODES_BY_ID,
+    FIND_NODES_IN_AREA,
     GET_NODE_INFO,
     GET_NODE_CHILDREN,
     GET_NODE_PARENT,
-    GET_NODES_IN_POSITION,
     GET_WINDOWS,
     CHECK_NODE_VALID,
-    
+
+    // 图片
+    GET_IMAGE,
+    CROP_IMAGE,
+    SAVE_IMAGE,
+    FIND_IMAGES,
+    IMAGE_EQUAL,
+
     // 颜色
-    GET_COLOR_IN_POSITION,
-    GET_COLOR_AREA,
-    GET_COLOR_AREAS,
-    COLOR_EQUAL,
-    
-    // 条件
-    BOOLEAN_OR,
-    BOOLEAN_AND,
-    BOOLEAN_NOT,
+    GET_COLOR,
+    FIND_COLORS,
 
     // 区域
     AREA_TO_INT,
@@ -142,35 +130,44 @@ public enum ActionType {
     PICK_AREA,
 
     // 位置
-    POSITION_FROM_INT,
-    POSITION_TO_INT,
-    POS_OFFSET,
-    POS_TO_TOUCH,
+    POINT_FROM_INT,
+    POINT_TO_INT,
+    POINT_OFFSET,
+    POINT_TO_TOUCH,
+
+    // 条件
+    BOOLEAN_OR,
+    BOOLEAN_AND,
+    BOOLEAN_NOT,
 
     // 数组
-    LIST_SET,
     LIST_MAKE,
-    LIST_GET,
+    LIST_SIZE,
+    LIST_IS_EMPTY,
+    LIST_CONTAIN,
     LIST_ADD,
     LIST_REMOVE,
-    LIST_CLEAR,
-    LIST_SIZE,
-    LIST_INDEX_OF,
-    CHECK_LIST_INDEX_VALID,
     LIST_APPEND,
+    LIST_CLEAR,
+    LIST_GET,
+    LIST_SET,
+    LIST_INDEX_OF,
     LIST_FOREACH,
 
     // 字典
-    MAP_SET,
     MAP_MAKE,
-    MAP_GET,
+    MAP_SIZE,
+    MAP_IS_EMPTY,
+    MAP_CONTAIN_KEY,
+    MAP_CONTAIN_VALUE,
     MAP_ADD,
     MAP_REMOVE,
+    MAP_APPEND,
     MAP_CLEAR,
-    MAP_SIZE,
+    MAP_GET,
+    MAP_SET,
     MAP_KEYS,
     MAP_VALUES,
-    MAP_APPEND,
     MAP_FOREACH,
 
     // 变量

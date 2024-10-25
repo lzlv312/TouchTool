@@ -36,7 +36,7 @@ public class PinWidgetApp extends PinWidget<PinApplication> {
         if (pinBase.getSubType() == PinSubType.NORMAL) applications = new PinApplications(PinSubType.SINGLE_APP_WITH_ACTIVITY);
         else applications = new PinApplications(pinBase.getSubType());
 
-        if (pinBase.getPackageName() != null && !pinBase.getPackageName().isEmpty()) applications.getValues().add(pinBase);
+        if (pinBase.getPackageName() != null && !pinBase.getPackageName().isEmpty()) applications.add(pinBase);
         init();
     }
 
@@ -54,13 +54,12 @@ public class PinWidgetApp extends PinWidget<PinApplication> {
     private void refreshApps() {
         binding.iconBox.removeAllViews();
 
-        List<PinObject> values = applications.getValues();
-        if (values == null || values.isEmpty()) {
+        if (applications == null || applications.isEmpty()) {
             pinBase.reset();
             return;
         }
 
-        PinApplication app = (PinApplication) values.get(0);
+        PinApplication app = (PinApplication) applications.get(0);
         pinBase.setPackageName(app.getPackageName());
         List<String> classes = app.getActivityClasses();
         if (classes == null || classes.isEmpty()) pinBase.setActivityClasses(null);
@@ -86,7 +85,7 @@ public class PinWidgetApp extends PinWidget<PinApplication> {
             itemBinding.numberText.setText(String.valueOf(classes.size()));
         }
         itemBinding.getRoot().setOnClickListener(v -> {
-            applications.getValues().clear();
+            applications.clear();
             refreshApps();
         });
     }

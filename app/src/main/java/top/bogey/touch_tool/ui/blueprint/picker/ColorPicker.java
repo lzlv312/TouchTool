@@ -121,7 +121,7 @@ public class ColorPicker extends FullScreenPicker<PinColor.ColorInfo> {
     private void matchColor(int color, int minArea, int maxArea) {
         if (screenInfo.getScreenShot() == null) return;
 
-        pickList = DisplayUtil.matchColor(screenInfo.getScreenShot(), color, new Rect(), 5);
+        pickList = DisplayUtil.matchColor(screenInfo.getScreenShot(), color, new Rect(), 80);
 
         if (pickList != null && !pickList.isEmpty()) {
             colorInfo.setColor(color);

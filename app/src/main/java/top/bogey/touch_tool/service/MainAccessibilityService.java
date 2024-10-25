@@ -390,9 +390,12 @@ public class MainAccessibilityService extends AccessibilityService {
     private CaptureService.CaptureBinder binder = null;
 
     public boolean isCaptureEnabled() {
-        if (SettingSaver.getInstance().getCapture() == 2 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-            return true;
-        return isEnabled() && binder != null;
+        if (isEnabled()) {
+            if (SettingSaver.getInstance().getCapture() == 2 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+                return true;
+            return binder != null;
+        }
+        return false;
     }
 
     public void startCapture(BooleanResultCallback callback) {

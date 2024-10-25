@@ -5,6 +5,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class NodeInfo {
     public String clazz;
@@ -44,32 +47,51 @@ public class NodeInfo {
         }
     }
 
-    public List<NodeInfo> findChildren(String id) {
+    public List<NodeInfo> findChildrenById(String id) {
         List<NodeInfo> result = new ArrayList<>();
         for (NodeInfo child : children) {
-            if (id.equals(child.id)) result.add(child);
-            result.addAll(child.findChildren(id));
+            if (child.id != null && child.id.contains(id)) result.add(child);
+            result.addAll(child.findChildrenById(id));
         }
         return result;
     }
 
-    public static NodeInfo findChild(NodeInfo nodeInfo, int x, int y) {
-        if (nodeInfo.area.contains(x, y) && nodeInfo.usable && nodeInfo.visible) return nodeInfo;
-        for (NodeInfo child : nodeInfo.children) {
-            NodeInfo result = findChild(child, x, y);
-            if (result != null) return result;
+    public List<NodeInfo> findChildrenByText(String text) {
+        List<NodeInfo> result = new ArrayList<>();
+        for (NodeInfo child : children) {
+
+            if (child.text != null && !child.text.isEmpty()) {
+                Pattern pattern = AppUtil.getPattern(text);
+                if (pattern == null) {
+                    if (child.text.contains(text)) result.add(child);
+                } else {
+                    if (pattern.matcher(child.text).find()) {
+                        result.add(child);
+                    }
+                }
+            }
+
+            result.addAll(child.findChildrenById(id));
         }
-        return null;
+        return result;
     }
 
-    public static NodeInfo findChildReverse(NodeInfo nodeInfo, int x, int y) {
-        List<NodeInfo> nodeInfos = nodeInfo.children;
-        for (int i = nodeInfos.size() - 1; i >= 0; i--) {
-            NodeInfo child = nodeInfos.get(i);
-            NodeInfo result = findChildReverse(child, x, y);
+    public List<NodeInfo> findChildrenInArea(Rect area) {
+        List<NodeInfo> result = new ArrayList<>();
+        for (NodeInfo child : children) {
+            if (Rect.intersects(area, child.area)) result.add(child);
+            result.addAll(child.findChildrenInArea(area));
+        }
+        return result;
+    }
+
+    public NodeInfo findUsableChild(int x, int y) {
+        for (int i = children.size() - 1; i >= 0; i--) {
+            NodeInfo child = children.get(i);
+            NodeInfo result = child.findUsableChild(x, y);
             if (result != null) return result;
         }
-        if (nodeInfo.area.contains(x, y) && nodeInfo.usable && nodeInfo.visible) return nodeInfo;
+        if (area.contains(x, y) && usable && visible) return this;
         return null;
     }
 }

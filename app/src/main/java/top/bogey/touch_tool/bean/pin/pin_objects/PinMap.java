@@ -1,23 +1,36 @@
 package top.bogey.touch_tool.bean.pin.pin_objects;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import top.bogey.touch_tool.utils.GsonUtil;
 
-public class PinMap extends PinObject {
+public class PinMap extends PinObject implements Map<PinObject, PinObject> {
     protected PinType keyType = PinType.OBJECT;
     protected PinType valueType = PinType.OBJECT;
     protected Map<PinObject, PinObject> valueMap = new HashMap<>();
-    protected boolean changeAble;
+    protected boolean changeAble = true;
+    protected boolean dynamic = false;
 
     public PinMap() {
         super(PinType.MAP);
+    }
+
+    public PinMap(boolean dynamic) {
+        this();
+        this.dynamic = dynamic;
     }
 
     public PinMap(PinType keyType, PinType valueType) {
@@ -33,11 +46,20 @@ public class PinMap extends PinObject {
         this.changeAble = changeAble;
     }
 
+    public PinMap(PinType keyType, PinType valueType, boolean changeAble, boolean dynamic) {
+        this();
+        this.keyType = keyType;
+        this.valueType = valueType;
+        this.changeAble = changeAble;
+        this.dynamic = dynamic;
+    }
+
     public PinMap(JsonObject jsonObject) {
         super(jsonObject);
         keyType = GsonUtil.getAsObject(jsonObject, "keyType", PinType.class, PinType.OBJECT);
         valueType = GsonUtil.getAsObject(jsonObject, "valueType", PinType.class, PinType.OBJECT);
-        changeAble = GsonUtil.getAsBoolean(jsonObject, "changeAble", false);
+        changeAble = GsonUtil.getAsBoolean(jsonObject, "changeAble", true);
+        dynamic = GsonUtil.getAsBoolean(jsonObject, "dynamic", false);
         valueMap = GsonUtil.getAsObject(jsonObject, "valueMap", TypeToken.getParameterized(HashMap.class, PinBase.class, PinBase.class).getType(), new HashMap<>());
     }
 
@@ -58,14 +80,14 @@ public class PinMap extends PinObject {
     public boolean isInstance(PinBase pin) {
         if (super.isInstance(pin)) {
             if (pin instanceof PinMap pinMap) {
-                if (keyType == PinType.OBJECT) {
+                if (dynamic && keyType == PinType.OBJECT) {
                     if (valueType == PinType.OBJECT) {
                         return true;
                     }
                     return valueType == pinMap.valueType;
                 }
 
-                if (valueType == PinType.OBJECT) {
+                if (dynamic && valueType == PinType.OBJECT) {
                     return keyType == pinMap.keyType;
                 }
 
@@ -99,34 +121,21 @@ public class PinMap extends PinObject {
         reset();
     }
 
-    public Map<PinObject, PinObject> getValueMap() {
-        return valueMap;
-    }
-
-    public void setValueMap(Map<PinObject, PinObject> valueMap) {
-        this.valueMap = valueMap;
-    }
-
     public boolean isChangeAble() {
         return changeAble;
     }
 
-    public void setChangeAble(boolean changeAble) {
-        this.changeAble = changeAble;
+    public boolean isDynamic() {
+        return dynamic;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public final boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PinMap pinMap)) return false;
+        if (!super.equals(object)) return false;
 
-        PinMap pinMap = (PinMap) o;
-
-        if (isChangeAble() != pinMap.isChangeAble()) return false;
-        if (getKeyType() != pinMap.getKeyType()) return false;
-        if (getValueType() != pinMap.getValueType()) return false;
-        return getValueMap().equals(pinMap.getValueMap());
+        return isChangeAble() == pinMap.isChangeAble() && getKeyType() == pinMap.getKeyType() && getValueType() == pinMap.getValueType() && valueMap.equals(pinMap.valueMap);
     }
 
     @Override
@@ -134,8 +143,88 @@ public class PinMap extends PinObject {
         int result = super.hashCode();
         result = 31 * result + getKeyType().hashCode();
         result = 31 * result + getValueType().hashCode();
-        result = 31 * result + getValueMap().hashCode();
-        result = 31 * result + (isChangeAble() ? 1 : 0);
+        result = 31 * result + valueMap.hashCode();
+        result = 31 * result + Boolean.hashCode(isChangeAble());
         return result;
+    }
+
+    @Override
+    public int size() {
+        return valueMap.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return valueMap.isEmpty();
+    }
+
+    @Override
+    public boolean containsKey(@Nullable Object key) {
+        return valueMap.containsKey(key);
+    }
+
+    @Override
+    public boolean containsValue(@Nullable Object value) {
+        return valueMap.containsValue(value);
+    }
+
+    @Nullable
+    @Override
+    public PinObject get(@Nullable Object key) {
+        return valueMap.get(key);
+    }
+
+    @Nullable
+    @Override
+    public PinObject put(PinObject key, PinObject value) {
+        return valueMap.put(key, value);
+    }
+
+    @Nullable
+    @Override
+    public PinObject remove(@Nullable Object key) {
+        return valueMap.remove(key);
+    }
+
+    @Override
+    public void putAll(@NonNull Map<? extends PinObject, ? extends PinObject> m) {
+        valueMap.putAll(m);
+    }
+
+    @Override
+    public void clear() {
+        valueMap.clear();
+    }
+
+    @NonNull
+    @Override
+    public Set<PinObject> keySet() {
+        return valueMap.keySet();
+    }
+
+    @NonNull
+    @Override
+    public Collection<PinObject> values() {
+        return valueMap.values();
+    }
+
+    @NonNull
+    @Override
+    public Set<Entry<PinObject, PinObject>> entrySet() {
+        return valueMap.entrySet();
+    }
+
+    public static class PinMapSerializer implements JsonSerializer<PinMap> {
+        public JsonElement serialize(PinMap src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("type", src.getType().name());
+            jsonObject.addProperty("subType", src.getSubType().name());
+            jsonObject.addProperty("keyType", src.keyType.name());
+            jsonObject.addProperty("valueType", src.valueType.name());
+            jsonObject.add("valueMap", context.serialize(src.valueMap));
+            jsonObject.addProperty("changeAble", src.isChangeAble());
+            jsonObject.addProperty("dynamic", src.dynamic);
+            return jsonObject;
+        }
     }
 }

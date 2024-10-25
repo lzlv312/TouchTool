@@ -71,12 +71,11 @@ public class PinValueArea extends PinObject {
     }
 
     @Override
-    public boolean equals(Object object) {
+    public final boolean equals(Object object) {
         if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
+        if (!(object instanceof PinValueArea that)) return false;
         if (!super.equals(object)) return false;
 
-        PinValueArea that = (PinValueArea) object;
         return getMin() == that.getMin() && getMax() == that.getMax();
     }
 

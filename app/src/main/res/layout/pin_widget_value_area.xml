@@ -14,7 +14,7 @@
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:clipChildren="false"
-            android:hint="@string/Pin_value_area_min"
+            android:hint="@string/pin_value_area_min"
             app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
             app:shapeAppearanceOverlay="@style/Theme.TouchTool.ShapeAppearance.LeftCorner.Small">
 
@@ -36,7 +36,7 @@
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:clipChildren="false"
-            android:hint="@string/Pin_value_area_max"
+            android:hint="@string/pin_value_area_max"
             app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
             app:shapeAppearanceOverlay="@style/Theme.TouchTool.ShapeAppearance.RightCorner.Small">
 

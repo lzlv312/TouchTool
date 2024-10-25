@@ -1,5 +1,6 @@
 package top.bogey.touch_tool.utils;
 
+import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
@@ -7,12 +8,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.ParcelFormatException;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.accessibility.AccessibilityManager;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityWindowInfo;
 
 import androidx.annotation.StringRes;
 import androidx.core.content.FileProvider;
@@ -28,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.Collator;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -339,7 +344,7 @@ public class AppUtil {
         return true;
     }
 
-    public static Uri writeToFile(Context context, String path, byte[] content) {
+    public static Uri writeToInner(Context context, String path, byte[] content) {
         File file = new File(path);
         if (!file.exists()) {
             try {
@@ -357,5 +362,41 @@ public class AppUtil {
         }
 
         return FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
+    }
+
+    public static void saveImage(Context context, Bitmap image) {
+        if (image == null) return;
+        String fileName = "share_" + System.currentTimeMillis() + ".jpg";
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        try (OutputStream outputStream = new FileOutputStream(file)) {
+            image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            intent.setData(Uri.fromFile(file));
+            context.sendBroadcast(intent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<AccessibilityNodeInfo> getWindows(AccessibilityService service) {
+        List<AccessibilityNodeInfo> windows = new ArrayList<>();
+        for (AccessibilityWindowInfo window : service.getWindows()) {
+            if (window == null) continue;
+            if (window.getType() == AccessibilityWindowInfo.TYPE_ACCESSIBILITY_OVERLAY) continue;
+            AccessibilityNodeInfo root = window.getRoot();
+            if (root == null) continue;
+            if (root.getChildCount() == 0) continue;
+            windows.add(root);
+        }
+        return windows;
     }
 }

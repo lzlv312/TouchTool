@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
 public class ScreenInfo {
@@ -23,13 +24,8 @@ public class ScreenInfo {
             screenShot = bitmap;
             if (callback != null) callback.onResult(true);
         });
-        for (AccessibilityWindowInfo window : service.getWindows()) {
-            if (window == null) continue;
-            if (window.getType() == AccessibilityWindowInfo.TYPE_ACCESSIBILITY_OVERLAY) continue;
-            AccessibilityNodeInfo root = window.getRoot();
-            if (root == null) continue;
-            if (root.getChildCount() == 0) continue;
-            rootNodes.add(new NodeInfo(root));
+        for (AccessibilityNodeInfo window : AppUtil.getWindows(service)) {
+            rootNodes.add(new NodeInfo(window));
         }
     }
 

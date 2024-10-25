@@ -1,0 +1,57 @@
+package top.bogey.touch_tool.bean.action.list;
+
+import com.google.gson.JsonObject;
+
+import java.util.Arrays;
+import java.util.List;
+
+import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionType;
+import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
+import top.bogey.touch_tool.bean.task.TaskRunnable;
+
+public class ListForeachAction extends ListExecuteAction{
+    private final transient Pin breakPin = new Pin(new PinExecute(), R.string.list_foreach_action_break);
+    private final transient Pin listPin = new Pin(new PinList());
+    private final transient Pin elementPin = new Pin(new PinObject(), R.string.pin_object, true);
+    private final transient Pin indexPin = new Pin(new PinInteger(), R.string.list_foreach_action_index, true);
+    private final transient Pin completePin = new Pin(new PinExecute(), R.string.for_loop_action_complete, true);
+
+    private transient boolean isBreak = false;
+
+    public ListForeachAction() {
+        super(ActionType.LIST_FOREACH);
+        addPins(listPin, elementPin, indexPin);
+    }
+
+    public ListForeachAction(JsonObject jsonObject) {
+        super(jsonObject);
+        reAddPins(listPin, elementPin, indexPin);
+    }
+
+    @Override
+    public void execute(TaskRunnable runnable, Pin pin) {
+        if (pin == inPin) {
+            PinList list = getPinValue(runnable, listPin);
+            for (int i = 0; i < list.size(); i++) {
+                if (runnable.isInterrupt()) return;
+                if (isBreak) break;
+                elementPin.setValue(list.get(i));
+                indexPin.getValue(PinInteger.class).setValue(i);
+                executeNext(runnable, outPin);
+            }
+            executeNext(runnable, completePin);
+        } else {
+            isBreak = true;
+        }
+    }
+
+    @Override
+    public List<Pin> getDynamicValueTypePins() {
+        return Arrays.asList(listPin, elementPin);
+    }
+}

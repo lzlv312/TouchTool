@@ -35,6 +35,10 @@ public class PinArea extends PinScaleAble<Rect> {
         value = GsonUtil.getAsObject(jsonObject, "value", Rect.class, screenArea);
     }
 
+    public boolean isFullScreen() {
+        return value.isEmpty() || screenArea.equals(value);
+    }
+
     @Override
     public void reset() {
         super.reset();

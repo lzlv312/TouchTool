@@ -22,6 +22,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.task.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.ocr.OCR;
 import top.bogey.touch_tool.service.ocr.OCRResult;
 import top.bogey.touch_tool.utils.DisplayUtil;
@@ -52,23 +53,18 @@ public class GetOcrTextAction extends CalculateAction {
 
         MainAccessibilityService service = MainApplication.getInstance().getService();
         service.tryGetScreenShot(bitmap -> {
-            List<PinObject> values = textArrayPin.getValue(PinList.class).getValues();
+            PinList textArray = textArrayPin.getValue(PinList.class);
             Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, areaRect.left, areaRect.top, areaRect.width(), areaRect.height());
-            List<OCRResult> ocrResults = OCR.runOcr(OcrType.values()[type.getIndex()].name(), clipBitmap);
+            List<OCRResult> ocrResults = OCR.runOcr(TaskInfoSummary.OcrType.values()[type.getIndex()].name(), clipBitmap);
             StringBuilder builder = new StringBuilder();
             for (OCRResult ocrResult : ocrResults) {
                 if (ocrResult.getSimilar() <= similar.intValue()) continue;
                 builder.append(ocrResult.getText());
-                values.add(new PinString(ocrResult.getText()));
+                textArray.add(new PinString(ocrResult.getText()));
             }
             textPin.getValue(PinString.class).setValue(builder.toString());
             runnable.resume();
         });
         runnable.pause();
-    }
-
-    public enum OcrType {
-        CHINESE,
-        ENGLISH
     }
 }

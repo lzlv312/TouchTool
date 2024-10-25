@@ -274,4 +274,6 @@ public class TaskInfoSummary {
     public enum NotworkState {NONE, WIFI, MOBILE, VPN}
 
     public enum BatteryState {UNKNOWN, CHARGING, DISCHARGING, NOT_CHARGING, FULL}
+
+    public enum OcrType {CHINESE, ENGLISH}
 }

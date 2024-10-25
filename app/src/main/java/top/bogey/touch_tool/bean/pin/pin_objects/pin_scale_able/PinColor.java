@@ -46,7 +46,7 @@ public class PinColor extends PinScaleAble<PinColor.ColorInfo>{
         ColorInfo info = super.getValue();
         float scale = getScale();
         if (scale == 1) return info;
-        return new ColorInfo(info.color, (int) (info.minArea * scale), (int) (info.maxArea * scale));
+        return new ColorInfo(info.color, (int) (info.minArea * scale * scale), (int) (info.maxArea * scale * scale));
     }
 
     @Override
@@ -117,11 +117,10 @@ public class PinColor extends PinScaleAble<PinColor.ColorInfo>{
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+        public final boolean equals(Object object) {
+            if (this == object) return true;
+            if (!(object instanceof ColorInfo colorInfo)) return false;
 
-            ColorInfo colorInfo = (ColorInfo) o;
             return getColor() == colorInfo.getColor() && getMinArea() == colorInfo.getMinArea() && getMaxArea() == colorInfo.getMaxArea();
         }
 

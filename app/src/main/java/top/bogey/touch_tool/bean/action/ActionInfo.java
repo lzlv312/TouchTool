@@ -1,12 +1,14 @@
 package top.bogey.touch_tool.bean.action;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import java.lang.reflect.Constructor;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.color.FindColorsAction;
 import top.bogey.touch_tool.bean.action.logic.ChoiceExecuteAction;
 import top.bogey.touch_tool.bean.action.logic.ForLoopAction;
 import top.bogey.touch_tool.bean.action.logic.IfConditionAction;
@@ -64,6 +66,8 @@ public class ActionInfo {
     private final static ActionInfo CLOSE_STICK_INFO = new ActionInfo(ActionType.CLOSE_STICK, StickCloseAction.class, R.drawable.icon_home, R.string.stick_close_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo CLOSE_ALL_STICK_INFO = new ActionInfo(ActionType.CLOSE_ALL_STICK, StickCloseAllAction.class, R.drawable.icon_home, R.string.stick_close_all_action, 0, 0, NormalActionCard.class);
 
+    private final static ActionInfo FIND_COLORS_INFO = new ActionInfo(ActionType.FIND_COLORS, FindColorsAction.class, R.drawable.icon_color, R.string.find_colors_action, R.string.find_colors_action_desc, 0, NormalActionCard.class);
+
     public static ActionInfo getActionInfo(ActionType type) {
         return switch (type) {
             case MANUAL_START -> MANUAL_START_INFO;
@@ -91,6 +95,8 @@ public class ActionInfo {
             case STICK -> STICK_INFO;
             case CLOSE_STICK -> CLOSE_STICK_INFO;
             case CLOSE_ALL_STICK -> CLOSE_ALL_STICK_INFO;
+
+            case FIND_COLORS -> FIND_COLORS_INFO;
             default -> null;
         };
     }
@@ -178,5 +184,14 @@ public class ActionInfo {
 
     public Action getAction() {
         return action;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ActionInfo{" +
+                "clazz=" + clazz +
+                ", type=" + type +
+                '}';
     }
 }

@@ -71,7 +71,7 @@ public class ShareToAction extends ExecuteAction {
                     bytes = value.toString().getBytes();
                     path = context.getCacheDir() + File.separator + "share_" + System.currentTimeMillis() + ".txt";
                 }
-                Uri uri = AppUtil.writeToFile(context, path, bytes);
+                Uri uri = AppUtil.writeToInner(context, path, bytes);
                 if (uri != null) {
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.putExtra(Intent.EXTRA_STREAM, uri);

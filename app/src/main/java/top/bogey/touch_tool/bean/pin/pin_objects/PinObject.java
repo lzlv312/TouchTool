@@ -40,14 +40,4 @@ public class PinObject extends PinBase {
     public String toString() {
         return "";
     }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }

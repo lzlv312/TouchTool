@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.JsonObject;
 
+import java.util.Objects;
+
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.utils.GsonUtil;
 
@@ -47,20 +49,18 @@ public class PinNode extends PinObject {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public final boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PinNode pinNode)) return false;
+        if (!super.equals(object)) return false;
 
-        PinNode pinNode = (PinNode) o;
-
-        return getNodeInfo() != null ? getNodeInfo().equals(pinNode.getNodeInfo()) : pinNode.getNodeInfo() == null;
+        return Objects.equals(getNodeInfo(), pinNode.getNodeInfo());
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (getNodeInfo() != null ? getNodeInfo().hashCode() : 0);
+        result = 31 * result + Objects.hashCode(getNodeInfo());
         return result;
     }
 }

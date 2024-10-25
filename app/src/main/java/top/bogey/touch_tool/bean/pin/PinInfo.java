@@ -3,6 +3,7 @@ package top.bogey.touch_tool.bean.pin;
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import java.lang.reflect.Constructor;
@@ -256,8 +257,8 @@ public class PinInfo {
 
     public PinBase newInstance() {
         try {
-            Constructor<? extends PinBase> constructor = clazz.getConstructor(PinType.class, PinSubType.class);
-            return constructor.newInstance(type, subType);
+            Constructor<? extends PinBase> constructor = clazz.getConstructor();
+            return constructor.newInstance();
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -296,5 +297,15 @@ public class PinInfo {
 
     public boolean isValuePin() {
         return valuePin;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "PinInfo{" +
+                "subType=" + subType +
+                ", type=" + type +
+                ", clazz=" + clazz +
+                '}';
     }
 }

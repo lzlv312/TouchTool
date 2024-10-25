@@ -24,7 +24,7 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
     private final transient Pin outPin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
     private final static Pin morePin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
 
-    private final transient Pin posPin = new Pin(new PinPoint(), R.string.Pin_point, false, false, true);
+    private final transient Pin posPin = new Pin(new PinPoint(), R.string.pin_point, false, false, true);
 
     private final transient Pin secondPin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
     private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_execute, true);

@@ -31,8 +31,8 @@ public class PinApplications extends PinList {
     }
 
     @Override
-    public boolean contains(PinObject pinObject) {
-        if (pinObject instanceof PinApplication pinApplication) {
+    public boolean contains(Object object) {
+        if (object instanceof PinApplication pinApplication) {
             List<String> activityClasses = pinApplication.getActivityClasses();
             String commonPackage = MainApplication.getInstance().getString(R.string.common_package);
             boolean isCommon = false;

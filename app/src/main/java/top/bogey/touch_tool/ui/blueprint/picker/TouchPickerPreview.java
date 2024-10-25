@@ -25,7 +25,7 @@ public class TouchPickerPreview extends BasePicker<PinTouchPath> {
 
         binding = FloatPickerTouchPreviewBinding.inflate(LayoutInflater.from(context), this, true);
 
-        binding.pathView.setPath(touchPath.getValue());
+        binding.pathView.setPath(touchPath.getPathParts());
 
         binding.playButton.setOnClickListener(v -> {
             MainAccessibilityService service = MainApplication.getInstance().getService();
@@ -48,7 +48,7 @@ public class TouchPickerPreview extends BasePicker<PinTouchPath> {
         binding.pickerButton.setOnClickListener(v -> new TouchPicker(context, result -> {
             touchPath.setValue(result.getValue());
             touchPath.setAnchor(result.getAnchor());
-            binding.pathView.setPath(result.getValue());
+            binding.pathView.setPath(result.getPathParts());
         }, touchPath).show());
     }
 }

@@ -150,7 +150,7 @@
     <string name="for_loop_action">循环执行…次</string>
     <string name="for_loop_action_desc">循环多次执行节点</string>
     <string name="for_loop_action_help">从开始值执行，当前值每次执行后增加步长量，直到当前值大于结束值</string>
-    <string name="for_loop_action_break">提前退出</string>
+    <string name="for_loop_action_break">跳出循环</string>
     <string name="for_loop_action_start">开始值</string>
     <string name="for_loop_action_end">结束值</string>
     <string name="for_loop_action_step">步长</string>
@@ -159,7 +159,7 @@
 
     <string name="while_loop_action">条件循环执行</string>
     <string name="while_loop_action_desc">满足条件时执行，否则执行完成节点</string>
-    <string name="while_loop_action_break">提前退出</string>
+    <string name="while_loop_action_break">跳出循环</string>
     <string name="while_loop_action_complete">完成</string>
 
     <string name="sequence_action">顺序执行</string>
@@ -371,6 +371,138 @@
     <string name="get_area_intersection_action">取区域交集</string>
     <string name="get_area_intersection_action_desc">取两个区域相交的区域</string>
 
+
+    <!-- 动作-Point -->
+    <string name="point_to_integer_action">位置转数值</string>
+    <string name="point_to_integer_action_desc">提取位置的横纵坐标</string>
+
+    <string name="point_from_integer_action">数值转位置</string>
+    <string name="point_from_integer_action_desc">将数值转换为位置</string>
+
+    <string name="point_offset_action">位置偏移</string>
+    <string name="point_offset_action_desc">将位置进行偏移</string>
+    <string name="point_offset_action_offset">偏移</string>
+
+    <!-- 动作-Boolean -->
+    <string name="boolean_and_action">所有条件达成</string>
+    <string name="boolean_and_action_desc">所有条件达成结果才是达成</string>
+
+    <string name="boolean_or_action">任意条件达成</string>
+    <string name="boolean_or_action_desc">任意条件达成结果就能达成</string>
+
+    <string name="boolean_not_action">反转条件</string>
+    <string name="boolean_not_action_desc">取与条件相反的结果</string>
+
+
+    <!-- 动作-Node -->
+    <string name="find_node_by_path_action">获取控件</string>
+    <string name="find_node_by_path_action_desc">根据路径获取控件</string>
+    <string name="find_node_by_path_action_path">路径</string>
+
+    <string name="find_nodes_by_text_action">获取控件</string>
+    <string name="find_nodes_by_text_action_desc">根据文本获取控件</string>
+
+    <string name="find_nodes_by_id_action">获取控件</string>
+    <string name="find_nodes_by_id_action_desc">根据ID获取控件</string>
+    <string name="find_nodes_by_id_action_id">控件ID</string>
+
+    <string name="find_nodes_in_area_action">获取控件</string>
+    <string name="find_nodes_in_area_action_desc">根据区域获取控件</string>
+
+    <string name="get_node_info_action">获取控件信息</string>
+    <string name="get_node_info_action_desc">获取控件详细信息</string>
+    <string name="get_node_info_action_clazz">类名</string>
+    <string name="get_node_info_action_id">控件ID</string>
+    <string name="get_node_info_action_node_desc">描述</string>
+    <string name="get_node_info_action_visible">是否可见</string>
+    <string name="get_node_info_action_usable">是否可用</string>
+
+    <string name="get_node_children_action">获取控件子控件</string>
+    <string name="get_node_children_action_desc">获取控件子控件</string>
+
+    <string name="get_node_parent_action">获取控件父控件</string>
+    <string name="get_node_parent_action_desc">获取控件父控件</string>
+
+    <string name="get_windows_action">获取所有窗口</string>
+    <string name="get_windows_action_desc">获取所有窗口</string>
+
+    <string name="check_node_valid_action">检查控件是否有效</string>
+    <string name="check_node_valid_action_desc">检查控件是否有效</string>
+
+
+    <!-- 动作-Image -->
+    <string name="get_image_action">获取图片</string>
+    <string name="get_image_action_desc">获取屏幕指定区域图片</string>
+
+    <string name="crop_image_action">裁剪图片</string>
+    <string name="crop_image_action_desc">裁剪图片</string>
+
+    <string name="save_image_action">保存图片</string>
+    <string name="save_image_action_desc">静默保存图片到图片文件夹</string>
+
+    <string name="find_images_action">识别图片</string>
+    <string name="find_images_action_desc">识别屏幕指定区域所有图片</string>
+    <string name="find_images_action_template">模板</string>
+    <string name="find_images_action_similarity">相似度</string>
+
+    <string name="image_equal_action">图片相似度</string>
+    <string name="image_equal_action_desc">获取两图片相似度</string>
+
+
+    <!-- 动作-Color -->
+    <string name="get_color_action">获取颜色</string>
+    <string name="get_color_action_desc">获取屏幕指定位置颜色</string>
+
+    <string name="find_colors_action">识别颜色</string>
+    <string name="find_colors_action_desc">识别屏幕指定区域所有颜色</string>
+    <string name="find_colors_action_template">模板</string>
+    <string name="find_colors_action_similarity">相似度</string>
+
+
+    <!-- 动作-List -->
+    <string name="list_make_action">新建列表</string>
+    <string name="list_make_action_desc">新建一个列表</string>
+
+    <string name="list_size_action">列表长度</string>
+    <string name="list_size_action_desc">获取列表长度</string>
+
+    <string name="list_is_empty_action">列表是否为空</string>
+    <string name="list_is_empty_action_desc">判断列表是否为空</string>
+
+    <string name="list_contain_action">是否包含元素</string>
+    <string name="list_contain_action_desc">判断列表是否包含元素</string>
+
+    <string name="list_add_action">添加元素</string>
+    <string name="list_add_action_desc">向列表中添加元素</string>
+
+    <string name="list_remove_action">移除元素</string>
+    <string name="list_remove_action_desc">从列表中移除元素</string>
+    <string name="list_remove_action_index">索引</string>
+
+    <string name="list_append_action">列表拼接</string>
+    <string name="list_append_action_desc">将两个列表拼接</string>
+
+    <string name="list_clear_action">清空列表</string>
+    <string name="list_clear_action_desc">清空列表</string>
+
+    <string name="list_get_action">获取元素</string>
+    <string name="list_get_action_desc">从列表中获取元素</string>
+    <string name="list_get_action_index">索引</string>
+
+    <string name="list_set_action">设置元素</string>
+    <string name="list_set_action_desc">向列表中设置元素</string>
+    <string name="list_set_action_index">索引</string>
+    <string name="list_set_action_value">之前的对象</string>
+
+    <string name="list_index_of_action">元素索引</string>
+    <string name="list_index_of_action_desc">获取元素在列表中的索引</string>
+    <string name="list_index_of_action_index">索引</string>
+
+    <string name="list_foreach_action">遍历列表</string>
+    <string name="list_foreach_action_desc">遍历列表中的每个元素</string>
+    <string name="list_foreach_action_break">跳出循环</string>
+    <string name="list_foreach_action_index">索引</string>
+
     <!-- 针脚名 -->
     <string name="pin_execute">执行</string>
 
@@ -379,7 +511,7 @@
 
     <string name="pin_object">对象</string>
 
-    <string name="pin_list">数组</string>
+    <string name="pin_list">列表</string>
 
     <string name="pin_map">字典</string>
 

@@ -18,6 +18,7 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinListener;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.PinInfo;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.pin_slot.PinSlotView;
 import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidget;
@@ -146,12 +147,12 @@ public abstract class PinView extends FrameLayout implements PinListener {
     }
 
     @Override
-    public void onLinkedTo(Pin origin, Pin to) {
+    public void onLinkedTo(Task task, Pin origin, Pin to) {
         post(this::refreshPin);
     }
 
     @Override
-    public void onUnLinkedFrom(Pin origin, Pin from) {
+    public void onUnLinkedFrom(Task task, Pin origin, Pin from) {
         post(this::refreshPin);
     }
 

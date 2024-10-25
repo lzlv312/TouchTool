@@ -544,7 +544,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                                 Pin pin = pinView.getPin();
                                 if (touchState == TOUCH_DRAG_PIN) {
                                     if (pin.linkAble(touchedPin.getPin())) {
-                                        pin.mutualAddLink(touchedPin.getPin());
+                                        pin.mutualAddLink(task, touchedPin.getPin());
                                         flag = false;
                                     }
                                 } else {
@@ -573,18 +573,15 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         if (touchedPin == null) return;
         Pin p = touchedPin.getPin();
         if (touchState == TOUCH_DRAG_PIN) {
-            if (p.isSingleLink()) p.clearLinks(task);
             for (Pin pin : action.getPins()) {
                 if (pin.linkAble() && pin.linkAble(p)) {
-                    if (pin.isSingleLink()) pin.clearLinks(task);
-                    pin.mutualAddLink(p);
+                    pin.mutualAddLink(task, p);
                     break;
                 }
             }
         } else if (touchState == TOUCH_DRAG_LINK) {
             for (Pin pin : action.getPins()) {
                 if (pin.linkAble() && pin.linkAble(p.getValue())) {
-                    if (pin.isSingleLink()) pin.clearLinks(task);
                     pin.addLinks(task, selectedLinks);
                 }
             }

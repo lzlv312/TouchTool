@@ -2,7 +2,6 @@ package top.bogey.touch_tool.bean.base;
 
 import com.google.gson.JsonObject;
 
-import java.util.Objects;
 import java.util.UUID;
 
 import top.bogey.touch_tool.utils.GsonUtil;

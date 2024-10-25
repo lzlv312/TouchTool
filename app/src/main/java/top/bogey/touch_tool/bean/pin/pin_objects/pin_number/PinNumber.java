@@ -66,20 +66,18 @@ public abstract class PinNumber<T extends Number> extends PinObject {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public final boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PinNumber<?> pinNumber)) return false;
+        if (!super.equals(object)) return false;
 
-        PinNumber<?> pinNumber = (PinNumber<?>) o;
-
-        return Objects.equals(value, pinNumber.value);
+        return getValue().equals(pinNumber.getValue());
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (value != null ? value.hashCode() : 0);
+        result = 31 * result + getValue().hashCode();
         return result;
     }
 }

@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.bean.action;
 
 import android.graphics.Point;
+import android.util.Log;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -265,15 +266,14 @@ public abstract class Action extends Identity implements PinListener {
     }
 
     @Override
-    public void onLinkedTo(Pin origin, Pin to) {
+    public void onLinkedTo(Task task, Pin origin, Pin to) {
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onPinChanged(origin));
     }
 
     @Override
-    public void onUnLinkedFrom(Pin origin, Pin from) {
+    public void onUnLinkedFrom(Task task, Pin origin, Pin from) {
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onPinChanged(origin));
     }
-
 
     @Override
     public void onTypeChanged(Pin origin, Class<? extends PinBase> type) {
@@ -334,6 +334,8 @@ public abstract class Action extends Identity implements PinListener {
                 Constructor<? extends Action> constructor = info.getClazz().getConstructor(JsonObject.class);
                 return constructor.newInstance(jsonObject);
             } catch (Exception e) {
+                Log.d("TAG", "deserialize action: " + info);
+                Log.d("TAG", "deserialize action json: " + json);
                 e.printStackTrace();
                 return null;
             }

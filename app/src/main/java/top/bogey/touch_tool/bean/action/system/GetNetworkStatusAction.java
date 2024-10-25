@@ -30,10 +30,10 @@ public class GetNetworkStatusAction extends CalculateAction {
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
-        List<PinObject> values = statusPin.getValue(PinList.class).getValues();
+        PinList states = statusPin.getValue(PinList.class);
         List<TaskInfoSummary.NotworkState> state = TaskInfoSummary.getInstance().getNetworkState();
         for (TaskInfoSummary.NotworkState notworkState : state) {
-            values.add(new PinString(notworkState.name()));
+            states.add(new PinString(notworkState.name()));
         }
     }
 }

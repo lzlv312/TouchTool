@@ -37,7 +37,7 @@ public class OpenAppAction extends ExecuteAction {
         PinApplication app = getPinValue(runnable, appPin);
         PinMap map = getPinValue(runnable, paramsPin);
         Map<String, String> params = new HashMap<>();
-        map.getValueMap().forEach((key, value) -> params.put(key.toString(), value.toString()));
+        map.forEach((key, value) -> params.put(key.toString(), value.toString()));
 
         List<String> classes = app.getActivityClasses();
         if (classes == null || classes.isEmpty()) {

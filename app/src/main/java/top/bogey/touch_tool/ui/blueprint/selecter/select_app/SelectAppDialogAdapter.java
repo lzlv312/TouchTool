@@ -92,7 +92,7 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
     }
 
     private PinApplication getSelectedApp(String packageName) {
-        for (PinObject value : applications.getValues()) {
+        for (PinObject value : applications) {
             if (value instanceof PinApplication app) {
                 if (packageName.equals(app.getPackageName())) {
                     return app;
@@ -184,21 +184,21 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
             if (app == null) {
                 // 单选的需要取消之前选择的
                 if (applications.isSingle()) {
-                    for (PinObject value : applications.getValues()) {
+                    for (PinObject value : applications) {
                         if (value instanceof PinApplication pinApplication) {
                             int index = getAppIndex(pinApplication.getPackageName());
                             notifyItemChanged(index);
                         }
                     }
-                    applications.getValues().clear();
+                    applications.clear();
                 }
-                applications.getValues().add(new PinApplication(info.packageName));
+                applications.add(new PinApplication(info.packageName));
             } else {
-                applications.getValues().remove(app);
+                applications.remove(app);
             }
 
             if (info.packageName.equals(context.getString(R.string.common_package))) {
-                for (PinObject value : applications.getValues()) {
+                for (PinObject value : applications) {
                     if (value instanceof PinApplication pinApplication) {
                         int index = getAppIndex(pinApplication.getPackageName());
                         notifyItemChanged(index);
@@ -210,15 +210,15 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
         private void selectApp(PinApplication app) {
             if (app.getActivityClasses() == null || app.getActivityClasses().isEmpty()) return;
             if (applications.isSingle()) {
-                for (PinObject value : applications.getValues()) {
+                for (PinObject value : applications) {
                     if (value instanceof PinApplication pinApplication) {
                         int index = getAppIndex(pinApplication.getPackageName());
                         notifyItemChanged(index);
                     }
                 }
-                applications.getValues().clear();
+                applications.clear();
             }
-            applications.getValues().add(app);
+            applications.add(app);
         }
     }
 }

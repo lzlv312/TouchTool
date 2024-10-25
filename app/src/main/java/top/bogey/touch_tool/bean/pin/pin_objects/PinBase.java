@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.bean.pin.pin_objects;
 
+import android.util.Log;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -61,11 +63,10 @@ public abstract class PinBase implements Copyable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof PinBase pinBase)) return false;
 
-        PinBase pinBase = (PinBase) o;
         return getType() == pinBase.getType() && getSubType() == pinBase.getSubType();
     }
 
@@ -89,6 +90,8 @@ public abstract class PinBase implements Copyable {
                 Constructor<? extends PinBase> constructor = pinInfo.getClazz().getConstructor(JsonObject.class);
                 return constructor.newInstance(jsonObject);
             } catch (Exception e) {
+                Log.d("TAG", "deserialize pin: " + pinInfo);
+                Log.d("TAG", "deserialize pin json: " + json);
                 e.printStackTrace();
                 return null;
             }

@@ -104,7 +104,7 @@ Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchTemplate(JNIEnv *env, jc
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchColor(JNIEnv *env, jclass clazz, jobject bitmap, jintArray hsvColor, jint offset) {
+Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchColor(JNIEnv *env, jclass clazz, jobject bitmap, jintArray rgb, jint similarity) {
     Mat src = bitmap_to_cv_mat(env, bitmap);
     if (src.empty()) return nullptr;
 
@@ -112,13 +112,28 @@ Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchColor(JNIEnv *env, jclas
     GaussianBlur(src, src, Size(5, 5), 0);
     erode(src, src, 3);
 
-    jint *hsv = env->GetIntArrayElements(hsvColor, JNI_FALSE);
-    Scalar color((int) hsv[0], (int) hsv[1], (int) hsv[2]);
-    Scalar lowColor(clamp(180, 0, (int) color[0] - offset), clamp(255, 0, (int) color[1] - offset), clamp(255, 0, (int) color[2] - offset));
-    Scalar highColor(clamp(180, 0, (int) color[0] + offset), clamp(255, 0, (int) color[1] + offset), clamp(255, 0, (int) color[2] + offset));
+    jint *rgbColor = env->GetIntArrayElements(rgb, JNI_FALSE);
+    Mat bgr = Mat(1, 1, CV_8UC3, Vec3b(rgbColor[2], rgbColor[1], rgbColor[0]));
+    Mat hsv;
+    cvtColor(bgr, hsv, COLOR_BGR2HSV);
+    Vec3b hsvColor = hsv.at<Vec3b>(0, 0);
+    int similar = clamp(100, 1, similarity);
+    double diff = (1 - (similar / 100.0)) * 0.2;
+
+    Vec3b lowHsv(
+            max(.0, hsvColor[0] - 180 * diff),
+            max(.0, hsvColor[1] - 255 * diff),
+            max(.0, hsvColor[2] - 255 * diff)
+            );
+
+    Vec3b highHsv(
+            min(180.0, hsvColor[0] + 180 * diff),
+            min(255.0, hsvColor[1] + 255 * diff),
+            min(255.0, hsvColor[2] + 255 * diff)
+            );
 
     Mat mask;
-    inRange(src, lowColor, highColor, mask);
+    inRange(src, lowHsv, highHsv, mask);
     vector<vector<Point> > contours;
     findContours(mask, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 

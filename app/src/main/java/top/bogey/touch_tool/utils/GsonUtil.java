@@ -9,14 +9,17 @@ import java.lang.reflect.Type;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 
 public class GsonUtil {
     public static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Action.class, new Action.ActionDeserializer())
             .registerTypeAdapter(Pin.class, new Pin.PinDeserialize())
             .registerTypeAdapter(PinBase.class, new PinBase.PinBaseDeserializer())
-            .registerTypeAdapter(PinTouchPath.class, new PinTouchPath.PinTouchPathSerializer())
+
+            .registerTypeAdapter(PinList.class, new PinList.PinListSerializer())
+            .registerTypeAdapter(PinMap.class, new PinMap.PinMapSerializer())
             .create();
 
     public static <T> T copy(T src, Class<T> clazz) {

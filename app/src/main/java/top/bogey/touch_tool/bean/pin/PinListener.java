@@ -1,11 +1,12 @@
 package top.bogey.touch_tool.bean.pin;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.task.Task;
 
 public interface PinListener {
-    void onLinkedTo(Pin origin, Pin to);
+    void onLinkedTo(Task task, Pin origin, Pin to);
 
-    void onUnLinkedFrom(Pin origin, Pin from);
+    void onUnLinkedFrom(Task task, Pin origin, Pin from);
 
     void onTypeChanged(Pin origin, Class<? extends PinBase> type);
 

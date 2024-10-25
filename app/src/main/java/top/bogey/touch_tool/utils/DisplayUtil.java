@@ -232,9 +232,9 @@ public class DisplayUtil {
         return rectList;
     }
 
-    public static native List<MatchResult> nativeMatchColor(Bitmap bitmap, int[] color, int range);
+    public static native List<MatchResult> nativeMatchColor(Bitmap bitmap, int[] color, int similarity);
 
-    public static synchronized List<Rect> matchColor(Bitmap bitmap, int color, Rect area, int range) {
+    public static synchronized List<Rect> matchColor(Bitmap bitmap, int color, Rect area, int similarity) {
         if (bitmap == null) return null;
         if (area == null) area = new Rect();
 
@@ -245,11 +245,9 @@ public class DisplayUtil {
             if (bitmap == null) return null;
         }
 
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        int[] opencvHsv = {(int) (hsv[0] / 2), (int) (hsv[1] * 255), (int) (hsv[2] * 255)};
+        int[] rgb = {Color.red(color), Color.green(color), Color.blue(color)};
 
-        List<MatchResult> matchResults = nativeMatchColor(bitmap, opencvHsv, range);
+        List<MatchResult> matchResults = nativeMatchColor(bitmap, rgb, similarity);
         if (tmp != null) tmp.recycle();
 
         if (matchResults == null || matchResults.isEmpty()) return null;

@@ -30,10 +30,10 @@ public class PinWidgetTouch extends PinWidget<PinTouchPath> {
 
     @Override
     protected void initBase() {
-        binding.pathView.setPath(pinBase.getValue());
+        binding.pathView.setPath(pinBase.getPathParts());
 
         binding.pathView.setOnClickListener(v -> {
-            TouchPathView view = new TouchPathView(getContext(), pinBase.getValue(), true);
+            TouchPathView view = new TouchPathView(getContext(), pinBase.getPathParts(), true);
             Point size = DisplayUtil.getScreenSize(getContext());
             DisplayUtil.setViewWidth(view, size.x / 2);
             DisplayUtil.setViewHeight(view, size.y / 2);
@@ -47,7 +47,7 @@ public class PinWidgetTouch extends PinWidget<PinTouchPath> {
         binding.pickButton.setOnClickListener(v -> new TouchPickerPreview(getContext(), result -> {
             pinBase.setValue(result.getValue());
             pinBase.setAnchor(result.getAnchor());
-            binding.pathView.setPath(result.getValue());
+            binding.pathView.setPath(result.getPathParts());
         }, pinBase).show());
     }
 

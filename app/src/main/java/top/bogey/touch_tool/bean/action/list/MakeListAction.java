@@ -1,0 +1,59 @@
+package top.bogey.touch_tool.bean.action.list;
+
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionType;
+import top.bogey.touch_tool.bean.action.DynamicPinsAction;
+import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.task.TaskRunnable;
+
+public class MakeListAction extends ListCalculateAction implements DynamicPinsAction {
+    private final static Pin morePin = new Pin(new PinObject(), R.string.pin_object);
+    private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin);
+    private final transient Pin listPin = new Pin(new PinList(), R.string.pin_object, true);
+
+    public MakeListAction() {
+        super(ActionType.LIST_MAKE);
+        addPins(addPin, listPin);
+    }
+
+    public MakeListAction(JsonObject jsonObject) {
+        super(jsonObject);
+        reAddPins(morePin);
+        reAddPins(addPin, listPin);
+    }
+
+    @Override
+    public void calculate(TaskRunnable runnable, Pin pin) {
+        for (Pin dynamicPin : getDynamicPins()) {
+            PinObject value = getPinValue(runnable, dynamicPin);
+            listPin.getValue(PinList.class).add(value);
+        }
+    }
+
+    @Override
+    public List<Pin> getDynamicValueTypePins() {
+        List<Pin> dynamicPins = getDynamicPins();
+        dynamicPins.add(listPin);
+        dynamicPins.add(morePin);
+        return dynamicPins;
+    }
+
+    @Override
+    public List<Pin> getDynamicPins() {
+        List<Pin> pins = new ArrayList<>();
+        boolean start = true;
+        for (Pin pin : getPins()) {
+            if (pin == addPin) start = false;
+            if (start) pins.add(pin);
+        }
+        return pins;
+    }
+}
