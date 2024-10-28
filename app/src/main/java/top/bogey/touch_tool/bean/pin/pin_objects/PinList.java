@@ -29,6 +29,12 @@ public class PinList extends PinObject implements List<PinObject> {
         super(PinType.LIST);
     }
 
+    public PinList(PinType valueType) {
+        this();
+        this.valueType = valueType;
+        dynamic = false;
+    }
+
     public PinList(PinType valueType, boolean changeAble, boolean dynamic) {
         this();
         this.valueType = valueType;

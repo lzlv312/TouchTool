@@ -4,6 +4,16 @@
         <item>开始</item>
         <item>逻辑</item>
         <item>通用</item>
+        <item>系统</item>
+        <item>数值</item>
+        <item>文本</item>
+        <item>条件</item>
+        <item>控件</item>
+        <item>图片</item>
+        <item>颜色</item>
+        <item>区域</item>
+        <item>位置</item>
+        <item>列表</item>
     </string-array>
 
     <string-array name="pin_type">

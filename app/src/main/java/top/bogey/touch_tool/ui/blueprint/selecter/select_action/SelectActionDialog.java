@@ -117,10 +117,11 @@ public class SelectActionDialog extends BottomSheetDialog {
                     if (pin == null) continue;
                     types.add(type);
                 }
+                if (types.isEmpty()) continue;
                 preset.put(groupType.getName(), types);
             }
         }
-        dataMap.put(getContext().getString(R.string.select_action_group_preset), preset);
+        if (!preset.isEmpty()) dataMap.put(getContext().getString(R.string.select_action_group_preset), preset);
         // 第二部分：任务Action
         // 第三部分：变量Action
         // 第四部分：卡片Action

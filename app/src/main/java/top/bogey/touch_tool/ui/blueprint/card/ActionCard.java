@@ -49,6 +49,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     public abstract void init();
+
     public abstract boolean check();
 
     public void addPin(Pin pin) {
@@ -64,8 +65,6 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     /**
-     *
-     * @param pin
      * @param offset 添加到列表中的位置
      */
     public void addPin(Pin pin, int offset) {
@@ -73,8 +72,6 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     /**
-     *
-     * @param pin
      * @param offset 添加到上下左右各区域得偏移，不是添加到列表中的位置
      */
     public abstract void addPinView(Pin pin, int offset);
@@ -114,18 +111,25 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     public void setExpandType(Action.ExpandType expandType) {
+        if (expandType == Action.ExpandType.HALF && !action.canExpand()) {
+            expandType = Action.ExpandType.FULL;
+        }
         action.setExpandType(expandType);
-        pinViews.forEach((id, pinView) -> pinView.expand(expandType));
+        pinViews.forEach((id, pinView) -> pinView.expand(action.getExpandType()));
     }
 
     public void expand() {
-        int ordinal = action.getExpandType().ordinal();
-        Action.ExpandType[] values = Action.ExpandType.values();
-        // 下一个枚举
-        if (ordinal < values.length - 1) {
-            action.setExpandType(values[ordinal + 1]);
-        } else {
-            action.setExpandType(values[0]);
+        Action.ExpandType expandType = action.getExpandType();
+        switch (expandType) {
+            case NONE -> {
+                if (action.canExpand()) {
+                    action.setExpandType(Action.ExpandType.HALF);
+                } else {
+                    action.setExpandType(Action.ExpandType.FULL);
+                }
+            }
+            case HALF -> action.setExpandType(Action.ExpandType.FULL);
+            case FULL -> action.setExpandType(Action.ExpandType.NONE);
         }
         pinViews.forEach((id, pinView) -> pinView.expand(action.getExpandType()));
     }
@@ -156,6 +160,19 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         }
 
         return null;
+    }
+
+    public boolean isEmptyPosition(float x, float y, float scale) {
+        for (Map.Entry<String, PinView> entry : pinViews.entrySet()) {
+            PinView pinView = entry.getValue();
+            PointF pointF = DisplayUtil.getLocationRelativeToView(pinView, this);
+            float px = pointF.x * scale;
+            float py = pointF.y * scale;
+            float width = pinView.getWidth() * scale;
+            float height = pinView.getHeight() * scale;
+            if (new RectF(px, py, px + width, py + height).contains(x, y)) return false;
+        }
+        return true;
     }
 
     @Override

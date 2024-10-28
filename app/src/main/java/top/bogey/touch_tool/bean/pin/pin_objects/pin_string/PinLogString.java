@@ -3,6 +3,7 @@ package top.bogey.touch_tool.bean.pin.pin_objects.pin_string;
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.utils.GsonUtil;
 
@@ -19,6 +20,6 @@ public class PinLogString extends PinString {
 
     @Override
     public boolean isInstance(PinBase pin) {
-        return true;
+        return pin instanceof PinObject;
     }
 }

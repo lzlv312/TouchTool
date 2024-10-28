@@ -2,6 +2,7 @@ package top.bogey.touch_tool.ui.blueprint.pin;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -91,7 +92,8 @@ public abstract class PinView extends FrameLayout implements PinListener {
                         PinWidget<? extends PinBase> widget = widgetClass.getConstructor(Context.class, ActionCard.class, PinView.class, info.getClazz(), boolean.class).newInstance(getContext(), card, this, pin.getValue(), custom);
                         widgetBox.addView(widget);
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        Log.d("TAG", "refreshPin: " + info);
+                        e.printStackTrace();
                     }
                 }
             }
@@ -107,8 +109,11 @@ public abstract class PinView extends FrameLayout implements PinListener {
             } else {
                 // 连接不为空，必须显示
                 if (pin.getLinks().isEmpty()) {
-                    if (pin.isHide()) setVisibility(expandType == Action.ExpandType.NONE ? GONE : VISIBLE);
-                    else setVisibility(VISIBLE);
+                    // 半开的显示非隐藏针脚
+                    if (expandType == Action.ExpandType.HALF) {
+                        if (pin.isHide()) setVisibility(GONE);
+                        else setVisibility(VISIBLE);
+                    } else setVisibility(GONE);
                 } else {
                     setVisibility(VISIBLE);
                 }

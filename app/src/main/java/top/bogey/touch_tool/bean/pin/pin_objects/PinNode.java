@@ -10,7 +10,7 @@ import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.utils.GsonUtil;
 
 public class PinNode extends PinObject {
-    private NodeInfo nodeInfo;
+    private transient NodeInfo nodeInfo;
 
     public PinNode() {
         super(PinType.NODE);
@@ -23,7 +23,6 @@ public class PinNode extends PinObject {
 
     public PinNode(JsonObject jsonObject) {
         super(jsonObject);
-        nodeInfo = GsonUtil.getAsObject(jsonObject, "nodeInfo", NodeInfo.class, null);
     }
 
     @Override

@@ -84,7 +84,7 @@ public class PinTouchPath extends PinScaleAble<String> {
         Set<GestureDescription.StrokeDescription> strokes = new HashSet<>();
         for (int i = 0; i < pathList.size(); i++) {
             Path path = pathList.get(i);
-            int time = Math.max(1, (int) (times.get(i) * timeScale));
+            int time = Math.max(1, (int) (times.get(i) / timeScale));
             GestureDescription.StrokeDescription stroke = new GestureDescription.StrokeDescription(path, 0, time);
             strokes.add(stroke);
         }
@@ -131,7 +131,7 @@ public class PinTouchPath extends PinScaleAble<String> {
                 if (lastX == x && lastY == y) x++;
                 path.lineTo(x, y);
 
-                int time = Math.max(1, (int) (pathPart.getTime() * timeScale));
+                int time = Math.max(1, (int) (pathPart.getTime() / timeScale));
                 GestureDescription.StrokeDescription stroke = preStrokeMap.get(point.getId());
                 if (stroke == null) {
                     stroke = new GestureDescription.StrokeDescription(path, 0, time, willContinue);

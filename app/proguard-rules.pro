@@ -19,3 +19,16 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-assumenosideeffects class android.util.Log{
+    public static int d(...);
+}
+
+-keep class android.graphics.Point{*;}
+-keep class android.graphics.Rect{*;}
+
+-keep class top.bogey.touch_tool.utils.MatchResult{*;}
+-keep class top.bogey.touch_tool.bean.**{*;}
+-keep class * extends top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidget{*;}
+
+-keep enum top.bogey.touch_tool.** {*;}

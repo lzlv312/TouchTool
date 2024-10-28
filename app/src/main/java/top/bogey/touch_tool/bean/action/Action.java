@@ -35,6 +35,7 @@ public abstract class Action extends Identity implements PinListener {
     private final List<Pin> pins = new ArrayList<>();
 
     private ExpandType expandType = ExpandType.HALF;
+    private boolean locked = false;
     private Point pos = new Point();
 
     protected transient List<Pin> tmpPins = new ArrayList<>();
@@ -49,6 +50,7 @@ public abstract class Action extends Identity implements PinListener {
         type = GsonUtil.getAsObject(jsonObject, "type", ActionType.class, null);
         assert type != null;
         expandType = GsonUtil.getAsObject(jsonObject, "expandType", ExpandType.class, ExpandType.HALF);
+        locked = GsonUtil.getAsBoolean(jsonObject, "locked", false);
         pos = GsonUtil.getAsObject(jsonObject, "pos", Point.class, new Point());
         tmpPins = GsonUtil.getAsObject(jsonObject, "pins", TypeToken.getParameterized(ArrayList.class, Pin.class).getType(), new ArrayList<>());
     }
@@ -175,7 +177,7 @@ public abstract class Action extends Identity implements PinListener {
     }
 
     public void removePin(Task context, Pin pin) {
-        //todo
+        pin.clearLinks(context);
         removePin(pin);
     }
 
@@ -304,6 +306,21 @@ public abstract class Action extends Identity implements PinListener {
 
     public void setExpandType(ExpandType expandType) {
         this.expandType = expandType;
+    }
+
+    public boolean canExpand() {
+        for (Pin pin : getPins()) {
+            if (pin.isHide()) return true;
+        }
+        return false;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     public Point getPos() {

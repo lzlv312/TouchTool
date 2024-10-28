@@ -66,8 +66,8 @@
     <string name="select_action_group_card">现有动作</string>
 
     <string name="select_app_search">搜索应用</string>
-    <string name="select_app_third">第三方应用：%d</string>
-    <string name="select_app_all">所有应用：%d</string>
+    <string name="select_app_search_third">搜索%d个第三方应用</string>
+    <string name="select_app_search_all">搜索%d个所有应用</string>
     <string name="select_app_activity">选择活动</string>
     <string name="select_app_search_activity">搜索活动</string>
 
@@ -228,6 +228,9 @@
     <string name="text_to_speak_action">文本转语音</string>
     <string name="text_to_speak_action_desc">将文本转为语音并播放</string>
 
+    <string name="write_to_clipboard_action">复制到剪贴板</string>
+    <string name="write_to_clipboard_action_desc">将针脚值复制到剪贴板</string>
+
     <string name="share_to_action">分享到</string>
     <string name="share_to_action_desc">将针脚值分享到选定的应用</string>
     <string name="share_to_action_as">作为</string>
@@ -301,6 +304,10 @@
     <string name="number_mod_action">取余数</string>
     <string name="number_mod_action_desc">取两个数值的余数</string>
 
+    <string name="number_abs_action">取绝对值</string>
+    <string name="number_abs_action_desc">取一个数值的绝对值</string>
+    <string name="number_abs_action_value">绝对值</string>
+
     <string name="number_equal_action">数值比较 =</string>
     <string name="number_equal_action_desc">判断两个数值是否相等</string>
     <string name="number_equal_action_offset">精度</string>
@@ -317,6 +324,12 @@
     <string name="number_to_integer_action">取整</string>
     <string name="number_to_integer_action_desc">将数值按规则取整</string>
     <string name="number_to_integer_action_type">取整方式</string>
+
+    <string name="check_number_in_value_area_action">数值范围判断</string>
+    <string name="check_number_in_value_area_action_desc">判断数值是否在指定范围内</string>
+
+    <string name="number_to_value_area_action">组合为数值范围</string>
+    <string name="number_to_value_area_action_desc">将两个数值组合为一个数值范围</string>
 
 
     <!-- 动作-String -->
@@ -354,6 +367,10 @@
     <string name="get_ocr_text_action_type">模型</string>
     <string name="get_ocr_text_action_text">所有文字</string>
 
+    <string name="find_ocr_text_action">OCR匹配文本</string>
+    <string name="find_ocr_text_action_desc">在屏幕中查找指定文字</string>
+    <string name="find_ocr_text_action_type">模型</string>
+
     <!-- 动作-Area -->
     <string name="area_to_integer_action">区域转数值</string>
     <string name="area_to_integer_action_desc">提取区域的上下左右数值</string>
@@ -371,6 +388,11 @@
     <string name="get_area_intersection_action">取区域交集</string>
     <string name="get_area_intersection_action_desc">取两个区域相交的区域</string>
 
+    <string name="get_area_center_action">取区域中心</string>
+    <string name="get_area_center_action_desc">取指定区域的中心位置</string>
+
+    <string name="pick_area_action">手动选择区域</string>
+    <string name="pick_area_action_desc">选择一个区域</string>
 
     <!-- 动作-Point -->
     <string name="point_to_integer_action">位置转数值</string>
@@ -382,6 +404,15 @@
     <string name="point_offset_action">位置偏移</string>
     <string name="point_offset_action_desc">将位置进行偏移</string>
     <string name="point_offset_action_offset">偏移</string>
+
+    <string name="point_to_touch_action">位置转为手势</string>
+    <string name="point_to_touch_action_desc">将位置转换为手势</string>
+    <string name="point_to_touch_action_time">触摸时间</string>
+
+    <string name="touch_action">执行手势</string>
+    <string name="touch_action_desc">执行指定手势</string>
+    <string name="touch_action_time">手势速度</string>
+    <string name="touch_action_offset">随机偏移</string>
 
     <!-- 动作-Boolean -->
     <string name="boolean_and_action">所有条件达成</string>
@@ -428,6 +459,17 @@
 
     <string name="check_node_valid_action">检查控件是否有效</string>
     <string name="check_node_valid_action_desc">检查控件是否有效</string>
+
+    <string name="node_touch_action">点击控件</string>
+    <string name="node_touch_action_desc">点击控件</string>
+    <string name="node_touch_action_long">长按</string>
+    <string name="node_touch_action_else">未完成</string>
+
+    <string name="edit_text_input_action">输入文本</string>
+    <string name="edit_text_input_action_desc">输入文本</string>
+    <string name="edit_text_input_action_edit_text">输入框</string>
+    <string name="edit_text_input_action_append">追加</string>
+    <string name="edit_text_input_action_enter">模拟回车</string>
 
 
     <!-- 动作-Image -->
@@ -503,6 +545,13 @@
     <string name="list_foreach_action_break">跳出循环</string>
     <string name="list_foreach_action_index">索引</string>
 
+
+    <!-- 动作-Map -->
+    <string name="map_make_action">新建字典</string>
+    <string name="map_make_action_desc">新建一个字典</string>
+    <string name="map_make_action_key">键</string>
+    <string name="map_make_action_value">值</string>
+
     <!-- 针脚名 -->
     <string name="pin_execute">执行</string>
 
@@ -532,7 +581,7 @@
 
     <string name="pin_select">单选</string>
     <string name="pin_select_hint">选项(逗号分隔)</string>
-    <string name="Pin_touch">手势</string>
+    <string name="pin_touch">手势</string>
     <string name="pin_node">控件</string>
 
     <string name="pin_image">图片</string>

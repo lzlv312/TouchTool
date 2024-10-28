@@ -26,7 +26,7 @@ import top.bogey.touch_tool.utils.AppUtil;
 public class FindOcrTextAction extends FindExecuteAction {
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area, false, false, true);
-    private final transient Pin typePin = new Pin(new PinSingleSelect(R.array.ocr_type), R.string.get_ocr_text_action_type, false, false, true);
+    private final transient Pin typePin = new Pin(new PinSingleSelect(R.array.ocr_type), R.string.find_ocr_text_action_type, false, false, true);
     private final transient Pin resultAreaPin = new Pin(new PinArea(), R.string.pin_area, true);
     private final transient Pin resultTextPin = new Pin(new PinString(), R.string.pin_string, true);
 

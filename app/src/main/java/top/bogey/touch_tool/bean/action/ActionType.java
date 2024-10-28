@@ -32,11 +32,6 @@ public enum ActionType {
     CLOSE_ALL_STICK,
     
     EXECUTE_TASK,
-    
-    CLICK_POSITION,
-    CLICK_NODE,
-    TOUCH,
-    EDITTEXT_INPUT,
 
     SAVE,
     LOAD,
@@ -76,6 +71,7 @@ public enum ActionType {
     NUMBER_MUL,
     NUMBER_DIV,
     NUMBER_MOD,
+    NUMBER_ABS,
     NUMBER_EQUAL,
     NUMBER_LESS,
     NUMBER_GREATER,
@@ -98,6 +94,11 @@ public enum ActionType {
     GET_OCR_TEXT,
     FIND_OCR_TEXT,
 
+    // 条件
+    BOOLEAN_OR,
+    BOOLEAN_AND,
+    BOOLEAN_NOT,
+
     // 控件
     FIND_NODE_BY_PATH,
     FIND_NODES_BY_TEXT,
@@ -108,6 +109,9 @@ public enum ActionType {
     GET_NODE_PARENT,
     GET_WINDOWS,
     CHECK_NODE_VALID,
+
+    NODE_TOUCH,
+    EDITTEXT_INPUT,
 
     // 图片
     GET_IMAGE,
@@ -134,11 +138,7 @@ public enum ActionType {
     POINT_TO_INT,
     POINT_OFFSET,
     POINT_TO_TOUCH,
-
-    // 条件
-    BOOLEAN_OR,
-    BOOLEAN_AND,
-    BOOLEAN_NOT,
+    TOUCH,
 
     // 数组
     LIST_MAKE,

@@ -27,6 +27,7 @@ import top.bogey.touch_tool.databinding.ViewBlueprintBinding;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
+import top.bogey.touch_tool.ui.setting.SettingSaver;
 
 public class BlueprintView extends Fragment {
     private final Stack<Task> taskStack = new Stack<>();
@@ -109,8 +110,11 @@ public class BlueprintView extends Fragment {
         binding.addButton.setOnClickListener(v -> new SelectActionDialog(requireContext(), binding.cardLayout, null, null).show());
 
         binding.lockEditButton.setOnClickListener(v -> {
-
+            binding.cardLayout.setEditAble(!binding.cardLayout.isEditAble());
+            binding.lockEditButton.setImageResource(binding.cardLayout.isEditAble() ? R.drawable.icon_edit : R.drawable.icon_touch);
         });
+        binding.cardLayout.setEditAble(!SettingSaver.getInstance().isLookFirst());
+        binding.lockEditButton.setImageResource(binding.cardLayout.isEditAble() ? R.drawable.icon_edit : R.drawable.icon_touch);
 
         pushStack(task);
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);

@@ -223,10 +223,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         float x, y;
         if (lastX <= 0 && lastY <= 0) {
             x = (getWidth() - width) / 2f;
-            y = (getHeight() - height) / 4f;
+            y = (getHeight() - height) / 5f;
         } else {
             x = lastX - width / 2f;
-            y = lastY - height / 4f;
+            y = lastY - height / 2f;
         }
         action.setPos((int) ((x - offsetX) / getScaleGridSize()), (int) ((y - offsetY) / getScaleGridSize()));
         updateCardPos(card);
@@ -293,10 +293,11 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         cards.values().forEach(this::updateCardPos);
     }
 
-    private ActionCard getActionCard(float x, float y) {
+    private ActionCard getActionCard(float x, float y, boolean checkLock) {
         List<ActionCard> cards = new ArrayList<>(this.cards.values());
         cards.sort((o1, o2) -> indexOfChild(o2) - indexOfChild(o1));
         for (ActionCard card : cards) {
+            if (checkLock && card.getAction().isLocked()) continue;
             RectF area = new RectF(card.getX(), card.getY(), card.getX() + card.getWidth() * scale, card.getY() + card.getHeight() * scale);
             if (area.contains(x, y)) return card;
         }
@@ -367,6 +368,22 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         return gridSize * scale;
     }
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (editAble) {
+            float x = event.getX();
+            float y = event.getY();
+
+            ActionCard card = getActionCard(x, y, false);
+            if (card != null) {
+                if (card.isEmptyPosition(x - card.getX(), y - card.getY(), scale)) {
+                    return true;
+                }
+            }
+        }
+        return super.onInterceptTouchEvent(event);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -392,7 +409,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 lastY = y;
 
                 if (editAble) {
-                    ActionCard card = getActionCard(x, y);
+                    ActionCard card = getActionCard(x, y, true);
                     if (card != null) {
                         touchState = TOUCH_CARD;
                         touchedCard = card;
@@ -536,7 +553,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                     }
 
                     case TOUCH_DRAG_PIN, TOUCH_DRAG_LINK -> {
-                        ActionCard card = getActionCard(x, y);
+                        ActionCard card = getActionCard(x, y, false);
                         if (card != null) {
                             boolean flag = true;
                             PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY(), scale);
@@ -559,6 +576,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                     }
                 }
                 touchState = TOUCH_NONE;
+                lastX = 0;
+                lastY = 0;
             }
         }
         postInvalidate();
@@ -590,6 +609,9 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
     private void showActionSelector() {
         int touchState = this.touchState;
+        float lastX = this.lastX;
+        float lastY = this.lastY;
+
         Pin pin = touchedPin.getPin();
         if (touchState == TOUCH_DRAG_PIN) {
             pin = new Pin(pin.getValue(), 0, pin.isOut());
@@ -599,6 +621,14 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
         actionDialog = new SelectActionDialog(getContext(), this, pin, card -> {
             tryLink(touchState, card.getAction());
+
+            float width = card.getMeasuredWidth() * scale;
+            float height = card.getMeasuredHeight() * scale;
+            float x = lastX - width / 2f;
+            float y = lastY - height / 2f;
+            card.getAction().setPos((int) ((x - offsetX) / getScaleGridSize()), (int) ((y - offsetY) / getScaleGridSize()));
+            updateCardPos(card);
+
             if (actionDialog != null) actionDialog.dismiss();
         });
         actionDialog.show();
@@ -756,7 +786,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 linkPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryInverse));
 
                 PinView currPosPinView = null;
-                ActionCard card = getActionCard(lastX, lastY);
+                ActionCard card = getActionCard(lastX, lastY, false);
                 if (card != null) {
                     currPosPinView = card.getLinkAblePinView(lastX - card.getX(), lastY - card.getY(), scale);
                 }
@@ -805,6 +835,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 area.bottom += gridSize;
             }
             canvas.drawRect(area, linkPaint);
+            refreshEditView();
         }
     }
 

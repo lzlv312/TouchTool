@@ -75,6 +75,56 @@
             android:visibility="gone" />
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/lockButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:icon="@drawable/icon_unlock"
+                app:iconSize="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/expandButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                app:icon="@drawable/icon_zoom_in"
+                app:iconSize="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/copyButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                app:icon="@drawable/icon_copy"
+                app:iconSize="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/removeButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                android:backgroundTint="@color/fill_button_background_error_check"
+                android:checkable="true"
+                app:icon="@drawable/icon_delete"
+                app:iconSize="16dp"
+                app:iconTint="@color/button_container_check" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/pinBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,15 +151,6 @@
                 android:orientation="vertical" />
 
         </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/hideButton"
-            style="@style/Theme.TouchTool.IconButton"
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:visibility="gone"
-            app:icon="@drawable/icon_down"
-            app:iconSize="16dp" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/errorText"

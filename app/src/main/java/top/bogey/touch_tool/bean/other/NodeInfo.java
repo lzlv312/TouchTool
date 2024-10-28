@@ -17,10 +17,17 @@ public class NodeInfo {
     public boolean usable;
     public boolean visible;
     public Rect area;
+
     public NodeInfo parent;
+    public int index = -1;
+
     public final List<NodeInfo> children = new ArrayList<>();
 
+    public final AccessibilityNodeInfo nodeInfo;
+
     public NodeInfo(AccessibilityNodeInfo nodeInfo) {
+        this.nodeInfo = nodeInfo;
+
         CharSequence className = nodeInfo.getClassName();
         if (className != null) clazz = className.toString();
 
@@ -42,6 +49,7 @@ public class NodeInfo {
             if (child != null) {
                 NodeInfo info = new NodeInfo(child);
                 info.parent = this;
+                info.index = i;
                 children.add(info);
             }
         }
@@ -93,5 +101,10 @@ public class NodeInfo {
         }
         if (area.contains(x, y) && usable && visible) return this;
         return null;
+    }
+
+    public AccessibilityNodeInfo findUsableParentNode() {
+        if (usable) return nodeInfo;
+        return parent == null ? null : parent.findUsableParentNode();
     }
 }

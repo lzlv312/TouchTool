@@ -66,7 +66,7 @@ public class SelectAppDialog extends BottomSheetDialogFragment {
         } else {
             apps = TaskInfoSummary.getInstance().findApps(searchString, includeSystemApp);
         }
-        binding.infoText.setText(getString(includeSystemApp ? R.string.select_app_all : R.string.select_app_third, apps.size()));
+        binding.editBox.setHint(getString(includeSystemApp ? R.string.select_app_search_all : R.string.select_app_search_third, apps.size()));
         if (!applications.isSingle() && (searchString == null || searchString.isEmpty())) {
             PackageInfo info = new PackageInfo();
             info.packageName = getString(R.string.common_package);
