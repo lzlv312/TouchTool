@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.pin.Pin;
@@ -27,7 +28,7 @@ import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.GsonUtil;
 
 public abstract class Action extends Identity implements PinListener {
@@ -212,7 +213,18 @@ public abstract class Action extends Identity implements PinListener {
 
     @Override
     public Action newCopy() {
-        return null;
+        Action copy = copy();
+        copy.setId(UUID.randomUUID().toString());
+        copy.setLocked(false);
+        copy.setExpandType(ExpandType.HALF);
+        copy.getPins().forEach(pin -> {
+            pin.setId(UUID.randomUUID().toString());
+            pin.setOwnerId(copy.getId());
+            pin.getLinks().clear();
+        });
+
+        copy.pos.offset(1, 1);
+        return copy;
     }
 
     @Override

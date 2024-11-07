@@ -46,7 +46,9 @@ public abstract class PinBase implements Copyable {
 
     @Override
     public PinBase newCopy() {
-        return copy();
+        PinBase copy = copy();
+        copy.reset();
+        return copy;
     }
 
     /** 对方能连上我吗？对方得是我的子类才能连上我 **/

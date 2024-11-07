@@ -9,7 +9,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class GetDateAction extends CalculateAction {
     protected final transient Pin yearPin = new Pin(new PinInteger(), R.string.get_date_action_year, true);

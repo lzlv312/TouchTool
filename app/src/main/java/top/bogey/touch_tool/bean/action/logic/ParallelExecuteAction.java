@@ -20,8 +20,8 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
-import top.bogey.touch_tool.bean.task.TaskListener;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskListener;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 
 public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsAction {

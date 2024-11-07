@@ -11,7 +11,7 @@ import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class NodeTouchAction extends ExecuteAction {
     private final transient Pin nodePin = new Pin(new PinNode(), R.string.pin_node);

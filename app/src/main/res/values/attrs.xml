@@ -23,4 +23,14 @@
         <attr name="description" />
         <attr name="options" />
     </declare-styleable>
+
+    <declare-styleable name="SettingWidgetSlider">
+        <attr name="icon" />
+        <attr name="title" />
+        <attr name="description" />
+        <attr name="min" format="integer" />
+        <attr name="max" format="integer" />
+        <attr name="step" format="integer" />
+        <attr name="value" format="integer" />
+    </declare-styleable>
 </resources>

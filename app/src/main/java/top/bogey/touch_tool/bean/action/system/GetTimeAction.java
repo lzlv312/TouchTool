@@ -10,7 +10,7 @@ import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinLong;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class GetTimeAction extends CalculateAction {
     protected final transient Pin hourPin = new Pin(new PinInteger(), R.string.get_time_action_hour, true);

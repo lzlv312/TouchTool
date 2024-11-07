@@ -3,11 +3,13 @@ package top.bogey.touch_tool.ui.play;
 import android.content.Context;
 import android.graphics.Point;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+
+import com.google.android.material.shape.CornerFamily;
+import com.google.android.material.shape.ShapeAppearanceModel;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -30,13 +32,23 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindowHelper;
 public class PlayFloatView extends FrameLayout implements FloatInterface {
 
     private final FloatPlayBinding binding;
+    private final int padding = SettingSaver.getInstance().getPlayViewPadding();
 
     public PlayFloatView(@NonNull Context context) {
         super(context);
         binding = FloatPlayBinding.inflate(LayoutInflater.from(context), this, true);
+        DisplayUtil.setViewMargin(binding.playButtonBox, padding, 0, padding, 0);
 
-        binding.dragSpace.setOnClickListener(v -> refreshExpand(true));
-        binding.closeButton.setOnClickListener(v -> refreshExpand(false));
+        binding.dragSpaceButton.setOnClickListener(v -> {
+            refreshExpand(true);
+            refreshCorner(false);
+            toDockSide();
+        });
+        binding.closeButton.setOnClickListener(v -> {
+            refreshExpand(false);
+            refreshCorner(false);
+            toDockSide();
+        });
 
         binding.buttonBox.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
             @Override
@@ -59,6 +71,8 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
 
     public void setActions(Map<ManualStartAction, Task> actions) {
         Set<ManualStartAction> already = new HashSet<>();
+        Set<PlayFloatItemView> needRemove = new HashSet<>();
+
         int childCount = binding.buttonBox.getChildCount();
         for (int index = childCount - 1; index >= 0; index--) {
             PlayFloatItemView itemView = (PlayFloatItemView) binding.buttonBox.getChildAt(index);
@@ -73,7 +87,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
                     break;
                 }
             }
-            itemView.tryRemoveFromParent(flag);
+            if (flag) needRemove.add(itemView);
         }
 
         actions.forEach((action, task) -> {
@@ -81,14 +95,55 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
             PlayFloatItemView itemView = new PlayFloatItemView(getContext(), task, action);
             binding.buttonBox.addView(itemView);
         });
+
+        needRemove.forEach(PlayFloatItemView::tryRemoveFromParent);
     }
 
     private void refreshExpand(boolean expand) {
-        SettingSaver.getInstance().setPlayViewState(expand);
+        SettingSaver.getInstance().setPlayViewExpand(expand);
         binding.playButtonBox.setVisibility(expand ? VISIBLE : GONE);
         binding.dragSpace.setVisibility(expand ? GONE : VISIBLE);
-        binding.dragSpace.setImageResource(inLeft() ? R.drawable.icon_down : R.drawable.icon_up);
+        binding.dragSpaceButton.setIconResource(inLeft() ? R.drawable.icon_down : R.drawable.icon_up);
+        binding.getRoot().animate().alpha(expand ? 1 : 0.3f);
+    }
 
+    private void refreshCorner(boolean dragging) {
+        boolean expand = SettingSaver.getInstance().isPlayViewExpand();
+        float cornerSize = DisplayUtil.dp2px(getContext(), expand ? 16 : 8);
+        if (dragging) {
+            ShapeAppearanceModel appearanceModel = ShapeAppearanceModel.builder()
+                    .setTopLeftCorner(CornerFamily.ROUNDED, cornerSize)
+                    .setTopRightCorner(CornerFamily.ROUNDED, cornerSize)
+                    .setBottomLeftCorner(CornerFamily.ROUNDED, cornerSize)
+                    .setBottomRightCorner(CornerFamily.ROUNDED, cornerSize)
+                    .build();
+
+            if (padding == 0) binding.playButtonBox.setShapeAppearanceModel(appearanceModel);
+            binding.dragSpace.setShapeAppearanceModel(appearanceModel);
+        } else {
+            if (inLeft()) {
+                ShapeAppearanceModel appearanceModel = ShapeAppearanceModel.builder()
+                        .setTopLeftCorner(CornerFamily.CUT, 0)
+                        .setTopRightCorner(CornerFamily.ROUNDED, cornerSize)
+                        .setBottomLeftCorner(CornerFamily.CUT, 0)
+                        .setBottomRightCorner(CornerFamily.ROUNDED, cornerSize)
+                        .build();
+                if (padding == 0) binding.playButtonBox.setShapeAppearanceModel(appearanceModel);
+                binding.dragSpace.setShapeAppearanceModel(appearanceModel);
+            } else {
+                ShapeAppearanceModel appearanceModel = ShapeAppearanceModel.builder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, cornerSize)
+                        .setTopRightCorner(CornerFamily.CUT, 0)
+                        .setBottomLeftCorner(CornerFamily.ROUNDED, cornerSize)
+                        .setBottomRightCorner(CornerFamily.CUT, 0)
+                        .build();
+                if (padding == 0) binding.playButtonBox.setShapeAppearanceModel(appearanceModel);
+                binding.dragSpace.setShapeAppearanceModel(appearanceModel);
+            }
+        }
+    }
+
+    private void toDockSide() {
         FloatWindowHelper helper = FloatWindow.getHelper(PlayFloatView.class.getName());
         if (helper != null) helper.viewParent.toDockSide();
     }
@@ -104,7 +159,8 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (changed) {
-            refreshExpand(SettingSaver.getInstance().isPlayViewState());
+            refreshExpand(SettingSaver.getInstance().isPlayViewExpand());
+            toDockSide();
         }
     }
 
@@ -116,7 +172,6 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
                 .setLayout(this)
                 .setDockSide(FloatDockSide.HORIZONTAL)
                 .setLocation(EAnchor.CENTER_RIGHT, pos.x, pos.y)
-                .setAnchor(EAnchor.CENTER)
                 .setCallback(new PlayFloatCallback())
                 .setSpecial(true)
                 .show();
@@ -128,11 +183,19 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
     }
 
     private static class PlayFloatCallback extends FloatBaseCallback {
-        private float lastX;
 
         @Override
         public void onShow(String tag) {
 
+        }
+
+        @Override
+        public void onDrag() {
+            super.onDrag();
+            View view = FloatWindow.getView(PlayFloatView.class.getName());
+            if (view instanceof PlayFloatView playFloatView) {
+                playFloatView.refreshCorner(true);
+            }
         }
 
         @Override
@@ -142,38 +205,12 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
             if (helper != null) {
                 Point point = helper.getRelativePoint();
                 SettingSaver.getInstance().setPlayViewPos(point);
-            }
-        }
-
-        @Override
-        public boolean onTouch(MotionEvent event) {
-            float x = event.getRawX();
-
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN -> {
-                    lastX = x;
-                    boolean state = SettingSaver.getInstance().isPlayViewState();
-                    return !state;
-                }
-
-                case MotionEvent.ACTION_MOVE -> {
-                    boolean state = SettingSaver.getInstance().isPlayViewState();
-                    if (!state) {
-                        float dx = x - lastX;
-
-                        int width = (int) DisplayUtil.dp2px(MainApplication.getInstance(), 32);
-                        View view = FloatWindow.getView(PlayFloatView.class.getName());
-                        if (view != null) width = view.getWidth();
-
-                        if (Math.abs(dx) > width && view instanceof PlayFloatView playFloatView) {
-                            playFloatView.refreshExpand(true);
-                            return true;
-                        }
-                    }
+                PlayFloatView view = (PlayFloatView) FloatWindow.getView(PlayFloatView.class.getName());
+                if (view != null) {
+                    view.refreshExpand(SettingSaver.getInstance().isPlayViewExpand());
+                    view.refreshCorner(false);
                 }
             }
-
-            return super.onTouch(event);
         }
     }
 }

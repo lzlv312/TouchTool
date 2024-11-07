@@ -14,8 +14,6 @@ import com.tencent.mmkv.MMKV;
 
 import java.util.List;
 
-import top.bogey.touch_tool.MainApplication;
-
 public class SettingSaver {
     private static SettingSaver instance;
 
@@ -56,6 +54,7 @@ public class SettingSaver {
 
     private static final String THEME = "THEME";                                        // 深色模式
     private static final String COLOR = "COLOR";                                        // 动态颜色
+    private static final String PLAY_VIEW_PADDING = "PLAY_VIEW_PADDING";                // 手动执行悬浮窗偏移
     private static final String LOOK_FIRST = "LOOK_FIRST";                              // 首次查看
 
     private static final MMKV mmkv = MMKV.defaultMMKV();
@@ -63,11 +62,11 @@ public class SettingSaver {
     public void init(Activity activity) {
         setHideBack(activity, isHideBack());
         setTheme(getTheme());
-        setForgeService(activity, isForgeService());
+        setForgeServiceEnabled(activity, isForgeServiceEnabled());
     }
 
     public void initColor(Application application) {
-        DynamicColors.applyToActivitiesIfAvailable(application, new DynamicColorsOptions.Builder().setPrecondition((act, theme) -> isColor()).build());
+        DynamicColors.applyToActivitiesIfAvailable(application, new DynamicColorsOptions.Builder().setPrecondition((act, theme) -> isDynamicColorTheme()).build());
     }
 
     public int getRunTimes() {
@@ -94,11 +93,11 @@ public class SettingSaver {
         mmkv.encode(ENABLE_TIPS, enable);
     }
 
-    public boolean isPlayViewState() {
+    public boolean isPlayViewExpand() {
         return mmkv.decodeBool(PLAY_VIEW_STATE, false);
     }
 
-    public void setPlayViewState(boolean enable) {
+    public void setPlayViewExpand(boolean enable) {
         mmkv.encode(PLAY_VIEW_STATE, enable);
     }
 
@@ -153,11 +152,11 @@ public class SettingSaver {
         }
     }
 
-    public boolean isForgeService() {
+    public boolean isForgeServiceEnabled() {
         return mmkv.decodeBool(FORGE_SERVICE, false);
     }
 
-    public void setForgeService(Context context, boolean enable) {
+    public void setForgeServiceEnabled(Context context, boolean enable) {
         mmkv.encode(FORGE_SERVICE, enable);
     }
 
@@ -178,43 +177,43 @@ public class SettingSaver {
         mmkv.encode(SUPER_USER, type);
     }
 
-    public int getManualPlay() {
+    public int getManualPlayType() {
         return mmkv.decodeInt(MANUAL_PLAY, 1);
     }
 
-    public void setManualPlay(int type) {
+    public void setManualPlayType(int type) {
         mmkv.encode(MANUAL_PLAY, type);
     }
 
-    public int getCapture() {
+    public int getCaptureType() {
         return mmkv.decodeInt(CAPTURE, 0);
     }
 
-    public void setCapture(int type) {
+    public void setCaptureType(int type) {
         mmkv.encode(CAPTURE, type);
     }
 
-    public boolean isOcr() {
+    public boolean isOcrEnabled() {
         return mmkv.decodeBool(OCR, false);
     }
 
-    public void setOcr(boolean enable) {
+    public void setOcrEnabled(boolean enable) {
         mmkv.encode(OCR, enable);
     }
 
-    public boolean isAlarm() {
+    public boolean isAlarmEnabled() {
         return mmkv.decodeBool(ALARM, false);
     }
 
-    public void setAlarm(boolean enable) {
+    public void setAlarmEnabled(boolean enable) {
         mmkv.encode(ALARM, enable);
     }
 
-    public boolean isBluetooth() {
+    public boolean isBluetoothEnabled() {
         return mmkv.decodeBool(BLUETOOTH, false);
     }
 
-    public void setBluetooth(boolean enable) {
+    public void setBluetoothEnabled(boolean enable) {
         mmkv.encode(BLUETOOTH, enable);
     }
 
@@ -227,11 +226,11 @@ public class SettingSaver {
         mmkv.encode(SHOW_TOUCH, enable);
     }
 
-    public boolean isStartTips() {
+    public boolean isShowStartTips() {
         return mmkv.decodeBool(START_TIPS, true);
     }
 
-    public void setStartTips(boolean enable) {
+    public void setShowStartTips(boolean enable) {
         mmkv.encode(START_TIPS, enable);
     }
 
@@ -245,13 +244,21 @@ public class SettingSaver {
         AppCompatDelegate.setDefaultNightMode(theme - 1);
     }
 
-    public boolean isColor() {
+    public boolean isDynamicColorTheme() {
         return mmkv.decodeBool(COLOR, true);
     }
 
-    public void setColor(Activity activity, boolean enable) {
+    public void setDynamicColorTheme(Activity activity, boolean enable) {
         mmkv.encode(COLOR, enable);
         activity.recreate();
+    }
+
+    public int getPlayViewPadding() {
+        return mmkv.decodeInt(PLAY_VIEW_PADDING, 0);
+    }
+
+    public void setPlayViewPadding(int padding) {
+        mmkv.encode(PLAY_VIEW_PADDING, padding);
     }
 
     public boolean isLookFirst() {

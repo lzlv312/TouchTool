@@ -8,7 +8,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 
 public class CheckCaptureReadyAction extends CalculateAction {
@@ -16,12 +16,12 @@ public class CheckCaptureReadyAction extends CalculateAction {
 
     public CheckCaptureReadyAction() {
         super(ActionType.CHECK_CAPTURE_READY);
-        addPins(valuePin);
+        addPin(valuePin);
     }
 
     public CheckCaptureReadyAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(valuePin);
+        reAddPin(valuePin);
     }
 
     @Override

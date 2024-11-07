@@ -8,12 +8,12 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 
 public class CaptureSwitchAction extends ExecuteAction {
     private final transient Pin valuePin = new Pin(new PinBoolean(true), R.string.capture_switch_action_switch);
-    private final transient Pin waitPin = new Pin(new PinBoolean(true), R.string.capture_switch_action_wait);
+    private final transient Pin waitPin = new Pin(new PinBoolean(true), R.string.capture_switch_action_wait, false, false, true);
 
     public CaptureSwitchAction() {
         super(ActionType.SWITCH_CAPTURE);
@@ -33,10 +33,12 @@ public class CaptureSwitchAction extends ExecuteAction {
         if (value.getValue()) {
             if (wait.getValue()) {
                 service.startCapture(result -> runnable.resume());
-                runnable.pause();
+                runnable.await();
             } else {
                 service.startCapture(null);
             }
+        } else {
+            service.stopCapture();
         }
         executeNext(runnable, outPin);
     }

@@ -19,6 +19,7 @@ import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.TaskSaver;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.GsonUtil;
 
 public class Task extends Identity {
@@ -233,10 +234,10 @@ public class Task extends Identity {
     }
 
     public void executeNext(TaskRunnable runnable, Map<String, PinObject> params) {
+        runnable.popStack();
         if (startAction != null) {
             startAction.setParams(params);
         }
-        runnable.popStack();
     }
 
     public long getCreateTime() {

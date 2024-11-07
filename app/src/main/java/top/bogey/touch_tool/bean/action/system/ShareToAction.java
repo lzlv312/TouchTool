@@ -20,11 +20,11 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class ShareToAction extends ExecuteAction {
-    private final transient Pin appPin = new Pin(new PinApplication(PinSubType.SINGLE_SEND_ACTIVITY), R.string.pin_app);
+    private final transient Pin appPin = new Pin(new PinApplication(PinSubType.SINGLE_APP_WITH_EXPORT_ACTIVITY), R.string.pin_app);
     private final transient Pin valuePin = new Pin(new PinObject(), R.string.pin_object);
     private final transient Pin typePin = new Pin(new PinSingleSelect(R.array.share_type), R.string.share_to_action_as);
 

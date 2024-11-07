@@ -10,7 +10,7 @@ import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.MatchResult;
 
@@ -33,7 +33,7 @@ public class ImageEqualAction extends CalculateAction {
     public void calculate(TaskRunnable runnable, Pin pin) {
         PinImage source = getPinValue(runnable, sourceImage);
         PinImage template = getPinValue(runnable, templatePin);
-        List<MatchResult> matchResults = DisplayUtil.nativeMatchTemplate(source.getImage(), template.getImage(), 0);
+        List<MatchResult> matchResults = DisplayUtil.nativeMatchTemplate(source.getImage(), template.getImage(), 0, 1);
         if (!matchResults.isEmpty()) {
             MatchResult matchResult = matchResults.get(0);
             similarityPin.getValue(PinInteger.class).setValue((int) matchResult.value);

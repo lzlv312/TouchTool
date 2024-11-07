@@ -2,7 +2,7 @@ package top.bogey.touch_tool.bean.action.start;
 
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class InnerStartAction extends StartAction {
     private final transient Pin startPin;
@@ -14,7 +14,7 @@ public class InnerStartAction extends StartAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
-        super.execute(runnable, startPin);
+        executeNext(runnable, startPin);
     }
 
     @Override

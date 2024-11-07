@@ -10,7 +10,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.utils.AppUtil;
 
@@ -19,12 +19,12 @@ public class SwitchScreenAction extends ExecuteAction {
 
     public SwitchScreenAction() {
         super(ActionType.SWITCH_SCREEN);
-        addPins(screenPin);
+        addPin(screenPin);
     }
 
     public SwitchScreenAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(screenPin);
+        reAddPin(screenPin);
     }
 
     @Override

@@ -12,19 +12,19 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class WriteToClipboardAction extends ExecuteAction {
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
 
     public WriteToClipboardAction() {
         super(ActionType.WRITE_TO_CLIPBOARD);
-        addPins(textPin);
+        addPin(textPin);
     }
 
     public WriteToClipboardAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(textPin);
+        reAddPin(textPin);
     }
 
     @Override

@@ -9,10 +9,9 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 
 public class GetNetworkStatusAction extends CalculateAction {
@@ -20,12 +19,12 @@ public class GetNetworkStatusAction extends CalculateAction {
 
     public GetNetworkStatusAction() {
         super(ActionType.GET_NETWORK_STATUS);
-        addPins(statusPin);
+        addPin(statusPin);
     }
 
     public GetNetworkStatusAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(statusPin);
+        reAddPin(statusPin);
     }
 
     @Override

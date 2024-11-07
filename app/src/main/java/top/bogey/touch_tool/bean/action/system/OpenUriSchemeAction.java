@@ -8,7 +8,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class OpenUriSchemeAction extends ExecuteAction {
@@ -16,12 +16,12 @@ public class OpenUriSchemeAction extends ExecuteAction {
 
     public OpenUriSchemeAction() {
         super(ActionType.OPEN_URI_SCHEME);
-        addPins(uriPin);
+        addPin(uriPin);
     }
 
     public OpenUriSchemeAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(uriPin);
+        reAddPin(uriPin);
     }
 
     @Override

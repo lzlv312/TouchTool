@@ -1,7 +1,7 @@
 package top.bogey.touch_tool.bean.base;
 
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public interface ExecuteAble {
     void execute(TaskRunnable runnable, Pin pin);

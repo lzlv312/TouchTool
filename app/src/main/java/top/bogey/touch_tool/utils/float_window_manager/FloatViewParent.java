@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
@@ -40,31 +41,23 @@ public class FloatViewParent extends FrameLayout {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!config.dragAble || config.animating) {
-            config.dragging = false;
-            return false;
+        if (config.callback != null) {
+            if (config.callback.onTouch(event)) return true;
         }
 
-        if (config.callback != null) {
-            if (config.callback.onTouch(event)) {
-                return true;
-            }
+        if (!config.dragAble || config.animating) {
+            config.dragging = false;
+            return super.onTouchEvent(event);
         }
 
         float x = event.getRawX();
         float y = event.getRawY();
 
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN -> {
-                config.dragging = false;
-                showArea = helper.getShowArea();
-                lastX = x;
-                lastY = y;
-            }
             case MotionEvent.ACTION_MOVE -> {
                 float dx = x - lastX;
                 float dy = y - lastY;
-                if (!config.dragging && dx * dx + dy * dy < 81) return false;
+                if (dx * dx + dy * dy < 81) return false;
                 config.dragging = true;
 
                 helper.params.x = (int) Math.max(Math.min(helper.params.x + dx, showArea.right), showArea.left);
@@ -83,12 +76,39 @@ public class FloatViewParent extends FrameLayout {
                 toDockSide();
             }
         }
+        Log.d("TAG", "onTouchEvent: " + event + ", " + config.dragging);
 
         return config.dragging || super.onTouchEvent(event);
     }
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        float x = event.getRawX();
+        float y = event.getRawY();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN -> {
+                config.dragging = false;
+                showArea = helper.getShowArea();
+                lastX = x;
+                lastY = y;
+            }
+            case MotionEvent.ACTION_MOVE -> {
+                float dx = x - lastX;
+                float dy = y - lastY;
+                if (dx * dx + dy * dy < 81) return false;
+                config.dragging = true;
+            }
+        }
+        Log.d("TAG", "onInterceptTouchEvent: " + event + ", " + config.dragging);
+
+        return config.dragging || super.onInterceptTouchEvent(event);
+    }
+
     public void toDockSide() {
         if (config.side != FloatDockSide.DEFAULT) {
+            showArea = helper.getShowArea();
+
             int leftDistance = Math.abs(helper.params.x - showArea.left);
             int rightDistance = Math.abs(helper.params.x - showArea.right);
             int topDistance = Math.abs(helper.params.y - showArea.top);
@@ -157,12 +177,9 @@ public class FloatViewParent extends FrameLayout {
                 }
             });
             animator.start();
+        } else {
+            if (config.callback != null) config.callback.onDragEnd();
         }
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return config.dragging || super.onInterceptTouchEvent(ev);
     }
 
     @Override

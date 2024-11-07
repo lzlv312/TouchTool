@@ -2,8 +2,11 @@ package top.bogey.touch_tool.ui.blueprint.selecter.select_app;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
@@ -11,7 +14,6 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -31,10 +33,10 @@ public class SelectActivityDialog extends FrameLayout {
 
         SelectActivityDialogAdapter adapter = new SelectActivityDialogAdapter(applications, application, callback);
         binding.activityBox.setAdapter(adapter);
-        List<ActivityInfo> activityInfoList = new ArrayList<>();
-        if (info.activities != null) Collections.addAll(activityInfoList, info.activities);
+        List<ActivityInfo> activityInfoList = getActivities(applications.isShared(), info);
         adapter.refreshActivities(activityInfoList);
 
+        PackageManager manager = getContext().getPackageManager();
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -46,16 +48,49 @@ public class SelectActivityDialog extends FrameLayout {
                     Pattern pattern = AppUtil.getPattern(searchString);
                     if (pattern == null) {
                         for (ActivityInfo activityInfo : activityInfoList) {
-                            if (activityInfo.name.contains(searchString)) newActivities.add(activityInfo);
+                            if (applications.isShared()) {
+                                CharSequence name = activityInfo.loadLabel(manager);
+                                if (name.toString().contains(searchString)) newActivities.add(activityInfo);
+                            } else {
+                                if (activityInfo.name.contains(searchString)) newActivities.add(activityInfo);
+                            }
                         }
                     } else {
                         for (ActivityInfo activityInfo : activityInfoList) {
-                            if (pattern.matcher(activityInfo.name).find()) newActivities.add(activityInfo);
+                            if (applications.isShared()) {
+                                CharSequence name = activityInfo.loadLabel(manager);
+                                if (pattern.matcher(name).find()) newActivities.add(activityInfo);
+                            } else {
+                                if (pattern.matcher(activityInfo.name).find()) newActivities.add(activityInfo);
+                            }
                         }
                     }
                     adapter.refreshActivities(newActivities);
                 }
             }
         });
+    }
+
+    private List<ActivityInfo> getActivities(boolean isShared, PackageInfo info) {
+        List<ActivityInfo> activityInfoList = new ArrayList<>();
+        if (isShared) {
+            PackageManager manager = getContext().getPackageManager();
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("*/*");
+            intent.setPackage(info.packageName);
+            List<ResolveInfo> resolveInfos = manager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
+            for (ResolveInfo resolveInfo : resolveInfos) {
+                ActivityInfo activityInfo = resolveInfo.activityInfo;
+                activityInfo.processName = (String) resolveInfo.loadLabel(manager);
+                activityInfoList.add(activityInfo);
+            }
+        } else {
+            if (info.activities != null) {
+                for (ActivityInfo activityInfo : info.activities) {
+                    if (activityInfo.exported) activityInfoList.add(activityInfo);
+                }
+            }
+        }
+        return activityInfoList;
     }
 }

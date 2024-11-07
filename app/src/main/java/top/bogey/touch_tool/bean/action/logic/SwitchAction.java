@@ -16,7 +16,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinStringExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class SwitchAction extends Action implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinStringExecute(), 0, true);

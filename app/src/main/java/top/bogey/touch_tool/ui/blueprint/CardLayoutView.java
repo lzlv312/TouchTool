@@ -275,6 +275,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         task.removeAction(action);
         cards.remove(action.getId());
         removeView(card);
+
+        if (selectedCards.remove(card)) refreshEditView();
     }
 
     private void updateCardPos(ActionCard card) {

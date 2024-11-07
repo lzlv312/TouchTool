@@ -10,13 +10,15 @@ import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class StringSplitAction extends CalculateAction {
-    private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
-    private final transient Pin separatorPin = new Pin(new PinString(), R.string.string_split_action_split);
+    private final transient Pin textPin = new Pin(new PinLogString(), R.string.pin_string);
+    private final transient Pin separatorPin = new Pin(new PinLogString(), R.string.string_split_action_split);
     private final transient Pin emptyPin = new Pin(new PinBoolean(true), R.string.string_split_action_empty);
     private final transient Pin resultPin = new Pin(new PinList(PinType.STRING), R.string.pin_string, true);
 
@@ -34,14 +36,14 @@ public class StringSplitAction extends CalculateAction {
     public void calculate(TaskRunnable runnable, Pin pin) {
         PinList value = resultPin.getValue(PinList.class);
 
-        PinString text = getPinValue(runnable, textPin);
-        PinString separator = getPinValue(runnable, separatorPin);
+        PinObject text = getPinValue(runnable, textPin);
+        PinObject separator = getPinValue(runnable, separatorPin);
         PinBoolean empty = getPinValue(runnable, emptyPin);
 
-        if (text.getValue() == null) return;
+        if (text.toString().isEmpty()) return;
 
-        if (separator.getValue() == null || separator.getValue().isEmpty()) {
-            IntStream intStream = text.getValue().codePoints();
+        if (separator.toString().isEmpty()) {
+            IntStream intStream = text.toString().codePoints();
             intStream.forEach(cp -> {
                 String s = new String(Character.toChars(cp));
                 if (empty.getValue()) {
@@ -51,7 +53,7 @@ public class StringSplitAction extends CalculateAction {
                 value.add(new PinString(s));
             });
         } else {
-            String[] split = text.getValue().split(separator.getValue());
+            String[] split = text.toString().split(separator.toString());
             for (String s : split) {
                 if (empty.getValue()) {
                     s = s.trim();

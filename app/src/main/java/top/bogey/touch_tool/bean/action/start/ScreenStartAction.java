@@ -6,7 +6,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 
 public class ScreenStartAction extends StartAction {
@@ -14,12 +14,12 @@ public class ScreenStartAction extends StartAction {
 
     public ScreenStartAction() {
         super(ActionType.SCREEN_START);
-        addPins(statePin);
+        addPin(statePin);
     }
 
     public ScreenStartAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(statePin);
+        reAddPin(statePin);
     }
 
     @Override

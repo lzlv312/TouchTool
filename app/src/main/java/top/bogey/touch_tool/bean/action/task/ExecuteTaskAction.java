@@ -17,22 +17,22 @@ import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
 import top.bogey.touch_tool.bean.save.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ExecuteTaskAction extends Action {
     private final transient Pin inPin = new ShowAblePin(new PinExecute(), R.string.pin_execute);
     private final transient Pin outPin = new ShowAblePin(new PinExecute(), R.string.pin_execute, true);
     private final transient Pin taskPin = new NotLinkAblePin(new PinTaskString(), R.string.execute_task_action_task_id);
-    private final transient Pin withExecutePin = new NotLinkAblePin(new PinBoolean(true), R.string.execute_task_action_with_execute);
+    private final transient Pin justCalPin = new NotLinkAblePin(new PinBoolean(true), R.string.execute_task_action_just_cal);
 
     public ExecuteTaskAction() {
         super(ActionType.EXECUTE_TASK);
-        addPins(inPin, outPin, taskPin, withExecutePin);
+        addPins(inPin, outPin, taskPin, justCalPin);
     }
 
     public ExecuteTaskAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(inPin, outPin, taskPin, withExecutePin);
+        reAddPins(inPin, outPin, taskPin, justCalPin);
     }
 
     @Override
@@ -55,16 +55,16 @@ public class ExecuteTaskAction extends Action {
 
         task.copy().execute(runnable, this, params);
 
-        PinBoolean withExecute = withExecutePin.getValue();
-        if (withExecute.getValue()) {
+        PinBoolean justCal = justCalPin.getValue();
+        if (!justCal.getValue()) {
             executeNext(runnable, outPin);
         }
     }
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
-        PinBoolean withExecute = withExecutePin.getValue();
-        if (!withExecute.getValue()) {
+        PinBoolean justCal = justCalPin.getValue();
+        if (justCal.getValue()) {
             execute(runnable, pin);
         }
     }
@@ -82,7 +82,7 @@ public class ExecuteTaskAction extends Action {
         });
     }
 
-    public Pin getWithExecutePin() {
-        return withExecutePin;
+    public Pin getJustCalPin() {
+        return justCalPin;
     }
 }

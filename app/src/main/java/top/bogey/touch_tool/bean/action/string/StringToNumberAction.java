@@ -9,13 +9,15 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class StringToNumberAction extends CalculateAction {
-    private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
+    private final transient Pin textPin = new Pin(new PinLogString(), R.string.pin_string);
     private final transient Pin numberPin = new Pin(new PinDouble(), R.string.pin_number_integer, true);
 
     public StringToNumberAction() {
@@ -31,11 +33,11 @@ public class StringToNumberAction extends CalculateAction {
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
         numberPin.getValue(PinDouble.class).setValue(0.0);
-        PinString text = getPinValue(runnable, textPin);
-        if (text.getValue() == null || text.getValue().isEmpty()) return;
+        PinObject text = getPinValue(runnable, textPin);
+        if (text.toString().isEmpty()) return;
         Pattern pattern = AppUtil.getPattern("-?\\d+(\\.\\d+)?");
         if (pattern == null) return;
-        Matcher matcher = pattern.matcher(text.getValue());
+        Matcher matcher = pattern.matcher(text.toString());
         if (matcher.find()) {
             numberPin.getValue(PinDouble.class).setValue(Double.parseDouble(matcher.group()));
         }

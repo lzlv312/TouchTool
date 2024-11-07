@@ -8,7 +8,7 @@ import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class WhileLoopAction extends ExecuteAction {
     private final transient Pin breakPin = new Pin(new PinExecute(), R.string.while_loop_action_break);
@@ -32,9 +32,10 @@ public class WhileLoopAction extends ExecuteAction {
             PinBoolean condition = getPinValue(runnable, conditionPin);
             while (condition.getValue()) {
                 if (isBreak || runnable.isInterrupt()) break;
-                executeNext(runnable, completePin);
+                executeNext(runnable, outPin);
                 condition = getPinValue(runnable, conditionPin);
             }
+            executeNext(runnable, completePin);
         } else {
             isBreak = true;
         }

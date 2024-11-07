@@ -10,7 +10,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public abstract class StartAction extends Action {
 
@@ -31,7 +31,7 @@ public abstract class StartAction extends Action {
         reAddPins(enablePin, restartPin, breakPin, executePin);
     }
 
-    public boolean ready(TaskRunnable runnable) {
+    public boolean ready() {
         return true;
     }
 

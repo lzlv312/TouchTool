@@ -74,7 +74,7 @@ public class NormalActionCard extends ActionCard{
 
         binding.copyButton.setOnClickListener(v -> {
             Action copy = action.newCopy();
-            ((CardLayoutView) getParent()).addNewCard(copy);
+            ((CardLayoutView) getParent()).addCard(copy);
         });
 
         binding.removeButton.setOnClickListener(v -> {

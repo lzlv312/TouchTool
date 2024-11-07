@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
@@ -68,9 +69,8 @@ public class FloatWindowHelper {
         if (floatView == null) {
             floatView = LayoutInflater.from(viewParent.getContext()).inflate(config.layoutId, viewParent, true);
             config.layoutView = floatView;
-        } else {
-            viewParent.addView(floatView);
         }
+        viewParent.addView(floatView);
 
         manager.addView(viewParent, params);
     }
@@ -180,6 +180,7 @@ public class FloatWindowHelper {
     void setRelativePoint(EAnchor gravity, Point relativePoint) {
         Rect showArea = getShowArea();
         config.gravity = gravity;
+        config.location = relativePoint;
         Point garvityPoint = getGarvityPoint();
         Point offset = getAnchorOffset();
         params.x = Math.max(showArea.left, Math.min(showArea.right, garvityPoint.x + relativePoint.x + offset.x));

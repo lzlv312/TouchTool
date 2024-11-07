@@ -26,11 +26,11 @@
                     android:id="@+id/versionText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:alpha="0.1"
                     android:layout_gravity="end"
                     android:layout_margin="8dp"
-                    android:gravity="end" />
+                    android:alpha="0.1"
+                    android:gravity="end"
+                    android:textSize="24sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -264,6 +264,16 @@
                         app:description="@string/preference_setting_color_desc"
                         app:icon="@drawable/icon_color"
                         app:title="@string/preference_setting_color" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSlider
+                        android:id="@+id/manualPlayPadding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/preference_setting_manual_play_padding_desc"
+                        app:icon="@drawable/icon_screen"
+                        app:max="50"
+                        app:title="@string/preference_setting_manual_play_padding"
+                        app:value="0" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/lookFirstSwitch"

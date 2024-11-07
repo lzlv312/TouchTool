@@ -13,10 +13,12 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.logic.FindExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.ocr.OCR;
@@ -24,7 +26,7 @@ import top.bogey.touch_tool.service.ocr.OCRResult;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class FindOcrTextAction extends FindExecuteAction {
-    private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
+    private final transient Pin textPin = new Pin(new PinLogString(), R.string.pin_string);
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area, false, false, true);
     private final transient Pin typePin = new Pin(new PinSingleSelect(R.array.ocr_type), R.string.find_ocr_text_action_type, false, false, true);
     private final transient Pin resultAreaPin = new Pin(new PinArea(), R.string.pin_area, true);
@@ -42,12 +44,12 @@ public class FindOcrTextAction extends FindExecuteAction {
 
     @Override
     public boolean find(TaskRunnable runnable) {
-        PinString text = getPinValue(runnable, textPin);
+        PinObject text = getPinValue(runnable, textPin);
         PinArea area = getPinValue(runnable, areaPin);
         PinSingleSelect type = getPinValue(runnable, typePin);
 
-        String value = text.getValue();
-        if (value == null || value.isEmpty()) return false;
+        String value = text.toString();
+        if (value.isEmpty()) return false;
         Pattern pattern = AppUtil.getPattern(value);
         if (pattern == null) return false;
 
@@ -69,7 +71,7 @@ public class FindOcrTextAction extends FindExecuteAction {
             }
             runnable.resume();
         });
-        runnable.pause();
+        runnable.await();
 
         return result.get();
     }

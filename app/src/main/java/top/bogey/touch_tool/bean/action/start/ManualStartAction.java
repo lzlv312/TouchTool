@@ -13,7 +13,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinIconExecute;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 
 public class ManualStartAction extends StartAction {
@@ -44,7 +44,7 @@ public class ManualStartAction extends StartAction {
     }
 
     @Override
-    public boolean ready(TaskRunnable runnable) {
+    public boolean ready() {
         TaskInfoSummary handler = TaskInfoSummary.getInstance();
         TaskInfoSummary.PackageActivity packageActivity = handler.getPackageActivity();
 

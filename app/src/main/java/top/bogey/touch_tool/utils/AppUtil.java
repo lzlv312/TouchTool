@@ -198,7 +198,7 @@ public class AppUtil {
     public static boolean isAccessibilityServiceEnabled(Context context) {
         AccessibilityManager manager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
         for (AccessibilityServiceInfo info : manager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)) {
-            if (info.getId().contains(context.getPackageName())) {
+            if (info.getId().contains(context.getPackageName() + "/")) {
                 return true;
             }
         }

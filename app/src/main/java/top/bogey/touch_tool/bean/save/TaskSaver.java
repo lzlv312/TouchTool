@@ -4,6 +4,8 @@ import android.os.Handler;
 
 import com.tencent.mmkv.MMKV;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -203,12 +205,12 @@ public class TaskSaver {
     }
 
     public String getLog(String key) {
-        Logger logger = loggers.computeIfAbsent(key, k -> new Logger(LOG_DIR, key));
+        Logger logger = loggers.computeIfAbsent(key, k -> new Logger(key, LOG_DIR));
         return logger.getLog();
     }
 
     public void addLog(String key, String content) {
-        Logger logger = loggers.computeIfAbsent(key, k -> new Logger(LOG_DIR, key));
+        Logger logger = loggers.computeIfAbsent(key, k -> new Logger(key, LOG_DIR));
         logger.addLog(content);
     }
 

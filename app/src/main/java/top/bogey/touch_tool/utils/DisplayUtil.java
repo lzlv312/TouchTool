@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class DisplayUtil {
+    private static int statusHeight = -1;
 
     @ColorInt
     public static int getAttrColor(Context context, int id) {
@@ -75,7 +76,7 @@ public class DisplayUtil {
     }
 
     @SuppressLint({"DiscouragedApi", "InternalInsetResource"})
-    public static int getStatusBarHeight(Context context) {
+    private static int getStatusBarHeight(Context context) {
         int statusBarHeight = 0;
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
@@ -83,6 +84,7 @@ public class DisplayUtil {
     }
 
     public static int getStatusBarHeight(View view, WindowManager.LayoutParams params) {
+        if (statusHeight >= 0) return statusHeight;
         if (view == null) return 0;
         if (params == null) return getStatusBarHeight(view.getContext());
 
@@ -90,7 +92,8 @@ public class DisplayUtil {
         view.getLocationOnScreen(location);
 
         // 绝对坐标与相对坐标一致，代表状态栏高度为0
-        return location[0] + location[1] - params.x - params.y;
+        statusHeight = location[0] + location[1] - params.x - params.y;
+        return statusHeight;
     }
 
     public static PointF getLocationRelativeToView(View view, View relativeView) {
@@ -115,6 +118,13 @@ public class DisplayUtil {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         if (params == null) params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, height);
         else params.height = height;
+        view.setLayoutParams(params);
+    }
+
+    public static void setViewMargin(View view, int left, int top, int right, int bottom) {
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        if (params == null) return;
+        params.setMargins(left, top, right, bottom);
         view.setLayoutParams(params);
     }
 
@@ -193,18 +203,20 @@ public class DisplayUtil {
     public static Bitmap textToBitmap(Context context, String text, int textSize) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(DisplayUtil.getAttrColor(context, android.R.attr.textColorPrimary));
-        paint.setTextSize(TypedValue.complexToDimensionPixelSize(textSize, context.getResources().getDisplayMetrics()));
+        float pixelSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, textSize, context.getResources().getDisplayMetrics());
+        paint.setTextSize(pixelSize);
         paint.setTextAlign(Paint.Align.CENTER);
 
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
+        if (bounds.isEmpty()) return null;
         Bitmap bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        canvas.drawText(text, bounds.width() / 2f, bounds.height() / 2f, paint);
+        canvas.drawText(text, bounds.width() / 2f, bounds.height(), paint);
         return bitmap;
     }
 
-    public static native List<MatchResult> nativeMatchTemplate(Bitmap bitmap, Bitmap template, int similarity);
+    public static native List<MatchResult> nativeMatchTemplate(Bitmap bitmap, Bitmap template, int similarity, int speed);
 
     public static synchronized List<Rect> matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity) {
         if (bitmap == null) return null;
@@ -218,7 +230,7 @@ public class DisplayUtil {
             if (bitmap == null) return null;
         }
 
-        List<MatchResult> matchResults = nativeMatchTemplate(bitmap, template, similarity);
+        List<MatchResult> matchResults = nativeMatchTemplate(bitmap, template, similarity, 1);
         if (tmp != null) tmp.recycle();
 
         if (matchResults == null || matchResults.isEmpty()) return null;

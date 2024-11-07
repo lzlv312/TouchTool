@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.task;
+package top.bogey.touch_tool.service;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -8,6 +8,7 @@ import java.util.concurrent.Future;
 
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
+import top.bogey.touch_tool.bean.task.Task;
 
 public class TaskRunnable implements Runnable {
     private final Stack<Task> taskStack = new Stack<>();
@@ -20,10 +21,13 @@ public class TaskRunnable implements Runnable {
     private Future<?> future;
     private boolean interrupt = false;
     private boolean paused;
+    private long pauseTime = -1;
 
     public TaskRunnable(Task task, StartAction startAction) {
-        taskStack.push(task.copy());
-        actionStack.push(startAction.copy());
+        Task taskCopy = task.copy();
+        Action action = taskCopy.getAction(startAction.getId());
+        if (action == null) pushStack(taskCopy, startAction);
+        else pushStack(taskCopy, action);
     }
 
     @Override
@@ -31,26 +35,25 @@ public class TaskRunnable implements Runnable {
         try {
             listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onStart(this));
             Action action = getAction();
-            while (true) {
-                if (action instanceof StartAction start) {
-                    if (start.ready(this)) {
-                        start.execute(this, null);
-                    }
-                } else {
-                    action.execute(this, null);
-                }
-
-                Action nextAction = getAction();
-                if (Objects.equals(action, nextAction)) break;
-                action = nextAction;
-            }
+            action.execute(this, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onFinish(this));
-        popStack();
         interrupt = true;
+    }
+
+    private synchronized void checkStatus() {
+        if (pauseTime >= 0) {
+            try {
+                paused = true;
+                wait(pauseTime);
+                pauseTime = -1;
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void pushStack(Task task, Action action) {
@@ -88,47 +91,64 @@ public class TaskRunnable implements Runnable {
         progress++;
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onExecute(this, action, progress));
 
-        StartAction startAction = (StartAction) getStartAction();
+        StartAction startAction = getStartAction();
         if (startAction == null || startAction.stop(this)) stop();
+        else checkStatus();
     }
 
     public void addCalculateProgress(Action action) {
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onCalculate(this, action));
+        checkStatus();
     }
 
     public void stop() {
+        if (paused) resume();
         if (future != null) future.cancel(true);
         interrupt = true;
     }
 
     public void sleep(long time) {
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (time <= 0) return;
+        long remainTime = time;
+        long sleepTime = Math.min(remainTime, 100);
+        while (sleepTime > 0) {
+            try {
+                Thread.sleep(sleepTime);
+                remainTime = remainTime - 100;
+                sleepTime = Math.min(remainTime, 100);
+                checkStatus();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                break;
+            }
         }
+    }
+
+    public void await() {
+        if (paused) return;
+        await(0);
+    }
+
+    public void await(long ms) {
+        if (paused) return;
+        pauseTime = ms;
+        checkStatus();
     }
 
     public void pause() {
         pause(0);
     }
 
-    public synchronized void pause(long ms) {
-        if (!paused) {
-            try {
-                paused = true;
-                if (ms == 0) wait();
-                else wait(ms);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    public void pause(long ms) {
+        pauseTime = ms;
     }
 
     public synchronized void resume() {
         if (paused) {
             paused = false;
-            notifyAll();
+            this.notifyAll();
+        } else {
+            pauseTime = -1;
         }
     }
 

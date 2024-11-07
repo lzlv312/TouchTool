@@ -8,7 +8,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 
 public class TextToSpeechAction extends ExecuteAction {
@@ -16,12 +16,12 @@ public class TextToSpeechAction extends ExecuteAction {
 
     public TextToSpeechAction() {
         super(ActionType.TEXT_TO_SPEECH);
-        addPins(textPin);
+        addPin(textPin);
     }
 
     public TextToSpeechAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(textPin);
+        reAddPin(textPin);
     }
 
     @Override

@@ -10,19 +10,19 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class CustomEndAction extends Action {
     private final transient Pin executePin = new Pin(new PinExecute(), 0);
 
     public CustomEndAction(ActionType type) {
         super(type);
-        addPins(executePin);
+        addPin(executePin);
     }
 
     public CustomEndAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(executePin);
+        reAddPin(executePin);
         tmpPins.forEach(this::addPin);
         tmpPins.clear();
     }

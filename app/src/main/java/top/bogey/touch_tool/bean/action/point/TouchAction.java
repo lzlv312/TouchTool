@@ -13,7 +13,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinFloat;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 
 public class TouchAction extends ExecuteAction {
@@ -43,7 +43,7 @@ public class TouchAction extends ExecuteAction {
         } else {
             service.runGesture(path.getStrokes(time.floatValue(), offset.intValue()), result -> runnable.resume());
         }
-        runnable.pause();
+        runnable.await();
         executeNext(runnable, outPin);
     }
 }

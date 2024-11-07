@@ -8,7 +8,7 @@ import java.util.List;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ListClearAction extends ListExecuteAction {
     private final transient Pin listPin = new Pin(new PinList());

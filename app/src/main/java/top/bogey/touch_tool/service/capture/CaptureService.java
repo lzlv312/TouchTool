@@ -1,6 +1,5 @@
 package top.bogey.touch_tool.service.capture;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -61,6 +60,7 @@ public class CaptureService extends Service {
                         stopService();
                     }
                 }, null);
+                setVirtualDisplay();
             }
         }
         return new CaptureBinder();
@@ -69,25 +69,44 @@ public class CaptureService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        createNotification();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (virtualDisplay != null) virtualDisplay.release();
+        if (imageReader != null) imageReader.close();
+        if (projection != null) projection.stop();
 
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(NOTIFICATION_ID);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
+            if (intent.getBooleanExtra(STOP_CAPTURE, false)) {
+                stopService();
+            }
+        }
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        if (virtualDisplay != null) virtualDisplay.release();
+        if (imageReader != null) imageReader.close();
 
+        if (projection != null) setVirtualDisplay();
+        else stopService();
     }
 
     private void stopService() {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service != null) {
-
+            service.stopCapture();
         } else {
             stopSelf();
         }
@@ -142,7 +161,7 @@ public class CaptureService extends Service {
     public class CaptureBinder extends Binder {
 
         public synchronized Bitmap getScreenShot() {
-            try(Image image = imageReader.acquireLatestImage())  {
+            try (Image image = imageReader.acquireLatestImage()) {
                 if (image == null) return null;
                 Image.Plane[] planes = image.getPlanes();
                 ByteBuffer buffer = planes[0].getBuffer();

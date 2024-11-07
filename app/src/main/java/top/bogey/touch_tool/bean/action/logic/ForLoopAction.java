@@ -9,7 +9,7 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ForLoopAction extends ExecuteAction {
     private final transient Pin breakPin = new Pin(new PinExecute(), R.string.for_loop_action_break);
@@ -48,7 +48,8 @@ public class ForLoopAction extends ExecuteAction {
                 if (isBreak) break;
                 currentPin.getValue(PinInteger.class).setValue(currentValue);
                 executeNext(runnable, outPin);
-                currentValue += stepValue;
+                if (startValue <= endValue) currentValue += stepValue;
+                else currentValue -= stepValue;
             }
             executeNext(runnable, completePin);
         } else {

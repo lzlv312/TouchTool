@@ -146,6 +146,9 @@
     <string name="choice_action">手动选择执行</string>
     <string name="choice_action_desc">弹出选择窗口供使用者手动选择</string>
     <string name="choice_action_default">默认</string>
+    <string name="choice_action_show_anchor">屏幕锚点</string>
+    <string name="choice_action_show_pos">相对锚点位置</string>
+
 
     <string name="for_loop_action">循环执行…次</string>
     <string name="for_loop_action_desc">循环多次执行节点</string>
@@ -182,7 +185,7 @@
     <!-- 动作-Task -->
     <string name="execute_task_action">执行任务</string>
     <string name="execute_task_action_task_id">任务</string>
-    <string name="execute_task_action_with_execute">执行针脚</string>
+    <string name="execute_task_action_just_cal">仅计算</string>
 
     <!-- 动作-Normal -->
     <string name="delay_action">延时</string>
@@ -194,13 +197,13 @@
     <string name="log_action_desc">输出日志到日志界面</string>
     <string name="log_action_text">日志</string>
     <string name="log_action_show">弹出提示</string>
-    <string name="log_action_show_pos">提示位置</string>
-    <string name="log_action_show_anchor">位置锚点</string>
+    <string name="log_action_show_anchor">屏幕锚点</string>
+    <string name="log_action_show_pos">相对锚点位置</string>
     <string name="log_action_save">保存日志</string>
 
     <string name="stick_screen_action">贴图到屏幕上</string>
-    <string name="stick_screen_action_pos">位置</string>
-    <string name="stick_screen_action_anchor">位置锚点</string>
+    <string name="stick_screen_action_anchor">屏幕锚点</string>
+    <string name="stick_screen_action_pos">相对锚点位置</string>
     <string name="stick_screen_action_id">标志</string>
 
     <string name="stick_close_action">关闭贴图</string>
@@ -224,6 +227,7 @@
 
     <string name="stop_ringtone_action">停止铃声</string>
     <string name="stop_ringtone_action_desc">停止播放铃声</string>
+    <string name="stop_ringtone_action_ringtone">铃声</string>
 
     <string name="text_to_speak_action">文本转语音</string>
     <string name="text_to_speak_action_desc">将文本转为语音并播放</string>
@@ -701,6 +705,9 @@
 
     <string name="preference_setting_color">动态颜色</string>
     <string name="preference_setting_color_desc">在支持的Android版本上，开启后应用将使用壁纸颜色作为主色调</string>
+
+    <string name="preference_setting_manual_play_padding">手动执行悬浮窗靠边偏移</string>
+    <string name="preference_setting_manual_play_padding_desc">设置手动执行悬浮窗靠边时的空白像素</string>
 
     <string name="preference_setting_look_first">默认查看蓝图</string>
     <string name="preference_setting_look_first_desc">打开蓝图时默认为查看模式，而不是编辑模式</string>

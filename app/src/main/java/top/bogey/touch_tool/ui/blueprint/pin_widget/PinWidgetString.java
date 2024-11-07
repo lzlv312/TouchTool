@@ -142,11 +142,12 @@ public class PinWidgetString extends PinWidget<PinString> {
                         if (code == Activity.RESULT_OK) {
                             Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
                             if (uri == null) {
+                                binding.editText.setText("");
                                 pinBase.setValue(null);
                             } else {
+                                binding.editText.setText(getRingtoneName(uri.toString()));
                                 pinBase.setValue(uri.toString());
                             }
-                            binding.editText.setText(getRingtoneName(pinBase.getValue()));
                         }
                     });
                 });

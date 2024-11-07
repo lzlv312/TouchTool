@@ -12,7 +12,7 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class MapMakeAction extends MapCalculateAction implements DynamicPinsAction {
     private final static Pin keyMorePin = new Pin(new PinObject(), R.string.map_make_action_key);

@@ -12,28 +12,31 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 
 import java.util.List;
-import java.util.UUID;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.databinding.FloatChoiceExecuteBinding;
 import top.bogey.touch_tool.databinding.FloatChoiceExecuteItemBinding;
+import top.bogey.touch_tool.ui.blueprint.picker.FloatBaseCallback;
+import top.bogey.touch_tool.ui.setting.SettingSaver;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.callback.StringResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
+import top.bogey.touch_tool.utils.float_window_manager.FloatWindowHelper;
 
 @SuppressLint("ViewConstructor")
 public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterface {
     private final FloatChoiceExecuteBinding binding;
     private StringResultCallback callback;
+    private boolean remember = false;
 
-    public static void showChoice(List<Choice> choices, StringResultCallback callback, Point location) {
+    public static void showChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
             ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getContext());
             choiceView.show();
-            choiceView.innerShowChoice(choices, callback, location);
+            choiceView.innerShowChoice(choices, callback, anchor, location);
         });
     }
 
@@ -47,11 +50,14 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
         });
     }
 
-    public void innerShowChoice(List<Choice> choices, StringResultCallback callback, Point location) {
-        if (location.x == 0 && location.y == 0) {
-            FloatWindow.setLocation(KeepAliveFloatView.class.getName(), EAnchor.CENTER, location);
+    public void innerShowChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, Point location) {
+        if (location.x == -1 && location.y == -1) {
+            remember = true;
+            Point point = SettingSaver.getInstance().getChoiceViewPos();
+            FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), EAnchor.CENTER, point);
         } else {
-            FloatWindow.setLocation(KeepAliveFloatView.class.getName(), EAnchor.TOP_LEFT, location);
+            remember = false;
+            FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), anchor, location);
         }
         this.callback = callback;
         for (Choice choice : choices) {
@@ -67,10 +73,13 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
 
     @Override
     public void show() {
+        Point point = SettingSaver.getInstance().getChoiceViewPos();
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setLayout(this)
                 .setTag(ChoiceExecuteFloatView.class.getName())
                 .setSpecial(true)
+                .setLocation(EAnchor.CENTER, point.x, point.y)
+                .setCallback(new PlayFloatCallback())
                 .show();
     }
 
@@ -80,5 +89,28 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
     }
 
     public record Choice(String id, String title, Bitmap icon) {
+    }
+
+    private class PlayFloatCallback extends FloatBaseCallback {
+
+        @Override
+        public void onShow(String tag) {
+
+        }
+
+        @Override
+        public void onDragEnd() {
+            super.onDragEnd();
+            FloatWindowHelper helper = FloatWindow.getHelper(ChoiceExecuteFloatView.class.getName());
+            if (helper != null && remember) {
+                Point point = helper.getRelativePoint();
+                SettingSaver.getInstance().setChoiceViewPos(point);
+            }
+        }
+
+        @Override
+        public void onDismiss() {
+
+        }
     }
 }

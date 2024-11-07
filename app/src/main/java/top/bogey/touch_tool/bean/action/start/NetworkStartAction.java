@@ -8,10 +8,9 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 
 public class NetworkStartAction extends StartAction {
@@ -19,12 +18,12 @@ public class NetworkStartAction extends StartAction {
 
     public NetworkStartAction() {
         super(ActionType.NETWORK_START);
-        addPins(statePin);
+        addPin(statePin);
     }
 
     public NetworkStartAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(statePin);
+        reAddPin(statePin);
     }
 
     @Override

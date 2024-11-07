@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.task;
+package top.bogey.touch_tool.service;
 
 import top.bogey.touch_tool.bean.action.Action;
 

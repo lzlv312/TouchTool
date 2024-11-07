@@ -46,15 +46,12 @@ static paddle::lite_api::PowerMode str_to_cpu_mode(const std::string &cpu_mode) 
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchTemplate(JNIEnv *env, jclass clazz, jobject bitmap, jobject temp, jint similarity) {
-    int scale = 1;
+Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchTemplate(JNIEnv *env, jclass clazz, jobject bitmap, jobject temp, jint similarity, jint speed) {
+    int scale = speed;
 
     Mat src = bitmap_to_cv_mat(env, bitmap);
     Mat tmp = bitmap_to_cv_mat(env, temp);
     if (src.empty() || tmp.empty()) return createMatchResult(env, 0, 0, 0, 0, 0);
-
-    cvtColor(src, src, COLOR_BGR2GRAY);
-    cvtColor(tmp, tmp, COLOR_BGR2GRAY);
 
     resize(src, src, Size(src.cols / scale, src.rows / scale));
     resize(tmp, tmp, Size(tmp.cols / scale, tmp.rows / scale));

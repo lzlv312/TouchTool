@@ -41,7 +41,7 @@ public class ShowAblePin extends Pin {
     @Override
     public boolean showAble(Action action) {
         if (action instanceof ExecuteTaskAction executeTaskAction) {
-            return executeTaskAction.getWithExecutePin().getValue(PinBoolean.class).getValue();
+            return executeTaskAction.getJustCalPin().getValue(PinBoolean.class).getValue();
         }
         return super.showAble(action);
     }

@@ -12,7 +12,7 @@ public class Logger {
     private long time = System.currentTimeMillis();
 
     public Logger(String key, String path) {
-        mmkv = MMKV.mmkvWithID(key, path, MMKV.MULTI_PROCESS_MODE);
+        mmkv = MMKV.mmkvWithID(key, MMKV.MULTI_PROCESS_MODE, null, path);
     }
 
     public String getLog() {

@@ -127,7 +127,7 @@ public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActi
         public void refresh(ActivityInfo info) {
             this.info = info;
             if (applications.isShared()) {
-                button.setText(info.loadLabel(manager));
+                button.setText(info.processName);
             } else {
                 button.setText(info.name);
             }
@@ -143,7 +143,7 @@ public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActi
                 if (applications.isSingle()) {
                     for (String aClass : classes) {
                         int index = getActivityIndex(aClass);
-                        notifyItemChanged(index);
+                        if (index >= 0) notifyItemChanged(index);
                     }
                     classes.clear();
                 }

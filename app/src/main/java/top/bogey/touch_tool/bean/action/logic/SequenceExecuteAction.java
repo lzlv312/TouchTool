@@ -12,7 +12,7 @@ import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class SequenceExecuteAction extends ExecuteAction implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinExecute(), R.string.pin_execute, true);

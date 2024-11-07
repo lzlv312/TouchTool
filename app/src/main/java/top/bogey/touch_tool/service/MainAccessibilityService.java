@@ -45,8 +45,6 @@ import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
 import top.bogey.touch_tool.bean.save.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.bean.task.TaskListener;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
 import top.bogey.touch_tool.service.capture.CaptureService;
 import top.bogey.touch_tool.service.receiver.SystemEventReceiver;
 import top.bogey.touch_tool.ui.PermissionActivity;
@@ -194,7 +192,7 @@ public class MainAccessibilityService extends AccessibilityService {
         runnable.addListener(new TaskListener() {
             @Override
             public void onStart(TaskRunnable runnable) {
-                StartAction startAction = (StartAction) runnable.getStartAction();
+                StartAction startAction = runnable.getStartAction();
                 if (startAction.getRestartType() == StartAction.RestartType.RESTART) {
                     stopTask(runnable.getStartTask());
                 }
@@ -311,7 +309,7 @@ public class MainAccessibilityService extends AccessibilityService {
         if (task == null || timeStartAction == null) return;
         if (!timeStartAction.isEnable()) return;
         if (!isEnabled()) return;
-        if (!SettingSaver.getInstance().isAlarm()) return;
+        if (!SettingSaver.getInstance().isAlarmEnabled()) return;
 
         PendingIntent pendingIntent = getAlarmPendingIntent(task.getId(), timeStartAction.getId());
         if (pendingIntent == null) return;
@@ -391,7 +389,7 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public boolean isCaptureEnabled() {
         if (isEnabled()) {
-            if (SettingSaver.getInstance().getCapture() == 2 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            if (SettingSaver.getInstance().getCaptureType() == 2 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
                 return true;
             return binder != null;
         }
@@ -425,7 +423,7 @@ public class MainAccessibilityService extends AccessibilityService {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     binder = (CaptureService.CaptureBinder) service;
-                    SettingSaver.getInstance().setCapture(1);
+                    SettingSaver.getInstance().setCaptureType(1);
                     callCaptureCallback(true);
                 }
 
@@ -457,7 +455,7 @@ public class MainAccessibilityService extends AccessibilityService {
     private Bitmap lastScreenShot;
 
     public void getScreenShot(BitmapResultCallback callback) {
-        switch (SettingSaver.getInstance().getCapture()) {
+        switch (SettingSaver.getInstance().getCaptureType()) {
             case 0 -> callback.onResult(null);
             case 1 -> {
                 if (binder != null) {

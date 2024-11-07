@@ -1,41 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="?attr/materialCardViewFilledStyle"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/playButtonBox"
+        style="?attr/materialCardViewFilledStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/closeButton"
-            style="@style/Theme.TouchTool.IconButton"
-            android:layout_width="32dp"
-            android:layout_height="24dp"
-            app:icon="@drawable/icon_up" />
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
         <LinearLayout
-            android:id="@+id/buttonBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/closeButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="32dp"
+                android:layout_height="24dp"
+                app:icon="@drawable/icon_up" />
 
-    <com.google.android.material.imageview.ShapeableImageView
+            <LinearLayout
+                android:id="@+id/buttonBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/dragSpace"
-        android:layout_width="8dp"
-        android:layout_height="32dp"
-        android:rotation="-90"
-        android:scaleType="center"
-        android:src="@drawable/icon_up"
-        android:tint="?attr/colorPrimary"
-        android:visibility="gone" />
+        style="?attr/materialCardViewFilledStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
-</com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dragSpaceButton"
+            style="@style/Theme.TouchTool.IconButton"
+            android:layout_width="16dp"
+            android:layout_height="32dp"
+            android:rotation="-90"
+            app:icon="@drawable/icon_up" />
+    </com.google.android.material.card.MaterialCardView>
+
+</FrameLayout>

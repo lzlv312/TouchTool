@@ -38,7 +38,6 @@ public class PermissionActivity extends BaseActivity {
                     finish();
                 }
             });
-            finish();
         }
     }
 }

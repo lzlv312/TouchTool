@@ -7,7 +7,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class StickCloseAction extends ExecuteAction {
@@ -15,17 +15,17 @@ public class StickCloseAction extends ExecuteAction {
 
     public StickCloseAction() {
         super(ActionType.CLOSE_STICK);
-        addPins(idPin);
+        addPin(idPin);
     }
 
     public StickCloseAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(idPin);
+        reAddPin(idPin);
     }
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
-        PinString id = idPin.getValue();
+        PinString id = getPinValue(runnable, idPin);
 
         FloatWindow.dismiss(id.getValue());
 

@@ -7,25 +7,25 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinValueArea;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class DelayAction extends ExecuteAction {
-    private final transient Pin delay = new Pin(new PinValueArea(10, 60000), R.string.delay_action_time);
+    private final transient Pin delay = new Pin(new PinValueArea(200, 200), R.string.delay_action_time);
 
     public DelayAction() {
         super(ActionType.DELAY);
-        addPins(delay);
+        addPin(delay);
     }
 
     public DelayAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(delay);
+        reAddPin(delay);
     }
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         PinValueArea delayValue = getPinValue(runnable, delay);
-        runnable.pause(delayValue.getRandomValue());
+        runnable.sleep(delayValue.getRandomValue());
         executeNext(runnable, outPin);
     }
 }

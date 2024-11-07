@@ -137,7 +137,7 @@ public class TaskInfoSummary {
         for (Task task : TaskSaver.getInstance().getTasks(clazz)) {
             for (Action action : task.getActions(clazz)) {
                 StartAction startAction = (StartAction) action;
-                if (startAction.isEnable()) service.runTask(task, startAction);
+                if (startAction.isEnable() && startAction.ready()) service.runTask(task, startAction);
             }
         }
     }
@@ -177,7 +177,7 @@ public class TaskInfoSummary {
         if (packageName == null || activityName == null) return false;
         if (packageName.isEmpty() || activityName.isEmpty()) return false;
         PackageInfo packageInfo = getAppInfo(packageName);
-        if (packageInfo == null) return false;
+        if (packageInfo == null || packageInfo.activities == null) return false;
         for (ActivityInfo activityInfo : packageInfo.activities) {
             if (activityInfo.name.equals(activityName)) return true;
         }

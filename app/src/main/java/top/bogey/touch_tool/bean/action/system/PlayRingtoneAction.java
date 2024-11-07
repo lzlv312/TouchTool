@@ -7,21 +7,23 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinRingtoneString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 
 public class PlayRingtoneAction extends ExecuteAction {
-    private final transient Pin ringPin = new Pin(new PinString(), R.string.play_ringtone_action_ringtone);
+    private final transient Pin ringPin = new Pin(new PinRingtoneString(), R.string.play_ringtone_action_ringtone);
 
     public PlayRingtoneAction() {
         super(ActionType.PLAY_RINGTONE);
-        addPins(ringPin);
+        addPin(ringPin);
     }
 
     public PlayRingtoneAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(ringPin);
+        reAddPin(ringPin);
     }
 
     @Override

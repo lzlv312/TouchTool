@@ -1,7 +1,6 @@
 package top.bogey.touch_tool.bean.action.point;
 
 import android.graphics.Point;
-import android.graphics.Rect;
 
 import com.google.gson.JsonObject;
 
@@ -10,9 +9,8 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class PointToIntegerAction extends CalculateAction {
     private final transient Pin pointPin = new Pin(new PinPoint(), R.string.pin_point);

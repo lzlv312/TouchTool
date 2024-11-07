@@ -179,11 +179,15 @@ public class BaseActivity extends AppCompatActivity {
         }
         resultCallback = callback;
         Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE | RingtoneManager.TYPE_ALARM);
         if (path != null && !path.isEmpty()) {
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(path));
         }
-        intentLauncher.launch(intent);
+        try {
+            intentLauncher.launch(intent);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void launcherBluetooth(ActivityResultCallback callback) {

@@ -34,6 +34,7 @@ public class PinApplications extends PinList {
     public boolean contains(Object object) {
         if (object instanceof PinApplication pinApplication) {
             List<String> activityClasses = pinApplication.getActivityClasses();
+
             String commonPackage = MainApplication.getInstance().getString(R.string.common_package);
             boolean isCommon = false;
             for (PinObject value : values) {
@@ -69,7 +70,7 @@ public class PinApplications extends PinList {
                     PinApplication application = (PinApplication) value;
                     List<String> classes = application.getActivityClasses();
                     if (isCommon) {
-                        // 如果是通用，其他包都是排除的，如果匹配上任意包名，界面名，就是不包含
+                        // 如果是通用，其他包都是排除的，如果匹配上任意包名+界面名，就是不包含
                         if (application.getPackageName().equals(pinApplication.getPackageName())) {
                             // 如果没有界面，就是排除这个应用所有界面，直接不包含
                             if (classes == null || classes.isEmpty()) return false;
@@ -79,7 +80,7 @@ public class PinApplications extends PinList {
                             }
                         }
                     } else {
-                        // 如果不是通用：当界面为空，就是包含所有界面，这是只需判断包相同就行
+                        // 如果不是通用：当界面为空，就是包含所有界面，这时只需判断包相同就行
                         if (classes == null || classes.isEmpty()) {
                             if (application.getPackageName().equals(pinApplication.getPackageName())) {
                                 return true;
@@ -97,6 +98,8 @@ public class PinApplications extends PinList {
                     }
                 }
             }
+            // 没有被排除的应用，就是包含
+            return isCommon;
         }
         return false;
     }

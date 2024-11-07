@@ -1,9 +1,7 @@
 package top.bogey.touch_tool.ui.task;
 
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,12 +28,11 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.save.TaskSaveListener;
 import top.bogey.touch_tool.bean.save.TaskSaver;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.bean.task.TaskListener;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskListener;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.databinding.ViewTaskBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.MainActivity;
-import top.bogey.touch_tool.ui.blueprint.picker.AreaPicker;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;

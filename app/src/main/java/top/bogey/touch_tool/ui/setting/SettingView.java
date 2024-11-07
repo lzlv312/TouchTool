@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -76,14 +77,14 @@ public class SettingView extends Fragment {
         // 功能启用
         binding.enableSwitch.setOnSwitchClickListener(v -> {
             MainAccessibilityService service = MainApplication.getInstance().getService();
+            boolean enable = false;
             if (binding.enableSwitch.isChecked()) {
                 if (AppUtil.isAccessibilityServiceEnabled(activity)) {
                     if (service != null) {
+                        enable = true;
                         service.setEnabled(true);
-                        SettingSaver.getInstance().setEnabled(true);
                     } else {
                         binding.enableSwitch.setChecked(false);
-                        SettingSaver.getInstance().setEnabled(false);
                     }
                 } else {
                     AppUtil.showDialog(activity, getString(R.string.app_setting_enable_tips, getString(R.string.app_name)), result -> {
@@ -92,14 +93,14 @@ public class SettingView extends Fragment {
                         }
                     });
                     binding.enableSwitch.setChecked(false);
-                    SettingSaver.getInstance().setEnabled(false);
                 }
             } else {
                 if (service != null) {
                     service.setEnabled(false);
-                    SettingSaver.getInstance().setEnabled(false);
                 }
             }
+
+            SettingSaver.getInstance().setEnabled(enable);
         });
 
         MainAccessibilityService serv = MainApplication.getInstance().getService();
@@ -126,8 +127,8 @@ public class SettingView extends Fragment {
         binding.ignoreBatterySwitch.setChecked(AppUtil.isIgnoredBattery(activity));
 
         // 前台服务
-        binding.forgeServiceSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setForgeService(activity, binding.forgeServiceSwitch.isChecked()));
-        binding.forgeServiceSwitch.setChecked(SettingSaver.getInstance().isForgeService());
+        binding.forgeServiceSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setForgeServiceEnabled(activity, binding.forgeServiceSwitch.isChecked()));
+        binding.forgeServiceSwitch.setChecked(SettingSaver.getInstance().isForgeServiceEnabled());
 
         // 开机自启
         binding.autoStartSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setAutoStart(binding.autoStartSwitch.isChecked()));
@@ -166,32 +167,36 @@ public class SettingView extends Fragment {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setManualPlay(index);
+                SettingSaver.getInstance().setManualPlayType(index);
             }
         });
-        binding.manualPlaySelect.checkIndex(SettingSaver.getInstance().getManualPlay());
+        binding.manualPlaySelect.checkIndex(SettingSaver.getInstance().getManualPlayType());
+        binding.manualPlaySelect.setOnClickListener(v -> {
+            SettingSaver.getInstance().setPlayViewPos(new Point());
+            SettingSaver.getInstance().setPlayViewExpand(true);
+        });
 
         // 屏幕截图
         binding.captureSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setCapture(index);
+                SettingSaver.getInstance().setCaptureType(index);
                 binding.ocrSwitch.setVisibility(index == 0 ? View.GONE : View.VISIBLE);
             }
         });
-        binding.captureSelect.checkIndex(SettingSaver.getInstance().getCapture());
-        binding.ocrSwitch.setVisibility(SettingSaver.getInstance().getCapture() == 0 ? View.GONE : View.VISIBLE);
+        binding.captureSelect.checkIndex(SettingSaver.getInstance().getCaptureType());
+        binding.ocrSwitch.setVisibility(SettingSaver.getInstance().getCaptureType() == 0 ? View.GONE : View.VISIBLE);
 
         // 文字识别
         binding.ocrSwitch.setOnSwitchClickListener(v -> {
             if (binding.ocrSwitch.isChecked()) {
 
             } else {
-                SettingSaver.getInstance().setOcr(false);
+                SettingSaver.getInstance().setOcrEnabled(false);
             }
         });
-        binding.ocrSwitch.setChecked(SettingSaver.getInstance().isOcr());
+        binding.ocrSwitch.setChecked(SettingSaver.getInstance().isOcrEnabled());
 
         // 精确定时
         AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
@@ -200,7 +205,7 @@ public class SettingView extends Fragment {
             if (binding.alarmSwitch.isChecked()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     if (canScheduleExactAlarms) {
-                        SettingSaver.getInstance().setAlarm(true);
+                        SettingSaver.getInstance().setAlarmEnabled(true);
                     } else {
                         Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
                         startActivity(intent);
@@ -210,7 +215,7 @@ public class SettingView extends Fragment {
                     binding.alarmSwitch.setChecked(true);
                 }
             } else {
-                SettingSaver.getInstance().setAlarm(false);
+                SettingSaver.getInstance().setAlarmEnabled(false);
             }
             if (binding.alarmSwitch.isChecked()) {
                 MainAccessibilityService service = MainApplication.getInstance().getService();
@@ -219,21 +224,21 @@ public class SettingView extends Fragment {
                 }
             }
         });
-        binding.alarmSwitch.setChecked(canScheduleExactAlarms && SettingSaver.getInstance().isAlarm());
+        binding.alarmSwitch.setChecked(canScheduleExactAlarms && SettingSaver.getInstance().isAlarmEnabled());
 
         // 蓝牙监听
         binding.bluetoothSwitch.setOnSwitchClickListener(v -> {
             if (binding.bluetoothSwitch.isChecked()) {
                 activity.launcherBluetooth((code, data) -> {
                     boolean enable = code == Activity.RESULT_OK;
-                    SettingSaver.getInstance().setBluetooth(enable);
+                    SettingSaver.getInstance().setBluetoothEnabled(enable);
                     binding.bluetoothSwitch.setChecked(enable);
                 });
             } else {
-                SettingSaver.getInstance().setBluetooth(false);
+                SettingSaver.getInstance().setBluetoothEnabled(false);
             }
         });
-        binding.bluetoothSwitch.setChecked(SettingSaver.getInstance().isBluetooth());
+        binding.bluetoothSwitch.setChecked(SettingSaver.getInstance().isBluetoothEnabled());
 
 
         // 手势轨迹
@@ -241,8 +246,8 @@ public class SettingView extends Fragment {
         binding.showTouchSwitch.setChecked(SettingSaver.getInstance().isShowTouch());
 
         // 任务提示
-        binding.taskTipsSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setStartTips(binding.taskTipsSwitch.isChecked()));
-        binding.taskTipsSwitch.setChecked(SettingSaver.getInstance().isStartTips());
+        binding.taskTipsSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowStartTips(binding.taskTipsSwitch.isChecked()));
+        binding.taskTipsSwitch.setChecked(SettingSaver.getInstance().isShowStartTips());
 
 
         // 夜间模式
@@ -256,8 +261,12 @@ public class SettingView extends Fragment {
         binding.themeSelect.checkIndex(SettingSaver.getInstance().getTheme());
 
         // 动态颜色
-        binding.dynamicColorSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setColor(activity, binding.dynamicColorSwitch.isChecked()));
-        binding.dynamicColorSwitch.setChecked(SettingSaver.getInstance().isColor());
+        binding.dynamicColorSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setDynamicColorTheme(activity, binding.dynamicColorSwitch.isChecked()));
+        binding.dynamicColorSwitch.setChecked(SettingSaver.getInstance().isDynamicColorTheme());
+
+        // 手动执行悬浮窗偏移
+        binding.manualPlayPadding.setSliderOnChangeListener((slider, value, fromUser) -> SettingSaver.getInstance().setPlayViewPadding((int) value));
+        binding.manualPlayPadding.setValue(SettingSaver.getInstance().getPlayViewPadding());
 
         // 优先查看蓝图
         binding.lookFirstSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setLookFirst(binding.lookFirstSwitch.isChecked()));

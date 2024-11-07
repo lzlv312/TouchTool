@@ -18,7 +18,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.databinding.FloatStickScreenBinding;
-import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
@@ -58,12 +57,6 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
     }
 
     public void innerShowStick(PinObject object, EAnchor anchor, Point location) {
-        if (location.x < 0 || location.y < 0) {
-            Point screenSize = DisplayUtil.getScreenSize(getContext());
-            FloatWindow.setLocation(KeepAliveFloatView.class.getName(), EAnchor.CENTER, new Point(screenSize.x / 2, screenSize.y / 2));
-        } else {
-            FloatWindow.setLocation(KeepAliveFloatView.class.getName(), anchor, location);
-        }
         if (object instanceof PinImage pinImage) {
             binding.image.setVisibility(VISIBLE);
             binding.image.setImageBitmap(pinImage.getImage());
@@ -78,6 +71,13 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             binding.title.setVisibility(VISIBLE);
             binding.title.setText(object.toString());
         }
+        post(() -> {
+            if (location.x < 0 || location.y < 0) {
+                FloatWindow.setLocation(StickScreenFloatView.class.getName(), EAnchor.CENTER, new Point(0, 0));
+            } else {
+                FloatWindow.setLocation(StickScreenFloatView.class.getName(), anchor, location);
+            }
+        });
     }
 
     @Override
@@ -86,6 +86,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
                 .setLayout(this)
                 .setTag(tag)
                 .setSpecial(true)
+                .setLocation(EAnchor.CENTER, 0, 0)
                 .show();
     }
 

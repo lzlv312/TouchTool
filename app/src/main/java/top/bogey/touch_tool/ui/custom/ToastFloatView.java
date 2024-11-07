@@ -43,14 +43,16 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
     }
 
     public void innerShowToast(String msg, EAnchor anchor, Point pos) {
-        if (pos.x < 0 || pos.y < 0) {
-            Point screenSize = DisplayUtil.getScreenSize(getContext());
-            FloatWindow.setLocation(ToastFloatView.class.getName(), EAnchor.BOTTOM_CENTER, new Point(0, -screenSize.y / 5));
-        } else {
-            FloatWindow.setLocation(ToastFloatView.class.getName(), anchor, pos);
-        }
-        handler.removeCallbacksAndMessages(null);
         binding.title.setText(msg);
+        post(() -> {
+            if (pos.x < 0 || pos.y < 0) {
+                Point screenSize = DisplayUtil.getScreenSize(getContext());
+                FloatWindow.setLocation(ToastFloatView.class.getName(), EAnchor.BOTTOM_CENTER, new Point(0, -screenSize.y / 5));
+            } else {
+                FloatWindow.setLocation(ToastFloatView.class.getName(), anchor, pos);
+            }
+        });
+        handler.removeCallbacksAndMessages(null);
         handler.postDelayed(this::dismiss, 1500);
     }
 

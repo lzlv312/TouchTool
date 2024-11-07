@@ -11,7 +11,7 @@ import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 
 public class GetColorAction extends CalculateAction {
@@ -40,6 +40,6 @@ public class GetColorAction extends CalculateAction {
             }
             runnable.resume();
         });
-        runnable.pause();
+        runnable.await();
     }
 }

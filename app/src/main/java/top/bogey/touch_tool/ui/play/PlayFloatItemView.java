@@ -1,7 +1,6 @@
 package top.bogey.touch_tool.ui.play;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -15,14 +14,11 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
-import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinIconExecute;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.bean.task.TaskListener;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
 import top.bogey.touch_tool.databinding.FloatPlayItemBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.service.TaskListener;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class PlayFloatItemView extends FrameLayout implements TaskListener {
     private final FloatPlayItemBinding binding;
@@ -44,7 +40,7 @@ public class PlayFloatItemView extends FrameLayout implements TaskListener {
         this.task = task;
         this.startAction = action;
 
-        binding.icon.setImageBitmap(getIcon(task, action));
+        binding.title.setText(getTitle(task, action));
 
         binding.playButton.setOnClickListener(v -> {
             if (playing) {
@@ -77,8 +73,8 @@ public class PlayFloatItemView extends FrameLayout implements TaskListener {
         return this.task.getId().equals(task.getId()) && this.startAction.getId().equals(startAction.getId());
     }
 
-    public void tryRemoveFromParent(boolean remove) {
-        if (playing) this.remove = remove;
+    public void tryRemoveFromParent() {
+        if (playing) this.remove = true;
         else {
             ((ViewGroup) getParent()).removeView(this);
         }
@@ -96,20 +92,20 @@ public class PlayFloatItemView extends FrameLayout implements TaskListener {
         playing = false;
 
         binding.playButton.setIndeterminate(false);
-        binding.icon.setImageResource(R.drawable.icon_stop);
-        binding.icon.setAlpha(1f);
-        binding.percent.setVisibility(GONE);
+        binding.icon.setIconResource(R.drawable.icon_play);
+    }
+
+    private void setPlaying() {
+        playing = true;
+
+        binding.playButton.setIndeterminate(true);
+        binding.icon.setIconResource(R.drawable.icon_pause);
     }
 
     private boolean resume() {
         if (runnable == null) return false;
         runnable.resume();
-        playing = true;
-
-        binding.playButton.setIndeterminate(true);
-        binding.icon.setImageBitmap(getIcon(runnable.getTask(), runnable.getStartAction()));
-        binding.icon.setAlpha(.2f);
-        binding.percent.setVisibility(VISIBLE);
+        setPlaying();
         return true;
     }
 
@@ -117,39 +113,36 @@ public class PlayFloatItemView extends FrameLayout implements TaskListener {
         if (runnable == null) return;
         runnable.stop();
         runnable = null;
+        playing = false;
 
         binding.playButton.setIndeterminate(false);
-        binding.icon.setAlpha(1f);
-        binding.percent.setVisibility(GONE);
+        binding.icon.setIconResource(0);
+        binding.title.setText(getTitle(task, startAction));
     }
 
-    private Bitmap getIcon(Task task, StartAction action) {
-        Pin executePin = action.getExecutePin();
-        if (executePin.getValue() instanceof PinIconExecute iconExecute) {
-            return iconExecute.getImage();
-        }
-
+    private String getTitle(Task task, StartAction action) {
         String description = action.getDescription();
         if (description == null || description.isEmpty()) description = task.getTitle();
-        if (description == null || description.isEmpty())
-            return DisplayUtil.textToBitmap(getContext(), "?", 13);
+        if (description == null || description.isEmpty()) return "?";
         Pattern pattern = Pattern.compile("[\"|“](.*)[\"|”]");
         Matcher matcher = pattern.matcher(description);
         if (matcher.find()) {
-            return DisplayUtil.textToBitmap(getContext(), matcher.group(1), 13);
+            return matcher.group(1);
         }
-        return DisplayUtil.textToBitmap(getContext(), description.substring(0, 1), 13);
+        return description.substring(0, 1);
     }
 
     @Override
     public void onStart(TaskRunnable runnable) {
-        playing = true;
         this.runnable = runnable;
+        post(this::setPlaying);
     }
 
     @Override
     public void onExecute(TaskRunnable runnable, Action action, int progress) {
-        post(() -> binding.percent.setText(String.valueOf(progress)));
+        post(() -> {
+            if (playing) binding.title.setText(String.valueOf(progress));
+        });
     }
 
     @Override
@@ -158,8 +151,9 @@ public class PlayFloatItemView extends FrameLayout implements TaskListener {
 
     @Override
     public void onFinish(TaskRunnable runnable) {
-        playing = false;
-        stop();
-        if (remove) post(() -> ((ViewGroup) getParent()).removeView(this));
+        post(() -> {
+            stop();
+            if (remove) ((ViewGroup) getParent()).removeView(this);
+        });
     }
 }

@@ -8,7 +8,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.utils.AppUtil;
 
@@ -17,12 +17,12 @@ public class GetScreenStatusAction extends CalculateAction {
 
     public GetScreenStatusAction() {
         super(ActionType.GET_SCREEN_STATUS);
-        addPins(screenPin);
+        addPin(screenPin);
     }
 
     public GetScreenStatusAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(screenPin);
+        reAddPin(screenPin);
     }
 
     @Override

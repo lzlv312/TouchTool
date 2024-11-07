@@ -9,7 +9,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
-import top.bogey.touch_tool.bean.task.TaskRunnable;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 
 public class GetCurrentAppAction extends CalculateAction {
@@ -17,12 +17,12 @@ public class GetCurrentAppAction extends CalculateAction {
 
     public GetCurrentAppAction() {
         super(ActionType.GET_CURRENT_APPLICATION);
-        addPins(appPin);
+        addPin(appPin);
     }
 
     public GetCurrentAppAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(appPin);
+        reAddPin(appPin);
     }
 
     @Override
