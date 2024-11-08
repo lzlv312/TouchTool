@@ -19,12 +19,13 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinAutoPinString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class MathExpressionAction extends CalculateAction implements DynamicPinsAction {
-    private final transient Pin expressionPin = new NotLinkAblePin(new PinString(PinSubType.AUTO_PIN), R.string.math_expression_action_express);
+    private final transient Pin expressionPin = new NotLinkAblePin(new PinAutoPinString(), R.string.math_expression_action_express);
     private final transient Pin resultPin = new Pin(new PinDouble(), R.string.math_expression_action_result, true);
 
     public MathExpressionAction() {
@@ -35,7 +36,7 @@ public class MathExpressionAction extends CalculateAction implements DynamicPins
     public MathExpressionAction(JsonObject jsonObject) {
         super(jsonObject);
         reAddPins(expressionPin, resultPin);
-        reAddPins();
+        reAddPins(new Pin(new PinDouble()));
     }
 
     @Override
@@ -57,7 +58,6 @@ public class MathExpressionAction extends CalculateAction implements DynamicPins
             resultPin.getValue(PinDouble.class).setValue(result);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(MainApplication.getInstance(), R.string.math_expression_action_tips, Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDate;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinFloat;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinLong;
@@ -56,6 +57,11 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
     @Keep
     public PinWidgetNumber(@NonNull Context context, ActionCard card, PinView pinView, PinLong pinBase, boolean custom) {
         this(context, card, pinView, (PinNumber<Long>) pinBase, custom);
+    }
+
+    @Keep
+    public PinWidgetNumber(@NonNull Context context, ActionCard card, PinView pinView, PinDouble pinBase, boolean custom) {
+        this(context, card, pinView, (PinNumber<Double>) pinBase, custom);
     }
 
     @Keep
@@ -106,6 +112,22 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                         try {
                             float i = Float.parseFloat(string);
                             ((PinFloat) pinBase).setValue(i);
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                            pinBase.reset();
+                        }
+                    }
+                });
+            }
+            case DOUBLE -> {
+                binding.editText.setInputType(EditorInfo.TYPE_NUMBER_FLAG_DECIMAL);
+                binding.editText.addTextChangedListener(new TextChangedListener() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        String string = s.toString();
+                        try {
+                            double i = Double.parseDouble(string);
+                            ((PinDouble) pinBase).setValue(i);
                         } catch (NumberFormatException e) {
                             e.printStackTrace();
                             pinBase.reset();

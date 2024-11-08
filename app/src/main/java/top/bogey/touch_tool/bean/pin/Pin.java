@@ -224,7 +224,9 @@ public class Pin extends Identity {
 
     @Override
     public Pin copy() {
-        return GsonUtil.copy(this, Pin.class);
+        Pin copy = GsonUtil.copy(this, Pin.class);
+        copy.setTitleId(getTitleId());
+        return copy;
     }
 
     @Override

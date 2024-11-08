@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -159,7 +160,9 @@ public class PinWidgetString extends PinWidget<PinString> {
                 binding.editText.addTextChangedListener(new TextChangedListener() {
                     @Override
                     public void afterTextChanged(Editable s) {
+                        if (Objects.equals(s.toString(), pinBase.getValue())) return;
                         pinBase.setValue(s.toString());
+                        resetDynamicPin(s.toString());
                     }
                 });
             }
@@ -174,7 +177,6 @@ public class PinWidgetString extends PinWidget<PinString> {
                     @Override
                     public void afterTextChanged(Editable s) {
                         pinBase.setValue(s.toString());
-                        resetDynamicPin(s.toString());
                     }
                 });
             }

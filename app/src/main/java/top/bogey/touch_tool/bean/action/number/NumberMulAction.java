@@ -20,7 +20,7 @@ public class NumberMulAction extends DynamicNumberAction{
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
-        double result = 0;
+        double result = 1;
         for (Pin dynamicPin : getDynamicPins()) {
             PinNumber<?> value = getPinValue(runnable, dynamicPin);
             result *= value.doubleValue();

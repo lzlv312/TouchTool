@@ -13,24 +13,24 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class CheckNumberInValueArea extends CalculateAction {
-    private final transient Pin numberPin = new Pin(new PinDouble(), R.string.pin_number_integer);
     private final transient Pin valueAreaPin = new Pin(new PinValueArea(), R.string.pin_value_area);
+    private final transient Pin numberPin = new Pin(new PinDouble(), R.string.pin_number_integer);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
 
     public CheckNumberInValueArea() {
         super(ActionType.CHECK_NUMBER_IN_VALUE_AREA);
-        addPins(numberPin, valueAreaPin, resultPin);
+        addPins(valueAreaPin, numberPin, resultPin);
     }
 
     public CheckNumberInValueArea(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(numberPin, valueAreaPin, resultPin);
+        reAddPins(valueAreaPin, numberPin, resultPin);
     }
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
-        PinNumber<?> number = getPinValue(runnable, numberPin);
         PinValueArea valueArea = getPinValue(runnable, valueAreaPin);
+        PinNumber<?> number = getPinValue(runnable, numberPin);
         resultPin.getValue(PinBoolean.class).setValue(valueArea.getMin() <= number.doubleValue() && number.doubleValue() <= valueArea.getMax());
     }
 }

@@ -137,7 +137,9 @@ public abstract class Action extends Identity implements PinListener {
         while (!tmpPin.isSameClass(PinAdd.class)) {
             if (def.isSameClass(tmpPin)) {
                 Pin copy = def.newCopy();
-                if (copy.getTitleId() == 0) copy.setTitle(tmpPin.getTitle());
+                if (copy.getTitleId() == 0) {
+                    copy.setTitle(tmpPin.getTitle());
+                }
                 reAddPin(copy);
             } else {
                 tmpPins.remove(0);

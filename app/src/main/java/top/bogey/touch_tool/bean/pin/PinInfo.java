@@ -20,6 +20,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
@@ -97,6 +98,7 @@ public class PinInfo {
     private final static PinInfo INTEGER_INFO = new PinInfo(PinType.NUMBER, PinSubType.INTEGER, PinInteger.class, NormalPinSlotView.class, getColor(R.color.IntegerPinColor), 0, PinWidgetNumber.class, true);
     private final static PinInfo FLOAT_INFO = new PinInfo(PinType.NUMBER, PinSubType.FLOAT, PinFloat.class, NormalPinSlotView.class, getColor(R.color.FloatPinColor), 0, PinWidgetNumber.class, true);
     private final static PinInfo LONG_INFO = new PinInfo(PinType.NUMBER, PinSubType.LONG, PinLong.class, NormalPinSlotView.class, getColor(R.color.LongPinColor), 0, PinWidgetNumber.class, true);
+    private final static PinInfo DOUBLE_INFO = new PinInfo(PinType.NUMBER, PinSubType.DOUBLE, PinDouble.class, NormalPinSlotView.class, getColor(R.color.IntegerPinColor), 0, PinWidgetNumber.class, true);
     private final static PinInfo DATE_INFO = new PinInfo(PinType.NUMBER, PinSubType.DATE, PinDate.class, NormalPinSlotView.class, getColor(R.color.LongPinColor), 0, PinWidgetNumber.class, true);
     private final static PinInfo TIME_INFO = new PinInfo(PinType.NUMBER, PinSubType.TIME, PinTime.class, NormalPinSlotView.class, getColor(R.color.LongPinColor), 0, PinWidgetNumber.class, true);
     private final static PinInfo PERIODIC_INFO = new PinInfo(PinType.NUMBER, PinSubType.PERIODIC, PinPeriodic.class, NormalPinSlotView.class, getColor(R.color.LongPinColor), 0, PinWidgetNumber.class, true);
@@ -164,6 +166,7 @@ public class PinInfo {
                     case NORMAL, INTEGER -> info = INTEGER_INFO;
                     case FLOAT -> info = FLOAT_INFO;
                     case LONG -> info = LONG_INFO;
+                    case DOUBLE -> info = DOUBLE_INFO;
                     case DATE -> info = DATE_INFO;
                     case TIME -> info = TIME_INFO;
                     case PERIODIC -> info = PERIODIC_INFO;
@@ -205,7 +208,7 @@ public class PinInfo {
         List<PinSubType> list = null;
         switch (type) {
             case STRING -> list = List.of(PinSubType.RINGTONE, PinSubType.MULTI_LINE, PinSubType.NODE_PATH);
-            case NUMBER -> list = List.of(PinSubType.INTEGER, PinSubType.FLOAT);
+            case NUMBER -> list = List.of(PinSubType.INTEGER, PinSubType.DOUBLE);
             case APP -> list = List.of(PinSubType.SINGLE_APP, PinSubType.SINGLE_ACTIVITY, PinSubType.SINGLE_APP_WITH_ACTIVITY, PinSubType.SINGLE_APP_WITH_EXPORT_ACTIVITY);
             case LIST -> list = List.of(PinSubType.MULTI_APP, PinSubType.MULTI_APP_WITH_ACTIVITY, PinSubType.MULTI_APP_WITH_EXPORT_ACTIVITY);
         }
