@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "top.bogey.touch_tool"
-    compileSdk = 34
+    compileSdk = 35
     ndkVersion = "21.4.7075529"
     buildToolsVersion = "35.0.0"
 
@@ -19,7 +19,7 @@ android {
     defaultConfig {
         applicationId = "top.bogey.touch_tool"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = now
 
@@ -76,7 +76,7 @@ android {
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.22.1"
+            version = "3.31.0"
         }
     }
 

@@ -213,7 +213,7 @@ public class AppUtil {
     public static Pattern getPattern(String pattern) {
         try {
             return Pattern.compile(pattern);
-        } catch (PatternSyntaxException e) {
+        } catch (Exception e) {
             return null;
         }
     }

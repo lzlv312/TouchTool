@@ -21,7 +21,7 @@ public class PinString extends PinObject {
         this.value = value;
     }
 
-    public PinString(PinSubType subType) {
+    protected PinString(PinSubType subType) {
         super(PinType.STRING, subType);
     }
 

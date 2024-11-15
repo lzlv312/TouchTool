@@ -155,7 +155,6 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
 
     @Override
     protected void realShow() {
-        FloatWindow.show(tag);
         List<Rect> rectList = DisplayUtil.matchTemplate(screenInfo.getScreenShot(), bitmap, null, 85);
         if (rectList != null && !rectList.isEmpty()) area.set(rectList.get(0));
         area.offset(-location[0], -location[1]);

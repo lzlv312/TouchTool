@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -197,7 +198,7 @@ public class Task extends Identity {
     }
 
     public void check(ActionCheckResult result) {
-        actions.forEach(action -> action.check(result, this));
+        actions.stream().filter(Objects::nonNull).forEach(action -> action.check(result, this));
         if (tasks != null) tasks.forEach(task -> task.check(result));
     }
 

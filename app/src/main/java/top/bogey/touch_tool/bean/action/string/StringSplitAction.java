@@ -57,7 +57,7 @@ public class StringSplitAction extends CalculateAction {
             for (String s : split) {
                 if (empty.getValue()) {
                     s = s.trim();
-                    if (s.isEmpty()) return;
+                    if (s.isEmpty()) continue;
                 }
                 value.add(new PinString(s));
             }

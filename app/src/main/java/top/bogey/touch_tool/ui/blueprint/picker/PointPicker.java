@@ -88,7 +88,6 @@ public class PointPicker extends FullScreenPicker<Point> {
 
     @Override
     protected void realShow() {
-        FloatWindow.show(tag);
         currentX -= location[0];
         currentY -= location[1];
         refreshUI();

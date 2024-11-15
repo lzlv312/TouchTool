@@ -7,11 +7,12 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
+import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 
 public class BatteryStartAction extends StartAction {
-    private final transient Pin statePin = new Pin(new PinSingleSelect(R.array.charging_state), R.string.battery_start_action_state, true);
+    private final transient Pin statePin = new SingleSelectPin(new PinSingleSelect(R.array.charging_state), R.string.battery_start_action_state, true);
     private final transient Pin valuePin = new Pin(new PinInteger(), R.string.battery_start_action_value, true);
 
     public BatteryStartAction() {

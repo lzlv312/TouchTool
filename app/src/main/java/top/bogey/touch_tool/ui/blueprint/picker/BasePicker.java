@@ -18,6 +18,7 @@ public class BasePicker<T> extends FrameLayout implements FloatInterface {
     protected final ResultCallback<T> callback;
     protected String tag;
     protected boolean dragAble = true;
+    protected boolean editable = false;
     protected FloatCallback floatCallback;
 
     public BasePicker(@NonNull Context context, ResultCallback<T> callback) {
@@ -27,12 +28,17 @@ public class BasePicker<T> extends FrameLayout implements FloatInterface {
         floatCallback = new FloatBaseCallback();
     }
 
+    public void setFloatCallback(FloatCallback floatCallback) {
+        this.floatCallback = floatCallback;
+    }
+
     @Override
     public void show() {
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setLayout(this)
                 .setTag(tag)
                 .setDragAble(dragAble)
+                .setExistEditText(editable)
                 .setCallback(floatCallback)
                 .show();
     }

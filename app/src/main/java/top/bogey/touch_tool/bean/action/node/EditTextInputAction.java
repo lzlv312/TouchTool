@@ -14,15 +14,17 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinMultiLineString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class EditTextInputAction extends ExecuteAction {
     private final transient Pin nodePin = new Pin(new PinNode(), R.string.edit_text_input_action_edit_text);
-    private final transient Pin contentPin = new Pin(new PinString(PinSubType.MULTI_LINE), R.string.pin_string);
-    private final transient Pin appendPin = new Pin(new PinBoolean(), R.string.edit_text_input_action_append);
-    private final transient Pin enterPin = new Pin(new PinBoolean(), R.string.edit_text_input_action_enter);
-    private final transient Pin elsePin = new Pin(new PinBoolean(), R.string.node_touch_action_else, true);
+    private final transient Pin contentPin = new Pin(new PinMultiLineString(), R.string.pin_string);
+    private final transient Pin appendPin = new Pin(new PinBoolean(), R.string.edit_text_input_action_append, false, false, true);
+    private final transient Pin enterPin = new Pin(new PinBoolean(), R.string.edit_text_input_action_enter, false, false, true);
+    private final transient Pin elsePin = new Pin(new PinExecute(), R.string.node_touch_action_else, true);
 
     public EditTextInputAction() {
         super(ActionType.EDITTEXT_INPUT);

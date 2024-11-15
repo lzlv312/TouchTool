@@ -146,7 +146,6 @@ public class ColorPicker extends FullScreenPicker<PinColor.ColorInfo> {
 
     @Override
     protected void realShow() {
-        FloatWindow.show(tag);
         matchColor(colorInfo.getColor(), colorInfo.getMinArea(), colorInfo.getMaxArea());
         if (pickList != null && !pickList.isEmpty()) {
             for (Rect rect : pickList) {

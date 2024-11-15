@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 
+import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.databinding.PinWidgetAreaBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.picker.AreaPicker;
+import top.bogey.touch_tool.ui.blueprint.picker.AreaPickerPreview;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
@@ -59,7 +61,7 @@ public class PinWidgetArea extends PinWidget<PinArea> {
             }
         });
 
-        binding.pickButton.setOnClickListener(v -> new AreaPicker(getContext(), area::set, area));
+        binding.pickButton.setOnClickListener(v -> new AreaPickerPreview(getContext(), area::set, area, pinBase.getSubType() == PinSubType.FOR_OCR).show());
     }
 
     @Override

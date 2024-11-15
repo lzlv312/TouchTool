@@ -10,12 +10,13 @@ import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
+import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class CheckAreaRelationAction extends CalculateAction {
     private final transient Pin firstAreaPin = new Pin(new PinArea(), R.string.pin_area);
     private final transient Pin secondAreaPin = new Pin(new PinArea(), R.string.pin_area);
-    private final transient Pin resultPin = new Pin(new PinSingleSelect(), R.string.check_area_relation_action_relation, true);
+    private final transient Pin resultPin = new SingleSelectPin(new PinSingleSelect(R.array.area_relation), R.string.check_area_relation_action_relation, true);
 
     public CheckAreaRelationAction() {
         super(ActionType.CHECK_AREA_RELATION);

@@ -19,6 +19,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
+import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskInfoSummary;
@@ -29,7 +30,7 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 public class GetOcrTextAction extends CalculateAction {
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area);
     private final transient Pin similarPin = new Pin(new PinInteger(), R.string.pin_number_integer);
-    private final transient Pin typePin = new Pin(new PinSingleSelect(R.array.ocr_type), R.string.get_ocr_text_action_type, false, false, true);
+    private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(R.array.ocr_type), R.string.get_ocr_text_action_type, false, false, true);
     private final transient Pin textPin = new Pin(new PinString(), R.string.get_ocr_text_action_text, true);
     private final transient Pin textArrayPin = new Pin(new PinList(PinType.STRING), R.string.pin_string, true);
 

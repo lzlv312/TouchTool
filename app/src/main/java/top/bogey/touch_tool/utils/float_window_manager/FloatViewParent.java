@@ -83,6 +83,8 @@ public class FloatViewParent extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (!config.dragAble) return super.onInterceptTouchEvent(event);
+
         float x = event.getRawX();
         float y = event.getRawY();
 

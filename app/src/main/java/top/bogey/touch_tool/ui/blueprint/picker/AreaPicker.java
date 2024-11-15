@@ -48,7 +48,8 @@ public class AreaPicker extends FullScreenPicker<Rect> {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
-            AreaPicker areaPicker = new AreaPicker(keepView.getContext(), callback, new Rect());
+            AreaPicker areaPicker = new AreaPicker(keepView.getContext(), callback, DisplayUtil.getScreenArea(keepView.getContext()));
+            areaPicker.setFloatCallback(new AreaPickerCallback(areaPicker));
             areaPicker.show();
         });
     }
@@ -163,7 +164,6 @@ public class AreaPicker extends FullScreenPicker<Rect> {
 
     @Override
     protected void realShow() {
-        FloatWindow.show(tag);
         area.offset(-location[0], -location[1]);
         refreshUI();
     }
@@ -231,6 +231,17 @@ public class AreaPicker extends FullScreenPicker<Rect> {
         canvas.restore();
 
         drawChild(canvas, binding.buttonBox, getDrawingTime());
+    }
 
+    private static class AreaPickerCallback extends FullScreenPickerCallback {
+
+        public AreaPickerCallback(FullScreenPicker<?> picker) {
+            super(picker);
+        }
+
+        @Override
+        public void onDismiss() {
+
+        }
     }
 }

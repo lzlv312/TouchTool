@@ -11,12 +11,13 @@ import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class NodeTouchAction extends ExecuteAction {
     private final transient Pin nodePin = new Pin(new PinNode(), R.string.pin_node);
     private final transient Pin ltPin = new Pin(new PinBoolean(), R.string.node_touch_action_long);
-    private final transient Pin elsePin = new Pin(new PinBoolean(), R.string.node_touch_action_else, true);
+    private final transient Pin elsePin = new Pin(new PinExecute(), R.string.node_touch_action_else, true);
 
     public NodeTouchAction() {
         super(ActionType.NODE_TOUCH);

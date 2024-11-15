@@ -45,6 +45,7 @@ import top.bogey.touch_tool.databinding.PinWidgetInputBinding;
 import top.bogey.touch_tool.ui.InstantActivity;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
+import top.bogey.touch_tool.ui.blueprint.picker.NodePickerPreview;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
@@ -98,6 +99,7 @@ public class PinWidgetString extends PinWidget<PinString> {
 
         binding.editText.setEnabled(false);
         binding.pickButton.setVisibility(VISIBLE);
+
         switch (pinBase.getSubType()) {
             case URL -> {
                 String url = "ttp://do_action?" + InstantActivity.TASK_ID + "=" + card.getTask().getId() + "&" + InstantActivity.ACTION_ID + "=" + card.getAction().getId();
@@ -167,8 +169,8 @@ public class PinWidgetString extends PinWidget<PinString> {
                 });
             }
             case MULTI_LINE -> {
-                binding.editText.setEnabled(true);
                 binding.pickButton.setVisibility(GONE);
+                binding.editText.setEnabled(true);
                 binding.editText.setText(pinBase.getValue());
                 binding.editText.setSingleLine(false);
                 binding.editText.setMaxLines(10);
@@ -181,29 +183,32 @@ public class PinWidgetString extends PinWidget<PinString> {
                 });
             }
             case NODE_PATH -> {
-                binding.editText.setText(pinBase.getValue());
-                binding.editText.setSingleLine(false);
-                binding.editText.setMaxLines(10);
-                binding.pickButton.setOnClickListener(v -> {
-
-                });
+                PinNodePathString nodePath = (PinNodePathString) pinBase;
+                binding.editText.setText(String.valueOf(nodePath.getNodeInfo()));
+                binding.pickButton.setIconResource(R.drawable.icon_widget);
+                binding.pickButton.setOnClickListener(v -> new NodePickerPreview(getContext(), result -> {
+                    nodePath.setValue(result);
+                    binding.editText.setText(String.valueOf(nodePath.getNodeInfo()));
+                }, nodePath.getNodeInfo()).show());
             }
             case TASK_ID -> {
 
             }
             default -> {
                 binding.editText.setEnabled(true);
+                binding.editText.setText(pinBase.getValue());
                 binding.pickButton.setVisibility(GONE);
             }
         }
 
-        binding.editText.setText(pinBase.getValue());
-        binding.editText.addTextChangedListener(new TextChangedListener() {
-            @Override
-            public void afterTextChanged(Editable s) {
-                pinBase.setValue(s.toString());
-            }
-        });
+        if (binding.editText.isEnabled()) {
+            binding.editText.addTextChangedListener(new TextChangedListener() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    pinBase.setValue(s.toString());
+                }
+            });
+        }
     }
 
     @Override

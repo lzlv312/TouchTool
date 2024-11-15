@@ -23,13 +23,16 @@ public abstract class FullScreenPicker<T> extends BasePicker<T> {
         super(context, callback);
         dragAble = false;
         floatCallback = new FullScreenPickerCallback(this);
+        service = MainApplication.getInstance().getService();
     }
 
     protected abstract void realShow();
 
     private void onShow() {
-        service = MainApplication.getInstance().getService();
-        postDelayed(() -> screenInfo = new ScreenInfo(service, result -> post(this::realShow)), 300);
+        postDelayed(() -> screenInfo = new ScreenInfo(service, result -> post(() -> {
+            FloatWindow.show(tag);
+            realShow();
+        })), 300);
     }
 
     @Override
@@ -38,6 +41,7 @@ public abstract class FullScreenPicker<T> extends BasePicker<T> {
                 .setLayout(this)
                 .setTag(tag)
                 .setDragAble(dragAble)
+                .setExistEditText(editable)
                 .setSize(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                 .setCallback(floatCallback)
                 .show();
@@ -51,7 +55,7 @@ public abstract class FullScreenPicker<T> extends BasePicker<T> {
         }
     }
 
-    private static class FullScreenPickerCallback extends FloatBaseCallback {
+    protected static class FullScreenPickerCallback extends FloatBaseCallback {
         private boolean first = true;
         private final FullScreenPicker<?> picker;
 

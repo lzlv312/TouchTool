@@ -23,7 +23,7 @@ public class PointToTouchAction extends CalculateAction implements DynamicPinsAc
     private final static Pin morePin = new Pin(new PinPoint(), R.string.pin_point);
     private final transient Pin pointPin = new Pin(new PinPoint(), R.string.pin_point);
     private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin);
-    private final transient Pin timePin = new Pin(new PinInteger(), R.string.point_to_touch_action_time);
+    private final transient Pin timePin = new Pin(new PinInteger(100), R.string.point_to_touch_action_time);
     private final transient Pin touchPin = new Pin(new PinTouchPath(), R.string.pin_touch, true);
 
     public PointToTouchAction() {
@@ -33,14 +33,16 @@ public class PointToTouchAction extends CalculateAction implements DynamicPinsAc
 
     public PointToTouchAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(pointPin, addPin, timePin, touchPin);
+        reAddPin(pointPin);
+        reAddPins(morePin);
+        reAddPins(addPin, timePin, touchPin);
     }
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
         List<Pin> dynamicPins = getDynamicPins();
         PinNumber<?> time = getPinValue(runnable, timePin);
-        int everyTime = time.intValue() / (dynamicPins.size() - 1);
+        int everyTime = time.intValue() / Math.max((dynamicPins.size() - 1), 1);
         List<PinTouchPath.PathPart> pathParts = new ArrayList<>();
         for (int i = 0; i < dynamicPins.size(); i++) {
             Pin dynamicPin = dynamicPins.get(i);

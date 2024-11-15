@@ -111,6 +111,14 @@ public class PinSingleSelect extends PinString {
         if (options.contains(value)) super.setValue(value);
     }
 
+    public boolean isDynamic() {
+        return dynamic;
+    }
+
+    public void setDynamic(boolean dynamic) {
+        this.dynamic = dynamic;
+    }
+
     @Override
     public final boolean equals(Object object) {
         if (this == object) return true;

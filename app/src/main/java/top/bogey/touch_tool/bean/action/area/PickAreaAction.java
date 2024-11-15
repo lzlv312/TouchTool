@@ -32,5 +32,6 @@ public class PickAreaAction extends ExecuteAction {
             runnable.resume();
         });
         runnable.await();
+        executeNext(runnable, outPin);
     }
 }

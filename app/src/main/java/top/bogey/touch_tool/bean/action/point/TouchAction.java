@@ -18,7 +18,7 @@ import top.bogey.touch_tool.service.MainAccessibilityService;
 
 public class TouchAction extends ExecuteAction {
     private final transient Pin touchPin = new Pin(new PinTouchPath(), R.string.pin_touch);
-    private final transient Pin timePin = new Pin(new PinFloat(), R.string.touch_action_time, false, false, true);
+    private final transient Pin timePin = new Pin(new PinFloat(1), R.string.touch_action_time, false, false, true);
     private final transient Pin offsetPin = new Pin(new PinInteger(), R.string.touch_action_offset);
 
     public TouchAction() {

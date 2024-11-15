@@ -88,7 +88,6 @@ public class TouchPicker extends FullScreenPicker<PinTouchPath> {
 
     @Override
     protected void realShow() {
-        FloatWindow.show(tag);
         pathParts.forEach(pathPart -> pathPart.offset(-location[0], -location[1]));
         refreshUI();
     }
