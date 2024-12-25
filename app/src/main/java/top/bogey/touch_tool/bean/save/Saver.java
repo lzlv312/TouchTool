@@ -4,8 +4,6 @@ import android.os.Handler;
 
 import com.tencent.mmkv.MMKV;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,14 +16,12 @@ import java.util.regex.Pattern;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.utils.AppUtil;
-import top.bogey.touch_tool.utils.GsonUtil;
 
-public class TaskSaver {
-    private static TaskSaver instance;
+public class Saver {
+    private static Saver instance;
     private static final String EMPTY_TAG = MainApplication.getInstance().getString(R.string.tag_empty);
 
     public static boolean matchTag(String tag, List<String> tags) {
@@ -39,10 +35,10 @@ public class TaskSaver {
 
     private static final String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/log";
 
-    public static TaskSaver getInstance() {
-        synchronized (TaskSaver.class) {
+    public static Saver getInstance() {
+        synchronized (Saver.class) {
             if (instance == null) {
-                instance = new TaskSaver();
+                instance = new Saver();
             }
         }
         return instance;
@@ -52,22 +48,27 @@ public class TaskSaver {
 
     private final Map<String, TaskSave> taskSaves = new HashMap<>();
     private final MMKV taskMMKV = MMKV.mmkvWithID("TASK_DB", MMKV.SINGLE_PROCESS_MODE);
-    private final Set<TaskSaveListener> listeners = new HashSet<>();
+    private final Set<TaskSaveListener> taskListeners = new HashSet<>();
+
+    private final Map<String, VariableSave> variableSaves = new HashMap<>();
+    private final MMKV variableMMKV = MMKV.mmkvWithID("Variable_DB", MMKV.SINGLE_PROCESS_MODE);
+    private final Set<VariableSaveListener> variableListeners = new HashSet<>();
 
     private final MMKV tagMMKV = MMKV.mmkvWithID("TAG_DB", MMKV.SINGLE_PROCESS_MODE);
 
-    private final MMKV commonMMKV = MMKV.mmkvWithID("COMMON_DB", MMKV.SINGLE_PROCESS_MODE);
-    private final Map<String, Logger> loggers = new HashMap<>();
+    private final Map<String, LogSave> loggers = new HashMap<>();
 
 
-    private TaskSaver() {
+    private Saver() {
         handler = new Handler();
         recycle();
         loadTasks();
+        loadVars();
     }
 
     private void recycle() {
         taskSaves.forEach((k, v) -> v.recycle());
+        variableSaves.forEach((k, v) -> v.recycle());
         new HashMap<>(loggers).forEach((k, v) -> {
             if (v.recycle()) {
                 loggers.remove(k);
@@ -87,6 +88,18 @@ public class TaskSaver {
         }
     }
 
+    private void loadVars() {
+        String[] keys = variableMMKV.allKeys();
+        if (keys == null) return;
+
+        for (String key : keys) {
+            VariableSave variableSave = new VariableSave(variableMMKV, key);
+            if (variableSave.getVar() == null) continue;
+            variableSaves.put(key, variableSave);
+        }
+    }
+
+    // ====================================================================================================================
     public List<Task> getTasks() {
         List<Task> tasks = new ArrayList<>();
         taskSaves.forEach((k, v) -> tasks.add(v.getTask()));
@@ -153,14 +166,22 @@ public class TaskSaver {
         return list;
     }
 
-    public Task getTask(String id) {
-        TaskSave taskSave = taskSaves.get(id);
+    public Task getTask(String taskId) {
+        TaskSave taskSave = taskSaves.get(taskId);
         if (taskSave == null) return null;
         return taskSave.getTask();
     }
 
-    public Task getOriginTask(String id) {
-        TaskSave taskSave = taskSaves.get(id);
+    public Task getTask(Task context, String taskId) {
+        Task task = context.findTask(taskId);
+        if (task == null) {
+            task = getTask(taskId);
+        }
+        return task;
+    }
+
+    public Task getOriginTask(String taskId) {
+        TaskSave taskSave = taskSaves.get(taskId);
         if (taskSave == null) return null;
         return taskSave.getOriginTask();
     }
@@ -169,10 +190,10 @@ public class TaskSaver {
         TaskSave taskSave = taskSaves.get(task.getId());
         if (taskSave == null) {
             taskSaves.put(task.getId(), new TaskSave(taskMMKV, task));
-            listeners.stream().filter(Objects::nonNull).forEach(v -> v.onCreate(task));
+            taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onCreate(task));
         } else {
             taskSave.setTask(task);
-            listeners.stream().filter(Objects::nonNull).forEach(v -> v.onUpdate(task));
+            taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onUpdate(task));
         }
     }
 
@@ -180,46 +201,86 @@ public class TaskSaver {
         TaskSave taskSave = taskSaves.remove(id);
         if (taskSave == null) return;
         Task task = taskSave.getTask();
-        listeners.stream().filter(Objects::nonNull).forEach(v -> v.onRemove(task));
+        taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onRemove(task));
         taskSave.remove();
-        Logger logger = loggers.get(id);
-        if (logger == null) return;
-        logger.destroy();
+        LogSave logSave = loggers.get(id);
+        if (logSave == null) return;
+        logSave.destroy();
     }
 
     public void addListener(TaskSaveListener listener) {
-        listeners.add(listener);
+        taskListeners.add(listener);
     }
 
     public void removeListener(TaskSaveListener listener) {
-        listeners.remove(listener);
+        taskListeners.remove(listener);
     }
 
+    // ====================================================================================================================
 
-    public PinObject getSave(String key) {
-        return (PinObject) GsonUtil.getAsObject(commonMMKV.decodeString(key), PinBase.class, null);
+    public List<Variable> getVars() {
+        List<Variable> vars = new ArrayList<>();
+        variableSaves.forEach((k, v) -> vars.add(v.getVar()));
+        return vars;
     }
 
-    public void setSave(String key, PinObject value) {
-        commonMMKV.encode(key, GsonUtil.toJson(value));
+    public Variable getVar(String id) {
+        VariableSave varSave = variableSaves.get(id);
+        if (varSave == null) return null;
+        return varSave.getVar();
     }
 
+    public Variable getOriginVar(String id) {
+        VariableSave varSave = variableSaves.get(id);
+        if (varSave == null) return null;
+        return varSave.getOriginVar();
+    }
+
+    public void saveVar(Variable var) {
+        VariableSave varSave = variableSaves.get(var.getId());
+        if (varSave == null) {
+            variableSaves.put(var.getId(), new VariableSave(variableMMKV, var));
+            variableListeners.stream().filter(Objects::nonNull).forEach(v -> v.onCreate(var));
+        } else {
+            varSave.setVar(var);
+            variableListeners.stream().filter(Objects::nonNull).forEach(v -> v.onUpdate(var));
+        }
+    }
+
+    public void removeVar(String id) {
+        VariableSave varSave = variableSaves.remove(id);
+        if (varSave == null) return;
+        Variable var = varSave.getVar();
+        variableListeners.stream().filter(Objects::nonNull).forEach(v -> v.onRemove(var));
+        varSave.remove();
+    }
+
+    public void addListener(VariableSaveListener listener) {
+        variableListeners.add(listener);
+    }
+
+    public void removeListener(VariableSaveListener listener) {
+        variableListeners.remove(listener);
+    }
+
+    // ====================================================================================================================
     public String getLog(String key) {
-        Logger logger = loggers.computeIfAbsent(key, k -> new Logger(key, LOG_DIR));
-        return logger.getLog();
+        LogSave logSave = loggers.computeIfAbsent(key, k -> new LogSave(key, LOG_DIR));
+        return logSave.getLog();
     }
 
     public void addLog(String key, String content) {
-        Logger logger = loggers.computeIfAbsent(key, k -> new Logger(key, LOG_DIR));
-        logger.addLog(content);
+        LogSave logSave = loggers.computeIfAbsent(key, k -> new LogSave(key, LOG_DIR));
+        logSave.addLog(content);
     }
 
     public void clearLog(String key) {
-        Logger logger = loggers.get(key);
-        if (logger == null) return;
-        logger.clearLog();
+        LogSave logSave = loggers.get(key);
+        if (logSave == null) return;
+        logSave.clearLog();
     }
 
+    // ====================================================================================================================
     public void addTag(String tag) {
         tagMMKV.encode(tag, true);
     }

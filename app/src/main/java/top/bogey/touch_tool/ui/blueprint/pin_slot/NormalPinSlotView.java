@@ -23,5 +23,6 @@ public class NormalPinSlotView extends PinSlotView {
     @Override
     public void setLinked(boolean linked) {
         binding.getRoot().setCardBackgroundColor(linked ? getPinColor() : DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant));
+        binding.getRoot().setStrokeColor(getPinColor());
     }
 }

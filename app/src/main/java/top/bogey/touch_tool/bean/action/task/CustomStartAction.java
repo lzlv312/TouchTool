@@ -2,20 +2,24 @@ package top.bogey.touch_tool.bean.action.task;
 
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
+import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class CustomStartAction extends Action {
+public class CustomStartAction extends Action implements DynamicPinsAction {
     private final transient Pin executePin = new Pin(new PinExecute(), 0, true);
 
-    public CustomStartAction(ActionType type) {
-        super(type);
+    public CustomStartAction() {
+        super(ActionType.CUSTOM_START);
         addPin(executePin);
     }
 
@@ -48,5 +52,16 @@ public class CustomStartAction extends Action {
             if (pin == null) return;
             pin.setValue(value);
         });
+    }
+
+    @Override
+    public List<Pin> getDynamicPins() {
+        List<Pin> pins = new ArrayList<>();
+        boolean start = false;
+        for (Pin pin : getPins()) {
+            if (pin == executePin) start = true;
+            if (start) pins.add(pin);
+        }
+        return pins;
     }
 }

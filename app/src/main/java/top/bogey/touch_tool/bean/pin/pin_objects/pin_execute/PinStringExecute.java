@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import java.util.Objects;
 
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.utils.GsonUtil;
 
@@ -31,6 +32,13 @@ public class PinStringExecute extends PinExecute {
     public void reset() {
         super.reset();
         value = null;
+    }
+
+    @Override
+    public void sync(PinBase value) {
+        if (value instanceof PinStringExecute pinString) {
+            this.value = pinString.value;
+        }
     }
 
     @Override

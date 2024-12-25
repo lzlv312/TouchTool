@@ -40,28 +40,35 @@ public class PinWidgetArea extends PinWidget<PinArea> {
             @Override
             public void afterTextChanged(Editable s) {
                 area.left = toInt(s);
+                pinView.getPin().notifyValueUpdated();
             }
         });
         binding.topEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
                 area.top = toInt(s);
+                pinView.getPin().notifyValueUpdated();
             }
         });
         binding.rightEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
                 area.right = toInt(s);
+                pinView.getPin().notifyValueUpdated();
             }
         });
         binding.bottomEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
                 area.bottom = toInt(s);
+                pinView.getPin().notifyValueUpdated();
             }
         });
 
-        binding.pickButton.setOnClickListener(v -> new AreaPickerPreview(getContext(), area::set, area, pinBase.getSubType() == PinSubType.FOR_OCR).show());
+        binding.pickButton.setOnClickListener(v -> new AreaPickerPreview(getContext(), result -> {
+            area.set(result);
+            pinView.getPin().notifyValueUpdated();
+        }, area, pinBase.getSubType() == PinSubType.FOR_OCR).show());
     }
 
     @Override

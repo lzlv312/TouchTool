@@ -14,12 +14,10 @@ import top.bogey.touch_tool.bean.pin.PinInfo;
 
 public abstract class PinSlotView extends FrameLayout {
     protected final Pin pin;
-    protected final PinBase pinBase;
 
     public PinSlotView(@NonNull Context context, Pin pin) {
         super(context);
         this.pin = pin;
-        pinBase = pin.getValue();
         ViewGroup.LayoutParams params = getLayoutParams();
         if (params == null) params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         setLayoutParams(params);
@@ -27,8 +25,9 @@ public abstract class PinSlotView extends FrameLayout {
 
     public abstract void setLinked(boolean linked);
 
-    protected @ColorInt int getPinColor() {
+    public @ColorInt int getPinColor() {
         if (pin.linkAble()) {
+            PinBase pinBase = pin.getValue();
             return PinInfo.getPinInfo(pinBase.getType(), pinBase.getSubType()).getColor();
         }
         return Color.GRAY;

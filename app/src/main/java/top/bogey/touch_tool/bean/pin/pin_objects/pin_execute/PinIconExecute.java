@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.GsonUtil;
@@ -65,6 +66,13 @@ public class PinIconExecute extends PinExecute {
         super.reset();
         value = null;
         image = null;
+    }
+
+    @Override
+    public void sync(PinBase value) {
+        if (value instanceof PinIconExecute pinIcon) {
+            this.value = pinIcon.value;
+        }
     }
 
     @Override

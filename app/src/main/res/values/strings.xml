@@ -37,12 +37,13 @@
     <string name="copy_task">复制</string>
 
     <!-- 任务界面相关 -->
+    <string name="title">标题</string>
+    <string name="des">描述</string>
+    <string name="copy_title">%s_复制</string>
+
     <string name="task_add">添加任务</string>
     <string name="task_update">修改任务</string>
-    <string name="task_title">标题</string>
-    <string name="task_des">描述</string>
     <string name="task_search">搜索任务</string>
-    <string name="task_copy_title">%s_复制</string>
     <string name="task_tag_add">添加分类</string>
 
     <string name="task_import">导入任务</string>
@@ -51,6 +52,8 @@
     <string name="task_export">导出任务</string>
     <string name="task_export_desc">选择需要导出的任务配置和通用自定义卡片到你选择的文件夹中</string>
 
+    <string name="variable_add">添加变量</string>
+    <string name="variable_update">修改变量</string>
 
     <!-- 蓝图界面相关 -->
     <string name="task_running_log">任务日志</string>
@@ -58,12 +61,8 @@
     <string name="task_capture">任务截图</string>
     <string name="task_capture_tips">保存任务截图还是分享任务截图？</string>
 
-    <string name="select_action_group_preset">预设</string>
-    <string name="select_action_group_task">任务</string>
-    <string name="select_action_group_task_global">全局任务</string>
-    <string name="select_action_group_task_private">私有任务</string>
-    <string name="select_action_group_variable">变量</string>
-    <string name="select_action_group_card">现有动作</string>
+    <string name="select_action_group_global">全局</string>
+    <string name="select_action_group_private">自有</string>
 
     <string name="select_app_search">搜索应用</string>
     <string name="select_app_search_third">搜索%d个第三方应用</string>
@@ -186,6 +185,9 @@
     <string name="execute_task_action">执行任务</string>
     <string name="execute_task_action_task_id">任务</string>
     <string name="execute_task_action_just_cal">仅计算</string>
+
+    <string name="custom_start_action">自定义开始</string>
+    <string name="custom_end_action">自定义结束</string>
 
     <!-- 动作-Normal -->
     <string name="delay_action">延时</string>
@@ -565,13 +567,28 @@
     <string name="pin_object">对象</string>
 
     <string name="pin_list">列表</string>
+    <string name="pin_list_app">应用列表</string>
 
     <string name="pin_map">字典</string>
 
     <string name="pin_string">文本</string>
+    <string name="pin_string_url">链接</string>
+    <string name="pin_string_shortcut">快捷方式</string>
+    <string name="pin_string_ringtone">铃声</string>
+    <string name="pin_string_multi_line">多行文本</string>
+    <string name="pin_string_node_path">控件路径</string>
+    <string name="pin_string_log">通配文本</string>
+    <string name="pin_string_task">任务</string>
+    <string name="pin_string_select">单选</string>
+    <string name="pin_string_select_hint">选项(逗号分隔)</string>
 
-    <string name="pin_number_integer">数值</string>
+    <string name="pin_number_integer">整数</string>
     <string name="pin_number_float">小数</string>
+    <string name="pin_number_long">长整数</string>
+    <string name="pin_number_double">数值</string>
+    <string name="pin_number_date">日期</string>
+    <string name="pin_number_time">时间</string>
+    <string name="pin_number_periodic">间隔</string>
 
     <string name="pin_boolean_condition">条件</string>
     <string name="pin_boolean_result">结果</string>
@@ -583,8 +600,6 @@
     <string name="pin_point">位置</string>
     <string name="pin_area">区域</string>
 
-    <string name="pin_select">单选</string>
-    <string name="pin_select_hint">选项(逗号分隔)</string>
     <string name="pin_touch">手势</string>
     <string name="pin_node">控件</string>
 

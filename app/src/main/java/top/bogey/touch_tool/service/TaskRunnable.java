@@ -16,6 +16,9 @@ public class TaskRunnable implements Runnable {
 
     private final Set<TaskListener> listeners = new HashSet<>();
 
+    private final Task task;
+    private final StartAction startAction;
+
     private int progress = 0;
 
     private Future<?> future;
@@ -24,18 +27,16 @@ public class TaskRunnable implements Runnable {
     private long pauseTime = -1;
 
     public TaskRunnable(Task task, StartAction startAction) {
-        Task taskCopy = task.copy();
-        Action action = taskCopy.getAction(startAction.getId());
-        if (action == null) pushStack(taskCopy, startAction);
-        else pushStack(taskCopy, action);
+        this.task = task;
+        this.startAction = startAction;
     }
 
     @Override
     public void run() {
         try {
-            listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onStart(this));
-            Action action = getAction();
-            action.execute(this, null);
+            task.execute(this, startAction, result -> {
+                if (result) listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onStart(this));
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

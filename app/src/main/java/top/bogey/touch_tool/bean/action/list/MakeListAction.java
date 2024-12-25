@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.bean.action.list;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -17,16 +19,17 @@ import top.bogey.touch_tool.service.TaskRunnable;
 public class MakeListAction extends ListCalculateAction implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinObject(), R.string.pin_object);
     private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin);
-    private final transient Pin listPin = new Pin(new PinList(), R.string.pin_object, true);
+    private final transient Pin listPin = new Pin(new PinList(),true);
 
     public MakeListAction() {
         super(ActionType.LIST_MAKE);
-        addPins(addPin, listPin);
+        Pin firstPin = new Pin(new PinObject(), R.string.pin_object, false, true);
+        addPins(firstPin, addPin, listPin);
     }
 
     public MakeListAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(morePin);
+        reAddPins(morePin, false);
         reAddPins(addPin, listPin);
     }
 
@@ -38,11 +41,12 @@ public class MakeListAction extends ListCalculateAction implements DynamicPinsAc
         }
     }
 
+    @NonNull
     @Override
     public List<Pin> getDynamicValueTypePins() {
         List<Pin> dynamicPins = getDynamicPins();
+        dynamicPins.add(addPin);
         dynamicPins.add(listPin);
-        dynamicPins.add(morePin);
         return dynamicPins;
     }
 

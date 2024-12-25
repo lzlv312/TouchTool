@@ -31,6 +31,11 @@ public class PinObject extends PinBase {
 
     }
 
+    @Override
+    public void sync(PinBase value) {
+
+    }
+
     public boolean cast(String value) {
         return false;
     }

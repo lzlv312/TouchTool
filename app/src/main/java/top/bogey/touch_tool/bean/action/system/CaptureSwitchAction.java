@@ -2,6 +2,8 @@ package top.bogey.touch_tool.bean.action.system;
 
 import com.google.gson.JsonObject;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
@@ -30,10 +32,14 @@ public class CaptureSwitchAction extends ExecuteAction {
         PinBoolean value = getPinValue(runnable, valuePin);
         PinBoolean wait = getPinValue(runnable, waitPin);
         MainAccessibilityService service = MainApplication.getInstance().getService();
+        AtomicBoolean needPaused = new AtomicBoolean(true);
         if (value.getValue()) {
             if (wait.getValue()) {
-                service.startCapture(result -> runnable.resume());
-                runnable.await();
+                service.startCapture(result -> {
+                    needPaused.set(false);
+                    runnable.resume();
+                });
+                if (needPaused.get()) runnable.await();
             } else {
                 service.startCapture(null);
             }

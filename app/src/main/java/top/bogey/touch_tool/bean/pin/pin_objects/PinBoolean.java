@@ -30,6 +30,13 @@ public class PinBoolean extends PinObject {
     }
 
     @Override
+    public void sync(PinBase value) {
+        if (value instanceof PinBoolean pinBoolean) {
+            this.value = pinBoolean.getValue();
+        }
+    }
+
+    @Override
     public boolean cast(String value) {
         if (Boolean.TRUE.toString().equals(value)) this.value = true;
         else if (Boolean.FALSE.toString().equals(value)) this.value = false;

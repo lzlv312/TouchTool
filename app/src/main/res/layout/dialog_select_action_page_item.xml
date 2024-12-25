@@ -53,65 +53,40 @@
             android:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/typeBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:visibility="gone">
-
-            <Spinner
-                android:id="@+id/typeSpinner"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_spinner"
-                android:dropDownWidth="match_parent"
-                android:gravity="center_horizontal"
-                android:popupBackground="@drawable/shape_spinner_background"
-                android:spinnerMode="dropdown" />
-
-            <Spinner
-                android:id="@+id/subTypeSpinner"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_spinner_right"
-                android:dropDownWidth="match_parent"
-                android:gravity="center_horizontal"
-                android:popupBackground="@drawable/shape_spinner_background"
-                android:spinnerMode="dropdown"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/varBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
+            android:baselineAligned="false"
             android:visibility="gone">
 
-            <Spinner
-                android:id="@+id/keySpinner"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/keySlot"
                 android:layout_width="0dp"
                 android:layout_height="24dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_spinner"
+                android:gravity="center_horizontal" />
+
+            <Spinner
+                android:id="@+id/typeSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:background="@drawable/shape_spinner"
                 android:dropDownWidth="match_parent"
+                android:entries="@array/pin_simple_type"
                 android:gravity="center_horizontal"
                 android:popupBackground="@drawable/shape_spinner_background"
                 android:spinnerMode="dropdown" />
 
-            <Spinner
-                android:id="@+id/valueSpinner"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/valueSlot"
                 android:layout_width="0dp"
                 android:layout_height="24dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_spinner_right"
-                android:dropDownWidth="match_parent"
                 android:gravity="center_horizontal"
-                android:popupBackground="@drawable/shape_spinner_background"
-                android:spinnerMode="dropdown"
                 android:visibility="gone" />
 
         </LinearLayout>
@@ -144,12 +119,12 @@
                     app:icon="@drawable/icon_copy" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/exchangeButton"
+                    android:id="@+id/settingButton"
                     style="@style/Theme.TouchTool.IconButton"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:visibility="gone"
-                    app:icon="@drawable/icon_refresh" />
+                    app:icon="@drawable/icon_setting" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/getVarValue"

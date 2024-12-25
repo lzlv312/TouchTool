@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinInfo;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.databinding.PinSlotListBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
@@ -27,12 +28,14 @@ public class ListPinSlotView extends PinSlotView {
     @Override
     public void setLinked(boolean linked) {
         binding.getRoot().setCardBackgroundColor(linked ? getPinColor() : DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant));
+        binding.getRoot().setStrokeColor(getPinColor());
     }
 
     @Override
-    protected @ColorInt int getPinColor() {
-        PinList pinList = (PinList) pinBase;
+    public @ColorInt int getPinColor() {
         if (pin.linkAble()) {
+            PinBase pinBase = pin.getValue();
+            PinList pinList = (PinList) pinBase;
             return PinInfo.getPinInfo(pinList.getValueType()).getColor();
         }
         return Color.GRAY;

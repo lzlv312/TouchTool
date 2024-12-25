@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="4dp"
-        android:hint="@string/task_title"
+        android:hint="@string/title"
         app:endIconMode="clear_text"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="4dp"
-        android:hint="@string/task_des"
+        android:hint="@string/des"
         app:endIconMode="clear_text"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 

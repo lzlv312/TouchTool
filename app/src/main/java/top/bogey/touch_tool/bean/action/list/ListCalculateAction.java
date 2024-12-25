@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.bean.action.list;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonObject;
 
 import java.util.Collections;
@@ -33,6 +35,7 @@ public abstract class ListCalculateAction extends CalculateAction implements Dyn
         super.onUnLinkedFrom(task, origin, from);
     }
 
+    @NonNull
     @Override
     public List<Pin> getDynamicKeyTypePins() {
         return Collections.emptyList();

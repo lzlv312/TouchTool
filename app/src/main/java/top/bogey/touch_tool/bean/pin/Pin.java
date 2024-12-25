@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
@@ -77,13 +78,14 @@ public class Pin extends Identity {
         hide = GsonUtil.getAsBoolean(jsonObject, "hide", false);
     }
 
-    public void setPin(Pin pin) {
+    public void sync(Pin pin) {
         setId(pin.getId());
         setUid(pin.getUid());
         setTitle(pin.getTitle());
         setDescription(pin.getDescription());
 
-        setValue(pin.getValue());
+        // 值需要让他自己同步
+        getValue().sync(pin.getValue());
         setLinks(pin.getLinks());
 
         setOut(pin.isOut());
@@ -213,15 +215,6 @@ public class Pin extends Identity {
         return true;
     }
 
-    public void replaceValue(PinBase value) {
-        PinBase oldValue = this.value;
-        this.value = value;
-        if (oldValue.getClass() != value.getClass()) {
-            listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onTypeChanged(this, value.getClass()));
-        }
-        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onValueChanged(this, value));
-    }
-
     @Override
     public Pin copy() {
         Pin copy = GsonUtil.copy(this, Pin.class);
@@ -247,6 +240,12 @@ public class Pin extends Identity {
 
     public void setValue(PinBase value) {
         this.value = value;
+        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onValueReplaced(this, value));
+        notifyValueUpdated();
+    }
+
+    public void notifyValueUpdated() {
+        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onValueUpdated(this, value));
     }
 
     public Map<String, String> getLinks() {
@@ -301,12 +300,12 @@ public class Pin extends Identity {
     public String getTitle() {
         if (title != null && !title.isEmpty()) return title;
         if (titleId == 0) return "";
-        String string = MainApplication.getInstance().getString(titleId);
-        if (value instanceof PinList list) {
+        if (isSameClass(PinList.class)) {
+            PinList list = getValue();
             PinInfo info = PinInfo.getPinInfo(list.getValueType());
-            if (info != null) return info.getTitle() + string;
+            if (info != null) return info.getTitle() + MainApplication.getInstance().getString(R.string.pin_list);
         }
-        return string;
+        return MainApplication.getInstance().getString(titleId);
     }
 
     @Override

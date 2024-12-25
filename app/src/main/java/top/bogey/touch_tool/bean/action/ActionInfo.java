@@ -23,7 +23,6 @@ import top.bogey.touch_tool.bean.action.color.GetColorAction;
 import top.bogey.touch_tool.bean.action.image.CropImageAction;
 import top.bogey.touch_tool.bean.action.image.FindImagesAction;
 import top.bogey.touch_tool.bean.action.image.GetImageAction;
-import top.bogey.touch_tool.bean.action.image.ImageEqualAction;
 import top.bogey.touch_tool.bean.action.image.SaveImageAction;
 import top.bogey.touch_tool.bean.action.list.ListAddAction;
 import top.bogey.touch_tool.bean.action.list.ListAppendAction;
@@ -116,6 +115,9 @@ import top.bogey.touch_tool.bean.action.system.StopRingtoneAction;
 import top.bogey.touch_tool.bean.action.system.SwitchScreenAction;
 import top.bogey.touch_tool.bean.action.system.TextToSpeechAction;
 import top.bogey.touch_tool.bean.action.system.WriteToClipboardAction;
+import top.bogey.touch_tool.bean.action.task.CustomEndAction;
+import top.bogey.touch_tool.bean.action.task.CustomStartAction;
+import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.DelayActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.NormalActionCard;
@@ -132,6 +134,9 @@ public class ActionInfo {
     private final static ActionInfo BLUETOOTH_START_INFO = new ActionInfo(ActionType.BLUETOOTH_START, BluetoothStartAction.class, R.drawable.icon_bluetooth, R.string.bluetooth_start_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo OUT_CALL_START_INFO = new ActionInfo(ActionType.OUT_CALL_START, OutCallStartAction.class, R.drawable.icon_auto_start, R.string.out_call_start_action, 0, 0, NormalActionCard.class);
 
+    private final static ActionInfo CUSTOM_START_INFO = new ActionInfo(ActionType.CUSTOM_START, CustomStartAction.class, R.drawable.icon_setting, R.string.custom_start_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo CUSTOM_END_INFO = new ActionInfo(ActionType.CUSTOM_END, CustomEndAction.class, R.drawable.icon_setting, R.string.custom_end_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo EXECUTE_TASK_INFO = new ActionInfo(ActionType.EXECUTE_TASK, ExecuteTaskAction.class, R.drawable.icon_task, R.string.execute_task_action, 0, 0, NormalActionCard.class);
 
     // 逻辑动作
     private final static ActionInfo IF_LOGIC_INFO = new ActionInfo(ActionType.IF_LOGIC, IfConditionAction.class, R.drawable.icon_condition, R.string.if_action, R.string.if_action_desc, 0, NormalActionCard.class);
@@ -238,7 +243,6 @@ public class ActionInfo {
     private final static ActionInfo CROP_IMAGE_INFO = new ActionInfo(ActionType.CROP_IMAGE, CropImageAction.class, R.drawable.icon_image, R.string.crop_image_action, R.string.crop_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SAVE_IMAGE_INFO = new ActionInfo(ActionType.SAVE_IMAGE, SaveImageAction.class, R.drawable.icon_image, R.string.save_image_action, R.string.save_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_IMAGES_INFO = new ActionInfo(ActionType.FIND_IMAGES, FindImagesAction.class, R.drawable.icon_image, R.string.find_images_action, R.string.find_images_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo IMAGE_EQUAL_INFO = new ActionInfo(ActionType.IMAGE_EQUAL, ImageEqualAction.class, R.drawable.icon_image, R.string.image_equal_action, R.string.image_equal_action_desc, 0, NormalActionCard.class);
 
 
     // 颜色操作
@@ -290,6 +294,9 @@ public class ActionInfo {
             case BLUETOOTH_START -> BLUETOOTH_START_INFO;
             case OUT_CALL_START -> OUT_CALL_START_INFO;
 
+            case CUSTOM_START -> CUSTOM_START_INFO;
+            case CUSTOM_END -> CUSTOM_END_INFO;
+            case EXECUTE_TASK -> EXECUTE_TASK_INFO;
 
             case IF_LOGIC -> IF_LOGIC_INFO;
             case WAIT_IF_LOGIC -> WAIT_IF_LOGIC_INFO;
@@ -388,7 +395,6 @@ public class ActionInfo {
             case CROP_IMAGE -> CROP_IMAGE_INFO;
             case SAVE_IMAGE -> SAVE_IMAGE_INFO;
             case FIND_IMAGES -> FIND_IMAGES_INFO;
-            case IMAGE_EQUAL -> IMAGE_EQUAL_INFO;
 
 
             case GET_COLOR -> GET_COLOR_INFO;
@@ -449,7 +455,7 @@ public class ActionInfo {
 
     private final Class<? extends ActionCard> cardClass;
 
-    private Action action;
+    private final Action action;
 
     public ActionInfo(ActionType type, Class<? extends Action> clazz, int icon, int title, int description) {
         this(type, clazz, title, description, icon, 0);
@@ -467,14 +473,7 @@ public class ActionInfo {
         this.description = description;
         this.help = help;
         this.cardClass = cardClass;
-
-        try {
-            Constructor<? extends Action> constructor = clazz.getConstructor();
-            action = constructor.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-            action = null;
-        }
+        action = newInstance();
     }
 
     public ActionType getType() {
@@ -507,6 +506,16 @@ public class ActionInfo {
 
     public Class<? extends ActionCard> getCardClass() {
         return cardClass;
+    }
+
+    public Action newInstance() {
+        try {
+            Constructor<? extends Action> constructor = clazz.getConstructor();
+            return constructor.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public Action getAction() {

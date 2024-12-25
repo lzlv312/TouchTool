@@ -45,6 +45,7 @@ android {
     buildTypes {
 
         debug {
+            isMinifyEnabled = true
             applicationIdSuffix = ".debug"
             resValue("string", "app_name", "点击助手Debug")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -76,7 +77,7 @@ android {
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.31.0"
+            version = "3.31.1"
         }
     }
 

@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.bean.action.list;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
@@ -35,6 +37,7 @@ public class ListContainAction extends ListCalculateAction {
         resultPin.getValue(PinBoolean.class).setValue(list.contains(element));
     }
 
+    @NonNull
     @Override
     public List<Pin> getDynamicValueTypePins() {
         return Arrays.asList(listPin, elementPin);

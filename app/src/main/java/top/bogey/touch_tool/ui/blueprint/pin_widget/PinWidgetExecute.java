@@ -53,6 +53,7 @@ public class PinWidgetExecute extends PinWidget<PinExecute> {
                     @Override
                     public void afterTextChanged(Editable s) {
                         stringExecute.setValue(s.toString());
+                        pinView.getPin().notifyValueUpdated();
                     }
                 });
             }
@@ -63,6 +64,7 @@ public class PinWidgetExecute extends PinWidget<PinExecute> {
                 binding.pickButton.setImageBitmap(iconExecute.getImage());
                 binding.pickButton.setOnClickListener(v -> new SelectIconDialog(getContext(), result -> {
                     binding.pickButton.setImageBitmap(result);
+                    pinView.getPin().notifyValueUpdated();
                     iconExecute.setImage(result);
                 }).show());
             }

@@ -28,7 +28,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,12 +39,10 @@ import java.util.Set;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionInfo;
-import top.bogey.touch_tool.bean.action.ActionType;
+import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.PinInfo;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.TaskSaveListener;
-import top.bogey.touch_tool.bean.save.TaskSaver;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
@@ -61,6 +58,7 @@ import top.bogey.touch_tool.ui.blueprint.history.edit.PinLinkHistory;
 import top.bogey.touch_tool.ui.blueprint.history.edit.PinRemoveHistory;
 import top.bogey.touch_tool.ui.blueprint.history.edit.PinUpdateHistory;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
+import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionByPinDialog;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
@@ -170,7 +168,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         });
         detector.setQuickScaleEnabled(false);
 
-        TaskSaver.getInstance().addListener(this);
+        Saver.getInstance().addListener(this);
     }
 
     public void setTask(Task task, HistoryManager history) {
@@ -185,9 +183,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         cards.clear();
 
         task.getActions().forEach(action -> {
+            if (action instanceof ExecuteTaskAction executeTaskAction) executeTaskAction.sync(task);
             ActionCard card = newCard(action);
-            addView(card);
             cards.put(action.getId(), card);
+            addView(card);
         });
         updateCardsPos();
         checkCards();
@@ -205,18 +204,27 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         }
     }
 
+    // 添加卡片
     public ActionCard addCard(Action action) {
         task.addAction(action);
         ActionCard card = newCard(action);
-        updateCardPos(card);
         cards.put(action.getId(), card);
         addView(card);
+        updateCardPos(card);
         return card;
     }
 
-    public ActionCard addNewCard(Action action) {
-        ActionCard card = addCard(action);
+    public void removeCard(ActionCard card) {
+        Action action = card.getAction();
+        action.getPins().forEach(pin -> pin.clearLinks(task));
+        task.removeAction(action);
+        cards.remove(action.getId());
+        removeView(card);
 
+        if (selectedCards.remove(card)) refreshEditView();
+    }
+
+    public void initCardPos(ActionCard card) {
         card.measure(0, 0);
         float width = card.getMeasuredWidth() * scale;
         float height = card.getMeasuredHeight() * scale;
@@ -228,55 +236,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
             x = lastX - width / 2f;
             y = lastY - height / 2f;
         }
-        action.setPos((int) ((x - offsetX) / getScaleGridSize()), (int) ((y - offsetY) / getScaleGridSize()));
+        card.getAction().setPos((int) ((x - offsetX) / getScaleGridSize()), (int) ((y - offsetY) / getScaleGridSize()));
         updateCardPos(card);
-
-        return card;
-    }
-
-    public ActionCard addNewCard(ActionType actionType) {
-        ActionInfo info = ActionInfo.getActionInfo(actionType);
-        if (info == null) return null;
-        return addNewCard(info.getClazz());
-    }
-
-    public ActionCard addNewCard(Class<? extends Action> actionClass) {
-        try {
-            Action action = actionClass.newInstance();
-            return addNewCard(action);
-        } catch (IllegalAccessException | InstantiationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void addNewCard(Class<? extends Action> actionClass, String key, PinObject value) {
-        try {
-            Constructor<? extends Action> constructor = actionClass.getConstructor(String.class, PinObject.class);
-            Action action = constructor.newInstance(key, value);
-            addNewCard(action);
-        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void addNewCard(Class<? extends Action> actionClass, Task task) {
-        try {
-            Constructor<? extends Action> constructor = actionClass.getConstructor(Task.class);
-            Action action = constructor.newInstance(task);
-            addNewCard(action);
-        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void removeCard(ActionCard card) {
-        Action action = card.getAction();
-        action.getPins().forEach(pin -> pin.clearLinks(task));
-        task.removeAction(action);
-        cards.remove(action.getId());
-        removeView(card);
-
-        if (selectedCards.remove(card)) refreshEditView();
     }
 
     private void updateCardPos(ActionCard card) {
@@ -621,14 +582,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
             pin = new Pin(pin.getValue(), 0, !pin.isOut());
         }
 
-        actionDialog = new SelectActionDialog(getContext(), this, pin, card -> {
-            tryLink(touchState, card.getAction());
-
-            float width = card.getMeasuredWidth() * scale;
-            float height = card.getMeasuredHeight() * scale;
-            float x = lastX - width / 2f;
-            float y = lastY - height / 2f;
-            card.getAction().setPos((int) ((x - offsetX) / getScaleGridSize()), (int) ((y - offsetY) / getScaleGridSize()));
+        actionDialog = new SelectActionByPinDialog(getContext(), task, pin, action -> {
+            ActionCard card = addCard(action);
+            tryLink(touchState, action);
+            action.setPos((int) ((lastX - offsetX) / getScaleGridSize()), (int) ((lastY - offsetY) / getScaleGridSize()));
             updateCardPos(card);
 
             if (actionDialog != null) actionDialog.dismiss();
@@ -740,10 +697,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                     // 只画输出线，输入线颜色可能不对
                     if (!pinView.getPin().isOut()) return;
 
-                    PinInfo pinInfo = PinInfo.getPinInfo(pinView.getPin().getValue());
-                    if (pinInfo == null) return;
-
-                    linkPaint.setColor(pinInfo.getColor());
+                    linkPaint.setColor(pinView.getPinColor());
                     canvas.drawPath(calculateLinkPath(pinView, cardPinView), linkPaint);
                 });
             });
@@ -766,9 +720,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                     PinView pinView = actionCard.getPinView(key);
                     if (pinView == null) return;
 
-                    PinInfo pinInfo = PinInfo.getPinInfo(pinView.getPin().getValue());
-                    if (pinInfo == null) return;
-                    linkPaint.setColor(pinInfo.getColor());
+                    linkPaint.setColor(pinView.getPinColor());
 
                     if (pinView.getPin().isOut()) {
                         canvas.drawPath(calculateLinkPath(pinView, cardPinView), linkPaint);
@@ -783,38 +735,35 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
         // 拖动针脚，要么连线，要么挪线
         if (touchState == TOUCH_DRAG_PIN || touchState == TOUCH_DRAG_LINK) {
-            PinInfo pinInfo = PinInfo.getPinInfo(touchedPin.getPin().getValue());
-            if (pinInfo != null) {
-                linkPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryInverse));
+            linkPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryInverse));
 
-                PinView currPosPinView = null;
-                ActionCard card = getActionCard(lastX, lastY, false);
-                if (card != null) {
-                    currPosPinView = card.getLinkAblePinView(lastX - card.getX(), lastY - card.getY(), scale);
+            PinView currPosPinView = null;
+            ActionCard card = getActionCard(lastX, lastY, false);
+            if (card != null) {
+                currPosPinView = card.getLinkAblePinView(lastX - card.getX(), lastY - card.getY(), scale);
+            }
+
+            if (touchState == TOUCH_DRAG_PIN) {
+                if (currPosPinView != null) {
+                    if (touchedPin.getPin().linkAble(currPosPinView.getPin())) {
+                        linkPaint.setColor(touchedPin.getPinColor());
+                    }
+                }
+                canvas.drawPath(calculateLinkPath(touchedPin), linkPaint);
+            } else {
+                if (currPosPinView != null && touchedPin.getPin().isSameClass(currPosPinView.getPin())) {
+                    linkPaint.setColor(touchedPin.getPinColor());
                 }
 
-                if (touchState == TOUCH_DRAG_PIN) {
-                    if (currPosPinView != null) {
-                        if (touchedPin.getPin().linkAble(currPosPinView.getPin())) {
-                            linkPaint.setColor(pinInfo.getColor());
-                        }
-                    }
-                    canvas.drawPath(calculateLinkPath(touchedPin), linkPaint);
-                } else {
-                    if (currPosPinView != null && touchedPin.getPin().isSameClass(currPosPinView.getPin())) {
-                        linkPaint.setColor(pinInfo.getColor());
-                    }
+                for (Map.Entry<String, String> entry : selectedLinks.entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    ActionCard actionCard = cards.get(value);
+                    if (actionCard == null) continue;
+                    PinView pinView = actionCard.getPinView(key);
+                    if (pinView == null) continue;
 
-                    for (Map.Entry<String, String> entry : selectedLinks.entrySet()) {
-                        String key = entry.getKey();
-                        String value = entry.getValue();
-                        ActionCard actionCard = cards.get(value);
-                        if (actionCard == null) continue;
-                        PinView pinView = actionCard.getPinView(key);
-                        if (pinView == null) continue;
-
-                        canvas.drawPath(calculateLinkPath(pinView), linkPaint);
-                    }
+                    canvas.drawPath(calculateLinkPath(pinView), linkPaint);
                 }
             }
         }

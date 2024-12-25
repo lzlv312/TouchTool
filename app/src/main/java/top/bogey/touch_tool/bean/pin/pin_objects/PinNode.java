@@ -31,6 +31,13 @@ public class PinNode extends PinObject {
         nodeInfo = null;
     }
 
+    @Override
+    public void sync(PinBase value) {
+        if (value instanceof PinNode pinNode) {
+            nodeInfo = pinNode.nodeInfo;
+        }
+    }
+
     @NonNull
     @Override
     public String toString() {

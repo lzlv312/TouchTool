@@ -13,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +26,8 @@ import top.bogey.touch_tool.bean.pin.PinListener;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.PinInfo;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.task.Task;
@@ -85,20 +88,21 @@ public abstract class Action extends Identity implements PinListener {
             Pin tmpPin = tmpPins.get(0);
             if (def.isSameClass(tmpPin)) {
                 tmpPins.remove(0);
-                def.setPin(tmpPin);
+                def.sync(tmpPin);
             }
         }
         addPin(def);
     }
 
     // 从临时列表中获取一个类似的针脚加入到正式列表中，如果没有类似的，就根据classes找其他类似的，这是一个纠错机制
-    public void reAddPin(Pin def, Class<? extends PinBase>... classes) {
+    @SafeVarargs
+    public final void reAddPin(Pin def, Class<? extends PinBase>... classes) {
         if (!tmpPins.isEmpty()) {
             Pin tmpPin = tmpPins.get(0);
             for (Class<? extends PinBase> aClass : classes) {
                 if (def.isSameClass(aClass)) {
                     tmpPins.remove(0);
-                    def.setPin(tmpPin);
+                    def.sync(tmpPin);
                     break;
                 }
             }
@@ -115,7 +119,7 @@ public abstract class Action extends Identity implements PinListener {
                 Pin tmpPin = tmpPins.get(0);
                 if (def.isSameClass(info.getClazz())) {
                     tmpPins.remove(0);
-                    def.setPin(tmpPin);
+                    def.sync(tmpPin);
                 }
             }
         }
@@ -123,8 +127,10 @@ public abstract class Action extends Identity implements PinListener {
         addPin(def);
     }
 
-    public void reAddPins(Pin... pins) {
-        for (Pin pin : pins) reAddPin(pin);
+    public void reAddPins(Pin pin, Pin... pins) {
+        ArrayList<Pin> list = new ArrayList<>(Arrays.asList(pins));
+        list.add(0, pin);
+        for (Pin e : list) reAddPin(e);
     }
 
     // 从临时列表获取一系列类似针脚加入到正式列表中，直到出现添加针脚为止
@@ -144,6 +150,23 @@ public abstract class Action extends Identity implements PinListener {
             } else {
                 tmpPins.remove(0);
             }
+            if (tmpPins.isEmpty()) break;
+            tmpPin = tmpPins.get(0);
+        }
+    }
+
+    // 从临时列表获取一系列针脚加入到正式列表中，直到出现添加针脚或到结束
+    public void reAddPins(Pin def, boolean toEnd) {
+        if (tmpPins.isEmpty()) {
+            return;
+        }
+
+        Pin tmpPin = tmpPins.get(0);
+        while (toEnd || !tmpPin.isSameClass(PinAdd.class)) {
+            if (def != null) tmpPin.setTitleId(def.getTitleId());
+            addPin(tmpPin);
+            tmpPins.remove(0);
+
             if (tmpPins.isEmpty()) break;
             tmpPin = tmpPins.get(0);
         }
@@ -260,7 +283,7 @@ public abstract class Action extends Identity implements PinListener {
             resetReturnValue();
             calculate(runnable, pin);
             runnable.addCalculateProgress(this);
-            return pin.getValue();
+            return returnValue(pin.getValue());
         }
 
         if (pin.isLinked()) {
@@ -269,12 +292,19 @@ public abstract class Action extends Identity implements PinListener {
                 Action action = runnable.getTask().getAction(linkedPin.getOwnerId());
                 if (action != null) {
                     T pinValue = action.getPinValue(runnable, linkedPin);
+                    pinValue = returnValue(pinValue);
                     pin.setValue(pinValue);
                     return pinValue;
                 }
             }
         }
-        return pin.getValue();
+        return returnValue(pin.getValue());
+    }
+
+    // 列表和集合类型返回引用，其他类型返回拷贝
+    private <T extends PinObject> T returnValue(T value) {
+        if (value instanceof PinList || value instanceof PinMap) return value;
+        return (T) value.copy();
     }
 
     public void check(ActionCheckResult result, Task task) {
@@ -292,12 +322,12 @@ public abstract class Action extends Identity implements PinListener {
     }
 
     @Override
-    public void onTypeChanged(Pin origin, Class<? extends PinBase> type) {
+    public void onValueReplaced(Pin origin, PinBase value) {
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onPinChanged(origin));
     }
 
     @Override
-    public void onValueChanged(Pin origin, PinBase value) {
+    public void onValueUpdated(Pin origin, PinBase value) {
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onPinChanged(origin));
     }
 

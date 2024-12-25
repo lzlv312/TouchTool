@@ -49,6 +49,11 @@ public class DisplayUtil {
         return Color.argb(a, r, g, b);
     }
 
+    @ColorInt
+    public static int getTextColor(@ColorInt int backgroundColor) {
+        return Color.luminance(backgroundColor) > 0.5 ? Color.BLACK : Color.WHITE;
+    }
+
     public static float dp2px(Context context, float dp) {
         return dp * context.getResources().getDisplayMetrics().density;
     }
@@ -198,22 +203,6 @@ public class DisplayUtil {
         if (x + width > bitmapWidth) width = bitmapWidth - x;
         if (y + height > bitmapHeight) height = bitmapHeight - y;
         return new Rect(x, y, x + width, y + height);
-    }
-
-    public static Bitmap textToBitmap(Context context, String text, int textSize) {
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(DisplayUtil.getAttrColor(context, android.R.attr.textColorPrimary));
-        float pixelSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, textSize, context.getResources().getDisplayMetrics());
-        paint.setTextSize(pixelSize);
-        paint.setTextAlign(Paint.Align.CENTER);
-
-        Rect bounds = new Rect();
-        paint.getTextBounds(text, 0, text.length(), bounds);
-        if (bounds.isEmpty()) return null;
-        Bitmap bitmap = Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        canvas.drawText(text, bounds.width() / 2f, bounds.height(), paint);
-        return bitmap;
     }
 
     public static native List<MatchResult> nativeMatchTemplate(Bitmap bitmap, Bitmap template, int similarity, int speed);

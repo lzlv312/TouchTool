@@ -20,7 +20,7 @@ import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.save.TaskSaveListener;
-import top.bogey.touch_tool.bean.save.TaskSaver;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewTaskPageItemActionBinding;
 import top.bogey.touch_tool.databinding.ViewTaskPageItemBinding;
@@ -41,13 +41,13 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        TaskSaver.getInstance().addListener(this);
+        Saver.getInstance().addListener(this);
     }
 
     @Override
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
-        TaskSaver.getInstance().removeListener(this);
+        Saver.getInstance().removeListener(this);
     }
 
     @NonNull
@@ -69,7 +69,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
 
     @Override
     public void onCreate(Task task) {
-        if (TaskSaver.matchTag(tag, task.getTags())) {
+        if (Saver.matchTag(tag, task.getTags())) {
             tasks.add(task);
             notifyItemInserted(tasks.size() - 1);
         }

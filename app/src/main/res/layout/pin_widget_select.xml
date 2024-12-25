@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="4dp"
         android:clipChildren="false"
-        android:hint="@string/pin_select_hint"
+        android:hint="@string/pin_string_select_hint"
         android:visibility="gone"
         app:endIconMode="custom"
         app:endIconDrawable="@drawable/icon_check_circle"

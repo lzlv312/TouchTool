@@ -43,7 +43,7 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
-import top.bogey.touch_tool.bean.save.TaskSaver;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.capture.CaptureService;
 import top.bogey.touch_tool.service.receiver.SystemEventReceiver;
@@ -274,7 +274,7 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     public void resetAllAlarm() {
-        List<Task> tasks = TaskSaver.getInstance().getTasks(TimeStartAction.class);
+        List<Task> tasks = Saver.getInstance().getTasks(TimeStartAction.class);
         for (Task task : tasks) {
             for (Action action : task.getActions(TimeStartAction.class)) {
                 TimeStartAction timeStartAction = (TimeStartAction) action;
@@ -287,7 +287,7 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     public void cancelAllAlarm() {
-        List<Task> tasks = TaskSaver.getInstance().getTasks(TimeStartAction.class);
+        List<Task> tasks = Saver.getInstance().getTasks(TimeStartAction.class);
         for (Task task : tasks) {
             for (Action action : task.getActions(TimeStartAction.class)) {
                 TimeStartAction timeStartAction = (TimeStartAction) action;
@@ -349,7 +349,7 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public void replaceAlarm(Task task) {
         if (task == null) return;
-        Task originTask = TaskSaver.getInstance().getOriginTask(task.getId());
+        Task originTask = Saver.getInstance().getOriginTask(task.getId());
         List<Action> actions = task.getActions(TimeStartAction.class);
 
         if (originTask != null) {

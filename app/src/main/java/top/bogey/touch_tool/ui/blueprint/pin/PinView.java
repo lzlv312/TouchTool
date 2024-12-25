@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.ui.blueprint.pin;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
 import java.lang.reflect.Constructor;
@@ -55,7 +57,7 @@ public abstract class PinView extends FrameLayout implements PinListener {
                 slotView = constructor.newInstance(getContext(), pin);
                 slotBox.addView(slotView);
             } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
 
@@ -151,6 +153,12 @@ public abstract class PinView extends FrameLayout implements PinListener {
         return pin;
     }
 
+    @ColorInt
+    public int getPinColor() {
+        if (slotView != null) return slotView.getPinColor();
+        return Color.GRAY;
+    }
+
     @Override
     public void onLinkedTo(Task task, Pin origin, Pin to) {
         post(this::refreshPin);
@@ -162,14 +170,12 @@ public abstract class PinView extends FrameLayout implements PinListener {
     }
 
     @Override
-    public void onTypeChanged(Pin origin, Class<? extends PinBase> type) {
+    public void onValueReplaced(Pin origin, PinBase value) {
         post(this::refreshPin);
     }
 
     @Override
-    public void onValueChanged(Pin origin, PinBase value) {
-        post(this::refreshPin);
-    }
+    public void onValueUpdated(Pin origin, PinBase value) {}
 
     @Override
     public void onTitleChanged(Pin origin, String title) {

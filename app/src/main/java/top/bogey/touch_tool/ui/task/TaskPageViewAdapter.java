@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import top.bogey.touch_tool.bean.save.TaskSaver;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.databinding.ViewTaskPageBinding;
 
 public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapter.ViewHolder> {
@@ -64,9 +64,9 @@ public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapte
 
         public void refresh(String tag) {
             if (search) {
-                adapter.setTasks(tag, TaskSaver.getInstance().searchTasks(tag));
+                adapter.setTasks(tag, Saver.getInstance().searchTasks(tag));
             } else {
-                adapter.setTasks(tag, TaskSaver.getInstance().getTasks(tag));
+                adapter.setTasks(tag, Saver.getInstance().getTasks(tag));
             }
         }
     }

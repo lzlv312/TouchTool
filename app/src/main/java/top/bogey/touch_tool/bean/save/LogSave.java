@@ -4,14 +4,14 @@ import com.tencent.mmkv.MMKV;
 
 import top.bogey.touch_tool.utils.GsonUtil;
 
-public class Logger {
+public class LogSave {
     private static final String INDEX = "index";
 
     private final MMKV mmkv;
 
     private long time = System.currentTimeMillis();
 
-    public Logger(String key, String path) {
+    public LogSave(String key, String path) {
         mmkv = MMKV.mmkvWithID(key, MMKV.MULTI_PROCESS_MODE, null, path);
     }
 

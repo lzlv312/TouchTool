@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.JsonObject;
 
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
@@ -39,6 +40,13 @@ public class PinString extends PinObject {
     public void reset() {
         super.reset();
         value = null;
+    }
+
+    @Override
+    public void sync(PinBase value) {
+        if (value instanceof PinString pinString) {
+            this.value = pinString.value;
+        }
     }
 
     @Override

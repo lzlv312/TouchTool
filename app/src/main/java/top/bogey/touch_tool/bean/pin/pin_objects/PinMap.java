@@ -70,6 +70,17 @@ public class PinMap extends PinObject implements Map<PinObject, PinObject> {
     }
 
     @Override
+    public void sync(PinBase value) {
+        if (value instanceof PinMap pinMap) {
+            keyType = pinMap.keyType;
+            valueType = pinMap.valueType;
+            changeAble = pinMap.changeAble;
+            dynamic = pinMap.dynamic;
+            valueMap = pinMap.valueMap;
+        }
+    }
+
+    @Override
     public PinMap copy() {
         PinMap pinMap = new PinMap(keyType, valueType, changeAble);
         valueMap.forEach((key, value) -> pinMap.valueMap.put((PinObject) key.copy(), (PinObject) value.copy()));

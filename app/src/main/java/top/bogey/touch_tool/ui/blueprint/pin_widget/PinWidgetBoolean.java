@@ -25,6 +25,7 @@ public class PinWidgetBoolean extends PinWidget<PinBoolean> {
         binding.enableSwitch.setChecked(pinBase.getValue());
         binding.enableSwitch.setOnClickListener(v -> {
             pinBase.setValue(!pinBase.getValue());
+            pinView.getPin().notifyValueUpdated();
             binding.enableSwitch.setChecked(pinBase.getValue());
         });
     }

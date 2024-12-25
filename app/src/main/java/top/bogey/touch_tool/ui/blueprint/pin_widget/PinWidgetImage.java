@@ -25,6 +25,7 @@ public class PinWidgetImage extends PinWidget<PinImage>{
     protected void initBase() {
         binding.pickButton.setOnClickListener(v -> new ImagePickerPreview(getContext(), image -> {
             pinBase.setImage(image);
+            pinView.getPin().notifyValueUpdated();
             binding.image.setImageBitmap(image);
         }, pinBase.getImage()).show());
         binding.image.setImageBitmap(pinBase.getImage());

@@ -29,6 +29,6 @@
 
 -keep class top.bogey.touch_tool.utils.MatchResult{*;}
 -keep class top.bogey.touch_tool.bean.**{*;}
--keep class * extends top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidget{*;}
+-keep class top.bogey.touch_tool.ui.blueprint.**{*;}
 
 -keep enum top.bogey.touch_tool.** {*;}

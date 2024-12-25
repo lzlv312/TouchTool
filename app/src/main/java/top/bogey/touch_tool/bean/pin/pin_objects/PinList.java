@@ -72,6 +72,16 @@ public class PinList extends PinObject implements List<PinObject> {
     }
 
     @Override
+    public void sync(PinBase value) {
+        if (value instanceof PinList pinList) {
+            valueType = pinList.valueType;
+            changeAble = pinList.changeAble;
+            dynamic = pinList.dynamic;
+            values = pinList.values;
+        }
+    }
+
+    @Override
     public PinList copy() {
         PinList pinList = new PinList(subType, valueType, changeAble);
         for (PinObject value : values) {

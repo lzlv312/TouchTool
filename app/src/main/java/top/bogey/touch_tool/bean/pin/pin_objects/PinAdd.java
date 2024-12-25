@@ -10,7 +10,7 @@ public class PinAdd extends PinBase{
 
     public PinAdd(Pin pin) {
         super(PinType.ADD);
-        this.pin = pin;
+        this.pin = pin.copy();
     }
 
     public PinAdd(JsonObject jsonObject) {
@@ -21,6 +21,13 @@ public class PinAdd extends PinBase{
     @Override
     public void reset() {
 
+    }
+
+    @Override
+    public void sync(PinBase value) {
+        if (value instanceof PinAdd pinAdd) {
+            pin.getValue().sync(pinAdd.pin.getValue());
+        }
     }
 
     @Override

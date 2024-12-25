@@ -5,42 +5,42 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import java.util.List;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionInfo;
 import top.bogey.touch_tool.bean.action.ActionType;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.action.task.CustomStartAction;
+import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
+import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
+import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.bean.pin.PinInfo;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.databinding.DialogSelectActionPageItemBinding;
-import top.bogey.touch_tool.ui.blueprint.CardLayoutView;
+import top.bogey.touch_tool.ui.blueprint.BlueprintView;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
+import top.bogey.touch_tool.ui.custom.EditVariableDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.listener.SpinnerSelectedListener;
 
 public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapter<SelectActionPageItemRecyclerViewAdapter.ViewHolder> {
-    private final static List<PinType> PIN_INFO_LIST = PinInfo.getValuePinTypes();
 
-    private final CardLayoutView cardLayoutView;
-    private final ResultCallback<ActionCard> callback;
+    private final ResultCallback<Action> callback;
 
     private List<Object> data;
 
-    public SelectActionPageItemRecyclerViewAdapter(CardLayoutView cardLayoutView, ResultCallback<ActionCard> callback) {
-        this.cardLayoutView = cardLayoutView;
+    public SelectActionPageItemRecyclerViewAdapter(ResultCallback<Action> callback) {
         this.callback = callback;
     }
 
@@ -63,7 +63,7 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
 
     public static String getObjectTitle(Object object) {
         if (object instanceof Task task) return task.getTitle();
-        if (object instanceof VariableInfo var) return var.getName();
+        if (object instanceof Variable var) return var.getTitle();
         if (object instanceof ActionType actionType) {
             ActionInfo info = ActionInfo.getActionInfo(actionType);
             if (info != null) {
@@ -76,6 +76,7 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
 
     public static String getObjectDesc(Object object) {
         if (object instanceof Task task) return task.getDescription();
+        if (object instanceof Variable var) return var.getDescription();
         if (object instanceof ActionType actionType) {
             ActionInfo info = ActionInfo.getActionInfo(actionType);
             if (info != null) {
@@ -103,115 +104,51 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
             this.binding = binding;
             context = binding.getRoot().getContext();
 
-            ArrayAdapter<String> valueAdapter = new ArrayAdapter<>(context, R.layout.pin_widget_select_item);
-            binding.valueSpinner.setAdapter(valueAdapter);
-            binding.valueSpinner.setOnItemSelectedListener(new SpinnerSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    int index = getBindingAdapterPosition();
-                    VariableInfo var = (VariableInfo) data.get(index);
-                    PinType valuePinType = PIN_INFO_LIST.get(position);
-                    PinType pinType = var.getValue().getType();
-                    if (pinType == PinType.MAP) {
-                        PinMap pinMap = (PinMap) var.getValue();
-                        PinType valueType = pinMap.getValueType();
-                        if (valueType == valuePinType) return;
-
-                        pinMap.setValueType(valuePinType);
-                        var.getOwner().addVar(var.getName(), pinMap);
-                    }
-                }
+            binding.keySlot.setOnClickListener(v -> {
+                SelectActionVariableTypeDialog dialog = new SelectActionVariableTypeDialog(context);
+                new MaterialAlertDialogBuilder(context)
+                        .setView(dialog)
+                        .setPositiveButton(R.string.enter, (view, which) -> {
+                            PinInfo pinInfo = dialog.getSelected();
+                            binding.keySlot.setText(pinInfo.getTitle());
+                            int index = getBindingAdapterPosition();
+                            Variable var = (Variable) data.get(index);
+                            var.setKeyPinInfo(pinInfo);
+                            notifyItemChanged(index);
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
             });
 
-            ArrayAdapter<String> keyAdapter = new ArrayAdapter<>(context, R.layout.pin_widget_select_item);
-            binding.keySpinner.setAdapter(keyAdapter);
-            binding.keySpinner.setOnItemSelectedListener(new SpinnerSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    int index = getBindingAdapterPosition();
-                    VariableInfo var = (VariableInfo) data.get(index);
-                    PinType pinType = var.getValue().getType();
-                    List<PinSubType> subTypes = PinInfo.getValuePinSubTypes(pinType);
-                    PinSubType subType = subTypes.get(position);
-                    List<PinType> keyPinTypes = PinInfo.getKeyPinTypes(pinType, subType);
-                    PinType keyPinType = keyPinTypes.get(position);
-
-                    if (pinType == PinType.LIST) {
-                        PinList pinList = (PinList) var.getValue();
-                        PinType valueType = pinList.getValueType();
-                        if (keyPinType == valueType) return;
-
-                        pinList.setValueType(keyPinType);
-                        var.getOwner().addVar(var.getName(), pinList);
-                    }
-
-                    if (pinType == PinType.MAP) {
-                        PinMap pinMap = (PinMap) var.getValue();
-                        PinType keyType = pinMap.getKeyType();
-                        if (keyPinType == keyType) return;
-
-                        pinMap.setKeyType(keyPinType);
-                        var.getOwner().addVar(var.getName(), pinMap);
-                    }
-                }
-            });
-
-            ArrayAdapter<String> subTypeAdapter = new ArrayAdapter<>(context, R.layout.pin_widget_select_item);
-            binding.subTypeSpinner.setAdapter(subTypeAdapter);
-            binding.subTypeSpinner.setOnItemSelectedListener(new SpinnerSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    int index = getBindingAdapterPosition();
-                    VariableInfo var = (VariableInfo) data.get(index);
-                    PinType pinType = var.getValue().getType();
-                    List<PinSubType> subTypes = PinInfo.getValuePinSubTypes(pinType);
-                    PinSubType subType = subTypes.get(position);
-                    if (subType == var.getValue().getSubType()) return;
-
-                    PinInfo pinInfo = PinInfo.getPinInfo(pinType, subType);
-                    PinBase pinBase = pinInfo.newInstance();
-                    if (pinBase instanceof PinObject pinObject) {
-                        var.setValue(pinObject);
-                    }
-
-                    List<PinType> keyPinTypes = PinInfo.getKeyPinTypes(pinType, subType);
-                    keyAdapter.clear();
-                    for (PinType type : keyPinTypes) {
-                        keyAdapter.add(PinInfo.getPinTypeTitle(type));
-                    }
-                }
-            });
-
-            ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(context, R.layout.pin_widget_select_item);
-            for (PinType pinType : PIN_INFO_LIST) {
-                typeAdapter.add(PinInfo.getPinTypeTitle(pinType));
-            }
-            binding.typeSpinner.setAdapter(typeAdapter);
             binding.typeSpinner.setOnItemSelectedListener(new SpinnerSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     int index = getBindingAdapterPosition();
-                    VariableInfo var = (VariableInfo) data.get(index);
-                    PinType pinType = PIN_INFO_LIST.get(position);
-                    if (pinType == var.getValue().getType()) return;
-
-                    PinInfo pinInfo = PinInfo.getPinInfo(pinType);
-                    PinBase pinBase = pinInfo.newInstance();
-                    if (pinBase instanceof PinObject pinObject) {
-                        var.setValue(pinObject);
-                    }
-
-                    List<PinSubType> subTypes = PinInfo.getValuePinSubTypes(pinType);
-                    subTypeAdapter.clear();
-                    for (PinSubType subType : subTypes) {
-                        subTypeAdapter.add(PinInfo.getPinSubTypeTitle(subType));
-                    }
+                    Variable var = (Variable) data.get(index);
+                    if (var.setType(Variable.VariableType.values()[position])) notifyItemChanged(index);
                 }
+            });
+
+            binding.valueSlot.setOnClickListener(v -> {
+                SelectActionVariableTypeDialog dialog = new SelectActionVariableTypeDialog(context);
+                new MaterialAlertDialogBuilder(context)
+                        .setView(dialog)
+                        .setPositiveButton(R.string.enter, (view, which) -> {
+                            PinInfo pinInfo = dialog.getSelected();
+                            binding.keySlot.setText(pinInfo.getTitle());
+                            int index = getBindingAdapterPosition();
+                            Variable var = (Variable) data.get(index);
+                            var.setValuePinInfo(pinInfo);
+                            notifyItemChanged(index);
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
             });
 
             binding.editButton.setOnClickListener(v -> {
                 int index = getBindingAdapterPosition();
                 Object object = data.get(index);
+
                 if (object instanceof Task editTask) {
                     EditTaskDialog dialog = new EditTaskDialog(context, editTask);
                     dialog.setTitle(R.string.task_update);
@@ -221,69 +158,88 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
                     dialog.show();
                 }
 
-                if (object instanceof VariableInfo var) {
-                    AppUtil.showEditDialog(context, R.string.task_update, var.getName(), result -> {
-                        if (result != null && !result.isEmpty()) {
-                            var.setName(result);
-                        }
+                if (object instanceof Variable var) {
+                    EditVariableDialog dialog = new EditVariableDialog(context, var);
+                    dialog.setTitle(R.string.variable_update);
+                    dialog.setCallback(result -> {
+                        if (result) var.save();
                     });
+                    dialog.show();
                 }
             });
 
             binding.copyButton.setOnClickListener(v -> {
                 int index = getBindingAdapterPosition();
                 Object object = data.get(index);
-                if (object instanceof Task copyTask) {
-                    Task parent = copyTask.getParent();
-                    if (parent == null) return;
-                    Task copy = copyTask.newCopy();
-                    copy.setTitle(context.getString(R.string.task_copy_title, copyTask.getTitle()));
-                    parent.addTask(copy);
-                    parent.save();
+                if (object instanceof Task task) {
+                    Task copy = task.newCopy();
+                    copy.setTitle(context.getString(R.string.copy_title, task.getTitle()));
+                    if (task.getParent() != null) task.getParent().addTask(copy);
+                    copy.save();
                     data.add(index + 1, copy);
                     notifyItemInserted(index + 1);
                 }
 
-                if (object instanceof VariableInfo var) {
-                    PinBase copy = var.getValue().newCopy();
-                    VariableInfo info = new VariableInfo(var.getOwner(), context.getString(R.string.task_copy_title, var.getName()), (PinObject) copy);
-                    data.add(index + 1, info);
+                if (object instanceof Variable var) {
+                    Variable copy = var.newCopy();
+                    copy.setTitle(context.getString(R.string.copy_title, var.getTitle()));
+                    if (var.getOwner() != null) var.getOwner().addVar(copy);
+                    copy.save();
+                    data.add(index + 1, copy);
                     notifyItemInserted(index + 1);
                 }
             });
 
-            binding.exchangeButton.setOnClickListener(v -> {
+            binding.settingButton.setOnClickListener(v -> {
                 int index = getBindingAdapterPosition();
                 Object object = data.get(index);
-                if (object instanceof Task exchangeTask) {
-                    Task parent = exchangeTask.getParent();
-                    if (parent == null) {
 
-                    }
+                if (object instanceof Task task) {
+                    BlueprintView.tryPushStack(task);
                 }
-
             });
 
             binding.setVarValue.setOnClickListener(v -> {
+                int index = getBindingAdapterPosition();
+                Object object = data.get(index);
 
+                if (object instanceof Variable var) {
+                    Action action = new SetVariableAction(var);
+                    if (callback != null) callback.onResult(action);
+                }
             });
 
             binding.getVarValue.setOnClickListener(v -> {
+                int index = getBindingAdapterPosition();
+                Object object = data.get(index);
 
+                if (object instanceof Variable var) {
+                    Action action = new GetVariableAction(var);
+                    if (callback != null) callback.onResult(action);
+                }
             });
 
             binding.deleteButton.setOnClickListener(v -> {
                 if (needDelete) {
                     int index = getBindingAdapterPosition();
                     Object object = data.get(index);
+
                     if (object instanceof Task task) {
                         Task parent = task.getParent();
-                        if (parent == null) return;
-                        parent.removeTask(task);
+                        if (parent == null) {
+                            Saver.getInstance().removeTask(task.getId());
+                        } else {
+                            parent.removeTask(task.getId());
+                        }
                     }
 
-                    if (object instanceof VariableInfo var) {
-                        var.getOwner().removeVar(var.getName());
+                    if (object instanceof Variable var) {
+                        Task owner = var.getOwner();
+                        if (owner == null) {
+                            Saver.getInstance().removeVar(var.getId());
+                        } else {
+                            owner.removeVar(var.getId());
+                        }
                     }
 
                     data.remove(index);
@@ -301,11 +257,23 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
             binding.getRoot().setOnClickListener(v -> {
                 int index = getBindingAdapterPosition();
                 Object object = data.get(index);
-                ActionCard card = null;
+                Action action = null;
                 if (object instanceof ActionType actionType) {
-                    card = cardLayoutView.addNewCard(actionType);
+                    ActionInfo info = ActionInfo.getActionInfo(actionType);
+                    if (info != null) action = info.newInstance();
                 }
-                if (callback != null) callback.onResult(card);
+
+                if (object instanceof Task task) {
+                    ExecuteTaskAction executeTaskAction = new ExecuteTaskAction();
+                    executeTaskAction.setTask(task);
+                    action = executeTaskAction;
+                }
+
+                if (object instanceof Variable var) {
+                    action = new GetVariableAction(var);
+                }
+
+                if (callback != null) callback.onResult(action);
             });
         }
 
@@ -320,54 +288,48 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
                 binding.taskDesc.setVisibility(ViewGroup.GONE);
             }
 
-            if (object instanceof Task task) {
-                // 主任务无法在这编辑或删除
-                if (task.getParent() != null) {
-                    binding.exchangeButton.setVisibility(ViewGroup.VISIBLE);
-                    binding.copyButton.setVisibility(ViewGroup.VISIBLE);
-                    binding.editButton.setVisibility(ViewGroup.VISIBLE);
-                    binding.deleteButton.setVisibility(ViewGroup.VISIBLE);
-                }
-            }
+            binding.editButton.setVisibility(ViewGroup.GONE);
+            binding.copyButton.setVisibility(ViewGroup.GONE);
+            binding.deleteButton.setVisibility(ViewGroup.GONE);
 
-            if (object instanceof VariableInfo var) {
+            binding.getRoot().setAlpha(1f);
+            binding.getRoot().setEnabled(true);
+            binding.settingButton.setVisibility(ViewGroup.GONE);
+            if (object instanceof Task task) {
+                binding.copyButton.setVisibility(ViewGroup.VISIBLE);
                 binding.editButton.setVisibility(ViewGroup.VISIBLE);
                 binding.deleteButton.setVisibility(ViewGroup.VISIBLE);
 
-                binding.typeBox.setVisibility(ViewGroup.VISIBLE);
-                PinType type = var.getValue().getType();
-                PinSubType subType = var.getValue().getSubType();
+                binding.settingButton.setVisibility(ViewGroup.VISIBLE);
 
-                binding.typeSpinner.setSelection(PIN_INFO_LIST.indexOf(type));
-                List<PinSubType> subTypes = PinInfo.getValuePinSubTypes(type);
-                if (subTypes.size() > 1) {
-                    binding.typeSpinner.setBackgroundResource(R.drawable.shape_spinner_left);
-                    binding.subTypeSpinner.setVisibility(ViewGroup.VISIBLE);
-                    binding.subTypeSpinner.setSelection(subTypes.indexOf(subType));
-                } else {
-                    binding.typeSpinner.setBackgroundResource(R.drawable.shape_spinner);
-                    binding.subTypeSpinner.setVisibility(ViewGroup.GONE);
-                    binding.subTypeSpinner.setSelection(0);
+                if (task.getActions(CustomStartAction.class).isEmpty()) {
+                    binding.getRoot().setEnabled(false);
+                    binding.getRoot().setAlpha(0.5f);
                 }
+            }
 
-                binding.varBox.setVisibility(type == PinType.LIST || type == PinType.MAP ? ViewGroup.VISIBLE : ViewGroup.GONE);
-                List<PinType> keyPinTypes = PinInfo.getKeyPinTypes(type, subType);
-                if (type == PinType.LIST) {
-                    PinList pinList = (PinList) var.getValue();
-                    PinType valueType = pinList.getValueType();
-                    binding.keySpinner.setSelection(keyPinTypes.indexOf(valueType));
-                }
-
-                if (type == PinType.MAP) {
-                    PinMap pinMap = (PinMap) var.getValue();
-                    PinType keyType = pinMap.getKeyType();
-                    PinType valueType = pinMap.getValueType();
-                    binding.keySpinner.setSelection(keyPinTypes.indexOf(keyType));
-                    binding.valueSpinner.setSelection(PIN_INFO_LIST.indexOf(valueType));
-                }
+            binding.getVarValue.setVisibility(ViewGroup.GONE);
+            binding.setVarValue.setVisibility(ViewGroup.GONE);
+            binding.varBox.setVisibility(ViewGroup.GONE);
+            if (object instanceof Variable var) {
+                binding.copyButton.setVisibility(ViewGroup.VISIBLE);
+                binding.editButton.setVisibility(ViewGroup.VISIBLE);
+                binding.deleteButton.setVisibility(ViewGroup.VISIBLE);
 
                 binding.getVarValue.setVisibility(ViewGroup.VISIBLE);
                 binding.setVarValue.setVisibility(ViewGroup.VISIBLE);
+
+                binding.varBox.setVisibility(ViewGroup.VISIBLE);
+                PinInfo pinInfo = var.getKeyPinInfo();
+                if (pinInfo != null) {
+                    binding.keySlot.setText(pinInfo.getTitle());
+                }
+                binding.typeSpinner.setSelection(var.getType().ordinal());
+                binding.valueSlot.setVisibility(var.getType() == Variable.VariableType.MAP ? ViewGroup.VISIBLE : ViewGroup.GONE);
+                pinInfo = var.getValuePinInfo();
+                if (pinInfo != null) {
+                    binding.valueSlot.setText(pinInfo.getTitle());
+                }
             }
         }
     }

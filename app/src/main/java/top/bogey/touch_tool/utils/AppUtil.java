@@ -39,7 +39,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.databinding.DialogInputTextBinding;
@@ -354,7 +353,7 @@ public class AppUtil {
             }
         }
 
-        try(OutputStream outputStream = new FileOutputStream(file)) {
+        try (OutputStream outputStream = new FileOutputStream(file)) {
             outputStream.write(content);
             outputStream.flush();
         } catch (IOException e) {

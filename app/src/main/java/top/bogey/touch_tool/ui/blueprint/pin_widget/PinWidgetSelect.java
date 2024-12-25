@@ -42,6 +42,7 @@ public class PinWidgetSelect extends PinWidget<PinSingleSelect> {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 pinBase.setValue(adapter.getItem(position));
+                pinView.getPin().notifyValueUpdated();
             }
         });
     }

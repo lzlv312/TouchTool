@@ -36,7 +36,10 @@ public class PinWidgetApps extends PinWidget<PinApplications>{
 
     @Override
     protected void initBase() {
-        binding.selectAppButton.setOnClickListener(v -> new SelectAppDialog(pinBase, result -> refreshApps()).show(((AppCompatActivity) getContext()).getSupportFragmentManager(), null));
+        binding.selectAppButton.setOnClickListener(v -> new SelectAppDialog(pinBase, result -> {
+            refreshApps();
+            pinView.getPin().notifyValueUpdated();
+        }).show(((AppCompatActivity) getContext()).getSupportFragmentManager(), null));
         refreshApps();
     }
 

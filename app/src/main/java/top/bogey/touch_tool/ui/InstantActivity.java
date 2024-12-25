@@ -11,8 +11,9 @@ import top.bogey.touch_tool.bean.action.start.OutCallStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
-import top.bogey.touch_tool.bean.save.TaskSaver;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 
 public class InstantActivity extends BaseActivity {
@@ -52,14 +53,14 @@ public class InstantActivity extends BaseActivity {
                     String taskId = params.remove(TASK_ID);
                     String actionId = params.remove(ACTION_ID);
                     if (taskId != null && actionId != null) {
-                        Task task = TaskSaver.getInstance().getTask(taskId);
+                        Task task = Saver.getInstance().getTask(taskId);
                         if (task != null) {
                             Action action = task.getAction(actionId);
                             if (action instanceof OutCallStartAction) {
                                 Task copy = task.copy();
                                 params.forEach((key, value) -> {
-                                    PinObject var = copy.getVar(key);
-                                    if (var != null) var.cast(value);
+                                    Variable var = copy.getVar(key);
+                                    if (var != null) var.getValue().cast(value);
                                 });
 
                                 service.runTask(task, (StartAction) action);
@@ -76,7 +77,7 @@ public class InstantActivity extends BaseActivity {
             String actionId = intent.getStringExtra(ACTION_ID);
 
             if (taskId != null && actionId != null) {
-                Task task = TaskSaver.getInstance().getTask(taskId);
+                Task task = Saver.getInstance().getTask(taskId);
                 if (task != null) {
                     Action action = task.getAction(actionId);
                     MainAccessibilityService service = MainApplication.getInstance().getService();

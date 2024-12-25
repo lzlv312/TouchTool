@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
@@ -58,6 +59,14 @@ public class PinApplication extends PinObject {
         super.reset();
         packageName = null;
         activityClasses = null;
+    }
+
+    @Override
+    public void sync(PinBase value) {
+        if (value instanceof PinApplication pinApplication) {
+            packageName = pinApplication.packageName;
+            activityClasses = pinApplication.activityClasses;
+        }
     }
 
     @NonNull

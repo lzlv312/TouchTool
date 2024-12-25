@@ -24,4 +24,9 @@ public class PinExecute extends PinBase {
     public void reset() {
 
     }
+
+    @Override
+    public void sync(PinBase value) {
+
+    }
 }

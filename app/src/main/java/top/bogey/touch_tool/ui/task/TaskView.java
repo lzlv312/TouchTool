@@ -26,7 +26,7 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.save.TaskSaveListener;
-import top.bogey.touch_tool.bean.save.TaskSaver;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskListener;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -83,7 +83,7 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
 
     @Override
     public void onDestroyView() {
-        TaskSaver.getInstance().removeListener(this);
+        Saver.getInstance().removeListener(this);
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service != null && service.isEnabled()) service.removeListener(this);
         super.onDestroyView();
@@ -97,7 +97,7 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
 
         binding = ViewTaskBinding.inflate(inflater, container, false);
 
-        TaskSaver.getInstance().addListener(this);
+        Saver.getInstance().addListener(this);
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service != null && service.isEnabled()) service.addListener(this);
 
@@ -118,7 +118,7 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
         binding.deleteButton.setOnClickListener(v -> AppUtil.showDialog(requireContext(), R.string.remove_task_tips, result -> {
             if (result) {
                 for (String id : selected) {
-                    TaskSaver.getInstance().removeTask(id);
+                    Saver.getInstance().removeTask(id);
                 }
                 hideBottomBar();
             }
@@ -136,9 +136,9 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
 
         binding.copyButton.setOnClickListener(v -> {
             selected.forEach(id -> {
-                Task task = TaskSaver.getInstance().getTask(id);
+                Task task = Saver.getInstance().getTask(id);
                 Task copy = task.newCopy();
-                copy.setTitle(getString(R.string.task_copy_title, task.getTitle()));
+                copy.setTitle(getString(R.string.copy_title, task.getTitle()));
                 copy.save();
             });
 
@@ -166,7 +166,7 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
         if (text != null && text.length() > 0) {
             adapter.search(text.toString());
         } else {
-            List<String> tags = TaskSaver.getInstance().getTaskTags();
+            List<String> tags = Saver.getInstance().getTaskTags();
             adapter.setTags(tags);
         }
     }
@@ -202,7 +202,7 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
         if (tab == null || tab.getText() == null) return;
 
         String tag = tab.getText().toString();
-        List<Task> tasks = TaskSaver.getInstance().getTasks(tag);
+        List<Task> tasks = Saver.getInstance().getTasks(tag);
 
         boolean flag = true;
         if (selected.size() == tasks.size()) {

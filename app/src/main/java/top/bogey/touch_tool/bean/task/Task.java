@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -17,18 +17,18 @@ import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.base.Identity;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
-import top.bogey.touch_tool.bean.save.TaskSaver;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.GsonUtil;
+import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
 public class Task extends Identity {
     private final long createTime;
 
     private List<Task> tasks;
     private List<Action> actions = new ArrayList<>();
-    private Map<String, PinObject> vars;
+    private List<Variable> vars;
     private List<String> tags;
 
     private transient Task parent;
@@ -42,10 +42,15 @@ public class Task extends Identity {
     public Task(JsonObject jsonObject) {
         super(jsonObject);
         createTime = GsonUtil.getAsLong(jsonObject, "createTime", System.currentTimeMillis());
+
         tasks = GsonUtil.getAsObject(jsonObject, "tasks", TypeToken.getParameterized(ArrayList.class, Task.class).getType(), null);
-        tasks.forEach(task -> task.parent = this);
+        if (tasks != null) tasks.forEach(task -> task.parent = this);
+
         actions = GsonUtil.getAsObject(jsonObject, "actions", TypeToken.getParameterized(ArrayList.class, Action.class).getType(), new ArrayList<>());
-        vars = GsonUtil.getAsObject(jsonObject, "vars", TypeToken.getParameterized(HashMap.class, String.class, PinBase.class).getType(), null);
+
+        vars = GsonUtil.getAsObject(jsonObject, "vars", TypeToken.getParameterized(ArrayList.class, Variable.class).getType(), null);
+        if (vars != null) vars.forEach(var -> var.owner = this);
+
         tags = GsonUtil.getAsObject(jsonObject, "tags", TypeToken.getParameterized(ArrayList.class, String.class).getType(), null);
     }
 
@@ -57,14 +62,15 @@ public class Task extends Identity {
         task.parent = this;
     }
 
-    public void removeTask(Task task) {
+    public void removeTask(String id) {
         if (tasks != null) {
+            Task task = getTask(id);
             tasks.remove(task);
             if (tasks.isEmpty()) tasks = null;
         }
     }
 
-    public Task getTaskById(String id) {
+    public Task getTask(String id) {
         if (tasks != null) {
             for (Task task : tasks) {
                 if (task.getId().equals(id)) {
@@ -72,26 +78,23 @@ public class Task extends Identity {
                 }
             }
         }
-        if (parent != null) {
-            return parent.getTaskById(id);
-        }
         return null;
     }
 
-    public List<Task> getTasksByTag(String tag) {
+    public List<Task> getTasks(String tag) {
         if (tasks == null) return null;
         return tasks.stream().filter(task -> task.getTags().contains(tag)).collect(Collectors.toList());
     }
 
     public Task findTask(String taskId) {
-        Task task = getTaskById(taskId);
+        Task task = getTask(taskId);
         if (task != null) return task;
         if (parent != null) return parent.findTask(taskId);
         return null;
     }
 
     public Task findTaskParent(String taskId) {
-        Task task = getTaskById(taskId);
+        Task task = getTask(taskId);
         if (task != null) return this;
         if (parent != null) return parent.findTaskParent(taskId);
         return null;
@@ -113,41 +116,42 @@ public class Task extends Identity {
         return actions.stream().filter(actionClass::isInstance).collect(Collectors.toList());
     }
 
-    public void addVar(String key, PinObject value) {
+    public void addVar(Variable value) {
+        Variable var = getVar(value.getTitle());
+        if (var != null) return;
         if (vars == null) {
-            vars = new HashMap<>();
+            vars = new ArrayList<>();
         }
-        vars.put(key, value);
+        vars.add(value);
+        value.owner = this;
     }
 
-    public void tryAddVar(String key, PinObject value) {
-        Task task = findVarParent(key);
-        if (task == null) return;
-        task.addVar(key, value);
-    }
-
-    public void removeVar(String key) {
+    public void removeVar(String id) {
         if (vars != null) {
-            vars.remove(key);
+            Variable var = getVar(id);
+            vars.remove(var);
             if (vars.isEmpty()) vars = null;
         }
     }
 
-    public PinObject getVar(String key) {
+    public Variable getVar(String id) {
         if (vars != null) {
-            return vars.get(key);
+            for (Variable var : vars) {
+                if (id.equals(var.getId())) return var;
+            }
         }
         return null;
     }
 
-    public PinObject findVar(String key) {
-        if (vars != null) return vars.get(key);
-        if (parent != null) return parent.findVar(key);
+    public Variable findVar(String id) {
+        Variable var = getVar(id);
+        if (var != null) return var;
+        if (parent != null) return parent.findVar(id);
         return null;
     }
 
     public Task findVarParent(String key) {
-        PinObject var = getVar(key);
+        Variable var = getVar(key);
         if (var != null) return this;
         if (parent != null) return parent.findVarParent(key);
         return null;
@@ -204,9 +208,7 @@ public class Task extends Identity {
 
     public void save() {
         if (parent != null) parent.save();
-        else {
-            TaskSaver.getInstance().saveTask(this);
-        }
+        else Saver.getInstance().saveTask(this);
     }
 
     @Override
@@ -222,6 +224,14 @@ public class Task extends Identity {
             copy.tasks.forEach(task -> task.parent = copy);
         }
         return copy;
+    }
+
+    public void execute(TaskRunnable runnable, StartAction startAction, BooleanResultCallback callback) {
+        Task copy = copy();
+        Action action = copy.getAction(startAction.getId());
+        runnable.pushStack(copy, action);
+        callback.onResult(true);
+        action.execute(runnable, null);
     }
 
     public void execute(TaskRunnable runnable, ExecuteTaskAction startAction, Map<String, PinObject> params) {
@@ -246,6 +256,7 @@ public class Task extends Identity {
     }
 
     public List<Task> getTasks() {
+        if (tasks == null) return Collections.emptyList();
         return tasks;
     }
 
@@ -261,11 +272,12 @@ public class Task extends Identity {
         this.actions = actions;
     }
 
-    public Map<String, PinObject> getVars() {
+    public List<Variable> getVars() {
+        if (vars == null) return Collections.emptyList();
         return vars;
     }
 
-    public void setVars(Map<String, PinObject> vars) {
+    public void setVars(List<Variable> vars) {
         this.vars = vars;
     }
 

@@ -96,6 +96,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                         try {
                             int i = Integer.parseInt(string);
                             ((PinInteger) pinBase).setValue(i);
+                            pinView.getPin().notifyValueUpdated();
                         } catch (NumberFormatException e) {
                             e.printStackTrace();
                             pinBase.reset();
@@ -112,6 +113,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                         try {
                             float i = Float.parseFloat(string);
                             ((PinFloat) pinBase).setValue(i);
+                            pinView.getPin().notifyValueUpdated();
                         } catch (NumberFormatException e) {
                             e.printStackTrace();
                             pinBase.reset();
@@ -128,6 +130,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                         try {
                             double i = Double.parseDouble(string);
                             ((PinDouble) pinBase).setValue(i);
+                            pinView.getPin().notifyValueUpdated();
                         } catch (NumberFormatException e) {
                             e.printStackTrace();
                             pinBase.reset();
@@ -144,6 +147,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                         try {
                             long i = Long.parseLong(string);
                             ((PinLong) pinBase).setValue(i);
+                            pinView.getPin().notifyValueUpdated();
                         } catch (NumberFormatException e) {
                             e.printStackTrace();
                             pinBase.reset();
@@ -173,6 +177,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
 
                     picker.addOnPositiveButtonClickListener(selection -> {
                         date.setValue(selection);
+                        pinView.getPin().notifyValueUpdated();
                         binding.editText.setText(AppUtil.formatDate(date.getValue()));
                     });
                 });
@@ -201,6 +206,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                         calendar.set(Calendar.MINUTE, picker.getMinute());
                         calendar.set(Calendar.SECOND, 0);
                         time.setValue(calendar.getTimeInMillis());
+                        pinView.getPin().notifyValueUpdated();
                         binding.editText.setText(AppUtil.formatTime(time.getValue()));
                     });
                 });
@@ -228,6 +234,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                         if (picker.getHour() == 0 && picker.getMinute() == 0) {
                             if (lastValue == 0) periodic.setValue(TimeUnit.HOURS.toMillis(24));
                             else periodic.setValue(0L);
+                            pinView.getPin().notifyValueUpdated();
                         }
                         binding.editText.setText(AppUtil.formatDuration(getContext(), periodic.getValue()));
                     });

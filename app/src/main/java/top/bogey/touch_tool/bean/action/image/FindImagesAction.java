@@ -22,7 +22,7 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 public class FindImagesAction extends FindExecuteAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image);
     private final transient Pin templatePin = new Pin(new PinImage(), R.string.find_images_action_template);
-    private final transient Pin similarityPin = new Pin(new PinInteger(), R.string.find_images_action_similarity);
+    private final transient Pin similarityPin = new Pin(new PinInteger(90), R.string.find_images_action_similarity);
     private final transient Pin areasPin = new Pin(new PinList(PinType.AREA), R.string.pin_area, true);
 
     public FindImagesAction() {
@@ -43,7 +43,7 @@ public class FindImagesAction extends FindExecuteAction {
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);
 
         List<Rect> rectList = DisplayUtil.matchTemplate(source.getImage(), template.getImage(), null, similarity.intValue());
-        rectList.forEach(rect -> areasPin.getValue(PinList.class).add(new PinArea(rect)));
+        if (rectList != null) rectList.forEach(rect -> areasPin.getValue(PinList.class).add(new PinArea(rect)));
 
         return !areasPin.getValue(PinList.class).isEmpty();
     }

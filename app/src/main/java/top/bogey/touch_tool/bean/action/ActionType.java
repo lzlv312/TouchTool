@@ -12,6 +12,8 @@ public enum ActionType {
     BLUETOOTH_START,
     OUT_CALL_START,
     INNER_START,
+    CUSTOM_START,
+    CUSTOM_END,
 
     // 逻辑
     IF_LOGIC,
@@ -32,9 +34,8 @@ public enum ActionType {
     CLOSE_ALL_STICK,
     
     EXECUTE_TASK,
-
-    SAVE,
-    LOAD,
+    GET_VARIABLE,
+    SET_VARIABLE,
 
     // 系统动作
     OPEN_APP,
@@ -118,7 +119,6 @@ public enum ActionType {
     CROP_IMAGE,
     SAVE_IMAGE,
     FIND_IMAGES,
-    IMAGE_EQUAL,
 
     // 颜色
     GET_COLOR,

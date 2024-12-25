@@ -45,6 +45,14 @@ public class PinValueArea extends PinObject {
         max = 0;
     }
 
+    @Override
+    public void sync(PinBase value) {
+        if (value instanceof PinValueArea pinValueArea) {
+            min = pinValueArea.min;
+            max = pinValueArea.max;
+        }
+    }
+
     @NonNull
     @Override
     public String toString() {

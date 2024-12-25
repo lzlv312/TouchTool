@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.bean.action.list;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
@@ -39,6 +41,7 @@ public class ListRemoveAction extends ListExecuteAction {
         }
     }
 
+    @NonNull
     @Override
     public List<Pin> getDynamicValueTypePins() {
         return Arrays.asList(listPin, resultPin);

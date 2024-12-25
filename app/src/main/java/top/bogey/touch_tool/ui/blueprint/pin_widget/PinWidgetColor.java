@@ -11,6 +11,7 @@ import top.bogey.touch_tool.databinding.PinWidgetColorBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.picker.ColorPickerPreview;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
+import top.bogey.touch_tool.utils.DisplayUtil;
 
 @SuppressLint("ViewConstructor")
 public class PinWidgetColor extends PinWidget<PinColor> {
@@ -32,7 +33,9 @@ public class PinWidgetColor extends PinWidget<PinColor> {
             colorInfo.setColor(result.getColor());
             colorInfo.setMinArea(result.getMinArea());
             colorInfo.setMaxArea(result.getMaxArea());
+            pinView.getPin().notifyValueUpdated();
             binding.colorText.setText(colorInfo.getColorString());
+            binding.colorText.setTextColor(DisplayUtil.getTextColor(colorInfo.getColor()));
             binding.color.setBackgroundColor(colorInfo.getColor());
         }, colorInfo).show());
     }

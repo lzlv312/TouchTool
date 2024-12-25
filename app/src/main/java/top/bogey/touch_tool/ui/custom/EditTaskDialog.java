@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.save.TaskSaver;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.DialogCreateTaskBinding;
 import top.bogey.touch_tool.databinding.ViewTagListItemBinding;
@@ -33,7 +33,7 @@ public class EditTaskDialog extends MaterialAlertDialogBuilder {
         binding.titleEdit.setText(task.getTitle());
         binding.desEdit.setText(task.getDescription());
 
-        List<String> tags = TaskSaver.getInstance().getAllTags();
+        List<String> tags = Saver.getInstance().getAllTags();
 
         List<String> currTags = task.getTags();
         if (currTags != null) {

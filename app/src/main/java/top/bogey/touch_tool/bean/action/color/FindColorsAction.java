@@ -44,7 +44,7 @@ public class FindColorsAction extends FindExecuteAction {
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);
 
         List<Rect> rectList = DisplayUtil.matchColor(source.getImage(), template.getValue().getColor(), null, similarity.intValue());
-        rectList.forEach(rect -> areasPin.getValue(PinList.class).add(new PinArea(rect)));
+        if (rectList != null) rectList.forEach(rect -> areasPin.getValue(PinList.class).add(new PinArea(rect)));
 
         return !areasPin.getValue(PinList.class).isEmpty();
     }

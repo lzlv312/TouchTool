@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.bean.action.map;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ public class MapMakeAction extends MapCalculateAction implements DynamicPinsActi
         }
     }
 
+    @NonNull
     @Override
     public List<Pin> getDynamicKeyTypePins() {
         List<Pin> pins = new ArrayList<>();
@@ -59,6 +62,7 @@ public class MapMakeAction extends MapCalculateAction implements DynamicPinsActi
         return pins;
     }
 
+    @NonNull
     @Override
     public List<Pin> getDynamicValueTypePins() {
         List<Pin> pins = new ArrayList<>();

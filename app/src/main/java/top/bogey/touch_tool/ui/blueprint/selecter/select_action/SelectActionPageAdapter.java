@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.databinding.DialogSelectActionPageBinding;
 import top.bogey.touch_tool.ui.blueprint.CardLayoutView;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
@@ -20,8 +21,7 @@ import top.bogey.touch_tool.utils.callback.ResultCallback;
 
 public class SelectActionPageAdapter extends RecyclerView.Adapter<SelectActionPageAdapter.ViewHolder> {
 
-    private final CardLayoutView cardLayoutView;
-    private final ResultCallback<ActionCard> callback;
+    private final ResultCallback<Action> callback;
     private final Map<String, List<Object>> dataMap = new HashMap<>();
     private final List<String> tags = new ArrayList<>();
     final List<String> currentTag = new ArrayList<>();
@@ -30,8 +30,7 @@ public class SelectActionPageAdapter extends RecyclerView.Adapter<SelectActionPa
     private boolean sort = true;
 
 
-    public SelectActionPageAdapter(CardLayoutView cardLayoutView, ResultCallback<ActionCard> callback) {
-        this.cardLayoutView = cardLayoutView;
+    public SelectActionPageAdapter(ResultCallback<Action> callback) {
         this.callback = callback;
     }
 
@@ -82,7 +81,7 @@ public class SelectActionPageAdapter extends RecyclerView.Adapter<SelectActionPa
         public ViewHolder(@NonNull DialogSelectActionPageBinding binding) {
             super(binding.getRoot());
 
-            adapter = new SelectActionPageItemRecyclerViewAdapter(cardLayoutView, callback);
+            adapter = new SelectActionPageItemRecyclerViewAdapter(callback);
             binding.getRoot().setAdapter(adapter);
         }
 

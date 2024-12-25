@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.save.TaskSaver;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewTagListBinding;
 import top.bogey.touch_tool.databinding.ViewTagListItemBinding;
@@ -31,7 +31,7 @@ public class TaskTagListView extends BottomSheetDialogFragment {
         this.taskView = taskView;
         if (taskView.selecting) {
             for (String id : taskView.selected) {
-                Task task = TaskSaver.getInstance().getTask(id);
+                Task task = Saver.getInstance().getTask(id);
                 if (tags.isEmpty()) {
                     if (task != null && task.getTags() != null) tags.addAll(task.getTags());
                 } else {
@@ -48,14 +48,14 @@ public class TaskTagListView extends BottomSheetDialogFragment {
 
         binding.addButton.setOnClickListener(v -> AppUtil.showEditDialog(requireContext(), R.string.task_tag_add, "", result -> {
             if (result != null && !result.isEmpty()) {
-                TaskSaver.getInstance().addTag(result);
+                Saver.getInstance().addTag(result);
                 binding.tagBox.removeAllViews();
-                List<String> tags = TaskSaver.getInstance().getAllTags();
+                List<String> tags = Saver.getInstance().getAllTags();
                 tags.forEach(this::addTagChip);
             }
         }));
 
-        List<String> tags = TaskSaver.getInstance().getAllTags();
+        List<String> tags = Saver.getInstance().getAllTags();
         tags.forEach(this::addTagChip);
 
         return binding.getRoot();
@@ -67,7 +67,7 @@ public class TaskTagListView extends BottomSheetDialogFragment {
         chip.setText(tag);
         chip.setOnCloseIconClickListener(v -> AppUtil.showDialog(requireContext(), R.string.tag_remove, result -> {
             if (result) {
-                TaskSaver.getInstance().removeTag(tag);
+                Saver.getInstance().removeTag(tag);
                 binding.tagBox.removeView(chip);
             }
         }));
@@ -78,14 +78,14 @@ public class TaskTagListView extends BottomSheetDialogFragment {
             chip.setOnClickListener(v -> {
                 if (tags.remove(tag)) {
                     for (String id : taskView.selected) {
-                        Task task = TaskSaver.getInstance().getTask(id);
+                        Task task = Saver.getInstance().getTask(id);
                         task.removeTag(tag);
                         task.save();
                     }
                 } else {
                     tags.add(tag);
                     for (String id : taskView.selected) {
-                        Task task = TaskSaver.getInstance().getTask(id);
+                        Task task = Saver.getInstance().getTask(id);
                         task.addTag(tag);
                         task.save();
                     }

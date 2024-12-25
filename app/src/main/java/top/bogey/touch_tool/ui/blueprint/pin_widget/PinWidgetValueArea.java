@@ -38,6 +38,8 @@ public class PinWidgetValueArea extends PinWidget<PinValueArea> {
                 pinBase.setMin(toInt(s));
                 if (binding.lockButton.isChecked()) {
                     binding.highEdit.setText(s);
+                } else {
+                    pinView.getPin().notifyValueUpdated();
                 }
             }
         });
@@ -46,6 +48,7 @@ public class PinWidgetValueArea extends PinWidget<PinValueArea> {
             @Override
             public void afterTextChanged(Editable s) {
                 pinBase.setMax(toInt(s));
+                pinView.getPin().notifyValueUpdated();
             }
         });
 

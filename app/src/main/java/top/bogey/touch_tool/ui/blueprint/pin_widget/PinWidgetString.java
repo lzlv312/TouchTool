@@ -30,6 +30,7 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.number.MathExpressionAction;
+import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinAutoPinString;
@@ -41,12 +42,15 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinShortcutString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinTaskString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinUrlString;
+import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.PinWidgetInputBinding;
 import top.bogey.touch_tool.ui.InstantActivity;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.picker.NodePickerPreview;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
+import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionByCustomActionDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
@@ -147,9 +151,11 @@ public class PinWidgetString extends PinWidget<PinString> {
                             if (uri == null) {
                                 binding.editText.setText("");
                                 pinBase.setValue(null);
+                                pinView.getPin().notifyValueUpdated();
                             } else {
                                 binding.editText.setText(getRingtoneName(uri.toString()));
                                 pinBase.setValue(uri.toString());
+                                pinView.getPin().notifyValueUpdated();
                             }
                         }
                     });
@@ -164,6 +170,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                     public void afterTextChanged(Editable s) {
                         if (Objects.equals(s.toString(), pinBase.getValue())) return;
                         pinBase.setValue(s.toString());
+                        pinView.getPin().notifyValueUpdated();
                         resetDynamicPin(s.toString());
                     }
                 });
@@ -179,6 +186,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                     @Override
                     public void afterTextChanged(Editable s) {
                         pinBase.setValue(s.toString());
+                        pinView.getPin().notifyValueUpdated();
                     }
                 });
             }
@@ -188,11 +196,23 @@ public class PinWidgetString extends PinWidget<PinString> {
                 binding.pickButton.setIconResource(R.drawable.icon_widget);
                 binding.pickButton.setOnClickListener(v -> new NodePickerPreview(getContext(), result -> {
                     nodePath.setValue(result);
+                    pinView.getPin().notifyValueUpdated();
                     binding.editText.setText(String.valueOf(nodePath.getNodeInfo()));
                 }, nodePath.getNodeInfo()).show());
             }
             case TASK_ID -> {
-
+                Task task = Saver.getInstance().getTask(card.getTask(), pinBase.getValue());
+                if (task != null) binding.editText.setText(task.getTitle());
+                binding.pickButton.setIconResource(R.drawable.icon_task);
+                binding.pickButton.setOnClickListener(v -> new SelectActionByCustomActionDialog(getContext(), card.getTask(), action -> {
+                    ExecuteTaskAction executeTaskAction = (ExecuteTaskAction) action;
+                    Task executeTask = executeTaskAction.getTask(card.getTask());
+                    pinBase.setValue(executeTask.getId());
+                    pinView.getPin().notifyValueUpdated();
+                    binding.editText.setText(executeTask.getTitle());
+                    ExecuteTaskAction cardAction = (ExecuteTaskAction) card.getAction();
+                    cardAction.sync(card.getTask(), executeTask);
+                }).show());
             }
             default -> {
                 binding.editText.setEnabled(true);
@@ -206,6 +226,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                 @Override
                 public void afterTextChanged(Editable s) {
                     pinBase.setValue(s.toString());
+                    pinView.getPin().notifyValueUpdated();
                 }
             });
         }

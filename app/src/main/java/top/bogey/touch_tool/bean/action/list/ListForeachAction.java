@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.bean.action.list;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
@@ -25,12 +27,12 @@ public class ListForeachAction extends ListExecuteAction{
 
     public ListForeachAction() {
         super(ActionType.LIST_FOREACH);
-        addPins(listPin, elementPin, indexPin);
+        addPins(breakPin, listPin, elementPin, indexPin);
     }
 
     public ListForeachAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(listPin, elementPin, indexPin);
+        reAddPins(breakPin, listPin, elementPin, indexPin);
     }
 
     @Override
@@ -50,6 +52,7 @@ public class ListForeachAction extends ListExecuteAction{
         }
     }
 
+    @NonNull
     @Override
     public List<Pin> getDynamicValueTypePins() {
         return Arrays.asList(listPin, elementPin);

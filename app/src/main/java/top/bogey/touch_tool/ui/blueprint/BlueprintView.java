@@ -21,10 +21,11 @@ import java.util.Map;
 import java.util.Stack;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.save.TaskSaver;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewBlueprintBinding;
 import top.bogey.touch_tool.ui.MainActivity;
+import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
 import top.bogey.touch_tool.ui.setting.SettingSaver;
@@ -102,12 +103,15 @@ public class BlueprintView extends Fragment {
         Bundle arguments = getArguments();
         if (arguments == null) throw new IllegalArgumentException();
         BlueprintViewArgs args = BlueprintViewArgs.fromBundle(arguments);
-        Task task = TaskSaver.getInstance().getTask(args.getTaskId());
+        Task task = Saver.getInstance().getTask(args.getTaskId());
         if (task == null) throw new IllegalArgumentException();
 
         binding = ViewBlueprintBinding.inflate(inflater, container, false);
 
-        binding.addButton.setOnClickListener(v -> new SelectActionDialog(requireContext(), binding.cardLayout, null, null).show());
+        binding.addButton.setOnClickListener(v -> new SelectActionDialog(requireContext(), taskStack.peek(), action -> {
+            ActionCard card = binding.cardLayout.addCard(action);
+            binding.cardLayout.initCardPos(card);
+        }).show());
 
         binding.lockEditButton.setOnClickListener(v -> {
             binding.cardLayout.setEditAble(!binding.cardLayout.isEditAble());

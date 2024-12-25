@@ -5,6 +5,8 @@ import android.graphics.Rect;
 
 import com.google.gson.JsonObject;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
@@ -35,11 +37,13 @@ public class GetImageAction extends CalculateAction {
         PinArea area = getPinValue(runnable, areaPin);
         Rect areaRect = area.getValue();
         MainAccessibilityService service = MainApplication.getInstance().getService();
-        service.tryGetScreenShot(bitmap -> {
+        AtomicBoolean needPaused = new AtomicBoolean(true);
+        service.getScreenShot(bitmap -> {
             Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, areaRect.left, areaRect.top, areaRect.width(), areaRect.height());
             if (clipBitmap != null) imagePin.getValue(PinImage.class).setImage(clipBitmap);
+            needPaused.set(false);
             runnable.resume();
         });
-        runnable.await();
+        if (needPaused.get()) runnable.await();
     }
 }

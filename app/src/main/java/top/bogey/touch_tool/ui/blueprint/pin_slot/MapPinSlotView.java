@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinInfo;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.databinding.PinSlotMapBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
@@ -29,14 +30,17 @@ public class MapPinSlotView extends PinSlotView {
     public void setLinked(boolean linked) {
         int keyColor = linked ? getPinColor() : DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant);
         binding.keySlot.setCardBackgroundColor(keyColor);
+        binding.keySlot.setStrokeColor(getPinColor());
 
         int valueColor = linked ? getPinColor() : DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant);
         binding.valueSlot.setCardBackgroundColor(valueColor);
+        binding.valueSlot.setStrokeColor(getPinValueColor());
     }
 
     @Override
-    protected int getPinColor() {
+    public int getPinColor() {
         if (pin.linkAble()) {
+            PinBase pinBase = pin.getValue();
             PinMap pinMap = (PinMap) pinBase;
             return PinInfo.getPinInfo(pinMap.getKeyType()).getColor();
         }
@@ -45,6 +49,7 @@ public class MapPinSlotView extends PinSlotView {
 
     private @ColorInt int getPinValueColor() {
         if (pin.linkAble()) {
+            PinBase pinBase = pin.getValue();
             PinMap pinMap = (PinMap) pinBase;
             return PinInfo.getPinInfo(pinMap.getValueType()).getColor();
         }

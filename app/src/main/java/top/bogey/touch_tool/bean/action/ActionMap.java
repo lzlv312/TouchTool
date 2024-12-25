@@ -21,7 +21,9 @@ public class ActionMap {
                     ActionType.BATTERY_START,
                     ActionType.SCREEN_START,
                     ActionType.BLUETOOTH_START,
-                    ActionType.OUT_CALL_START
+                    ActionType.OUT_CALL_START,
+                    ActionType.CUSTOM_START,
+                    ActionType.CUSTOM_END
             ));
 
             case LOGIC -> list.addAll(Arrays.asList(
@@ -133,8 +135,7 @@ public class ActionMap {
                     ActionType.GET_IMAGE,
                     ActionType.CROP_IMAGE,
                     ActionType.SAVE_IMAGE,
-                    ActionType.FIND_IMAGES,
-                    ActionType.IMAGE_EQUAL
+                    ActionType.FIND_IMAGES
             ));
 
             case COLOR -> list.addAll(Arrays.asList(
@@ -162,17 +163,17 @@ public class ActionMap {
 
             case LIST -> list.addAll(Arrays.asList(
                     ActionType.LIST_MAKE,
+                    ActionType.LIST_FOREACH,
+                    ActionType.LIST_ADD,
+                    ActionType.LIST_GET,
                     ActionType.LIST_SIZE,
                     ActionType.LIST_IS_EMPTY,
                     ActionType.LIST_CONTAIN,
-                    ActionType.LIST_ADD,
                     ActionType.LIST_REMOVE,
                     ActionType.LIST_APPEND,
                     ActionType.LIST_CLEAR,
-                    ActionType.LIST_GET,
                     ActionType.LIST_SET,
-                    ActionType.LIST_INDEX_OF,
-                    ActionType.LIST_FOREACH
+                    ActionType.LIST_INDEX_OF
             ));
         }
         return list;

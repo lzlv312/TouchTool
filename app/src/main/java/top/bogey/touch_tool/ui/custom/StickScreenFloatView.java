@@ -2,7 +2,6 @@ package top.bogey.touch_tool.ui.custom;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Point;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,6 +17,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.databinding.FloatStickScreenBinding;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
@@ -61,11 +61,11 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             binding.image.setVisibility(VISIBLE);
             binding.image.setImageBitmap(pinImage.getImage());
         } else if (object instanceof PinColor pinColor) {
-            binding.image.setVisibility(VISIBLE);
-            binding.image.setImageTintList(ColorStateList.valueOf(pinColor.getValue().getColor()));
+            binding.cardLayout.setCardBackgroundColor(pinColor.getValue().getColor());
 
             binding.title.setVisibility(VISIBLE);
             binding.title.setText(pinColor.getValue().getColorString());
+            binding.title.setTextColor(DisplayUtil.getTextColor(pinColor.getValue().getColor()));
             binding.title.setTextSize(9);
         } else {
             binding.title.setVisibility(VISIBLE);

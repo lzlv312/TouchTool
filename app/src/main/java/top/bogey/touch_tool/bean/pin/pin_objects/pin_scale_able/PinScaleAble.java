@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import java.util.Objects;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
@@ -46,6 +47,15 @@ public abstract class PinScaleAble<T> extends PinObject {
     public void reset() {
         screen = 0;
         anchor = EAnchor.TOP_LEFT;
+    }
+
+    @Override
+    public void sync(PinBase value) {
+        if (value instanceof PinScaleAble<?> pinScale) {
+            screen = pinScale.screen;
+            anchor = pinScale.anchor;
+            this.value = (T) pinScale.value;
+        }
     }
 
     @Override
