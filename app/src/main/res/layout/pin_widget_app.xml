@@ -30,6 +30,6 @@
         android:dropDownWidth="wrap_content"
         android:popupBackground="@drawable/shape_spinner_background"
         android:spinnerMode="dropdown"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 </LinearLayout>

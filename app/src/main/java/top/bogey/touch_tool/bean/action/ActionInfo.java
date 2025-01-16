@@ -118,6 +118,8 @@ import top.bogey.touch_tool.bean.action.system.WriteToClipboardAction;
 import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
+import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
+import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.DelayActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.NormalActionCard;
@@ -137,6 +139,9 @@ public class ActionInfo {
     private final static ActionInfo CUSTOM_START_INFO = new ActionInfo(ActionType.CUSTOM_START, CustomStartAction.class, R.drawable.icon_setting, R.string.custom_start_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo CUSTOM_END_INFO = new ActionInfo(ActionType.CUSTOM_END, CustomEndAction.class, R.drawable.icon_setting, R.string.custom_end_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo EXECUTE_TASK_INFO = new ActionInfo(ActionType.EXECUTE_TASK, ExecuteTaskAction.class, R.drawable.icon_task, R.string.execute_task_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo GET_VARIABLE_INFO = new ActionInfo(ActionType.GET_VARIABLE, GetVariableAction.class, R.drawable.icon_get_value, R.string.get_value_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo SET_VARIABLE_INFO = new ActionInfo(ActionType.SET_VARIABLE, SetVariableAction.class, R.drawable.icon_set_value, R.string.set_value_action, 0, 0, NormalActionCard.class);
+
 
     // 逻辑动作
     private final static ActionInfo IF_LOGIC_INFO = new ActionInfo(ActionType.IF_LOGIC, IfConditionAction.class, R.drawable.icon_condition, R.string.if_action, R.string.if_action_desc, 0, NormalActionCard.class);

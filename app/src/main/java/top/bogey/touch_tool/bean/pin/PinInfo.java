@@ -88,7 +88,7 @@ public class PinInfo {
     private final static PinInfo OBJECT_INFO = new PinInfo(PinType.OBJECT, PinSubType.NORMAL, PinObject.class, NormalPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_object, null, false);
 
     private final static PinInfo LIST_INFO = new PinInfo(PinType.LIST, PinSubType.NORMAL, PinList.class, ListPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_list, null, false);
-    private final static PinInfo APPS_INFO = new PinInfo(PinType.LIST, PinSubType.MULTI_APP, PinApplications.class, ListPinSlotView.class, getColor(R.color.AppPinColor), R.string.pin_list_app, PinWidgetApps.class, false);
+    private final static PinInfo APPS_INFO = new PinInfo(PinType.LIST, PinSubType.MULTI_APP, PinApplications.class, ListPinSlotView.class, getColor(R.color.AppPinColor), R.string.pin_list_app, PinWidgetApps.class, true);
 
     private final static PinInfo MAP_INFO = new PinInfo(PinType.MAP, PinSubType.NORMAL, PinMap.class, MapPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_map, null, false);
 

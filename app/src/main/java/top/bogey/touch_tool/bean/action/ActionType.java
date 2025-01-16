@@ -12,8 +12,13 @@ public enum ActionType {
     BLUETOOTH_START,
     OUT_CALL_START,
     INNER_START,
+
+    // 自定义相关
     CUSTOM_START,
     CUSTOM_END,
+    EXECUTE_TASK,
+    GET_VARIABLE,
+    SET_VARIABLE,
 
     // 逻辑
     IF_LOGIC,
@@ -32,10 +37,6 @@ public enum ActionType {
     STICK,
     CLOSE_STICK,
     CLOSE_ALL_STICK,
-    
-    EXECUTE_TASK,
-    GET_VARIABLE,
-    SET_VARIABLE,
 
     // 系统动作
     OPEN_APP,

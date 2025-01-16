@@ -189,6 +189,9 @@
     <string name="custom_start_action">自定义开始</string>
     <string name="custom_end_action">自定义结束</string>
 
+    <string name="set_value_action">设置变量</string>
+    <string name="get_value_action">获取变量</string>
+
     <!-- 动作-Normal -->
     <string name="delay_action">延时</string>
     <string name="delay_action_desc">等待一段时间后再继续执行</string>

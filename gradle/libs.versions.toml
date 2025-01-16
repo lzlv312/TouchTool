@@ -7,11 +7,11 @@ treeview = "1.2.0"
 flexbox = "3.0.0"
 
 gson = "2.11.0"
-mmkv = "2.0.1"
+mmkv = "2.0.2"
 shizuku = "13.1.5"
 exp4j = "0.4.8"
 
-agp = "8.7.3"
+agp = "8.8.0"
 
 [libraries]
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
