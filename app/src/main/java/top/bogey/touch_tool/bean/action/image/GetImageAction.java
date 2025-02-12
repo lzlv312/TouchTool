@@ -14,8 +14,8 @@ import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
-import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class GetImageAction extends CalculateAction {

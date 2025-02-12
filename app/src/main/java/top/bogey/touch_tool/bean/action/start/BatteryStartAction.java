@@ -5,11 +5,11 @@ import com.google.gson.JsonObject;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
-import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class BatteryStartAction extends StartAction {
     private final transient Pin statePin = new SingleSelectPin(new PinSingleSelect(R.array.charging_state), R.string.battery_start_action_state, true);

@@ -7,8 +7,8 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class BluetoothStartAction extends StartAction {
     private final transient Pin devicePin = new Pin(new PinString(), R.string.bluetooth_start_action_device, true);

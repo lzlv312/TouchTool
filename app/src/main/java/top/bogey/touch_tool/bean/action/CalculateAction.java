@@ -22,7 +22,7 @@ public abstract class CalculateAction extends Action{
     }
 
     @Override
-    public void resetReturnValue() {
+    public void resetReturnValue(TaskRunnable runnable) {
         for (Pin pin : getPins()) {
             if (pin.isOut()) {
                 if (pin.getValue() instanceof PinObject pinObject) {

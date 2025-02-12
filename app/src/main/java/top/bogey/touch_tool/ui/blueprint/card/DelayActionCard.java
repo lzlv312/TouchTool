@@ -14,7 +14,6 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.CardDelayBinding;
-import top.bogey.touch_tool.ui.blueprint.CardLayoutView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinBottomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinLeftView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinRightView;
@@ -25,7 +24,6 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 @SuppressLint("ViewConstructor")
 public class DelayActionCard extends ActionCard {
     private CardDelayBinding binding;
-    private boolean needDelete = false;
 
     public DelayActionCard(Context context, Task task, Action action) {
         super(context, task, action);
@@ -36,23 +34,9 @@ public class DelayActionCard extends ActionCard {
     public void init() {
         binding = CardDelayBinding.inflate(LayoutInflater.from(getContext()), this, true);
 
-        binding.copyButton.setOnClickListener(v -> {
-            Action copy = action.newCopy();
-            ((CardLayoutView) getParent()).addCard(copy);
-        });
-
-        binding.removeButton.setOnClickListener(v -> {
-            if (needDelete) {
-                ((CardLayoutView) getParent()).removeCard(this);
-            } else {
-                binding.removeButton.setChecked(true);
-                needDelete = true;
-                postDelayed(() -> {
-                    binding.removeButton.setChecked(false);
-                    needDelete = false;
-                }, 1500);
-            }
-        });
+        initDelete(binding.removeButton);
+        initCopy(binding.copyButton);
+        initLock(binding.lockButton);
     }
 
     @Override
@@ -89,7 +73,7 @@ public class DelayActionCard extends ActionCard {
 
     @Override
     public boolean isEmptyPosition(float x, float y, float scale) {
-        List<MaterialButton> buttons = List.of(binding.removeButton, binding.copyButton);
+        List<MaterialButton> buttons = List.of(binding.removeButton, binding.copyButton, binding.lockButton);
         for (MaterialButton button : buttons) {
             PointF pointF = DisplayUtil.getLocationRelativeToView(button, this);
             float px = pointF.x * scale;

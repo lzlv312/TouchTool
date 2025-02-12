@@ -82,7 +82,7 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
     }
 
     @Override
-    public void resetReturnValue() {
+    public void resetReturnValue(TaskRunnable runnable) {
 
     }
 

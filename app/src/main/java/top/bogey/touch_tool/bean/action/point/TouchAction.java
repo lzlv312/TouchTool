@@ -13,8 +13,8 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinFloat;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
-import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class TouchAction extends ExecuteAction {
     private final transient Pin touchPin = new Pin(new PinTouchPath(), R.string.pin_touch);

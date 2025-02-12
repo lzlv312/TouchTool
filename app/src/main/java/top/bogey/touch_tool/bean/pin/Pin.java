@@ -207,11 +207,15 @@ public class Pin extends Identity {
         return this.value.isInstance(value);
     }
 
+    public boolean linkAble(Task context) {
+        return linkAble();
+    }
+
     public boolean linkAble() {
         return true;
     }
 
-    public boolean showAble(Action action) {
+    public boolean showAble(Task context) {
         return true;
     }
 

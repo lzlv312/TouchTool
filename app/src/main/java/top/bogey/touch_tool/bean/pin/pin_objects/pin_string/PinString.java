@@ -50,6 +50,11 @@ public class PinString extends PinObject {
     }
 
     @Override
+    public boolean isInstance(PinBase pin) {
+        return pin instanceof PinObject;
+    }
+
+    @Override
     public boolean cast(String value) {
         this.value = value;
         return true;

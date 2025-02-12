@@ -1,24 +1,32 @@
 package top.bogey.touch_tool.ui.blueprint.card;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.ActionInfo;
 import top.bogey.touch_tool.bean.action.ActionListener;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.ui.blueprint.CardLayoutView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public abstract class ActionCard extends MaterialCardView implements ActionListener {
@@ -26,6 +34,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     protected final Action action;
 
     protected final Map<String, PinView> pinViews = new HashMap<>();
+    private boolean needDelete = false;
 
     public ActionCard(Context context, Task task, Action action) {
         super(context);
@@ -49,6 +58,82 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     public abstract void init();
+
+    protected void initCardInfo(ShapeableImageView icon, MaterialTextView title, MaterialTextView des) {
+        if (icon != null) {
+            ActionInfo info = ActionInfo.getActionInfo(action.getType());
+            if (info != null) icon.setImageResource(info.getIcon());
+        }
+
+        if (title != null) title.setText(action.getTitle());
+
+        if (des != null) {
+            des.setText(action.getDescription());
+            des.setVisibility((action.getDescription() == null || action.getDescription().isEmpty()) ? GONE : VISIBLE);
+        }
+    }
+
+    protected void initEditDesc(MaterialButton button, MaterialTextView des) {
+        button.setOnClickListener(v -> AppUtil.showEditDialog(getContext(), R.string.action_add_des, action.getDescription(), result -> {
+            action.setDescription(result);
+            des.setText(result);
+            des.setVisibility((result == null || result.isEmpty()) ? GONE : VISIBLE);
+        }));
+    }
+
+    protected void initDelete(MaterialButton button) {
+        button.setOnClickListener(v -> {
+            if (needDelete) {
+                ((CardLayoutView) getParent()).removeCard(this);
+            } else {
+                button.setChecked(true);
+                needDelete = true;
+                postDelayed(() -> {
+                    button.setChecked(false);
+                    needDelete = false;
+                }, 1500);
+            }
+        });
+    }
+
+    protected void initCopy(MaterialButton button) {
+        button.setOnClickListener(v -> {
+            Action copy = action.newCopy();
+            ((CardLayoutView) getParent()).addCard(copy);
+        });
+    }
+
+    protected void initLock(MaterialButton button) {
+        button.setIconResource(action.isLocked() ? R.drawable.icon_lock : R.drawable.icon_unlock);
+        if (action.isLocked()) {
+            setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceContainerHighest));
+        } else {
+            setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant));
+        }
+
+        button.setOnClickListener(v -> {
+            action.setLocked(!action.isLocked());
+            button.setIconResource(action.isLocked() ? R.drawable.icon_lock : R.drawable.icon_unlock);
+            if (action.isLocked()) {
+                setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceContainerHighest));
+            } else {
+                setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant));
+            }
+        });
+    }
+
+    protected void initExpand(MaterialButton button) {
+        ColorStateList expandColor = ColorStateList.valueOf(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimary));
+        ColorStateList unExpandColor = ColorStateList.valueOf(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorTertiary));
+        button.setIconResource(action.getExpandType() == Action.ExpandType.FULL ? R.drawable.icon_zoom_in : R.drawable.icon_zoom_out);
+        button.setIconTint(action.getExpandType() == Action.ExpandType.FULL ? expandColor : unExpandColor);
+        setExpandType(action.getExpandType());
+        button.setOnClickListener(v -> {
+            expand();
+            button.setIconResource(action.getExpandType() == Action.ExpandType.FULL ? R.drawable.icon_zoom_in : R.drawable.icon_zoom_out);
+            button.setIconTint(action.getExpandType() == Action.ExpandType.FULL ? expandColor : unExpandColor);
+        });
+    }
 
     public abstract boolean check();
 
@@ -150,6 +235,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
             float width = pinView.getWidth() * scale;
             float height = pinView.getHeight() * scale;
 
+            // 左右的针脚取32dp的宽度
             if (!pinView.getPin().isVertical()) {
                 float offset = DisplayUtil.dp2px(getContext(), 32 * scale);
                 if (pinView.getPin().isOut()) px = px + width - offset;

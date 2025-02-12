@@ -16,8 +16,8 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
-import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class FindNodesInAreaAction extends FindExecuteAction {
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area);

@@ -6,7 +6,6 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center_horizontal"
@@ -87,8 +86,8 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/addButton"
                 style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 app:icon="@drawable/icon_add"
                 app:iconSize="16dp" />
 
@@ -99,15 +98,6 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="4dp"
                 app:icon="@drawable/icon_unlock"
-                app:iconSize="16dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/copyButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="4dp"
-                app:icon="@drawable/icon_copy"
                 app:iconSize="16dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -131,24 +121,48 @@
             android:layout_marginVertical="4dp">
 
             <LinearLayout
-                android:id="@+id/inBox"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/inBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/inPinBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            </LinearLayout>
 
             <Space
                 android:layout_width="8dp"
                 android:layout_height="wrap_content" />
 
             <LinearLayout
-                android:id="@+id/outBox"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:layout_weight="1"
-                android:gravity="end"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/outBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/outPinBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

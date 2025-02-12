@@ -6,7 +6,7 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
+import top.bogey.touch_tool.bean.task.Task;
 
 public class ShowAblePin extends Pin {
 
@@ -39,10 +39,19 @@ public class ShowAblePin extends Pin {
     }
 
     @Override
-    public boolean showAble(Action action) {
+    public boolean showAble(Task context) {
+        Action action = context.getAction(getOwnerId());
         if (action instanceof ExecuteTaskAction executeTaskAction) {
-            return executeTaskAction.getJustCallPin().getValue(PinBoolean.class).getValue();
+            return executeTaskAction.isJustCall(context);
         }
-        return super.showAble(action);
+        return super.showAble(context);
+    }
+
+    @Override
+    public boolean linkAble(Task context) {
+        if (linkAble()) {
+            return showAble(context);
+        }
+        return false;
     }
 }

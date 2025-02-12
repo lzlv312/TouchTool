@@ -18,7 +18,7 @@ public class PinTopView extends PinView {
     private final PinTopBinding binding;
 
     public PinTopView(@NonNull Context context, ActionCard card, Pin pin) {
-        super(context, card, pin);
+        super(context, card, pin, false);
 
         binding = PinTopBinding.inflate(LayoutInflater.from(context), this, true);
         init();

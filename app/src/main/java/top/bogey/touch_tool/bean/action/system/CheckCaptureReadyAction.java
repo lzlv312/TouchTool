@@ -8,8 +8,8 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
-import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class CheckCaptureReadyAction extends CalculateAction {
     private final transient Pin valuePin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);

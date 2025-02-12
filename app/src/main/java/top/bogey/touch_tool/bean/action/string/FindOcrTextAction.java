@@ -6,7 +6,6 @@ import android.graphics.Rect;
 import com.google.gson.JsonObject;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.MainApplication;
@@ -17,20 +16,19 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
-import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.ocr.OCR;
 import top.bogey.touch_tool.service.ocr.OCRResult;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class FindOcrTextAction extends FindExecuteAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image);
-    private final transient Pin textPin = new Pin(new PinLogString(), R.string.pin_string);
+    private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area, false, false, true);
     private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(R.array.ocr_type), R.string.find_ocr_text_action_type, false, false, true);
     private final transient Pin resultAreaPin = new Pin(new PinArea(), R.string.pin_area, true);

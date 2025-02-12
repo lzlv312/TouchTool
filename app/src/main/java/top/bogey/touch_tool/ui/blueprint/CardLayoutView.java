@@ -556,14 +556,14 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         Pin p = touchedPin.getPin();
         if (touchState == TOUCH_DRAG_PIN) {
             for (Pin pin : action.getPins()) {
-                if (pin.linkAble() && pin.linkAble(p)) {
+                if (pin.linkAble(task) && pin.linkAble(p)) {
                     pin.mutualAddLink(task, p);
                     break;
                 }
             }
         } else if (touchState == TOUCH_DRAG_LINK) {
             for (Pin pin : action.getPins()) {
-                if (pin.linkAble() && pin.linkAble(p.getValue())) {
+                if (pin.linkAble(task) && pin.linkAble(p.getValue())) {
                     pin.addLinks(task, selectedLinks);
                 }
             }

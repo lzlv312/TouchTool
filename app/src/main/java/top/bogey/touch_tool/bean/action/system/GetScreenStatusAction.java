@@ -9,8 +9,8 @@ import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
-import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class GetScreenStatusAction extends CalculateAction {

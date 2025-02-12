@@ -12,15 +12,14 @@ import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class StringAppendAction extends CalculateAction implements DynamicPinsAction {
-    private final static Pin morePin = new Pin(new PinLogString(), R.string.pin_string);
+    private final static Pin morePin = new Pin(new PinString(), R.string.pin_string);
 
-    private final transient Pin firstPin = new Pin(new PinLogString(), R.string.pin_string);
-    private final transient Pin secondPin = new Pin(new PinLogString(), R.string.pin_string);
+    private final transient Pin firstPin = new Pin(new PinString(), R.string.pin_string);
+    private final transient Pin secondPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin resultPin = new Pin(new PinString(), R.string.pin_string, true);
     private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin);
 

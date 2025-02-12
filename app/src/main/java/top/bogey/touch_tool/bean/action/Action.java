@@ -22,10 +22,10 @@ import java.util.UUID;
 
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.PinListener;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
-import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
@@ -276,11 +276,11 @@ public abstract class Action extends Identity implements PinListener {
 
     public abstract void calculate(TaskRunnable runnable, Pin pin);
 
-    public abstract void resetReturnValue();
+    public abstract void resetReturnValue(TaskRunnable runnable);
 
     public <T extends PinObject> T getPinValue(TaskRunnable runnable, Pin pin) {
         if (pin.isOut()) {
-            resetReturnValue();
+            resetReturnValue(runnable);
             calculate(runnable, pin);
             runnable.addCalculateProgress(this);
             return returnValue(pin.getValue());

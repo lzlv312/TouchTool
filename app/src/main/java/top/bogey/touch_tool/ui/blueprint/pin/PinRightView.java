@@ -19,7 +19,7 @@ public class PinRightView extends PinView {
     private final PinRightBinding binding;
 
     public PinRightView(@NonNull Context context, ActionCard card, Pin pin) {
-        super(context, card, pin);
+        super(context, card, pin, false);
 
         binding = PinRightBinding.inflate(LayoutInflater.from(context), this, true);
         // 输出针脚不需要UI，除非是添加针脚

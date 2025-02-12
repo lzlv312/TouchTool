@@ -12,7 +12,6 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinTaskString;
@@ -25,19 +24,18 @@ import top.bogey.touch_tool.service.TaskRunnable;
 public class ExecuteTaskAction extends Action implements DynamicPinsAction {
     private final transient Pin inPin = new ShowAblePin(new PinExecute(), R.string.pin_execute);
     private final transient Pin outPin = new ShowAblePin(new PinExecute(), R.string.pin_execute, true);
-    private final transient Pin taskPin = new NotLinkAblePin(new PinTaskString(), R.string.execute_task_action_task_id);
-    private final transient Pin justCallPin = new NotLinkAblePin(new PinBoolean(true), R.string.execute_task_action_just_cal, false, false, true);
+    private final transient Pin taskPin = new NotLinkAblePin(new PinTaskString(), R.string.execute_task_action_task_id, false, false, true);
 
     private transient boolean synced = false;
 
     public ExecuteTaskAction() {
         super(ActionType.EXECUTE_TASK);
-        addPins(inPin, outPin, taskPin, justCallPin);
+        addPins(inPin, outPin, taskPin);
     }
 
     public ExecuteTaskAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(inPin, outPin, taskPin, justCallPin);
+        reAddPins(inPin, outPin, taskPin);
         tmpPins.forEach(this::addPin);
         tmpPins.clear();
     }
@@ -62,17 +60,17 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction {
 
         task.execute(runnable, this, params);
 
-        if (!isJustCall()) executeNext(runnable, outPin);
+        if (!isJustCall(runnable.getTask())) executeNext(runnable, outPin);
     }
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
-        if (isJustCall()) execute(runnable, pin);
+        if (isJustCall(runnable.getTask())) execute(runnable, pin);
     }
 
     @Override
-    public void resetReturnValue() {
-        if (isJustCall()) {
+    public void resetReturnValue(TaskRunnable runnable) {
+        if (isJustCall(runnable.getTask())) {
             for (Pin pin : getDynamicPins()) {
                 if (pin.isOut()) {
                     pin.getValue().reset();
@@ -89,13 +87,16 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction {
         });
     }
 
-    public Pin getJustCallPin() {
-        return justCallPin;
-    }
-
-    public boolean isJustCall() {
-        PinBoolean justCal = justCallPin.getValue();
-        return justCal.getValue();
+    public boolean isJustCall(Task context) {
+        Task task = getTask(context);
+        if (task == null) return false;
+        List<Action> actions = task.getActions(CustomEndAction.class);
+        if (actions.isEmpty()) return false;
+        for (Action action : actions) {
+            CustomEndAction endAction = (CustomEndAction) action;
+            return endAction.isJustCall();
+        }
+        return false;
     }
 
     public Task getTask(Task context) {
@@ -113,8 +114,8 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction {
         List<Pin> pins = new ArrayList<>();
         boolean start = false;
         for (Pin pin : getPins()) {
-            if (pin == justCallPin) start = true;
             if (start) pins.add(pin);
+            if (pin == taskPin) start = true;
         }
         return pins;
     }
@@ -155,10 +156,16 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction {
         for (Pin syncPin : syncPins) {
             Pin dynamicPin = getPinByUid(syncPin.getUid());
             if (dynamicPin == null) {
-                addPin(syncPin.newCopy());
+                Pin copy = syncPin.newCopy();
+                // 同步过来的针脚不再是动态的了
+                copy.setDynamic(false);
+                // 方向需要反转一下
+                copy.setOut(!copy.isOut());
+                addPin(copy);
                 continue;
             }
 
+            // 同步针脚默认值，只有当类型变更时才同步默认值
             if (!syncPin.isSameClass(dynamicPin)) {
                 dynamicPin.clearLinks(context);
                 dynamicPin.setValue(syncPin.getValue().copy());

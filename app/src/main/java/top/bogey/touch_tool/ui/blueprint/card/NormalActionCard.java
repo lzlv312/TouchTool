@@ -11,26 +11,21 @@ import com.google.android.material.button.MaterialButton;
 import java.util.Arrays;
 import java.util.List;
 
-import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
-import top.bogey.touch_tool.bean.action.ActionInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.CardNormalBinding;
-import top.bogey.touch_tool.ui.blueprint.CardLayoutView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinBottomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinLeftView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinRightView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinTopView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
-import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 @SuppressLint("ViewConstructor")
-public class NormalActionCard extends ActionCard{
+public class NormalActionCard extends ActionCard {
     private CardNormalBinding binding;
-    private boolean needDelete = false;
 
     public NormalActionCard(Context context, Task task, Action action) {
         super(context, task, action);
@@ -40,60 +35,12 @@ public class NormalActionCard extends ActionCard{
     public void init() {
         binding = CardNormalBinding.inflate(LayoutInflater.from(getContext()), this, true);
 
-        binding.title.setText(action.getTitle());
-
-        ActionInfo info = ActionInfo.getActionInfo(action.getType());
-        if (info != null) binding.icon.setImageResource(info.getIcon());
-
-        binding.des.setText(action.getDescription());
-        binding.des.setVisibility((action.getDescription() == null || action.getDescription().isEmpty()) ? GONE : VISIBLE);
-        binding.lockButton.setIconResource(action.isLocked() ? R.drawable.icon_lock : R.drawable.icon_unlock);
-        if (action.isLocked()) {
-            setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceContainerHighest));
-        } else {
-            setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant));
-        }
-        binding.expandButton.setIconResource(action.getExpandType() == Action.ExpandType.FULL ? R.drawable.icon_zoom_in : R.drawable.icon_zoom_out);
-        setExpandType(action.getExpandType());
-
-        binding.editButton.setOnClickListener(v -> AppUtil.showEditDialog(getContext(), R.string.action_add_des, action.getDescription(), result -> {
-            action.setDescription(result);
-            binding.des.setText(result);
-            binding.des.setVisibility((result == null || result.isEmpty()) ? GONE : VISIBLE);
-        }));
-
-        binding.lockButton.setOnClickListener(v -> {
-            action.setLocked(!action.isLocked());
-            binding.lockButton.setIconResource(action.isLocked() ? R.drawable.icon_lock : R.drawable.icon_unlock);
-            if (action.isLocked()) {
-                setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceContainerHighest));
-            } else {
-                setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant));
-            }
-        });
-
-        binding.copyButton.setOnClickListener(v -> {
-            Action copy = action.newCopy();
-            ((CardLayoutView) getParent()).addCard(copy);
-        });
-
-        binding.removeButton.setOnClickListener(v -> {
-            if (needDelete) {
-                ((CardLayoutView) getParent()).removeCard(this);
-            } else {
-                binding.removeButton.setChecked(true);
-                needDelete = true;
-                postDelayed(() -> {
-                    binding.removeButton.setChecked(false);
-                    needDelete = false;
-                }, 1500);
-            }
-        });
-
-        binding.expandButton.setOnClickListener(v -> {
-            expand();
-            binding.expandButton.setIconResource(action.getExpandType() == Action.ExpandType.FULL ? R.drawable.icon_zoom_in : R.drawable.icon_zoom_out);
-        });
+        initCardInfo(binding.icon, binding.title, binding.des);
+        initEditDesc(binding.editButton, binding.des);
+        initDelete(binding.removeButton);
+        initCopy(binding.copyButton);
+        initLock(binding.lockButton);
+        initExpand(binding.expandButton);
     }
 
     @Override

@@ -9,8 +9,8 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
-import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class GetCurrentAppAction extends CalculateAction {
     private final transient Pin appPin = new Pin(new PinApplication(), R.string.pin_app, true);

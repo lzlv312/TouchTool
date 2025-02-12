@@ -7,25 +7,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class CustomEndAction extends Action implements DynamicPinsAction {
-    private final transient Pin executePin = new Pin(new PinExecute(), 0);
+    private final transient Pin executePin = new Pin(new PinExecute(), R.string.pin_execute);
+    private final transient Pin justCallPin = new NotLinkAblePin(new PinBoolean(false), R.string.execute_task_action_just_cal);
 
     public CustomEndAction() {
         super(ActionType.CUSTOM_END);
-        addPin(executePin);
+        addPins(executePin, justCallPin);
     }
 
     public CustomEndAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPin(executePin);
+        reAddPins(executePin, justCallPin);
         tmpPins.forEach(this::addPin);
         tmpPins.clear();
     }
@@ -48,7 +52,7 @@ public class CustomEndAction extends Action implements DynamicPinsAction {
     }
 
     @Override
-    public void resetReturnValue() {
+    public void resetReturnValue(TaskRunnable runnable) {
 
     }
 
@@ -57,9 +61,14 @@ public class CustomEndAction extends Action implements DynamicPinsAction {
         List<Pin> pins = new ArrayList<>();
         boolean start = false;
         for (Pin pin : getPins()) {
-            if (pin == executePin) start = true;
             if (start) pins.add(pin);
+            if (pin == justCallPin) start = true;
         }
         return pins;
+    }
+
+    public boolean isJustCall() {
+        PinBoolean justCall = justCallPin.getValue();
+        return justCall.getValue();
     }
 }

@@ -121,6 +121,7 @@ import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
+import top.bogey.touch_tool.ui.blueprint.card.CustomActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.DelayActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.NormalActionCard;
 
@@ -136,8 +137,8 @@ public class ActionInfo {
     private final static ActionInfo BLUETOOTH_START_INFO = new ActionInfo(ActionType.BLUETOOTH_START, BluetoothStartAction.class, R.drawable.icon_bluetooth, R.string.bluetooth_start_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo OUT_CALL_START_INFO = new ActionInfo(ActionType.OUT_CALL_START, OutCallStartAction.class, R.drawable.icon_auto_start, R.string.out_call_start_action, 0, 0, NormalActionCard.class);
 
-    private final static ActionInfo CUSTOM_START_INFO = new ActionInfo(ActionType.CUSTOM_START, CustomStartAction.class, R.drawable.icon_setting, R.string.custom_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo CUSTOM_END_INFO = new ActionInfo(ActionType.CUSTOM_END, CustomEndAction.class, R.drawable.icon_setting, R.string.custom_end_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo CUSTOM_START_INFO = new ActionInfo(ActionType.CUSTOM_START, CustomStartAction.class, R.drawable.icon_setting, R.string.custom_start_action, 0, 0, CustomActionCard.class);
+    private final static ActionInfo CUSTOM_END_INFO = new ActionInfo(ActionType.CUSTOM_END, CustomEndAction.class, R.drawable.icon_setting, R.string.custom_end_action, 0, 0, CustomActionCard.class);
     private final static ActionInfo EXECUTE_TASK_INFO = new ActionInfo(ActionType.EXECUTE_TASK, ExecuteTaskAction.class, R.drawable.icon_task, R.string.execute_task_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo GET_VARIABLE_INFO = new ActionInfo(ActionType.GET_VARIABLE, GetVariableAction.class, R.drawable.icon_get_value, R.string.get_value_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo SET_VARIABLE_INFO = new ActionInfo(ActionType.SET_VARIABLE, SetVariableAction.class, R.drawable.icon_set_value, R.string.set_value_action, 0, 0, NormalActionCard.class);
@@ -302,6 +303,8 @@ public class ActionInfo {
             case CUSTOM_START -> CUSTOM_START_INFO;
             case CUSTOM_END -> CUSTOM_END_INFO;
             case EXECUTE_TASK -> EXECUTE_TASK_INFO;
+            case GET_VARIABLE -> GET_VARIABLE_INFO;
+            case SET_VARIABLE -> SET_VARIABLE_INFO;
 
             case IF_LOGIC -> IF_LOGIC_INFO;
             case WAIT_IF_LOGIC -> WAIT_IF_LOGIC_INFO;

@@ -11,13 +11,12 @@ import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class StringToNumberAction extends CalculateAction {
-    private final transient Pin textPin = new Pin(new PinLogString(), R.string.pin_string);
+    private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin numberPin = new Pin(new PinDouble(), R.string.pin_number_integer, true);
 
     public StringToNumberAction() {

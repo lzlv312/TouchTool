@@ -35,7 +35,7 @@ public abstract class ExecuteAction extends Action {
     }
 
     @Override
-    public final void resetReturnValue() {
+    public final void resetReturnValue(TaskRunnable runnable) {
 
     }
 }

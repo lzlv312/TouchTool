@@ -12,13 +12,12 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class StringSplitAction extends CalculateAction {
-    private final transient Pin textPin = new Pin(new PinLogString(), R.string.pin_string);
-    private final transient Pin separatorPin = new Pin(new PinLogString(), R.string.string_split_action_split);
+    private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
+    private final transient Pin separatorPin = new Pin(new PinString(), R.string.string_split_action_split);
     private final transient Pin emptyPin = new Pin(new PinBoolean(true), R.string.string_split_action_empty);
     private final transient Pin resultPin = new Pin(new PinList(PinType.STRING), R.string.pin_string, true);
 

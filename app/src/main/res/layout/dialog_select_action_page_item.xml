@@ -64,8 +64,9 @@
                 android:id="@+id/keySlot"
                 android:layout_width="0dp"
                 android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_spinner"
+                android:background="@drawable/shape_border"
                 android:gravity="center_horizontal" />
 
             <Spinner

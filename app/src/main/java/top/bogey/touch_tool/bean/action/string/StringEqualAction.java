@@ -10,13 +10,12 @@ import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class StringEqualAction extends CalculateAction {
-    private final transient Pin firstPin = new Pin(new PinLogString(), R.string.pin_string);
-    private final transient Pin secondPin = new Pin(new PinLogString(), R.string.pin_string);
+    private final transient Pin firstPin = new Pin(new PinString(), R.string.pin_string);
+    private final transient Pin secondPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin ignoreCasePin = new Pin(new PinBoolean(), R.string.string_equal_action_ignore_case);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
 

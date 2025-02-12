@@ -18,8 +18,7 @@ public class PinLeftView extends PinView {
     private final PinLeftBinding binding;
 
     public PinLeftView(@NonNull Context context, ActionCard card, Pin pin) {
-        super(context, card, pin);
-
+        super(context, card, pin, false);
         binding = PinLeftBinding.inflate(LayoutInflater.from(context), this, true);
         init();
     }

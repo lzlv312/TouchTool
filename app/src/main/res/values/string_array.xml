@@ -23,7 +23,7 @@
     </string-array>
 
     <string-array name="pin_simple_type">
-        <item>对象</item>
+        <item>单独</item>
         <item>数组</item>
         <item>字典</item>
     </string-array>
@@ -56,7 +56,6 @@
         <item>自动针脚</item>
         <item>多行文本</item>
         <item>控件路径</item>
-        <item>日志</item>
         <item>任务</item>
         <item>单选</item>
         <item>整数</item>

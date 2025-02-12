@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.bean.pin;
 
-import android.content.Context;
-
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
@@ -45,7 +43,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinAutoPinString;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinMultiLineString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinRingtoneString;
@@ -54,8 +51,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinTaskString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinUrlString;
-import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
-import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.ui.blueprint.pin_slot.ExecutePinSlotView;
 import top.bogey.touch_tool.ui.blueprint.pin_slot.ListPinSlotView;
 import top.bogey.touch_tool.ui.blueprint.pin_slot.MapPinSlotView;
@@ -99,7 +94,6 @@ public class PinInfo {
     private final static PinInfo AUTO_PIN_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.AUTO_PIN, PinAutoPinString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), 0, PinWidgetString.class, false);
     private final static PinInfo MULTI_LINE_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.MULTI_LINE, PinMultiLineString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), R.string.pin_string_multi_line, PinWidgetString.class, true);
     private final static PinInfo NODE_PATH_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.NODE_PATH, PinNodePathString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), R.string.pin_string_node_path, PinWidgetString.class, true);
-    private final static PinInfo LOG_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.LOG, PinLogString.class, NormalPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_string_log, PinWidgetString.class, true);
     private final static PinInfo TASK_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.TASK_ID, PinTaskString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), R.string.pin_string_task, PinWidgetString.class, false);
     private final static PinInfo SELECT_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.SINGLE_SELECT, PinSingleSelect.class, NormalPinSlotView.class, getColor(R.color.SelectPinColor), R.string.pin_string_select, PinWidgetSelect.class, true);
 
@@ -165,7 +159,6 @@ public class PinInfo {
                     case AUTO_PIN -> info = AUTO_PIN_STRING_INFO;
                     case MULTI_LINE -> info = MULTI_LINE_STRING_INFO;
                     case NODE_PATH -> info = NODE_PATH_STRING_INFO;
-                    case LOG -> info = LOG_STRING_INFO;
                     case TASK_ID -> info = TASK_STRING_INFO;
                     case SINGLE_SELECT -> info = SELECT_STRING_INFO;
                 }

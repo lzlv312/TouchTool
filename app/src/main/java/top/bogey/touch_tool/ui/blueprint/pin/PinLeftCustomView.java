@@ -5,23 +5,38 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.databinding.PinBottomBinding;
+import top.bogey.touch_tool.databinding.PinLeftCustomBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 
 @SuppressLint("ViewConstructor")
-public class PinBottomView extends PinView {
-    private final PinBottomBinding binding;
+public class PinLeftCustomView extends PinCustomView {
+    private final PinLeftCustomBinding binding;
 
-    public PinBottomView(@NonNull Context context, ActionCard card, Pin pin) {
-        super(context, card, pin, false);
-
-        binding = PinBottomBinding.inflate(LayoutInflater.from(context), this, true);
+    public PinLeftCustomView(@NonNull Context context, ActionCard card, Pin pin) {
+        super(context, card, pin);
+        binding = PinLeftCustomBinding.inflate(LayoutInflater.from(context), this, true);
         init();
+    }
+
+    @Override
+    public TextView getTypeView() {
+        return binding.keySlot;
+    }
+
+    @Override
+    public EditText getTitleEdit() {
+        return binding.title;
+    }
+
+    @Override
+    public Button getRemoveButton() {
+        return binding.removeButton;
     }
 
     @Override
@@ -31,12 +46,7 @@ public class PinBottomView extends PinView {
 
     @Override
     public TextView getTitleView() {
-        return binding.title;
-    }
-
-    @Override
-    public Button getRemoveButton() {
-        return binding.removeButton;
+        return null;
     }
 
     @Override

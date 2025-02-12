@@ -11,7 +11,7 @@ android {
     namespace = "top.bogey.touch_tool"
     compileSdk = 35
     ndkVersion = "21.4.7075529"
-    buildToolsVersion = "35.0.0"
+    buildToolsVersion = "35.0.1"
 
     val pattern = DateTimeFormatter.ofPattern("yyMMdd_HHmm")
     val now = LocalDateTime.now().format(pattern)
@@ -77,7 +77,7 @@ android {
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.31.1"
+            version = "3.31.5"
         }
     }
 

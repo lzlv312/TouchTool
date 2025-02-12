@@ -34,7 +34,6 @@ import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinAutoPinString;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinLogString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinMultiLineString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinRingtoneString;
@@ -62,10 +61,6 @@ public class PinWidgetString extends PinWidget<PinString> {
         super(context, card, pinView, pinBase, custom);
         binding = PinWidgetInputBinding.inflate(LayoutInflater.from(context), this, true);
         init();
-    }
-
-    public PinWidgetString(@NonNull Context context, ActionCard card, PinView pinView, PinLogString pinBase, boolean custom) {
-        this(context, card, pinView, (PinString) pinBase, custom);
     }
 
     public PinWidgetString(@NonNull Context context, ActionCard card, PinView pinView, PinUrlString pinBase, boolean custom) {

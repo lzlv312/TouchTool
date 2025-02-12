@@ -32,11 +32,7 @@ public abstract class PinView extends FrameLayout implements PinListener {
     protected final Pin pin;
     protected final boolean custom;
 
-    private PinSlotView slotView;
-
-    public PinView(@NonNull Context context, ActionCard card, Pin pin) {
-        this(context, card, pin, false);
-    }
+    protected PinSlotView slotView;
 
     public PinView(@NonNull Context context, ActionCard card, Pin pin, boolean custom) {
         super(context);
@@ -103,8 +99,7 @@ public abstract class PinView extends FrameLayout implements PinListener {
     }
 
     public void expand(Action.ExpandType expandType) {
-        if (pin.isVertical()) return;
-        if (pin.showAble(card.getAction())) {
+        if (pin.showAble(card.getTask())) {
             // 全显示
             if (expandType == Action.ExpandType.FULL) {
                 setVisibility(VISIBLE);
