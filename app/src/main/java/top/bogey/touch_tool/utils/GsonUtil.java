@@ -12,9 +12,13 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.bean.task.Variable;
 
 public class GsonUtil {
     public static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Task.class, new Task.TaskDeserialize())
+            .registerTypeAdapter(Variable.class, new Variable.VariableDeserialize())
             .registerTypeAdapter(Action.class, new Action.ActionDeserializer())
             .registerTypeAdapter(Pin.class, new Pin.PinDeserialize())
             .registerTypeAdapter(PinBase.class, new PinBase.PinBaseDeserializer())

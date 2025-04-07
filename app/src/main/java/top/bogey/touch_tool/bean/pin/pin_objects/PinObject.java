@@ -14,7 +14,7 @@ public class PinObject extends PinBase {
         super(type);
     }
 
-    protected PinObject(PinSubType subType) {
+    public PinObject(PinSubType subType) {
         super(PinType.OBJECT, subType);
     }
 
@@ -34,6 +34,17 @@ public class PinObject extends PinBase {
     @Override
     public void sync(PinBase value) {
 
+    }
+
+    @Override
+    public boolean isDynamic() {
+        return getSubType() == PinSubType.DYNAMIC;
+    }
+
+    @Override
+    public boolean isInstance(PinBase pin) {
+        if (pin instanceof PinObject ) return pin.isDynamic() || super.isInstance(pin);
+        return false;
     }
 
     public boolean cast(String value) {

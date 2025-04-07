@@ -27,7 +27,6 @@ public class DelayActionCard extends ActionCard {
 
     public DelayActionCard(Context context, Task task, Action action) {
         super(context, task, action);
-        setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceContainerHighest));
     }
 
     @Override
@@ -37,6 +36,7 @@ public class DelayActionCard extends ActionCard {
         initDelete(binding.removeButton);
         initCopy(binding.copyButton);
         initLock(binding.lockButton);
+        initPosView(binding.position);
     }
 
     @Override
@@ -53,7 +53,6 @@ public class DelayActionCard extends ActionCard {
                 binding.bottomBox.addView(pinView, binding.bottomBox.getChildCount() - offset);
             } else {
                 pinView = new PinRightView(getContext(), this, pin);
-                pinView.getSlotBox().setVisibility(GONE);
                 binding.outBox.addView(pinView, binding.outBox.getChildCount() - offset);
             }
         } else {
@@ -62,7 +61,6 @@ public class DelayActionCard extends ActionCard {
                 binding.topBox.addView(pinView, binding.topBox.getChildCount() - offset);
             } else {
                 pinView = new PinLeftView(getContext(), this, pin);
-                pinView.getSlotBox().setVisibility(GONE);
                 binding.inBox.addView(pinView, binding.inBox.getChildCount() - offset);
             }
         }
@@ -72,7 +70,9 @@ public class DelayActionCard extends ActionCard {
     }
 
     @Override
-    public boolean isEmptyPosition(float x, float y, float scale) {
+    public boolean isEmptyPosition(float x, float y) {
+        float scale = getScaleX();
+
         List<MaterialButton> buttons = List.of(binding.removeButton, binding.copyButton, binding.lockButton);
         for (MaterialButton button : buttons) {
             PointF pointF = DisplayUtil.getLocationRelativeToView(button, this);
@@ -82,6 +82,6 @@ public class DelayActionCard extends ActionCard {
             float height = button.getHeight() * scale;
             if (new RectF(px, py, px + width, py + height).contains(x, y)) return false;
         }
-        return super.isEmptyPosition(x, y, scale);
+        return super.isEmptyPosition(x, y);
     }
 }

@@ -22,15 +22,16 @@ import top.bogey.touch_tool.service.TaskRunnable;
 public class FindNodesInAreaAction extends FindExecuteAction {
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area);
     private final transient Pin nodesPin = new Pin(new PinList(PinType.NODE), R.string.pin_node, true);
+    private final transient Pin firstNodePin = new Pin(new PinNode(), R.string.pin_node_top, true);
 
     public FindNodesInAreaAction() {
         super(ActionType.FIND_NODES_IN_AREA);
-        addPins(areaPin, nodesPin);
+        addPins(areaPin, nodesPin, firstNodePin);
     }
 
     public FindNodesInAreaAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(areaPin, nodesPin);
+        reAddPins(areaPin, nodesPin, firstNodePin);
     }
 
     @Override
@@ -46,6 +47,8 @@ public class FindNodesInAreaAction extends FindExecuteAction {
             nodes.add(new PinNode(info));
         }
 
-        return !nodes.isEmpty();
+        if (nodes.isEmpty()) return false;
+        firstNodePin.setValue(nodes.get(nodes.size() - 1));
+        return true;
     }
 }

@@ -2,8 +2,11 @@ package top.bogey.touch_tool.bean.action.variable;
 
 import com.google.gson.JsonObject;
 
+import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
+import top.bogey.touch_tool.bean.action.SyncAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
@@ -11,7 +14,7 @@ import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.GsonUtil;
 
-public class GetVariableAction extends CalculateAction {
+public class GetVariableAction extends CalculateAction implements SyncAction {
     private final String varId;
     private final transient Pin varPin;
 
@@ -19,7 +22,9 @@ public class GetVariableAction extends CalculateAction {
         super(ActionType.GET_VARIABLE);
         varId = variable.getId();
         varPin = new Pin(variable.getValue(), true);
+        varPin.setId(varId);
         varPin.setTitle(variable.getTitle());
+        setTitle(MainApplication.getInstance().getString(R.string.get_value_action) + "-" + variable.getTitle());
         addPin(varPin);
     }
 
@@ -27,15 +32,37 @@ public class GetVariableAction extends CalculateAction {
         super(jsonObject);
         varId = GsonUtil.getAsString(jsonObject, "varId", "");
         reAddPins(null, true);
-        varPin = getPins().get(0);
+        varPin = getPinById(varId);
+    }
+
+    @Override
+    public String getTitle() {
+        if (title == null) return super.getTitle();
+        return title;
     }
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
         Task task = runnable.getTask();
-        Variable var = task.findVar(varId);
+        Variable var = task.findVariable(varId);
         if (var == null) var = Saver.getInstance().getVar(varId);
         if (var == null) return;
         varPin.setValue(var.getValue());
+    }
+
+    @Override
+    public void resetReturnValue(TaskRunnable runnable) {
+
+    }
+
+    @Override
+    public void sync(Task context) {
+        Variable variable = context.findVariable(varId);
+
+        if (variable == null) variable = Saver.getInstance().getVar(varId);
+        if (variable == null) return;
+        varPin.setValue(variable.getValue());
+        varPin.setTitle(variable.getTitle());
+        setTitle(MainApplication.getInstance().getString(R.string.get_value_action) + "-" + variable.getTitle());
     }
 }

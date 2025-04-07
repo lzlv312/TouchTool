@@ -16,6 +16,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -84,7 +85,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
         binding.editText.setSaveEnabled(false);
         binding.editText.setSaveFromParentEnabled(false);
         Number value = pinBase.getValue();
-        if (value != null) binding.editText.setText(String.valueOf(value));
+        if (value != null) binding.editText.setText(pinBase.toString());
 
         switch (pinBase.getSubType()) {
             case INTEGER -> {

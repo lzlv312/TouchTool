@@ -7,15 +7,18 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ComposePathEffect;
 import android.graphics.CornerPathEffect;
 import android.graphics.DashPathEffect;
 import android.graphics.LightingColorFilter;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
@@ -39,11 +42,14 @@ import java.util.Set;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionInfo;
-import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
+import top.bogey.touch_tool.bean.action.SyncAction;
+import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.save.TaskSaveListener;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.save.TaskSaveListener;
+import top.bogey.touch_tool.bean.save.VariableSaveListener;
 import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryStep;
@@ -60,9 +66,10 @@ import top.bogey.touch_tool.ui.blueprint.history.edit.PinUpdateHistory;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionByPinDialog;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
-public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHistoryOwner {
+public class CardLayoutView extends FrameLayout implements TaskSaveListener, VariableSaveListener, IHistoryOwner {
     private static final int TOUCH_NONE = 0;
     private static final int TOUCH_BACKGROUND = 1;
     private static final int TOUCH_CARD = 2;
@@ -76,7 +83,9 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
     private static final int TOUCH_DRAG_PIN = 8;
     private static final int TOUCH_DRAG_LINK = 9;
 
-    private static final long LONG_TOUCH_TIME = 500L;
+    private static final long LONG_TOUCH_TIME = 300L;
+    private static final int CORNER_OFFSET_SCALE = 2;
+
     private final Handler longTouchHandler;
 
     private final float gridSize;
@@ -93,19 +102,14 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
     private PinView touchedPin;
 
     private RectF selectArea = new RectF();
-    private final CardEditView editView;
     private SelectActionDialog actionDialog = null;
 
-    private float startX, startY;
-    private float lastX, lastY;
+    private float startX, startY, realStartX, realStartY;
+    private float lastX, lastY, realLastX, realLastY;
     private boolean movingTouch = false;
 
     private float offsetX, offsetY;
     private float scale = 1f;
-
-    private boolean editAble = true;
-
-    private boolean includeBg = true;
 
     private Task task;
     private HistoryManager history;
@@ -116,8 +120,6 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
         setSaveEnabled(false);
         setSaveFromParentEnabled(false);
-
-        addView(editView = new CardEditView(context, this));
 
         longTouchHandler = new Handler();
 
@@ -149,9 +151,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 offsetY += focusY * v;
 
                 updateCardsPos();
-                editView.setScaleX(scale);
-                editView.setScaleY(scale);
-                postInvalidate();
+                invalidate();
                 return true;
             }
 
@@ -166,9 +166,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 touchState = TOUCH_NONE;
             }
         });
-        detector.setQuickScaleEnabled(false);
+        detector.setQuickScaleEnabled(!AppUtil.isRelease(context));
 
-        Saver.getInstance().addListener(this);
+        Saver.getInstance().addListener((TaskSaveListener) this);
+        Saver.getInstance().addListener((VariableSaveListener) this);
     }
 
     public void setTask(Task task, HistoryManager history) {
@@ -183,14 +184,14 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         cards.clear();
 
         task.getActions().forEach(action -> {
-            if (action instanceof ExecuteTaskAction executeTaskAction) executeTaskAction.sync(task);
+            if (action instanceof SyncAction syncAction) syncAction.sync(task);
             ActionCard card = newCard(action);
             cards.put(action.getId(), card);
             addView(card);
         });
         updateCardsPos();
         checkCards();
-        postInvalidate();
+        invalidate();
     }
 
     public ActionCard newCard(Action action) {
@@ -206,6 +207,23 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
     // 添加卡片
     public ActionCard addCard(Action action) {
+        if (action instanceof CustomStartAction) {
+            List<Action> actions = task.getActions(action.getClass());
+            if (!actions.isEmpty()) {
+                Toast.makeText(getContext(), R.string.custom_action_single_error, Toast.LENGTH_SHORT).show();
+                return null;
+            }
+        }
+
+        if (action instanceof SyncAction) {
+            List<Action> actions = task.getActions(action.getClass());
+            if (!actions.isEmpty()) {
+                Action first = actions.get(0);
+                action = first.newCopy();
+            }
+            ((SyncAction) action).sync(task);
+        }
+
         task.addAction(action);
         ActionCard card = newCard(action);
         cards.put(action.getId(), card);
@@ -217,7 +235,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
     public void removeCard(ActionCard card) {
         Action action = card.getAction();
         action.getPins().forEach(pin -> pin.clearLinks(task));
-        task.removeAction(action);
+        task.removeAction(action.getId());
         cards.remove(action.getId());
         removeView(card);
 
@@ -249,7 +267,9 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         float y = pos.y * getScaleGridSize() + offsetY;
         card.updateCardPos(x, y);
 
-        card.setVisibility(RectF.intersects(new RectF(0, 0, getWidth(), getHeight()), new RectF(x, y, x + card.getWidth() * scale, y + card.getHeight() * scale)) ? VISIBLE : INVISIBLE);
+        RectF area = getCardArea(card);
+        area.offset(offsetX, offsetY);
+        card.setVisibility(RectF.intersects(new RectF(0, 0, getWidth(), getHeight()), area) ? VISIBLE : INVISIBLE);
     }
 
     private void updateCardsPos() {
@@ -261,7 +281,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         cards.sort((o1, o2) -> indexOfChild(o2) - indexOfChild(o1));
         for (ActionCard card : cards) {
             if (checkLock && card.getAction().isLocked()) continue;
-            RectF area = new RectF(card.getX(), card.getY(), card.getX() + card.getWidth() * scale, card.getY() + card.getHeight() * scale);
+            RectF area = getCardArea(card);
             if (area.contains(x, y)) return card;
         }
         return null;
@@ -299,6 +319,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
     private void addSelectedCard(ActionCard card) {
         selectedCards.add(card);
         card.setSelected(true);
+        refreshEditView();
     }
 
     private void cleanSelectedCards() {
@@ -308,21 +329,25 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
     }
 
     private void refreshEditView() {
-        RectF area = calculateCardsArea(selectedCards);
-        editView.setX(area.centerX() - editView.getWidth() * scale / 2f);
-        editView.setY(area.bottom + getScaleGridSize() * 2);
-        editView.setVisibility(selectedCards.isEmpty() ? INVISIBLE : VISIBLE);
+        BlueprintView.tryShowFloatingToolBar(selectedCards.size() > 1);
+    }
+
+    private RectF getCardArea(ActionCard card) {
+        float gridSize = getScaleGridSize();
+        Point cardPos = card.getAction().getPos();
+        float cardX = cardPos.x * gridSize;
+        float cardY = cardPos.y * gridSize;
+        float cardWidth = card.getWidth() * scale;
+        float cardHeight = card.getHeight() * scale;
+        return new RectF(cardX, cardY, cardX + cardWidth, cardY + cardHeight);
     }
 
     private RectF calculateCardsArea(Collection<ActionCard> cards) {
         List<PointF> points = new ArrayList<>();
         cards.forEach(card -> {
-            int x = (int) card.getX();
-            int y = (int) card.getY();
-            int width = (int) (card.getWidth() * scale);
-            int height = (int) (card.getHeight() * scale);
-            points.add(new PointF(x, y));
-            points.add(new PointF(x + width, y + height));
+            RectF cardArea = getCardArea(card);
+            points.add(new PointF(cardArea.left, cardArea.top));
+            points.add(new PointF(cardArea.right, cardArea.bottom));
         });
         return DisplayUtil.getPointFsArea(points);
     }
@@ -333,15 +358,15 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (editAble) {
-            float x = event.getX();
-            float y = event.getY();
+        float x = event.getX();
+        float y = event.getY();
+        float realX = x - offsetX;
+        float realY = y - offsetY;
 
-            ActionCard card = getActionCard(x, y, false);
-            if (card != null) {
-                if (card.isEmptyPosition(x - card.getX(), y - card.getY(), scale)) {
-                    return true;
-                }
+        ActionCard card = getActionCard(realX, realY, false);
+        if (card != null) {
+            if (card.isEmptyPosition(x - card.getX(), y - card.getY())) {
+                return true;
             }
         }
         return super.onInterceptTouchEvent(event);
@@ -351,64 +376,70 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         detector.onTouchEvent(event);
-        if (touchState == TOUCH_SCALE) {
-            longTouchHandler.removeCallbacksAndMessages(null);
-            return true;
-        }
+        if (touchState == TOUCH_SCALE) return true;
 
+        float gridSize = getScaleGridSize();
         float x = event.getX();
         float y = event.getY();
+        float realX = x - offsetX;
+        float realY = y - offsetY;
 
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN -> {
                 startX = x;
                 startY = y;
+                realStartX = realX;
+                realStartY = realY;
+
+                lastX = x;
+                lastY = y;
+                realLastX = realX;
+                realLastY = realY;
+
                 touchState = TOUCH_BACKGROUND;
                 touchedCard = null;
                 touchedPin = null;
                 selectedLinks.clear();
                 movingTouch = false;
-                lastX = x;
-                lastY = y;
 
-                if (editAble) {
-                    ActionCard card = getActionCard(x, y, true);
-                    if (card != null) {
-                        touchState = TOUCH_CARD;
-                        touchedCard = card;
+                longTouchHandler.removeCallbacksAndMessages(null);
 
-                        card.bringToFront();
-                        PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY(), scale);
-                        if (pinView != null) {
-                            touchState = TOUCH_PIN;
-                            touchedPin = pinView;
+                ActionCard card = getActionCard(realX, realY, true);
+                if (card != null) {
+                    touchState = TOUCH_CARD;
+                    touchedCard = card;
+
+                    card.bringToFront();
+                    PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY());
+                    if (pinView != null) {
+                        touchState = TOUCH_PIN;
+                        touchedPin = pinView;
+                    }
+                }
+
+                switch (touchState) {
+                    case TOUCH_BACKGROUND -> longTouchHandler.postDelayed(() -> {
+                        touchState = TOUCH_SELECT_AREA;
+                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    }, LONG_TOUCH_TIME);
+
+                    case TOUCH_PIN -> longTouchHandler.postDelayed(() -> {
+                        Pin pin = touchedPin.getPin();
+                        if (pin.isLinked()) {
+                            touchState = TOUCH_DRAG_LINK;
+                            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                            selectedLinks.putAll(pin.getLinks());
+                            pin.clearLinks(task);
                         }
-                    }
 
-                    switch (touchState) {
-                        case TOUCH_BACKGROUND -> longTouchHandler.postDelayed(() -> {
-                            touchState = TOUCH_SELECT_AREA;
-                            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                        }, LONG_TOUCH_TIME);
+                        Pin linkedPin = pin.getLinkedPin(task);
+                        if (linkedPin == null) return;
+                        Action action = task.getAction(linkedPin.getOwnerId());
+                        if (action == null) return;
 
-                        case TOUCH_PIN -> longTouchHandler.postDelayed(() -> {
-                            Pin pin = touchedPin.getPin();
-                            if (pin.isLinked()) {
-                                touchState = TOUCH_DRAG_LINK;
-                                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
-                                selectedLinks.putAll(pin.getLinks());
-                                pin.clearLinks(task);
-                            }
-
-                            Pin linkedPin = pin.getLinkedPin(task);
-                            if (linkedPin == null) return;
-                            Action action = task.getAction(linkedPin.getOwnerId());
-                            if (action == null) return;
-
-                            touchState = TOUCH_NONE;
-                            focusCard(action.getId());
-                        }, LONG_TOUCH_TIME);
-                    }
+                        touchState = TOUCH_NONE;
+                        focusCard(action.getId());
+                    }, LONG_TOUCH_TIME);
                 }
             }
             case MotionEvent.ACTION_MOVE -> {
@@ -433,6 +464,9 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                     }
                 }
 
+                // 边界移动
+                if (touchState != TOUCH_DRAG_BACKGROUND) sideMove(x, y);
+
                 switch (touchState) {
                     case TOUCH_DRAG_BACKGROUND -> {
                         offsetX += x - lastX;
@@ -440,23 +474,21 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                         lastX = x;
                         lastY = y;
                         updateCardsPos();
-                        refreshEditView();
                     }
 
                     case TOUCH_SELECT_AREA -> {
                         cleanSelectedCards();
-                        selectArea = new RectF(startX, startY, x, y);
+                        selectArea = new RectF(realStartX, realStartY, x - offsetX, y - offsetY);
                         selectArea.sort();
                         cards.values().forEach(card -> {
-                            RectF cardArea = new RectF(card.getX(), card.getY(), card.getX() + card.getWidth() * scale, card.getY() + card.getHeight() * scale);
+                            RectF cardArea = getCardArea(card);
                             if (cardArea.intersect(selectArea)) addSelectedCard(card);
                         });
                     }
 
                     case TOUCH_DRAG_CARD -> {
-                        float gridSize = getScaleGridSize();
-                        int dx = (int) ((x - lastX) / gridSize);
-                        int dy = (int) ((y - lastY) / gridSize);
+                        int dx = (int) ((x - offsetX - realLastX) / gridSize);
+                        int dy = (int) ((y - offsetY - realLastY) / gridSize);
 
                         selectedCards.forEach(card -> {
                             Action action = card.getAction();
@@ -465,28 +497,12 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                             if (dy != 0) pos.y += dy;
                             updateCardPos(card);
                         });
-                        refreshEditView();
 
-                        lastX += dx * gridSize;
-                        lastY += dy * gridSize;
+                        realLastX += dx * gridSize;
+                        realLastY += dy * gridSize;
                     }
 
                     case TOUCH_DRAG_PIN, TOUCH_DRAG_LINK -> {
-                        float offset = gridSize * 2;
-                        float gridSize = getScaleGridSize();
-                        if (x <= offset) {
-                            offsetX += gridSize;
-                        } else if (x >= getWidth() - offset) {
-                            offsetX -= gridSize;
-                        }
-
-                        if (y <= offset) {
-                            offsetY += gridSize;
-                        } else if (y >= getHeight() - offset) {
-                            offsetY -= gridSize;
-                        }
-                        updateCardsPos();
-
                         lastX = x;
                         lastY = y;
                     }
@@ -499,14 +515,11 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 switch (touchState) {
                     case TOUCH_BACKGROUND -> cleanSelectedCards();
 
-                    case TOUCH_DRAG_BACKGROUND, TOUCH_SELECT_AREA -> refreshEditView();
-
                     case TOUCH_CARD -> {
                         boolean contains = selectedCards.contains(touchedCard);
                         cleanSelectedCards();
                         if (!contains) {
                             addSelectedCard(touchedCard);
-                            refreshEditView();
                         }
                     }
 
@@ -516,10 +529,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                     }
 
                     case TOUCH_DRAG_PIN, TOUCH_DRAG_LINK -> {
-                        ActionCard card = getActionCard(x, y, false);
+                        ActionCard card = getActionCard(realX, realY, false);
                         if (card != null) {
                             boolean flag = true;
-                            PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY(), scale);
+                            PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY());
                             if (pinView != null) {
                                 Pin pin = pinView.getPin();
                                 if (touchState == TOUCH_DRAG_PIN) {
@@ -543,8 +556,28 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 lastY = 0;
             }
         }
-        postInvalidate();
+        invalidate();
         return true;
+    }
+
+    private void sideMove(float x, float y) {
+        float triggerWidth = gridSize * 3;
+        float sideMoveX = 0, sideMoveY = 0;
+        if (x <= triggerWidth) {
+            sideMoveX = 20;
+        } else if (x >= getWidth() - triggerWidth) {
+            sideMoveX = -20;
+        }
+
+        if (y <= triggerWidth) {
+            sideMoveY = 20;
+        } else if (y >= getHeight() - triggerWidth) {
+            sideMoveY = -20;
+        }
+
+        offsetX += sideMoveX;
+        offsetY += sideMoveY;
+        updateCardsPos();
     }
 
     private void tryLink(Action action) {
@@ -584,10 +617,11 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
         actionDialog = new SelectActionByPinDialog(getContext(), task, pin, action -> {
             ActionCard card = addCard(action);
-            tryLink(touchState, action);
-            action.setPos((int) ((lastX - offsetX) / getScaleGridSize()), (int) ((lastY - offsetY) / getScaleGridSize()));
-            updateCardPos(card);
-
+            if (card != null) {
+                tryLink(touchState, action);
+                action.setPos((int) ((lastX - offsetX) / getScaleGridSize()), (int) ((lastY - offsetY) / getScaleGridSize()));
+                updateCardPos(card);
+            }
             if (actionDialog != null) actionDialog.dismiss();
         });
         actionDialog.show();
@@ -603,64 +637,79 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
     public Bitmap takeTaskCapture() {
         cleanSelectedCards();
+
         float tmpScale = scale;
+        float tmpOffsetX = offsetX;
+        float tmpOffsetY = offsetY;
+
+        // 将所有卡片设置为未缩放大小
         scale = 1;
         updateCardsPos();
         cards.values().forEach(card -> card.setVisibility(VISIBLE));
 
+        // 计算所有卡片的绘制区域
         RectF area = calculateCardsArea(cards.values());
-        area.left -= gridSize;
-        area.top -= gridSize;
-        area.right += gridSize;
-        area.bottom += gridSize;
+        area.left -= gridSize * (CORNER_OFFSET_SCALE + 1);
+        area.top -= gridSize * (CORNER_OFFSET_SCALE + 1);
+        area.right += gridSize * (CORNER_OFFSET_SCALE + 1);
+        area.bottom += gridSize * (CORNER_OFFSET_SCALE + 1);
+
+        // 设置偏移
+        offsetX = -area.left;
+        offsetY = -area.top;
 
         Bitmap bitmap = Bitmap.createBitmap((int) area.width(), (int) area.height(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurface));
-        drawBackground(canvas, offsetX - area.left, offsetY - area.top, gridSize);
-        canvas.translate(-area.left, -area.top);
-        includeBg = false;
         dispatchDraw(canvas);
 
-        includeBg = true;
         scale = tmpScale;
+        offsetX = tmpOffsetX;
+        offsetY = tmpOffsetY;
         updateCardsPos();
         return bitmap;
     }
 
+    /**
+     * 绘制背景网格
+     *
+     * @param canvas   画布
+     * @param startX   绝对起始位置
+     * @param startY   绝对起始位置
+     * @param gridSize 网格大小
+     */
     private void drawBackground(Canvas canvas, float startX, float startY, float gridSize) {
         canvas.save();
         float offsetX = startX % gridSize;
         float offsetY = startY % gridSize;
         canvas.translate(offsetX, offsetY);
 
+        startX = startX - offsetX;
+        startY = startY - offsetY;
+        int startRow = (int) (startY / gridSize);
+        int startCol = (int) (startX / gridSize);
+
         float row = canvas.getHeight() / gridSize;
         float col = canvas.getWidth() / gridSize;
 
-        float bigGridSize = gridSize * 10;
-
-        startY = startY - offsetY;
         for (int i = 0; i < row; i++) {
-            float y = i * gridSize;
-            if (startY == y) {
+            if (startRow == i) {
                 gridPaint.setStrokeWidth(5);
             } else {
-                float lineY = (startY - y) % bigGridSize;
-                gridPaint.setStrokeWidth((Math.abs(lineY) < 1 || Math.abs(lineY) > bigGridSize - 1) ? 2 : 0.5f);
+                boolean isBig = (startRow - i) % 10 == 0;
+                gridPaint.setStrokeWidth(isBig ? 2 : 0.5f);
             }
-            canvas.drawLine(-gridSize, y, canvas.getWidth() + gridSize, y, gridPaint);
+            canvas.drawLine(-gridSize, i * gridSize, canvas.getWidth() + gridSize, i * gridSize, gridPaint);
         }
 
-        startX = startX - offsetX;
         for (int i = 0; i < col; i++) {
-            float x = i * gridSize;
-            if (startX == x) {
+            if (startCol == i) {
                 gridPaint.setStrokeWidth(5);
             } else {
-                float lineX = (startX - x) % bigGridSize;
-                gridPaint.setStrokeWidth((Math.abs(lineX) < 1 || Math.abs(lineX) > bigGridSize - 1) ? 2 : 0.5f);
+                boolean isBig = (startCol - i) % 10 == 0;
+                gridPaint.setStrokeWidth(isBig ? 2 : 0.5f);
             }
-            canvas.drawLine(x, -gridSize, x, canvas.getHeight() + gridSize, gridPaint);
+            canvas.drawLine(i * gridSize, -gridSize, i * gridSize, canvas.getHeight() + gridSize, gridPaint);
         }
 
         canvas.restore();
@@ -669,9 +718,9 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
         float gridSize = getScaleGridSize();
-        if (includeBg) drawBackground(canvas, offsetX, offsetY, gridSize);
+        drawBackground(canvas, offsetX, offsetY, gridSize);
 
-        CornerPathEffect cornerPathEffect = new CornerPathEffect(gridSize);
+        CornerPathEffect cornerPathEffect = new CornerPathEffect(gridSize * CORNER_OFFSET_SCALE / 2);
         linkPaint.setPathEffect(cornerPathEffect);
 
         linkPaint.setStrokeWidth(gridSize / 4);
@@ -681,6 +730,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
             Action action = card.getAction();
             action.getPins().forEach(pin -> {
+                // 输出针脚才需要画线
+                if (!pin.isOut()) return;
                 PinView cardPinView = card.getPinView(pin.getId());
                 if (cardPinView == null) return;
 
@@ -694,11 +745,17 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                     PinView pinView = actionCard.getPinView(key);
                     if (pinView == null) return;
 
-                    // 只画输出线，输入线颜色可能不对
-                    if (!pinView.getPin().isOut()) return;
+                    if (pinView.getPin().isSameClass(pin)) {
+                        linkPaint.setShader(null);
+                        linkPaint.setColor(pinView.getPinColor());
+                    } else {
+                        PointF startPoint = cardPinView.getSlotPosInLayout(scale);
+                        PointF endPoint = pinView.getSlotPosInLayout(scale);
+                        linkPaint.setShader(new LinearGradient(startPoint.x, startPoint.y, endPoint.x, endPoint.y, cardPinView.getPinColor(), pinView.getPinColor(), Shader.TileMode.CLAMP));
+                        linkPaint.setColor(Color.WHITE);
+                    }
 
-                    linkPaint.setColor(pinView.getPinColor());
-                    canvas.drawPath(calculateLinkPath(pinView, cardPinView), linkPaint);
+                    canvas.drawPath(calculateLinkPath(cardPinView, pinView), linkPaint);
                 });
             });
         });
@@ -722,6 +779,16 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
                     linkPaint.setColor(pinView.getPinColor());
 
+                    if (pinView.getPin().isSameClass(pin)) {
+                        linkPaint.setShader(null);
+                        linkPaint.setColor(pinView.getPinColor());
+                    } else {
+                        PointF startPoint = cardPinView.getSlotPosInLayout(scale);
+                        PointF endPoint = pinView.getSlotPosInLayout(scale);
+                        linkPaint.setShader(new LinearGradient(startPoint.x, startPoint.y, endPoint.x, endPoint.y, cardPinView.getPinColor(), pinView.getPinColor(), Shader.TileMode.CLAMP));
+                        linkPaint.setColor(Color.WHITE);
+                    }
+
                     if (pinView.getPin().isOut()) {
                         canvas.drawPath(calculateLinkPath(pinView, cardPinView), linkPaint);
                     } else {
@@ -730,6 +797,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 });
             });
         });
+
+        linkPaint.setShader(null);
         linkPaint.setColorFilter(null);
         linkPaint.setStrokeWidth(gridSize / 4);
 
@@ -740,7 +809,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
             PinView currPosPinView = null;
             ActionCard card = getActionCard(lastX, lastY, false);
             if (card != null) {
-                currPosPinView = card.getLinkAblePinView(lastX - card.getX(), lastY - card.getY(), scale);
+                currPosPinView = card.getLinkAblePinView(lastX - card.getX(), lastY - card.getY());
             }
 
             if (touchState == TOUCH_DRAG_PIN) {
@@ -771,7 +840,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         super.dispatchDraw(canvas);
 
         // 框选
-        if (touchState == TOUCH_SELECT_AREA || !selectedCards.isEmpty()) {
+        if (touchState == TOUCH_SELECT_AREA || selectedCards.size() > 1) {
             DashPathEffect dashPathEffect = new DashPathEffect(new float[]{gridSize, gridSize}, 0);
             linkPaint.setPathEffect(new ComposePathEffect(cornerPathEffect, dashPathEffect));
             linkPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimary));
@@ -785,8 +854,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 area.right += gridSize;
                 area.bottom += gridSize;
             }
+            area.offset(offsetX, offsetY);
             canvas.drawRect(area, linkPaint);
-            refreshEditView();
         }
     }
 
@@ -810,10 +879,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         path.moveTo(start.x, start.y);
 
         float gridSize = getScaleGridSize();
-
-        // 两点距离小于两格，则直接连线
-        float distance = (float) Math.sqrt(Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2));
-        if (distance < gridSize * 2) {
+        float gridSizeOffset = gridSize / 8;
+        float dx = Math.abs(start.x - end.x);
+        float dy = Math.abs(start.y - end.y);
+        if (Math.max(dx, dy) <= gridSize * CORNER_OFFSET_SCALE * 2 + gridSizeOffset) {
             path.lineTo(end.x, end.y);
             return path;
         }
@@ -821,24 +890,24 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         PointF startPoint = new PointF(start.x, start.y);
         PointF endPoint = new PointF(end.x, end.y);
         if (vertical) {
-            startPoint.y += gridSize;
-            endPoint.y -= gridSize;
+            startPoint.y += gridSize * CORNER_OFFSET_SCALE;
+            endPoint.y -= gridSize * CORNER_OFFSET_SCALE;
         } else {
-            startPoint.x += gridSize;
-            endPoint.x -= gridSize;
+            startPoint.x += gridSize * CORNER_OFFSET_SCALE;
+            endPoint.x -= gridSize * CORNER_OFFSET_SCALE;
         }
-        path.lineTo(startPoint.x, startPoint.y);
 
         boolean isXPositive = startPoint.x < endPoint.x;
         boolean isYPositive = startPoint.y < endPoint.y;
         int xScale = isXPositive ? 1 : -1;
         int yScale = isYPositive ? 1 : -1;
 
-        float dx = Math.abs(endPoint.x - startPoint.x);
-        float dy = Math.abs(endPoint.y - startPoint.y);
+        dx = Math.abs(endPoint.x - startPoint.x);
+        dy = Math.abs(endPoint.y - startPoint.y);
         boolean xLong = dx > dy;
-
         float halfLen = Math.abs(dx - dy) / 2;
+
+        path.lineTo(startPoint.x, startPoint.y);
         /*
         vertical:
             xLong:
@@ -862,52 +931,63 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 ! isXPositive: ↓ ← ↑
         */
 
+        boolean flag = true;
         if (vertical) {
-            if (dx < gridSize / 2) {
-                if (!isYPositive) { //← ↑ →
-                    float x = Math.min(endPoint.x, startPoint.x) - gridSize * 2;
+            if (!isYPositive) {
+                if (dx < gridSize * (2 + CORNER_OFFSET_SCALE) - gridSizeOffset) { //← ↑ →
+                    float x = Math.min(endPoint.x, startPoint.x) - gridSize * (CORNER_OFFSET_SCALE + 2);
                     path.lineTo(x, startPoint.y);
                     path.lineTo(x, endPoint.y);
+                    flag = false;
                 }
-            } else if (xLong) {
-                if (isYPositive) {  //↓ ← ↓, ↓ → ↓
-                    path.lineTo(startPoint.x, startPoint.y + dy / 2);
-                    path.lineTo(endPoint.x, endPoint.y - dy / 2);
-                } else {            //← ↖ ←, → ↗ →
-                    path.lineTo(startPoint.x + halfLen * xScale, startPoint.y);
-                    path.lineTo(endPoint.x - halfLen * xScale, endPoint.y);
-                }
-            } else {
-                if (isYPositive) {  //↓ ↙ ↓, ↓ ↘ ↓
-                    path.lineTo(startPoint.x, startPoint.y + halfLen);
-                    path.lineTo(endPoint.x, endPoint.y - halfLen);
-                } else {            //← ↑ ←, → ↑ →
-                    path.lineTo(startPoint.x + dx * xScale / 2, startPoint.y);
-                    path.lineTo(endPoint.x - dx * xScale / 2, endPoint.y);
+            }
+
+            if (flag) {
+                if (xLong) {
+                    if (isYPositive) {  //↓ ← ↓, ↓ → ↓
+                        path.lineTo(startPoint.x, startPoint.y + dy / 2);
+                        path.lineTo(endPoint.x, endPoint.y - dy / 2);
+                    } else {            //← ↖ ←, → ↗ →
+                        path.lineTo(startPoint.x + halfLen * xScale, startPoint.y);
+                        path.lineTo(endPoint.x - halfLen * xScale, endPoint.y);
+                    }
+                } else {
+                    if (isYPositive) {  //↓ ↙ ↓, ↓ ↘ ↓
+                        path.lineTo(startPoint.x, startPoint.y + halfLen);
+                        path.lineTo(endPoint.x, endPoint.y - halfLen);
+                    } else {            //← ↑ ←, → ↑ →
+                        path.lineTo(startPoint.x + dx * xScale / 2, startPoint.y);
+                        path.lineTo(endPoint.x - dx * xScale / 2, endPoint.y);
+                    }
                 }
             }
         } else {
-            if (dy < gridSize / 2) {
-                if (!isXPositive) { //↓ ← ↑
-                    float y = Math.max(endPoint.y, startPoint.y) + gridSize * 6;
+            if (!isXPositive) {
+                if (dy < gridSize * (2 + CORNER_OFFSET_SCALE) - gridSizeOffset) { //↓ ← ↑
+                    float y = Math.max(endPoint.y, startPoint.y) + gridSize * (CORNER_OFFSET_SCALE + 4);
                     path.lineTo(startPoint.x, y);
                     path.lineTo(endPoint.x, y);
+                    flag = false;
                 }
-            } else if (xLong) {
-                if (isXPositive) {  //→ ↗ →, → ↘ →
-                    path.lineTo(startPoint.x + halfLen, startPoint.y);
-                    path.lineTo(endPoint.x - halfLen, endPoint.y);
-                } else {            //↑ ← ↑, ↓ ← ↓
-                    path.lineTo(startPoint.x, startPoint.y + dy * yScale / 2);
-                    path.lineTo(endPoint.x, endPoint.y - dy * yScale / 2);
-                }
-            } else {
-                if (isXPositive) {  //→ ↑ →, → ↓ →
-                    path.lineTo(startPoint.x + dx / 2, startPoint.y);
-                    path.lineTo(endPoint.x - dx / 2, endPoint.y);
-                } else {            //↑ ↖ ↑, ↓ ↙ ↓
-                    path.lineTo(startPoint.x, startPoint.y + halfLen * yScale);
-                    path.lineTo(endPoint.x, endPoint.y - halfLen * yScale);
+            }
+
+            if (flag) {
+                if (xLong) {
+                    if (isXPositive) {  //→ ↗ →, → ↘ →
+                        path.lineTo(startPoint.x + halfLen, startPoint.y);
+                        path.lineTo(endPoint.x - halfLen, endPoint.y);
+                    } else {            //↑ ← ↑, ↓ ← ↓
+                        path.lineTo(startPoint.x, startPoint.y + dy * yScale / 2);
+                        path.lineTo(endPoint.x, endPoint.y - dy * yScale / 2);
+                    }
+                } else {
+                    if (isXPositive) {  //→ ↑ →, → ↓ →
+                        path.lineTo(startPoint.x + dx / 2, startPoint.y);
+                        path.lineTo(endPoint.x - dx / 2, endPoint.y);
+                    } else {            //↑ ↖ ↑, ↓ ↙ ↓
+                        path.lineTo(startPoint.x, startPoint.y + halfLen * yScale);
+                        path.lineTo(endPoint.x, endPoint.y - halfLen * yScale);
+                    }
                 }
             }
         }
@@ -928,12 +1008,12 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
         Toast.makeText(getContext(), getContext().getString(R.string.card_check_error_tips, count), Toast.LENGTH_SHORT).show();
     }
 
-    public boolean isEditAble() {
-        return editAble;
-    }
-
-    public void setEditAble(boolean editAble) {
-        this.editAble = editAble;
+    public void syncCards() {
+        for (ActionCard card : cards.values()) {
+            Action action = card.getAction();
+            if (action instanceof SyncAction syncAction)
+                syncAction.sync(task);
+        }
     }
 
     public Task getTask() {
@@ -947,11 +1027,27 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
 
     @Override
     public void onUpdate(Task task) {
+        syncCards();
         checkCards();
     }
 
     @Override
     public void onRemove(Task task) {
+        checkCards();
+    }
+
+    @Override
+    public void onCreate(Variable var) {
+
+    }
+
+    @Override
+    public void onUpdate(Variable var) {
+        syncCards();
+    }
+
+    @Override
+    public void onRemove(Variable var) {
         checkCards();
     }
 
@@ -964,7 +1060,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 case ADD_CARD -> {
                     CardAddHistory cardAddHistory = (CardAddHistory) editHistory;
                     Action action = cardAddHistory.getAction();
-                    task.removeAction(action);
+                    task.removeAction(action.getId());
                     ActionCard card = cards.remove(action.getId());
                     removeView(card);
                 }
@@ -1048,7 +1144,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
                 case REMOVE_CARD -> {
                     CardRemoveHistory cardRemoveHistory = (CardRemoveHistory) editHistory;
                     Action action = cardRemoveHistory.getAction();
-                    task.removeAction(action);
+                    task.removeAction(action.getId());
                     ActionCard card = cards.remove(action.getId());
                     removeView(card);
                 }
@@ -1109,4 +1205,5 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, IHi
             }
         });
     }
+
 }

@@ -7,13 +7,14 @@ import com.google.gson.JsonObject;
 import java.util.Collections;
 import java.util.List;
 
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ListClearAction extends ListExecuteAction {
-    private final transient Pin listPin = new Pin(new PinList());
+    private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list);
 
     public ListClearAction() {
         super(ActionType.LIST_CLEAR);

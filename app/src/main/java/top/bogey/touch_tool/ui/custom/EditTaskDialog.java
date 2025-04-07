@@ -17,6 +17,7 @@ import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.DialogCreateTaskBinding;
 import top.bogey.touch_tool.databinding.ViewTagListItemBinding;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
 public class EditTaskDialog extends MaterialAlertDialogBuilder {
@@ -33,6 +34,13 @@ public class EditTaskDialog extends MaterialAlertDialogBuilder {
         binding.titleEdit.setText(task.getTitle());
         binding.desEdit.setText(task.getDescription());
 
+        binding.addTagBtn.setOnClickListener(v -> AppUtil.showEditDialog(context, R.string.task_tag_add, "", result -> {
+            if (result != null && !result.isEmpty()) {
+                Saver.getInstance().addTag(result);
+                createChip(result);
+            }
+        }));
+
         List<String> tags = Saver.getInstance().getAllTags();
 
         List<String> currTags = task.getTags();
@@ -43,21 +51,7 @@ public class EditTaskDialog extends MaterialAlertDialogBuilder {
         }
 
         for (String tag : tags) {
-            ViewTagListItemBinding itemBinding = ViewTagListItemBinding.inflate(LayoutInflater.from(context), binding.tagBox, true);
-            Chip chip = itemBinding.getRoot();
-            chip.setCloseIconVisible(false);
-
-            chip.setText(tag);
-            if (currTags != null) {
-                chip.setChecked(currTags.contains(tag));
-            } else {
-                chip.setChecked(false);
-            }
-            chip.setOnClickListener(v -> {
-                if (!selectedTags.remove(tag)) {
-                    selectedTags.add(tag);
-                }
-            });
+            createChip(tag);
         }
 
         setPositiveButton(R.string.enter, (dialog, which) -> {
@@ -92,5 +86,26 @@ public class EditTaskDialog extends MaterialAlertDialogBuilder {
         Editable text = binding.desEdit.getText();
         if (text != null && text.length() > 0) return text.toString();
         return "";
+    }
+
+    private void createChip(String tag) {
+        ViewTagListItemBinding itemBinding = ViewTagListItemBinding.inflate(LayoutInflater.from(getContext()), binding.tagBox, true);
+        Chip chip = itemBinding.getRoot();
+        chip.setOnCloseIconClickListener(v -> AppUtil.showDialog(getContext(), R.string.tag_remove, result -> {
+            if (result) {
+                Saver.getInstance().removeTag(tag);
+                selectedTags.remove(tag);
+                binding.tagBox.removeView(chip);
+            }
+        }));
+
+        chip.setText(tag);
+        chip.setChecked(selectedTags.contains(tag));
+
+        chip.setOnClickListener(v -> {
+            if (!selectedTags.remove(tag)) {
+                selectedTags.add(tag);
+            }
+        });
     }
 }

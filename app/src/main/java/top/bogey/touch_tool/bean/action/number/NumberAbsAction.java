@@ -11,7 +11,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class NumberAbsAction extends CalculateAction {
-    private final transient Pin doublePin = new Pin(new PinDouble(), R.string.pin_number_integer);
+    private final transient Pin doublePin = new Pin(new PinDouble(), R.string.pin_number_double);
     private final transient Pin valuePin = new Pin(new PinDouble(), R.string.number_abs_action_value, true);
 
     public NumberAbsAction() {

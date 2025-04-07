@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.ViewSettingBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.super_user.ISuperUser;
@@ -70,9 +71,9 @@ public class SettingView extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
 
-        activity.addMenuProvider(menuProvider, getViewLifecycleOwner());
-
         binding = ViewSettingBinding.inflate(inflater, container, false);
+
+        binding.toolBar.addMenuProvider(menuProvider, getViewLifecycleOwner());
 
         // 功能启用
         binding.enableSwitch.setOnSwitchClickListener(v -> {
@@ -186,7 +187,6 @@ public class SettingView extends Fragment {
             }
         });
         binding.captureSelect.checkIndex(SettingSaver.getInstance().getCaptureType());
-        binding.ocrSwitch.setVisibility(SettingSaver.getInstance().getCaptureType() == 0 ? View.GONE : View.VISIBLE);
 
         // 文字识别
         binding.ocrSwitch.setOnSwitchClickListener(v -> {
@@ -267,10 +267,6 @@ public class SettingView extends Fragment {
         // 手动执行悬浮窗偏移
         binding.manualPlayPadding.setSliderOnChangeListener((slider, value, fromUser) -> SettingSaver.getInstance().setPlayViewPadding((int) value));
         binding.manualPlayPadding.setValue(SettingSaver.getInstance().getPlayViewPadding());
-
-        // 优先查看蓝图
-        binding.lookFirstSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setLookFirst(binding.lookFirstSwitch.isChecked()));
-        binding.lookFirstSwitch.setChecked(SettingSaver.getInstance().isLookFirst());
 
         PackageManager packageManager = activity.getPackageManager();
         try {

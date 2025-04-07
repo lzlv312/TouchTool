@@ -168,6 +168,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
 
                 if (isChecked == task.isEnable()) return;
                 task.setEnable(isChecked);
+                task.save();
             });
 
             binding.stopButton.setOnClickListener(v -> {
@@ -192,8 +193,9 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
                 ViewTaskPageItemActionBinding actionBinding = ViewTaskPageItemActionBinding.inflate(LayoutInflater.from(context), binding.actionsBox, true);
                 actionBinding.taskDesc.setText(startAction.getValidDescription());
                 actionBinding.enableSwitch.setChecked(startAction.isEnable());
-                actionBinding.enableSwitch.setOnClickListener(v -> {
-                    startAction.setEnable(actionBinding.enableSwitch.isChecked());
+                actionBinding.enableSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    if (isChecked == startAction.isEnable()) return;
+                    startAction.setEnable(isChecked);
                     task.save();
                 });
             }
@@ -204,7 +206,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
             binding.taskTag.setText(tagString);
             binding.taskTag.setVisibility(tagString.isEmpty() ? View.INVISIBLE : View.VISIBLE);
 
-            binding.enableSwitch.setChecked(task.isEnable());
+            if (binding.enableSwitch.isChecked() != task.isEnable()) binding.enableSwitch.setChecked(task.isEnable());
 
             ActionCheckResult result = new ActionCheckResult();
             task.check(result);

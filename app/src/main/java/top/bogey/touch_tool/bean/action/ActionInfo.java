@@ -18,8 +18,8 @@ import top.bogey.touch_tool.bean.action.area.PickAreaAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanAndAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanNotAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanOrAction;
-import top.bogey.touch_tool.bean.action.color.FindColorsAction;
-import top.bogey.touch_tool.bean.action.color.GetColorAction;
+import top.bogey.touch_tool.bean.action.image.FindColorsAction;
+import top.bogey.touch_tool.bean.action.image.GetColorAction;
 import top.bogey.touch_tool.bean.action.image.CropImageAction;
 import top.bogey.touch_tool.bean.action.image.FindImagesAction;
 import top.bogey.touch_tool.bean.action.image.GetImageAction;
@@ -123,6 +123,7 @@ import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.CustomActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.DelayActionCard;
+import top.bogey.touch_tool.ui.blueprint.card.ExecuteCustomActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.NormalActionCard;
 
 public class ActionInfo {
@@ -139,7 +140,7 @@ public class ActionInfo {
 
     private final static ActionInfo CUSTOM_START_INFO = new ActionInfo(ActionType.CUSTOM_START, CustomStartAction.class, R.drawable.icon_setting, R.string.custom_start_action, 0, 0, CustomActionCard.class);
     private final static ActionInfo CUSTOM_END_INFO = new ActionInfo(ActionType.CUSTOM_END, CustomEndAction.class, R.drawable.icon_setting, R.string.custom_end_action, 0, 0, CustomActionCard.class);
-    private final static ActionInfo EXECUTE_TASK_INFO = new ActionInfo(ActionType.EXECUTE_TASK, ExecuteTaskAction.class, R.drawable.icon_task, R.string.execute_task_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo EXECUTE_TASK_INFO = new ActionInfo(ActionType.EXECUTE_TASK, ExecuteTaskAction.class, R.drawable.icon_task, R.string.execute_task_action, 0, 0, ExecuteCustomActionCard.class);
     private final static ActionInfo GET_VARIABLE_INFO = new ActionInfo(ActionType.GET_VARIABLE, GetVariableAction.class, R.drawable.icon_get_value, R.string.get_value_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo SET_VARIABLE_INFO = new ActionInfo(ActionType.SET_VARIABLE, SetVariableAction.class, R.drawable.icon_set_value, R.string.set_value_action, 0, 0, NormalActionCard.class);
 
@@ -244,14 +245,11 @@ public class ActionInfo {
     private final static ActionInfo EDITTEXT_INPUT_INFO = new ActionInfo(ActionType.EDITTEXT_INPUT, EditTextInputAction.class, R.drawable.icon_widget, R.string.edit_text_input_action, R.string.edit_text_input_action_desc, 0, NormalActionCard.class);
 
 
-    // 图片操作
+    // 图片与颜色操作
     private final static ActionInfo GET_IMAGE_INFO = new ActionInfo(ActionType.GET_IMAGE, GetImageAction.class, R.drawable.icon_image, R.string.get_image_action, R.string.get_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CROP_IMAGE_INFO = new ActionInfo(ActionType.CROP_IMAGE, CropImageAction.class, R.drawable.icon_image, R.string.crop_image_action, R.string.crop_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SAVE_IMAGE_INFO = new ActionInfo(ActionType.SAVE_IMAGE, SaveImageAction.class, R.drawable.icon_image, R.string.save_image_action, R.string.save_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_IMAGES_INFO = new ActionInfo(ActionType.FIND_IMAGES, FindImagesAction.class, R.drawable.icon_image, R.string.find_images_action, R.string.find_images_action_desc, 0, NormalActionCard.class);
-
-
-    // 颜色操作
     private final static ActionInfo GET_COLOR_INFO = new ActionInfo(ActionType.GET_COLOR, GetColorAction.class, R.drawable.icon_color, R.string.get_color_action, R.string.get_color_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_COLORS_INFO = new ActionInfo(ActionType.FIND_COLORS, FindColorsAction.class, R.drawable.icon_color, R.string.find_colors_action, R.string.find_colors_action_desc, 0, NormalActionCard.class);
 

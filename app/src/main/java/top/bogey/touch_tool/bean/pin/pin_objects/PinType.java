@@ -29,5 +29,6 @@ public enum PinType {
     COLOR,
 
     APP,
+    APPS,
     ;
 }

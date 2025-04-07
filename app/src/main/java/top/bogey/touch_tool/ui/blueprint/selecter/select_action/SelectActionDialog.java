@@ -4,68 +4,52 @@ import android.content.Context;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.task.ITagManager;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.databinding.DialogSelectActionBinding;
+import top.bogey.touch_tool.databinding.WidgetSettingSelectButton2Binding;
 import top.bogey.touch_tool.databinding.WidgetSettingSelectButtonBinding;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.ui.custom.EditVariableDialog;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 public class SelectActionDialog extends BottomSheetDialog {
-    private final static int KEY = R.string.title;
-    private final static int VALUE = R.string.des;
+    protected final String GLOBAL = getContext().getString(R.string.select_action_group_global);
+    protected final String PRIVATE = getContext().getString(R.string.select_action_group_private);
+    protected final static String PARENT_PREFIX = "👨";
+    protected final static String TAG_PREFIX = "🔗";
 
     protected final DialogSelectActionBinding binding;
-    private final SelectActionPageAdapter adapter;
-    protected final Map<GroupType, Map<String, List<Object>>> dataMap = new LinkedHashMap<>();
     protected final Task task;
+    protected final SelectActionItemRecyclerViewAdapter adapter;
 
-    protected final TabLayout.OnTabSelectedListener tabListener = new TabLayout.OnTabSelectedListener() {
-        @Override
-        public void onTabSelected(TabLayout.Tab tab) {
-            String GLOBAL = getContext().getString(R.string.select_action_group_global);
-            String PRIVATE = getContext().getString(R.string.select_action_group_private);
-
-            int buttonId = binding.group.getCheckedButtonId();
-            View view = binding.group.findViewById(buttonId);
-            GroupType groupType = (GroupType) view.getTag(KEY);
-            if (groupType != GroupType.PRESET && (Objects.equals(tab.getText(), GLOBAL) || Objects.equals(tab.getText(), PRIVATE))) {
-                binding.addButton.setVisibility(View.VISIBLE);
-            } else {
-                binding.addButton.setVisibility(View.GONE);
-            }
-        }
-
-        @Override
-        public void onTabUnselected(TabLayout.Tab tab) {
-
-        }
-
-        @Override
-        public void onTabReselected(TabLayout.Tab tab) {
-
-        }
-    };
+    protected GroupType groupType = GroupType.PRESET;
+    protected Map<String, List<Object>> dataMap = new HashMap<>();
+    protected List<Object> dataList = new ArrayList<>();
 
     public SelectActionDialog(@NonNull Context context, Task task, ResultCallback<Action> callback) {
         super(context);
@@ -74,6 +58,41 @@ public class SelectActionDialog extends BottomSheetDialog {
         binding = DialogSelectActionBinding.inflate(LayoutInflater.from(context));
         setContentView(binding.getRoot());
 
+        BottomSheetBehavior<FrameLayout> behavior = getBehavior();
+        behavior.setDraggable(false);
+
+        adapter = new SelectActionItemRecyclerViewAdapter(this, callback);
+        binding.actionsBox.setAdapter(adapter);
+
+        binding.group.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                View view = group.findViewById(checkedId);
+                groupType = (GroupType) view.getTag();
+                binding.addButton.setTag(groupType);
+                dataMap = getGroupData(groupType);
+                refreshSubGroup(dataMap);
+            }
+        });
+
+        binding.subGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                View view = group.findViewById(checkedId);
+                String tag = (String) view.getTag();
+                dataList = dataMap.get(tag);
+                adapter.setData(dataList, groupType != GroupType.PRESET);
+                binding.addButton.setVisibility(Objects.equals(tag, GLOBAL) || Objects.equals(tag, PRIVATE) ? View.VISIBLE : View.GONE);
+            }
+        });
+
+        String[] groupName = getContext().getResources().getStringArray(R.array.group_type);
+        for (GroupType groupType : getGroupTypes()) {
+            WidgetSettingSelectButtonBinding buttonBinding = WidgetSettingSelectButtonBinding.inflate(LayoutInflater.from(getContext()), binding.group, true);
+            buttonBinding.getRoot().setId(View.generateViewId());
+            buttonBinding.getRoot().setText(groupName[groupType.ordinal()]);
+            buttonBinding.getRoot().setTag(groupType);
+        }
+        binding.group.check(binding.group.getChildAt(0).getId());
+
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -81,157 +100,192 @@ public class SelectActionDialog extends BottomSheetDialog {
             }
         });
 
-        adapter = new SelectActionPageAdapter(callback);
-        binding.actionsBox.setAdapter(adapter);
-
-        new TabLayoutMediator(binding.tabBox, binding.actionsBox, (tab, position) -> {
-            if (position < adapter.currentTag.size()) {
-                tab.setText(adapter.currentTag.get(position));
-            }
-        }).attach();
-
-        binding.group.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (isChecked) {
-                View view = group.findViewById(checkedId);
-                GroupType groupType = (GroupType) view.getTag(KEY);
-                binding.addButton.setTag(groupType);
-                Map<String, List<Object>> map = (Map<String, List<Object>>) view.getTag(VALUE);
-                adapter.setData(map, binding.group.indexOfChild(view) != 0);
-            }
-        });
-
         binding.searchButton.setOnClickListener(v -> {
             if (binding.searchBox.getVisibility() == View.VISIBLE) {
                 binding.searchBox.setVisibility(View.GONE);
+                binding.searchEdit.setText("");
             } else {
                 binding.searchBox.setVisibility(View.VISIBLE);
                 binding.searchEdit.requestFocus();
             }
         });
 
-        binding.tabBox.addOnTabSelectedListener(tabListener);
-
         binding.addButton.setOnClickListener(v -> {
             GroupType groupType = (GroupType) binding.addButton.getTag();
             switch (groupType) {
-                case TASK -> {
-                    Task newTask = new Task();
-                    EditTaskDialog dialog = new EditTaskDialog(getContext(), newTask);
-                    dialog.setTitle(R.string.task_add);
-                    dialog.setCallback(result -> {
-                        if (result) {
-                            TabLayout.Tab tab = binding.tabBox.getTabAt(binding.tabBox.getSelectedTabPosition());
-                            if (tab != null) {
-                                String string = getContext().getString(R.string.select_action_group_private);
-                                if (Objects.equals(tab.getText(), string)) {
-                                    task.addTask(newTask);
-                                }
-                            }
-                            newTask.save();
+                case TASK -> showNewTaskDialog();
+                case VARIABLE -> showNewVariableDialog();
+            }
+        });
+    }
+
+    private void showNewVariableDialog() {
+        Variable variable = new Variable(new PinObject());
+        EditVariableDialog dialog = new EditVariableDialog(getContext(), variable);
+        dialog.setTitle(R.string.variable_add);
+        dialog.setCallback(result -> {
+            if (result) {
+                View view = binding.subGroup.findViewById(binding.subGroup.getCheckedButtonId());
+                String tag = (String) view.getTag();
+                if (PRIVATE.equals(tag)) task.addVariable(variable);
+                variable.save();
+                dataList.add(0, variable);
+                adapter.notifyItemInserted(0);
+            }
+        });
+        dialog.show();
+    }
+
+    private void showNewTaskDialog() {
+        Task newTask = new Task();
+        EditTaskDialog dialog = new EditTaskDialog(getContext(), newTask);
+        dialog.setTitle(R.string.task_add);
+        dialog.setCallback(result -> {
+            if (result) {
+                View view = binding.subGroup.findViewById(binding.subGroup.getCheckedButtonId());
+                String tag = (String) view.getTag();
+                if (PRIVATE.equals(tag)) task.addTask(newTask);
+                newTask.save();
+                dataList.add(0, newTask);
+                adapter.notifyItemInserted(0);
+            }
+        });
+        dialog.show();
+    }
+
+    private Map<String, List<Object>> calculateTagGroup(Map<String, List<Object>> dataMap) {
+        Map<String, List<Object>> map = new HashMap<>();
+        dataMap.forEach((key, value) -> {
+            if (GLOBAL.equals(key) || PRIVATE.equals(key)) {
+                for (Object o : value) {
+                    if (o instanceof ITagManager) {
+                        List<String> tags = ((ITagManager) o).getTags();
+                        for (String tag : tags) {
+                            List<Object> objects = map.computeIfAbsent(tag, k -> new ArrayList<>());
+                            objects.add(o);
                         }
-                    });
-                    dialog.show();
-                }
-                case VARIABLE -> {
-                    Variable variable = new Variable(new PinObject());
-                    EditVariableDialog dialog = new EditVariableDialog(getContext(), variable);
-                    dialog.setTitle(R.string.variable_add);
-                    dialog.setCallback(result -> {
-                        if (result) {
-                            TabLayout.Tab tab = binding.tabBox.getTabAt(binding.tabBox.getSelectedTabPosition());
-                            if (tab != null) {
-                                String string = getContext().getString(R.string.select_action_group_private);
-                                if (Objects.equals(tab.getText(), string)) {
-                                    task.addVar(variable);
-                                }
-                            }
-                            variable.save();
-                        }
-                    });
-                    dialog.show();
+                    }
                 }
             }
         });
-        initGroup();
+
+        ArrayList<String> keys = new ArrayList<>(map.keySet());
+        AppUtil.chineseSort(keys, tag -> tag);
+        LinkedHashMap<String, List<Object>> linkedHashMap = new LinkedHashMap<>();
+        for (String key : keys) {
+            List<Object> objects = map.get(key);
+            linkedHashMap.put(TAG_PREFIX + key, objects);
+        }
+        return linkedHashMap;
     }
 
-    protected void initGroup() {
-        calculateShowData();
-        if (dataMap == null || dataMap.isEmpty()) return;
+    protected void refreshSubGroup(Map<String, List<Object>> dataMap) {
+        Map<String, List<Object>> tagGroup = calculateTagGroup(dataMap);
+        dataMap.putAll(tagGroup);
+        refreshSubGroup(dataMap.keySet().toArray(new String[0]));
+    }
 
-        binding.group.removeAllViews();
-        String[] groupName = getContext().getResources().getStringArray(R.array.group_type);
+    private void refreshSubGroup(String[] chips) {
+        binding.subGroup.clearChecked();
+        binding.subGroup.removeAllViews();
+        for (String s : chips) {
+            WidgetSettingSelectButton2Binding buttonBinding = WidgetSettingSelectButton2Binding.inflate(LayoutInflater.from(getContext()), binding.subGroup, true);
+            MaterialButton button = buttonBinding.getRoot();
+            button.setId(View.generateViewId());
+            button.setText(s);
+            button.setTag(s);
+        }
+        if (chips.length > 0) binding.subGroup.check(binding.subGroup.getChildAt(0).getId());
+    }
+
+    protected GroupType[] getGroupTypes() {
+        return new GroupType[]{GroupType.PRESET, GroupType.TASK, GroupType.VARIABLE};
+    }
+
+    protected void deleteSameObject(Object object) {
         dataMap.forEach((key, value) -> {
-            WidgetSettingSelectButtonBinding buttonBinding = WidgetSettingSelectButtonBinding.inflate(LayoutInflater.from(getContext()), binding.group, true);
-            buttonBinding.getRoot().setId(View.generateViewId());
-            buttonBinding.getRoot().setText(groupName[key.ordinal()]);
-            buttonBinding.getRoot().setTag(KEY, key);
-            buttonBinding.getRoot().setTag(VALUE, value);
+            for (int i = value.size() - 1; i >= 0; i--) {
+                Object o = value.get(i);
+                if (o.equals(object)) {
+                    value.remove(i);
+                }
+            }
         });
-
-        View child = binding.group.getChildAt(0);
-        binding.group.check(child.getId());
-        Map<String, List<Object>> map = (Map<String, List<Object>>) child.getTag(VALUE);
-        adapter.setData(map, binding.group.indexOfChild(child) != 0);
     }
 
-    protected void calculateShowData() {
-        dataMap.clear();
-        // 第一部分：预设Action
-        Map<String, List<Object>> preset = new LinkedHashMap<>();
-        for (ActionMap.ActionGroupType groupType : ActionMap.ActionGroupType.values()) {
-            List<Object> types = new ArrayList<>(ActionMap.getTypes(groupType));
-            preset.put(groupType.getName(), types);
+    protected Map<String, List<Object>> getGroupData(GroupType groupType) {
+        Map<String, List<Object>> map = new LinkedHashMap<>();
+        switch (groupType) {
+            case PRESET -> {
+                for (ActionMap.ActionGroupType actionGroupType : ActionMap.ActionGroupType.values()) {
+                    List<Object> types = new ArrayList<>(ActionMap.getTypes(actionGroupType));
+                    map.put(actionGroupType.getName(), types);
+                }
+            }
+            case TASK -> {
+                // 私有任务
+                List<Object> privateTasks = new ArrayList<>(task.getTasks());
+                map.put(PRIVATE, privateTasks);
+
+                // 公共任务
+                List<Object> publicTasks = new ArrayList<>(Saver.getInstance().getTasks());
+                map.put(GLOBAL, publicTasks);
+
+                // 父任务
+                Task parent = task.getParent();
+                while (parent != null) {
+                    List<Object> list = new ArrayList<>(parent.getTasks());
+                    if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
+                    parent = parent.getParent();
+                }
+            }
+            case VARIABLE -> {
+                List<Object> privateVars = new ArrayList<>(task.getVariables());
+                map.put(PRIVATE, privateVars);
+
+                List<Object> publicVars = new ArrayList<>(Saver.getInstance().getVars());
+                map.put(GLOBAL, publicVars);
+
+                Task parent = task.getParent();
+                while (parent != null) {
+                    List<Object> list = new ArrayList<>(parent.getVariables());
+                    if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
+                    parent = parent.getParent();
+                }
+            }
         }
-        dataMap.put(GroupType.PRESET, preset);
-
-
-        // 第二部分：带CustomStartAction的Task
-        Map<String, List<Object>> tasks = new LinkedHashMap<>();
-
-        // 公共任务
-        List<Object> publicTasks = new ArrayList<>(Saver.getInstance().getTasks());
-        tasks.put(getContext().getString(R.string.select_action_group_global), publicTasks);
-
-        // 私有任务
-        List<Object> privateTasks = new ArrayList<>(task.getTasks());
-        tasks.put(getContext().getString(R.string.select_action_group_private), privateTasks);
-
-        // 父任务
-        Task parent = task.getParent();
-        while (parent != null) {
-            List<Object> list = new ArrayList<>(parent.getTasks());
-            if (!list.isEmpty()) tasks.put(parent.getTitle(), list);
-            parent = parent.getParent();
-        }
-        dataMap.put(GroupType.TASK, tasks);
-
-
-        // 第三部分：变量Variable
-        Map<String, List<Object>> vars = new LinkedHashMap<>();
-
-        List<Object> publicVars = new ArrayList<>(Saver.getInstance().getVars());
-        vars.put(getContext().getString(R.string.select_action_group_global), publicVars);
-
-        List<Object> privateVars = new ArrayList<>(task.getVars());
-        vars.put(getContext().getString(R.string.select_action_group_private), privateVars);
-
-        parent = task.getParent();
-        while (parent != null) {
-            List<Object> list = new ArrayList<>(parent.getVars());
-            if (!list.isEmpty()) vars.put(parent.getTitle(), list);
-            parent = parent.getParent();
-        }
-        dataMap.put(GroupType.VARIABLE, vars);
+        return map;
     }
 
     public void search() {
         if (adapter == null) return;
         Editable text = binding.searchEdit.getText();
         if (text == null || text.length() == 0) {
-            adapter.search(null);
+            dataMap = getGroupData(groupType);
+            refreshSubGroup(dataMap);
         } else {
-            adapter.search(text.toString());
+            List<Object> data = new ArrayList<>();
+            Pattern pattern = AppUtil.getPattern(text.toString());
+
+            for (Map.Entry<String, List<Object>> entry : dataMap.entrySet()) {
+                List<Object> list = entry.getValue();
+                for (Object object : list) {
+                    String name = SelectActionItemRecyclerViewAdapter.getObjectTitle(object);
+
+                    if (pattern != null) {
+                        if (pattern.matcher(name).find()) {
+                            data.add(object);
+                        }
+                    } else {
+                        if (name.contains(text)) {
+                            data.add(object);
+                        }
+                    }
+                }
+            }
+            dataMap = new HashMap<>();
+            dataMap.put(text.toString(), data);
+            refreshSubGroup(dataMap);
         }
     }
 

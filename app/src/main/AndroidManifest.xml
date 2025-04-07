@@ -51,6 +51,9 @@
         <intent>
             <action android:name="android.intent.action.SEND" />
         </intent>
+        <intent>
+            <action android:name="top.bogey.ocr_service" />
+        </intent>
     </queries>
 
     <application

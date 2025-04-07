@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
@@ -25,7 +27,7 @@ import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
-import top.bogey.touch_tool.databinding.DialogSelectActionPageItemBinding;
+import top.bogey.touch_tool.databinding.DialogSelectActionItemBinding;
 import top.bogey.touch_tool.ui.blueprint.BlueprintView;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
@@ -34,20 +36,22 @@ import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.listener.SpinnerSelectedListener;
 
-public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapter<SelectActionPageItemRecyclerViewAdapter.ViewHolder> {
+public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<SelectActionItemRecyclerViewAdapter.ViewHolder> {
 
+    private final SelectActionDialog dialog;
     private final ResultCallback<Action> callback;
 
-    private List<Object> data;
+    private List<Object> data = new ArrayList<>();
 
-    public SelectActionPageItemRecyclerViewAdapter(ResultCallback<Action> callback) {
+    public SelectActionItemRecyclerViewAdapter(SelectActionDialog dialog, ResultCallback<Action> callback) {
+        this.dialog = dialog;
         this.callback = callback;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        DialogSelectActionPageItemBinding binding = DialogSelectActionPageItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        DialogSelectActionItemBinding binding = DialogSelectActionItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 
@@ -87,18 +91,36 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
         return "";
     }
 
+    @DrawableRes
+    public static int getObjectIcon(Object object) {
+        if (object instanceof Task) return R.drawable.icon_task;
+        if (object instanceof Variable) return R.drawable.icon_get_value;
+        if (object instanceof ActionType actionType) {
+            ActionInfo info = ActionInfo.getActionInfo(actionType);
+            if (info != null) {
+                return info.getIcon();
+            }
+        }
+        if (object instanceof ActionCard card) return getObjectIcon(card.getAction().getType());
+        return 0;
+    }
+
     public void setData(List<Object> data, boolean sort) {
         this.data = data;
-        if (sort) AppUtil.chineseSort(data, SelectActionPageItemRecyclerViewAdapter::getObjectTitle);
+        if (sort) AppUtil.chineseSort(data, SelectActionItemRecyclerViewAdapter::getObjectTitle);
         notifyDataSetChanged();
     }
 
+    private void deleteSameObject(Object object) {
+        dialog.deleteSameObject(object);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private final DialogSelectActionPageItemBinding binding;
+        private final DialogSelectActionItemBinding binding;
         private final Context context;
         private boolean needDelete = false;
 
-        public ViewHolder(@NonNull DialogSelectActionPageItemBinding binding) {
+        public ViewHolder(@NonNull DialogSelectActionItemBinding binding) {
             super(binding.getRoot());
 
             this.binding = binding;
@@ -114,6 +136,7 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
                             int index = getBindingAdapterPosition();
                             Variable var = (Variable) data.get(index);
                             var.setKeyPinInfo(pinInfo);
+                            var.save();
                             notifyItemChanged(index);
                         })
                         .setNegativeButton(R.string.cancel, null)
@@ -125,7 +148,10 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     int index = getBindingAdapterPosition();
                     Variable var = (Variable) data.get(index);
-                    if (var.setType(Variable.VariableType.values()[position])) notifyItemChanged(index);
+                    if (var.setType(Variable.VariableType.values()[position])) {
+                        var.save();
+                        notifyItemChanged(index);
+                    }
                 }
             });
 
@@ -139,6 +165,7 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
                             int index = getBindingAdapterPosition();
                             Variable var = (Variable) data.get(index);
                             var.setValuePinInfo(pinInfo);
+                            var.save();
                             notifyItemChanged(index);
                         })
                         .setNegativeButton(R.string.cancel, null)
@@ -183,7 +210,7 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
                 if (object instanceof Variable var) {
                     Variable copy = var.newCopy();
                     copy.setTitle(context.getString(R.string.copy_title, var.getTitle()));
-                    if (var.getOwner() != null) var.getOwner().addVar(copy);
+                    if (var.getParent() != null) var.getParent().addVariable(copy);
                     copy.save();
                     data.add(index + 1, copy);
                     notifyItemInserted(index + 1);
@@ -196,6 +223,7 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
 
                 if (object instanceof Task task) {
                     BlueprintView.tryPushStack(task);
+                    dialog.dismiss();
                 }
             });
 
@@ -209,41 +237,36 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
                 }
             });
 
-            binding.getVarValue.setOnClickListener(v -> {
-                int index = getBindingAdapterPosition();
-                Object object = data.get(index);
-
-                if (object instanceof Variable var) {
-                    Action action = new GetVariableAction(var);
-                    if (callback != null) callback.onResult(action);
-                }
-            });
-
             binding.deleteButton.setOnClickListener(v -> {
                 if (needDelete) {
-                    int index = getBindingAdapterPosition();
-                    Object object = data.get(index);
+                    AppUtil.showDialog(context, R.string.remove_tips, result -> {
+                        if (result) {
+                            int index = getBindingAdapterPosition();
+                            Object object = data.get(index);
 
-                    if (object instanceof Task task) {
-                        Task parent = task.getParent();
-                        if (parent == null) {
-                            Saver.getInstance().removeTask(task.getId());
-                        } else {
-                            parent.removeTask(task.getId());
+                            if (object instanceof Task task) {
+                                Task parent = task.getParent();
+                                if (parent == null) {
+                                    Saver.getInstance().removeTask(task.getId());
+                                } else {
+                                    parent.removeTask(task.getId());
+                                }
+                            }
+
+                            if (object instanceof Variable var) {
+                                Task owner = var.getParent();
+                                if (owner == null) {
+                                    Saver.getInstance().removeVar(var.getId());
+                                } else {
+                                    owner.removeVariable(var.getId());
+                                }
+                            }
+
+                            data.remove(index);
+                            notifyItemRemoved(index);
+                            deleteSameObject(object);
                         }
-                    }
-
-                    if (object instanceof Variable var) {
-                        Task owner = var.getOwner();
-                        if (owner == null) {
-                            Saver.getInstance().removeVar(var.getId());
-                        } else {
-                            owner.removeVar(var.getId());
-                        }
-                    }
-
-                    data.remove(index);
-                    notifyItemRemoved(index);
+                    });
                 } else {
                     binding.deleteButton.setChecked(true);
                     needDelete = true;
@@ -279,6 +302,7 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
 
         public void refresh(Object object) {
             binding.taskName.setText(getObjectTitle(object));
+            binding.icon.setImageResource(getObjectIcon(object));
 
             String desc = getObjectDesc(object);
             if (desc != null && !desc.isEmpty()) {
@@ -298,9 +322,11 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
             if (object instanceof Task task) {
                 binding.copyButton.setVisibility(ViewGroup.VISIBLE);
                 binding.editButton.setVisibility(ViewGroup.VISIBLE);
-                binding.deleteButton.setVisibility(ViewGroup.VISIBLE);
+                Task taskParent = task.getParentTask(dialog.task.getId());
+                binding.deleteButton.setVisibility(taskParent == null && !task.equals(dialog.task) ? ViewGroup.VISIBLE : ViewGroup.GONE);
 
                 binding.settingButton.setVisibility(ViewGroup.VISIBLE);
+
 
                 if (task.getActions(CustomStartAction.class).isEmpty()) {
                     binding.getRoot().setEnabled(false);
@@ -308,7 +334,6 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
                 }
             }
 
-            binding.getVarValue.setVisibility(ViewGroup.GONE);
             binding.setVarValue.setVisibility(ViewGroup.GONE);
             binding.varBox.setVisibility(ViewGroup.GONE);
             if (object instanceof Variable var) {
@@ -316,7 +341,6 @@ public class SelectActionPageItemRecyclerViewAdapter extends RecyclerView.Adapte
                 binding.editButton.setVisibility(ViewGroup.VISIBLE);
                 binding.deleteButton.setVisibility(ViewGroup.VISIBLE);
 
-                binding.getVarValue.setVisibility(ViewGroup.VISIBLE);
                 binding.setVarValue.setVisibility(ViewGroup.VISIBLE);
 
                 binding.varBox.setVisibility(ViewGroup.VISIBLE);

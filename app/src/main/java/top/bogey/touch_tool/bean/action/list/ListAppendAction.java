@@ -15,24 +15,24 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ListAppendAction extends ListExecuteAction {
-    private final transient Pin listPin = new Pin(new PinList());
-    private final transient Pin elementPin = new Pin(new PinList());
+    private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list);
+    private final transient Pin list2Pin = new Pin(new PinList(), R.string.pin_list);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
 
     public ListAppendAction() {
         super(ActionType.LIST_APPEND);
-        addPins(listPin, elementPin, resultPin);
+        addPins(listPin, list2Pin, resultPin);
     }
 
     public ListAppendAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(listPin, elementPin, resultPin);
+        reAddPins(listPin, list2Pin, resultPin);
     }
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         PinList list = getPinValue(runnable, listPin);
-        PinList element = getPinValue(runnable, elementPin);
+        PinList element = getPinValue(runnable, list2Pin);
         boolean result = list.addAll(element);
         resultPin.getValue(PinBoolean.class).setValue(result);
         executeNext(runnable, outPin);
@@ -41,7 +41,7 @@ public class ListAppendAction extends ListExecuteAction {
     @NonNull
     @Override
     public List<Pin> getDynamicValueTypePins() {
-        return Arrays.asList(listPin, elementPin);
+        return Arrays.asList(listPin, list2Pin);
     }
 
 }

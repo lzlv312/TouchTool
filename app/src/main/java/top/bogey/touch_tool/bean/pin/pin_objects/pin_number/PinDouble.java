@@ -19,7 +19,7 @@ public class PinDouble extends PinNumber<Double> {
     }
 
     public PinDouble(double value) {
-        super(PinSubType.FLOAT, value);
+        super(PinSubType.DOUBLE, value);
     }
 
     public PinDouble(JsonObject jsonObject) {
@@ -31,7 +31,7 @@ public class PinDouble extends PinNumber<Double> {
     @NonNull
     @Override
     public String toString() {
-        DecimalFormat format = new DecimalFormat("#.###");
+        DecimalFormat format = new DecimalFormat("#.####");
         return format.format(value);
     }
 

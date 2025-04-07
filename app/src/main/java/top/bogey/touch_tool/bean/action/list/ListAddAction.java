@@ -13,11 +13,12 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ListAddAction extends ListExecuteAction {
-    private final transient Pin listPin = new Pin(new PinList());
-    private final transient Pin elementPin = new Pin(new PinObject(), R.string.pin_object);
+    private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list);
+    private final transient Pin elementPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.pin_object);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
 
     public ListAddAction() {
@@ -27,7 +28,9 @@ public class ListAddAction extends ListExecuteAction {
 
     public ListAddAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(listPin, elementPin, resultPin);
+        reAddPin(listPin);
+        reAddPin(elementPin, true);
+        reAddPin(resultPin);
     }
 
     @Override

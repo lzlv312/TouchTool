@@ -9,7 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionInfo;
 import top.bogey.touch_tool.bean.action.ActionMap;
@@ -28,90 +27,82 @@ public class SelectActionByPinDialog extends SelectActionDialog {
     public SelectActionByPinDialog(@NonNull Context context, Task task, Pin touchedPin, ResultCallback<Action> callback) {
         super(context, task, callback);
         this.touchedPin = touchedPin;
-        binding.tabBox.removeOnTabSelectedListener(tabListener);
-        initGroup();
+        dataMap = getGroupData(groupType);
+        refreshSubGroup(dataMap);
     }
 
     @Override
-    public void calculateShowData() {
-        dataMap.clear();
-        if (touchedPin == null) return;
-        // 第一部分：预设Action
-        Map<String, List<Object>> preset = new LinkedHashMap<>();
-        for (ActionMap.ActionGroupType groupType : ActionMap.ActionGroupType.values()) {
-            List<Object> types = new ArrayList<>();
-            for (ActionType type : ActionMap.getTypes(groupType)) {
-                ActionInfo info = ActionInfo.getActionInfo(type);
-                if (info == null) continue;
-                Action action = info.getAction();
-                if (action == null) continue;
-                Pin pin = action.findConnectToAblePin(touchedPin);
-                if (pin == null) continue;
-                types.add(type);
-            }
-            if (types.isEmpty()) continue;
-            preset.put(groupType.getName(), types);
-        }
-        if (!preset.isEmpty()) dataMap.put(GroupType.PRESET, preset);
-
-        // 第二部分：带CustomStartAction的Task
-        Map<String, List<Object>> tasks = new LinkedHashMap<>();
-
-        // 公共任务
-        List<Object> publicTasks = new ArrayList<>();
-        for (Task task : Saver.getInstance().getTasks()) {
-            if (isConnectAbleTask(task)) publicTasks.add(task);
-        }
-        if (!publicTasks.isEmpty()) tasks.put(getContext().getString(R.string.select_action_group_global), publicTasks);
-
-        // 私有任务
-        List<Object> privateTasks = new ArrayList<>();
-        for (Task task : task.getTasks()) {
-            if (isConnectAbleTask(task)) privateTasks.add(task);
-        }
-        if (!privateTasks.isEmpty()) tasks.put(getContext().getString(R.string.select_action_group_private), privateTasks);
-
-        // 父任务
-        Task parent = task.getParent();
-        while (parent != null) {
-            List<Object> list = new ArrayList<>();
-            if (isConnectAbleTask(parent)) list.add(parent);
-            if (!list.isEmpty()) tasks.put(parent.getTitle(), list);
-            parent = parent.getParent();
-        }
-        if (!tasks.isEmpty()) dataMap.put(GroupType.TASK, tasks);
-
-        // 第三部分：变量Variable
-        Map<String, List<Object>> vars = new LinkedHashMap<>();
-
-        List<Object> publicVars = new ArrayList<>();
-        for (Variable var : Saver.getInstance().getVars()) {
-            if (touchedPin.getValue().isInstance(var.getValue())) {
-                publicVars.add(var);
-            }
-        }
-        if (!publicVars.isEmpty()) vars.put(getContext().getString(R.string.select_action_group_global), publicVars);
-
-        List<Object> privateVars = new ArrayList<>(task.getVars());
-        for (Variable var : task.getVars()) {
-            if (touchedPin.getValue().isInstance(var.getValue())) {
-                privateVars.add(var);
-            }
-        }
-        if (!privateVars.isEmpty()) vars.put(getContext().getString(R.string.select_action_group_private), privateVars);
-
-        parent = task.getParent();
-        while (parent != null) {
-            List<Object> list = new ArrayList<>();
-            for (Variable var : parent.getVars()) {
-                if (touchedPin.getValue().isInstance(var.getValue())) {
-                    list.add(var);
+    protected Map<String, List<Object>> getGroupData(GroupType groupType) {
+        Map<String, List<Object>> map = new LinkedHashMap<>();
+        switch (groupType) {
+            case PRESET -> {
+                for (ActionMap.ActionGroupType actionGroupType : ActionMap.ActionGroupType.values()) {
+                    List<Object> types = new ArrayList<>();
+                    for (ActionType actionType : new ArrayList<>(ActionMap.getTypes(actionGroupType))) {
+                        ActionInfo actionInfo = ActionInfo.getActionInfo(actionType);
+                        if (actionInfo == null) continue;
+                        Action action = actionInfo.getAction();
+                        if (action == null) continue;
+                        Pin pin = action.findConnectToAblePin(touchedPin);
+                        if (pin == null) continue;
+                        types.add(actionType);
+                    }
+                    if (types.isEmpty()) continue;
+                    map.put(actionGroupType.getName(), types);
                 }
             }
-            if (!list.isEmpty()) vars.put(parent.getTitle(), list);
-            parent = parent.getParent();
+            case TASK -> {
+                // 私有任务
+                List<Object> privateTasks = new ArrayList<>();
+                for (Task task : task.getTasks()) {
+                    if (isConnectAbleTask(task)) privateTasks.add(task);
+                }
+                map.put(PRIVATE, privateTasks);
+
+                // 公共任务
+                List<Object> publicTasks = new ArrayList<>();
+                for (Task task : Saver.getInstance().getTasks()) {
+                    if (isConnectAbleTask(task)) publicTasks.add(task);
+                }
+                map.put(GLOBAL, publicTasks);
+
+                // 父任务
+                Task parent = task.getParent();
+                while (parent != null) {
+                    List<Object> list = new ArrayList<>();
+                    if (isConnectAbleTask(parent)) list.add(parent);
+                    for (Task task : parent.getTasks()) {
+                        if (isConnectAbleTask(task)) list.add(task);
+                    }
+                    if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
+                    parent = parent.getParent();
+                }
+            }
+            case VARIABLE -> {
+                List<Object> privateVars = new ArrayList<>();
+                for (Variable var : task.getVariables()) {
+                    if (touchedPin.getValue().isInstance(var.getValue())) privateVars.add(var);
+                }
+                map.put(PRIVATE, privateVars);
+
+                List<Object> publicVars = new ArrayList<>();
+                for (Variable var : Saver.getInstance().getVars()) {
+                    if (touchedPin.getValue().isInstance(var.getValue())) publicVars.add(var);
+                }
+                map.put(GLOBAL, publicVars);
+
+                Task parent = task.getParent();
+                while (parent != null) {
+                    List<Object> list = new ArrayList<>();
+                    for (Variable var : parent.getVariables()) {
+                        if (touchedPin.getValue().isInstance(var.getValue())) list.add(var);
+                    }
+                    if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
+                    parent = parent.getParent();
+                }
+            }
         }
-        if (!vars.isEmpty()) dataMap.put(GroupType.TASK, vars);
+        return map;
     }
 
     private boolean isConnectAbleTask(Task task) {

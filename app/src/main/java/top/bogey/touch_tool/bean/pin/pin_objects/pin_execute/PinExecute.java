@@ -29,4 +29,9 @@ public class PinExecute extends PinBase {
     public void sync(PinBase value) {
 
     }
+
+    @Override
+    public boolean isDynamic() {
+        return false;
+    }
 }

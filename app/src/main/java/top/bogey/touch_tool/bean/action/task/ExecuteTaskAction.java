@@ -11,6 +11,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
+import top.bogey.touch_tool.bean.action.SyncAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
@@ -21,7 +22,7 @@ import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class ExecuteTaskAction extends Action implements DynamicPinsAction {
+public class ExecuteTaskAction extends Action implements DynamicPinsAction, SyncAction {
     private final transient Pin inPin = new ShowAblePin(new PinExecute(), R.string.pin_execute);
     private final transient Pin outPin = new ShowAblePin(new PinExecute(), R.string.pin_execute, true);
     private final transient Pin taskPin = new NotLinkAblePin(new PinTaskString(), R.string.execute_task_action_task_id, false, false, true);
@@ -101,7 +102,8 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction {
 
     public Task getTask(Task context) {
         PinTaskString taskString = taskPin.getValue();
-        return Saver.getInstance().getTask(context, taskString.getValue());
+        Task task = Saver.getInstance().getTask(context, taskString.getValue());
+        return task.copy();
     }
 
     public void setTask(Task task) {
@@ -120,6 +122,7 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction {
         return pins;
     }
 
+    @Override
     public void sync(Task context) {
         Task task = getTask(context);
         if (task == null) return;
@@ -127,6 +130,13 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction {
     }
 
     public void sync(Task context, Task task) {
+        setTitle(task.getTitle());
+
+        if (isJustCall(context)) {
+            inPin.clearLinks(context);
+            outPin.clearLinks(context);
+        }
+
         List<Pin> syncPins = new ArrayList<>();
         for (Action action : task.getActions(CustomStartAction.class)) {
             CustomStartAction startAction = (CustomStartAction) action;
@@ -153,24 +163,42 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction {
             }
         }
 
+        List<Pin> orderPins = new ArrayList<>();
         for (Pin syncPin : syncPins) {
             Pin dynamicPin = getPinByUid(syncPin.getUid());
             if (dynamicPin == null) {
-                Pin copy = syncPin.newCopy();
+                dynamicPin = syncPin.newCopy();
                 // 同步过来的针脚不再是动态的了
-                copy.setDynamic(false);
+                dynamicPin.setDynamic(false);
                 // 方向需要反转一下
-                copy.setOut(!copy.isOut());
-                addPin(copy);
-                continue;
+                dynamicPin.setOut(!dynamicPin.isOut());
+                addPin(dynamicPin);
+            } else {
+                // 同步针脚默认值，只有当类型变更时才同步默认值
+                if (!syncPin.isSameClass(dynamicPin)) {
+                    dynamicPin.clearLinks(context);
+                    dynamicPin.setValue(syncPin.getValue().copy());
+                }
+                dynamicPin.setTitle(syncPin.getTitle());
             }
 
-            // 同步针脚默认值，只有当类型变更时才同步默认值
-            if (!syncPin.isSameClass(dynamicPin)) {
-                dynamicPin.clearLinks(context);
-                dynamicPin.setValue(syncPin.getValue().copy());
-            }
-            dynamicPin.setTitle(syncPin.getTitle());
+            orderPins.add(dynamicPin);
         }
+
+        // 对同步过来的针脚排序
+        List<Pin> origin = getPins();
+        boolean start = true;
+        for (int i = origin.size() - 1; i >= 0; i--) {
+            Pin pin = origin.get(i);
+            if (pin == taskPin) start = false;
+            if (start) origin.remove(i);
+        }
+        origin.addAll(orderPins);
+    }
+
+    @Override
+    public String getTitle() {
+        if (title == null) return super.getTitle();
+        return title;
     }
 }

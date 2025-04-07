@@ -1,7 +1,17 @@
 package top.bogey.touch_tool.ui.task;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,16 +32,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import top.bogey.ocr.IOcr;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
-import top.bogey.touch_tool.bean.save.TaskSaveListener;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.save.TaskSaveListener;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.service.TaskListener;
-import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.databinding.ViewTaskBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.service.TaskListener;
+import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.service.ocr.OcrResult;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
@@ -55,10 +67,7 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
         @Override
         public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
             MainActivity activity = (MainActivity) requireActivity();
-            if (menuItem.getItemId() == R.id.searchTask) {
-                binding.searchBox.setVisibility(binding.searchBox.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                binding.searchEdit.setText(null);
-            } else if (menuItem.getItemId() == R.id.importTask) {
+            if (menuItem.getItemId() == R.id.importTask) {
 
                 return true;
             } else if (menuItem.getItemId() == R.id.exportTask) {
@@ -93,9 +102,10 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
-        requireActivity().addMenuProvider(menuProvider, getViewLifecycleOwner());
 
         binding = ViewTaskBinding.inflate(inflater, container, false);
+
+        binding.toolBar.addMenuProvider(menuProvider, getViewLifecycleOwner());
 
         Saver.getInstance().addListener(this);
         MainAccessibilityService service = MainApplication.getInstance().getService();
@@ -104,9 +114,12 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
+                binding.clean.setVisibility(s.length() == 0 ? View.GONE : View.VISIBLE);
                 resetTags();
             }
         });
+
+        binding.clean.setOnClickListener(v -> binding.searchEdit.setText(""));
 
         adapter = new TaskPageViewAdapter(this);
         binding.tasksBox.setAdapter(adapter);
@@ -115,7 +128,7 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
 
         binding.selectAllButton.setOnClickListener(v -> selectAll());
 
-        binding.deleteButton.setOnClickListener(v -> AppUtil.showDialog(requireContext(), R.string.remove_task_tips, result -> {
+        binding.deleteButton.setOnClickListener(v -> AppUtil.showDialog(requireContext(), R.string.remove_tips, result -> {
             if (result) {
                 for (String id : selected) {
                     Saver.getInstance().removeTask(id);
@@ -156,6 +169,55 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
                 if (result) task.save();
             });
             dialog.show();
+        });
+
+        binding.addButton.setOnLongClickListener(v -> {
+            PackageManager manager = requireContext().getPackageManager();
+            Intent intent = new Intent("top.bogey.ocr.OcrService");
+            List<ResolveInfo> resolves = manager.queryIntentServices(intent, PackageManager.MATCH_ALL);
+            for (ResolveInfo resolve : resolves) {
+                Log.d("TAG", "onCreateView: " + resolve.toString());
+
+                ApplicationInfo applicationInfo = resolve.serviceInfo.applicationInfo;
+                Log.d("TAG", "onCreateView: " + applicationInfo.toString());
+            }
+
+            MainAccessibilityService s = MainApplication.getInstance().getService();
+            if (s != null) {
+                ServiceConnection connection = new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+                        IOcr ocr = IOcr.Stub.asInterface(service);
+                        s.tryGetScreenShot(result -> {
+                            if (result != null) {
+                                try {
+                                    List<OcrResult> ocrResults = ocr.runOcr(result);
+                                    for (OcrResult ocrResult : ocrResults) {
+                                        Log.d("TAG", "onCreateView: " + ocrResult);
+                                    }
+                                } catch (RemoteException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName name) {
+
+                    }
+                };
+
+                Intent it = new Intent();
+                it.setAction("top.bogey.ocr.OcrService");
+                it.setComponent(new ComponentName("top.bogey.ocr.google.mlkit.debug", "top.bogey.ocr.google.mlkit.OcrService"));
+                boolean b = requireActivity().bindService(it, connection, Context.BIND_AUTO_CREATE);
+                if (!b) {
+                    Log.d("TAG", "onCreateView: " + "bindService fail");
+                }
+            }
+
+            return true;
         });
 
         return binding.getRoot();

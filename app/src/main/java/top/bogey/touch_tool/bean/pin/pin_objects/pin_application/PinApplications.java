@@ -14,15 +14,15 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 public class PinApplications extends PinList {
 
     public PinApplications() {
-        super(PinSubType.MULTI_APP_WITH_ACTIVITY, PinType.APP);
+        super(PinType.APPS, PinType.APP);
     }
 
     public PinApplications(PinSubType subType) {
-        super(subType, PinType.APP);
+        super(PinType.APPS, subType, PinType.APP);
     }
 
     public PinApplications(PinSubType subType, String packageName) {
-        super(subType, PinType.APP);
+        super(PinType.APPS, subType, PinType.APP);
         values.add(new PinApplication(packageName));
     }
 

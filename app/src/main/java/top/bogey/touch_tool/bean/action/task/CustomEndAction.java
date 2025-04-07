@@ -9,18 +9,23 @@ import java.util.Map;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.ActionListener;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
+import top.bogey.touch_tool.bean.action.SyncAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class CustomEndAction extends Action implements DynamicPinsAction {
+public class CustomEndAction extends Action implements DynamicPinsAction, SyncAction {
     private final transient Pin executePin = new Pin(new PinExecute(), R.string.pin_execute);
     private final transient Pin justCallPin = new NotLinkAblePin(new PinBoolean(false), R.string.execute_task_action_just_cal);
+
+    private final static SyncActionListener LISTENER = new SyncActionListener();
 
     public CustomEndAction() {
         super(ActionType.CUSTOM_END);
@@ -70,5 +75,67 @@ public class CustomEndAction extends Action implements DynamicPinsAction {
     public boolean isJustCall() {
         PinBoolean justCall = justCallPin.getValue();
         return justCall.getValue();
+    }
+
+    @Override
+    public void sync(Task context) {
+        LISTENER.setContext(context);
+        addListener(LISTENER);
+    }
+
+    private static class SyncActionListener implements ActionListener {
+        private Task context;
+        private boolean doing = false;
+
+        @Override
+        public void onPinAdded(Pin pin, int index) {
+            if (doing) return;
+            doing = true;
+            Action action = context.getAction(pin.getOwnerId());
+            if (action == null) return;
+            List<Action> actions = context.getActions(action.getUid());
+            for (Action act : actions) {
+                if (act == action) continue;
+                act.addPin(index, pin.newCopy());
+            }
+            doing = false;
+        }
+
+        @Override
+        public void onPinRemoved(Pin pin) {
+            if (doing) return;
+            doing = true;
+            Action action = context.getAction(pin.getOwnerId());
+            if (action == null) return;
+            List<Action> actions = context.getActions(action.getUid());
+            for (Action act : actions) {
+                if (act == action) continue;
+                Pin pinByUid = act.getPinByUid(pin.getUid());
+                if (pinByUid == null) continue;
+                act.removePin(context, pinByUid);
+            }
+            doing = false;
+        }
+
+        @Override
+        public void onPinChanged(Pin pin) {
+            if (doing) return;
+            doing = true;
+            Action action = context.getAction(pin.getOwnerId());
+            if (action == null) return;
+            List<Action> actions = context.getActions(action.getUid());
+            for (Action act : actions) {
+                if (act == action) continue;
+                Pin pinByUid = act.getPinByUid(pin.getUid());
+                if (pinByUid == null) continue;
+                pinByUid.setTitle(pin.getTitle());
+                if (!pinByUid.isSameClass(pin)) pinByUid.setValue(pin.getValue().copy());
+            }
+            doing = false;
+        }
+
+        public void setContext(Task context) {
+            this.context = context;
+        }
     }
 }

@@ -6,31 +6,69 @@
     android:layout_height="match_parent"
     tools:context=".ui.task.TaskView">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="8dp"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:src="@drawable/icon_search"
+                        app:tint="?attr/colorOnSurfaceVariant" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/searchEdit"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/task_search"
+                        android:textAppearance="@style/TextAppearance.Material3.SearchView.Prefix"
+                        android:inputType="text"
+                        android:maxLines="1" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/clean"
+                        style="@style/Theme.TouchTool.IconButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/icon_close"
+                        app:iconSize="24dp"
+                        android:visibility="gone"
+                        app:iconTint="?attr/colorOnSurfaceVariant" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/searchBox"
-            style="?attr/textInputOutlinedStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginVertical="4dp"
-            android:hint="@string/task_search"
-            android:visibility="gone"
-            app:endIconMode="clear_text"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-            app:startIconDrawable="@drawable/icon_search">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/searchEdit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:singleLine="true" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabBox"

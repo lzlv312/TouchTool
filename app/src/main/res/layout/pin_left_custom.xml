@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:minWidth="24dp"
@@ -47,6 +47,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="4dp" />
 
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/keySlot"
         android:layout_width="wrap_content"
@@ -71,7 +76,8 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginHorizontal="4dp"
+        android:alpha="0.5"
         android:src="@drawable/icon_sequence"
-        app:tint="?attr/colorSecondaryFixed" />
+        app:tint="?attr/colorOutline" />
 
 </LinearLayout>

@@ -39,7 +39,6 @@ public abstract class PinCustomView extends PinView {
                         PinInfo pinInfo = dialog.getSelected();
                         typeView.setText(pinInfo.getTitle());
                         pin.setValue(pinInfo.newInstance());
-                        refreshPin();
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .show();

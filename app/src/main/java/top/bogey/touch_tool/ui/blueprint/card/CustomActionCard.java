@@ -59,6 +59,7 @@ public class CustomActionCard extends ActionCard {
         initEditDesc(binding.editButton, binding.des);
         initDelete(binding.removeButton);
         initLock(binding.lockButton);
+        initPosView(binding.position);
 
         binding.addButton.setOnClickListener(v -> action.addPin(new Pin(new PinString(), 0, isOut, true)));
     }
@@ -105,7 +106,9 @@ public class CustomActionCard extends ActionCard {
     }
 
     @Override
-    public boolean isEmptyPosition(float x, float y, float scale) {
+    public boolean isEmptyPosition(float x, float y) {
+        float scale = getScaleX();
+
         List<MaterialButton> buttons = List.of(binding.lockButton, binding.addButton, binding.removeButton, binding.editButton);
         for (MaterialButton button : buttons) {
             PointF pointF = DisplayUtil.getLocationRelativeToView(button, this);
@@ -115,7 +118,7 @@ public class CustomActionCard extends ActionCard {
             float height = button.getHeight() * scale;
             if (new RectF(px, py, px + width, py + height).contains(x, y)) return false;
         }
-        return super.isEmptyPosition(x, y, scale);
+        return super.isEmptyPosition(x, y);
     }
 
     public void suppressLayout() {

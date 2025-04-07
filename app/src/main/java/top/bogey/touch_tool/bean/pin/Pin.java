@@ -245,7 +245,6 @@ public class Pin extends Identity {
     public void setValue(PinBase value) {
         this.value = value;
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onValueReplaced(this, value));
-        notifyValueUpdated();
     }
 
     public void notifyValueUpdated() {

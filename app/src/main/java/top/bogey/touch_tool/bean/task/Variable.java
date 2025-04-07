@@ -1,41 +1,53 @@
 package top.bogey.touch_tool.bean.task;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
-import java.util.Objects;
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.UUID;
 
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.pin.PinInfo;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.utils.GsonUtil;
 
-public class Variable extends Identity {
-    transient Task owner;
+public class Variable extends Identity implements ITagManager {
+    private transient Task parent;
     private PinObject value;
+    private final TagManager tagManager;
 
     public Variable(PinObject value) {
         super();
         this.value = value;
+        tagManager = new TagManager();
     }
 
     public Variable(JsonObject jsonObject) {
         super(jsonObject);
-        value = GsonUtil.getAsObject(jsonObject, "value", PinObject.class, new PinObject());
+        value = (PinObject) GsonUtil.getAsObject(jsonObject, "value", PinBase.class, new PinObject());
+        tagManager = GsonUtil.getAsObject(jsonObject, "tagManager", TagManager.class, new TagManager());
     }
 
     @Override
     public Variable copy() {
-        return GsonUtil.copy(this, Variable.class);
+        Variable copy = GsonUtil.copy(this, Variable.class);
+        copy.parent = parent;
+        return copy;
     }
 
     @Override
     public Variable newCopy() {
         Variable copy = copy();
         copy.setId(UUID.randomUUID().toString());
+        copy.parent = null;
         return copy;
     }
 
@@ -133,12 +145,48 @@ public class Variable extends Identity {
     }
 
     public void save() {
-        if (owner != null) owner.save();
+        if (parent != null) parent.save();
         else Saver.getInstance().saveVar(this);
     }
 
-    public Task getOwner() {
-        return owner;
+    public Task getParent() {
+        return parent;
+    }
+
+    public void setParent(Task parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public void addTag(String tag) {
+        tagManager.addTag(tag);
+    }
+
+    @Override
+    public void removeTag(String tag) {
+        tagManager.removeTag(tag);
+    }
+
+    @Override
+    public List<String> getTags() {
+        return tagManager.getTags();
+    }
+
+    @Override
+    public void setTags(List<String> tags) {
+        tagManager.setTags(tags);
+    }
+
+    @Override
+    public String getTagString() {
+        return tagManager.getTagString();
+    }
+
+    public static class VariableDeserialize implements JsonDeserializer<Variable> {
+        @Override
+        public Variable deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return new Variable(json.getAsJsonObject());
+        }
     }
 
     public enum VariableType {

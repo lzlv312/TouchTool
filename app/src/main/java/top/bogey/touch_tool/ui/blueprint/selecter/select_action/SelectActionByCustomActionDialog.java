@@ -9,7 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.save.Saver;
@@ -20,42 +19,43 @@ public class SelectActionByCustomActionDialog extends SelectActionDialog {
 
     public SelectActionByCustomActionDialog(@NonNull Context context, Task task, ResultCallback<Action> callback) {
         super(context, task, callback);
-        binding.tabBox.removeOnTabSelectedListener(tabListener);
     }
 
     @Override
-    public void calculateShowData() {
-        dataMap.clear();
-        // 带CustomStartAction的Task
-        Map<String, List<Object>> tasks = new LinkedHashMap<>();
+    protected GroupType[] getGroupTypes() {
+        return new GroupType[]{GroupType.TASK};
+    }
 
-        // 公共任务
-        List<Object> publicTasks = new ArrayList<>();
-        for (Task task : Saver.getInstance().getTasks()) {
-            if (task.getActions(CustomStartAction.class).isEmpty()) continue;
-            publicTasks.add(task);
-        }
-        if (!publicTasks.isEmpty()) tasks.put(getContext().getString(R.string.select_action_group_global), publicTasks);
-
-        // 私有任务
-        List<Object> privateTasks = new ArrayList<>();
-        for (Task task : task.getTasks()) {
-            if (task.getActions(CustomStartAction.class).isEmpty()) continue;
-            privateTasks.add(task);
-        }
-        if (!privateTasks.isEmpty()) tasks.put(getContext().getString(R.string.select_action_group_private), privateTasks);
-
-        // 父任务
-        Task parent = task.getParent();
-        while (parent != null) {
-            List<Object> list = new ArrayList<>();
-            for (Task task : parent.getTasks()) {
-                if (task.getActions(CustomStartAction.class).isEmpty()) continue;
-                list.add(task);
+    @Override
+    protected Map<String, List<Object>> getGroupData(GroupType groupType) {
+        Map<String, List<Object>> map = new LinkedHashMap<>();
+        if (groupType == GroupType.TASK) {
+            // 私有任务
+            List<Object> privateTasks = new ArrayList<>();
+            for (Task task : task.getTasks()) {
+                if (!task.getActions(CustomStartAction.class).isEmpty()) privateTasks.add(task);
             }
-            if (!list.isEmpty()) tasks.put(parent.getTitle(), list);
-            parent = parent.getParent();
+            map.put(PRIVATE, privateTasks);
+
+            // 公共任务
+            List<Object> publicTasks = new ArrayList<>();
+            for (Task task : Saver.getInstance().getTasks()) {
+                if (!task.getActions(CustomStartAction.class).isEmpty()) publicTasks.add(task);
+            }
+            map.put(GLOBAL, publicTasks);
+
+            // 父任务
+            Task parent = task.getParent();
+            while (parent != null) {
+                List<Object> list = new ArrayList<>();
+                if (!task.getActions(CustomStartAction.class).isEmpty()) list.add(parent);
+                for (Task task : parent.getTasks()) {
+                    if (!task.getActions(CustomStartAction.class).isEmpty()) list.add(task);
+                }
+                if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
+                parent = parent.getParent();
+            }
         }
-        if (!tasks.isEmpty()) dataMap.put(GroupType.TASK, tasks);
+        return map;
     }
 }

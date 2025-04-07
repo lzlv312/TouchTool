@@ -166,7 +166,7 @@ public abstract class PinView extends FrameLayout implements PinListener {
 
     @Override
     public void onValueReplaced(Pin origin, PinBase value) {
-        post(this::refreshPin);
+        post(this::init);
     }
 
     @Override

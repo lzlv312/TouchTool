@@ -22,46 +22,35 @@ import top.bogey.touch_tool.utils.GsonUtil;
 public class PinList extends PinObject implements List<PinObject> {
     protected PinType valueType = PinType.OBJECT;
     protected List<PinObject> values = new ArrayList<>();
-    protected boolean changeAble = false;
     protected boolean dynamic = true;
 
     public PinList() {
         super(PinType.LIST);
     }
 
+    // 有指定值类型的，不是动态的
     public PinList(PinType valueType) {
         this();
         this.valueType = valueType;
         dynamic = false;
     }
 
-    public PinList(PinType valueType, boolean changeAble, boolean dynamic) {
-        this();
+    public PinList(PinType type, PinType valueType) {
+        super(type);
         this.valueType = valueType;
-        this.changeAble = changeAble;
-        this.dynamic = dynamic;
+        dynamic = false;
     }
 
-    protected PinList(PinSubType subType) {
-        super(PinType.LIST, subType);
-    }
-
-    protected PinList(PinSubType subType, PinType valueType) {
-        super(PinType.LIST, subType);
+    public PinList(PinType type, PinSubType subType, PinType valueType) {
+        super(type, subType);
         this.valueType = valueType;
-    }
-
-    protected PinList(PinSubType subType, PinType valueType, boolean changeAble) {
-        super(PinType.LIST, subType);
-        this.valueType = valueType;
-        this.changeAble = changeAble;
+        dynamic = false;
     }
 
     public PinList(JsonObject jsonObject) {
         super(jsonObject);
         valueType = GsonUtil.getAsObject(jsonObject, "valueType", PinType.class, PinType.OBJECT);
-        changeAble = GsonUtil.getAsBoolean(jsonObject, "changeAble", true);
-        dynamic = GsonUtil.getAsBoolean(jsonObject, "dynamic", false);
+        dynamic = GsonUtil.getAsBoolean(jsonObject, "dynamic", true);
         values = GsonUtil.getAsObject(jsonObject, "values", TypeToken.getParameterized(ArrayList.class, PinBase.class).getType(), new ArrayList<>());
     }
 
@@ -75,7 +64,6 @@ public class PinList extends PinObject implements List<PinObject> {
     public void sync(PinBase value) {
         if (value instanceof PinList pinList) {
             valueType = pinList.valueType;
-            changeAble = pinList.changeAble;
             dynamic = pinList.dynamic;
             values = pinList.values;
         }
@@ -83,7 +71,8 @@ public class PinList extends PinObject implements List<PinObject> {
 
     @Override
     public PinList copy() {
-        PinList pinList = new PinList(subType, valueType, changeAble);
+        PinList pinList = new PinList(type, subType, valueType);
+        pinList.dynamic = dynamic;
         for (PinObject value : values) {
             pinList.values.add((PinObject) value.copy());
         }
@@ -94,8 +83,9 @@ public class PinList extends PinObject implements List<PinObject> {
     public boolean isInstance(PinBase pin) {
         if (super.isInstance(pin)) {
             if (pin instanceof PinList pinList) {
-                // 自己为OBJECT，且是动态的，那么可以任意类型连上我
-                if (dynamic && valueType == PinType.OBJECT) return true;
+                // 自己或连过来的为动态针脚，可以连接
+                if (pin.isDynamic()) return true;
+                if (isDynamic()) return true;
                 return pinList.valueType == valueType;
             }
         }
@@ -116,12 +106,9 @@ public class PinList extends PinObject implements List<PinObject> {
         this.valueType = valueType;
     }
 
-    public boolean isChangeAble() {
-        return changeAble;
-    }
-
+    @Override
     public boolean isDynamic() {
-        return dynamic;
+        return dynamic && valueType == PinType.OBJECT;
     }
 
     @Override
@@ -130,7 +117,7 @@ public class PinList extends PinObject implements List<PinObject> {
         if (!(object instanceof PinList that)) return false;
         if (!super.equals(object)) return false;
 
-        return isChangeAble() == that.isChangeAble() && getValueType() == that.getValueType() && values.equals(that.values);
+        return isDynamic() == that.isDynamic() && getValueType() == that.getValueType() && values.equals(that.values);
     }
 
     @Override
@@ -138,7 +125,7 @@ public class PinList extends PinObject implements List<PinObject> {
         int result = super.hashCode();
         result = 31 * result + getValueType().hashCode();
         result = 31 * result + values.hashCode();
-        result = 31 * result + Boolean.hashCode(isChangeAble());
+        result = 31 * result + Boolean.hashCode(isDynamic());
         return result;
     }
 
@@ -271,7 +258,6 @@ public class PinList extends PinObject implements List<PinObject> {
             jsonObject.addProperty("subType", src.getSubType().name());
             jsonObject.addProperty("valueType", src.getValueType().name());
             jsonObject.add("values", context.serialize(src.values));
-            jsonObject.addProperty("changeAble", src.isChangeAble());
             jsonObject.addProperty("dynamic", src.dynamic);
             return jsonObject;
         }

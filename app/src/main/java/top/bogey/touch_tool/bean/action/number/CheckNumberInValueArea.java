@@ -14,7 +14,7 @@ import top.bogey.touch_tool.service.TaskRunnable;
 
 public class CheckNumberInValueArea extends CalculateAction {
     private final transient Pin valueAreaPin = new Pin(new PinValueArea(), R.string.pin_value_area);
-    private final transient Pin numberPin = new Pin(new PinDouble(), R.string.pin_number_integer);
+    private final transient Pin numberPin = new Pin(new PinDouble(), R.string.pin_number_double);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
 
     public CheckNumberInValueArea() {

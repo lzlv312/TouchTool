@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.ui.setting;
+package top.bogey.touch_tool.bean.save;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -12,7 +12,9 @@ import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.DynamicColorsOptions;
 import com.tencent.mmkv.MMKV;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SettingSaver {
     private static SettingSaver instance;
@@ -36,6 +38,8 @@ public class SettingSaver {
     private static final String CHOICE_VIEW_POS = "CHOICE_VIEW_POS";                    // 选择执行悬浮窗位置
     private static final String SELECT_NODE_TYPE = "SELECT_NODE_TYPE";                  // 选择控件方式
 
+    private static final String FAV_TAGS = "FAV_TAGS";                                  // 收藏的标签
+
     // 设置
     private static final String ENABLED = "ENABLED";                                    // 功能是否开启
     private static final String HIDE_BACK = "HIDE_BACK";                                // 隐藏后台
@@ -55,7 +59,6 @@ public class SettingSaver {
     private static final String THEME = "THEME";                                        // 深色模式
     private static final String COLOR = "COLOR";                                        // 动态颜色
     private static final String PLAY_VIEW_PADDING = "PLAY_VIEW_PADDING";                // 手动执行悬浮窗偏移
-    private static final String LOOK_FIRST = "LOOK_FIRST";                              // 首次查看
 
     private static final MMKV mmkv = MMKV.defaultMMKV();
 
@@ -68,6 +71,8 @@ public class SettingSaver {
     public void initColor(Application application) {
         DynamicColors.applyToActivitiesIfAvailable(application, new DynamicColorsOptions.Builder().setPrecondition((act, theme) -> isDynamicColorTheme()).build());
     }
+
+    // 记录
 
     public int getRunTimes() {
         return mmkv.decodeInt(RUN_TIMES, 0);
@@ -125,6 +130,15 @@ public class SettingSaver {
         mmkv.encode(SELECT_NODE_TYPE, type);
     }
 
+    public Set<String> getFavTags() {
+        return mmkv.decodeStringSet(FAV_TAGS, new HashSet<>());
+    }
+
+    public void setFavTags(Set<String> tags) {
+        mmkv.encode(FAV_TAGS, tags);
+    }
+
+    // 设置
 
     public boolean isEnabled() {
         return mmkv.decodeBool(ENABLED, false);
@@ -259,14 +273,6 @@ public class SettingSaver {
 
     public void setPlayViewPadding(int padding) {
         mmkv.encode(PLAY_VIEW_PADDING, padding);
-    }
-
-    public boolean isLookFirst() {
-        return mmkv.decodeBool(LOOK_FIRST, false);
-    }
-
-    public void setLookFirst(boolean enable) {
-        mmkv.encode(LOOK_FIRST, enable);
     }
 
 }

@@ -27,7 +27,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.databinding.FloatPickerNodeBinding;
-import top.bogey.touch_tool.ui.setting.SettingSaver;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;

@@ -64,4 +64,5 @@
     <style name="Theme.TouchTool.TextAppearance.Hint" parent="TextAppearance.Material3.LabelSmall">
         <item name="android:textSize">5sp</item>
     </style>
+
 </resources>

@@ -41,6 +41,12 @@ public abstract class PinNumber<T extends Number> extends PinObject {
         }
     }
 
+    @Override
+    public boolean isInstance(PinBase pin) {
+        if (super.isInstance(pin)) return true;
+        return pin instanceof PinNumber<?>;
+    }
+
     public int intValue() {
         return value.intValue();
     }

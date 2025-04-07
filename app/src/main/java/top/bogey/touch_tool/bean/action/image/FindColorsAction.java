@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.action.color;
+package top.bogey.touch_tool.bean.action.image;
 
 import android.graphics.Rect;
 

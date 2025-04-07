@@ -48,7 +48,7 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.capture.CaptureService;
 import top.bogey.touch_tool.service.receiver.SystemEventReceiver;
 import top.bogey.touch_tool.ui.PermissionActivity;
-import top.bogey.touch_tool.ui.setting.SettingSaver;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.utils.callback.BitmapResultCallback;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.thread.TaskQueue;

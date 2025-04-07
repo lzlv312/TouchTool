@@ -6,9 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".ui.setting.SettingView">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolBar"
+            android:layout_width="match_parent"
+            app:title="@string/setting"
+            android:layout_height="?attr/actionBarSize" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -274,14 +287,6 @@
                         app:max="50"
                         app:title="@string/preference_setting_manual_play_padding"
                         app:value="0" />
-
-                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
-                        android:id="@+id/lookFirstSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:description="@string/preference_setting_look_first_desc"
-                        app:icon="@drawable/icon_hand"
-                        app:title="@string/preference_setting_look_first" />
 
                 </LinearLayout>
 

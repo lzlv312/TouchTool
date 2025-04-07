@@ -136,6 +136,7 @@ public class PinMap extends PinObject implements Map<PinObject, PinObject> {
         return changeAble;
     }
 
+    @Override
     public boolean isDynamic() {
         return dynamic;
     }

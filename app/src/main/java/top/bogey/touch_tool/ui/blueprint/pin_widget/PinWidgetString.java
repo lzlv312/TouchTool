@@ -14,7 +14,10 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.text.Editable;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
@@ -50,12 +53,41 @@ import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.picker.NodePickerPreview;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionByCustomActionDialog;
+import top.bogey.touch_tool.ui.blueprint.selecter.select_edit_text.SelectEditTextDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
 public class PinWidgetString extends PinWidget<PinString> {
     private final PinWidgetInputBinding binding;
+
+    private final ActionMode.Callback callback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu_edit_text, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            if (item.getItemId() == R.id.fullScreen) {
+                mode.finish();
+                new SelectEditTextDialog(getContext(), binding.editText, binding.editText::setText).show();
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+
+        }
+    };
 
     public PinWidgetString(@NonNull Context context, ActionCard card, PinView pinView, PinString pinBase, boolean custom) {
         super(context, card, pinView, pinBase, custom);
@@ -98,6 +130,9 @@ public class PinWidgetString extends PinWidget<PinString> {
 
         binding.editText.setEnabled(false);
         binding.pickButton.setVisibility(VISIBLE);
+
+        binding.editText.setCustomSelectionActionModeCallback(callback);
+        binding.editText.setCustomInsertionActionModeCallback(callback);
 
         switch (pinBase.getSubType()) {
             case URL -> {

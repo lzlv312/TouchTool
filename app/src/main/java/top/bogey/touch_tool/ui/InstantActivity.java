@@ -10,7 +10,6 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.OutCallStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
@@ -59,7 +58,7 @@ public class InstantActivity extends BaseActivity {
                             if (action instanceof OutCallStartAction) {
                                 Task copy = task.copy();
                                 params.forEach((key, value) -> {
-                                    Variable var = copy.getVar(key);
+                                    Variable var = copy.getVariable(key);
                                     if (var != null) var.getValue().cast(value);
                                 });
 

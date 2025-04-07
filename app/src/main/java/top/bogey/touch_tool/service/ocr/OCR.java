@@ -108,8 +108,8 @@ public class OCR {
         }
     }
 
-    public static List<OCRResult> runOcr(String moduleName, Bitmap image) {
-        List<OCRResult> results = new ArrayList<>();
+    public static List<OcrResult> runOcr(String moduleName, Bitmap image) {
+        List<OcrResult> results = new ArrayList<>();
         Long module = modules.get(moduleName);
         List<String> list = labels.get(moduleName);
         if (module == null) {
@@ -123,7 +123,7 @@ public class OCR {
         if (module == null || list == null) return results;
         if (image == null) return results;
 
-        float[] ocrData = forward(module, image, Math.max(image.getWidth(), image.getHeight()), 0, 0, 0);
+        float[] ocrData = forward(module, image, Math.max(image.getWidth(), image.getHeight()), 1, 0, 1);
         int begin = 0;
         while (begin < ocrData.length) {
             int pointNum = Math.round(ocrData[begin]);
@@ -154,7 +154,7 @@ public class OCR {
                 builder.append(list.get(index));
             }
 
-            results.add(new OCRResult(rect, builder.toString(), similar));
+            results.add(new OcrResult(rect, builder.toString(), similar));
 
             begin += (3 + pointNum * 2 + wordNum + 2);
         }

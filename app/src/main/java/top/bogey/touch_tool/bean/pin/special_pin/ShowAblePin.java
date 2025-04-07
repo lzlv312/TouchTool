@@ -42,7 +42,7 @@ public class ShowAblePin extends Pin {
     public boolean showAble(Task context) {
         Action action = context.getAction(getOwnerId());
         if (action instanceof ExecuteTaskAction executeTaskAction) {
-            return executeTaskAction.isJustCall(context);
+            return !executeTaskAction.isJustCall(context);
         }
         return super.showAble(context);
     }

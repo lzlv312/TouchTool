@@ -12,14 +12,15 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ListRemoveAction extends ListExecuteAction {
-    private final transient Pin listPin = new Pin(new PinList());
+    private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list);
     private final transient Pin indexPin = new Pin(new PinInteger(), R.string.list_remove_action_index);
-    private final transient Pin resultPin = new Pin(new PinObject(), R.string.pin_object, true);
+    private final transient Pin resultPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.pin_object, true);
 
     public ListRemoveAction() {
         super(ActionType.LIST_REMOVE);
@@ -28,7 +29,9 @@ public class ListRemoveAction extends ListExecuteAction {
 
     public ListRemoveAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(listPin, indexPin, resultPin);
+        reAddPin(listPin);
+        reAddPin(indexPin);
+        reAddPin(resultPin, true);
     }
 
     @Override

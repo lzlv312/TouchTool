@@ -22,6 +22,16 @@ import top.bogey.touch_tool.utils.AppUtil;
 
 public class Saver {
     private static Saver instance;
+
+    public static Saver getInstance() {
+        synchronized (Saver.class) {
+            if (instance == null) {
+                instance = new Saver();
+            }
+        }
+        return instance;
+    }
+
     private static final String EMPTY_TAG = MainApplication.getInstance().getString(R.string.tag_empty);
 
     public static boolean matchTag(String tag, List<String> tags) {
@@ -31,17 +41,6 @@ public class Saver {
         }
         if (emptyTags) return false;
         return tags.contains(tag);
-    }
-
-    private static final String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/log";
-
-    public static Saver getInstance() {
-        synchronized (Saver.class) {
-            if (instance == null) {
-                instance = new Saver();
-            }
-        }
-        return instance;
     }
 
     private final Handler handler;
@@ -56,6 +55,7 @@ public class Saver {
 
     private final MMKV tagMMKV = MMKV.mmkvWithID("TAG_DB", MMKV.SINGLE_PROCESS_MODE);
 
+    private static final String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/log";
     private final Map<String, LogSave> loggers = new HashMap<>();
 
 
@@ -173,7 +173,7 @@ public class Saver {
     }
 
     public Task getTask(Task context, String taskId) {
-        Task task = context.findTask(taskId);
+        Task task = context.findChildTask(taskId);
         if (task == null) {
             task = getTask(taskId);
         }
@@ -292,6 +292,14 @@ public class Saver {
             if (matchTag(tag, task.getTags())) {
                 task.removeTag(tag);
                 task.save();
+            }
+        });
+
+        variableSaves.forEach((id, variableSave) -> {
+            Variable var = variableSave.getVar();
+            if (matchTag(tag, var.getTags())) {
+                var.removeTag(tag);
+                var.save();
             }
         });
     }

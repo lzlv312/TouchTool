@@ -23,7 +23,7 @@ import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.service.ocr.OCR;
-import top.bogey.touch_tool.service.ocr.OCRResult;
+import top.bogey.touch_tool.service.ocr.OcrResult;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class FindOcrTextAction extends FindExecuteAction {
@@ -60,8 +60,8 @@ public class FindOcrTextAction extends FindExecuteAction {
         if (!service.isCaptureEnabled()) return false;
 
         Bitmap bitmap = source.getImage();
-        List<OCRResult> ocrResults = OCR.runOcr(TaskInfoSummary.OcrType.values()[type.getIndex()].name(), bitmap);
-        for (OCRResult ocrResult : ocrResults) {
+        List<OcrResult> ocrResults = OCR.runOcr(TaskInfoSummary.OcrType.values()[type.getIndex()].name(), bitmap);
+        for (OcrResult ocrResult : ocrResults) {
             if (Rect.intersects(ocrResult.getArea(), area.getValue())) {
                 if (pattern.matcher(ocrResult.getText()).find()) {
                     resultAreaPin.getValue(PinArea.class).setValue(ocrResult.getArea());

@@ -22,7 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.ui.setting.SettingSaver;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ActivityResultCallback;
 

@@ -13,34 +13,45 @@
     app:checkedIconSize="24dp"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
         android:orientation="vertical"
         android:paddingHorizontal="8dp"
         android:paddingVertical="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/icon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="top"
+                android:layout_marginVertical="4dp"
+                android:layout_marginEnd="4dp"
+                android:tint="?attr/colorOnSurfaceVariant" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/taskName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                android:textSize="14sp"
                 tools:ignore="NestedWeights" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/helpButton"
                 style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="top"
+                android:layout_marginStart="-8dp"
                 app:icon="@drawable/icon_info" />
 
         </LinearLayout>
@@ -50,7 +61,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="11sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="SmallSp" />
 
         <LinearLayout
             android:id="@+id/varBox"
@@ -86,7 +98,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_spinner_right"
+                android:background="@drawable/shape_border"
                 android:gravity="center_horizontal"
                 android:visibility="gone" />
 
@@ -128,14 +140,6 @@
                     app:icon="@drawable/icon_setting" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/getVarValue"
-                    style="@style/Theme.TouchTool.IconButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:visibility="gone"
-                    app:icon="@drawable/icon_get_value" />
-
-                <com.google.android.material.button.MaterialButton
                     android:id="@+id/setVarValue"
                     style="@style/Theme.TouchTool.IconButton"
                     android:layout_width="32dp"
@@ -158,13 +162,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/timeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:maxLines="1"
-        android:textSize="11sp" />
 
 </com.google.android.material.card.MaterialCardView>

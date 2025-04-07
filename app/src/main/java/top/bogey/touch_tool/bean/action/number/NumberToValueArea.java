@@ -7,13 +7,14 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinValueArea;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class NumberToValueArea extends CalculateAction {
-    private final transient Pin firstPin = new Pin(new PinInteger(), R.string.pin_number_integer);
-    private final transient Pin secondPin = new Pin(new PinInteger(), R.string.pin_number_integer);
+    private final transient Pin firstPin = new Pin(new PinDouble(), R.string.pin_number_double);
+    private final transient Pin secondPin = new Pin(new PinDouble(), R.string.pin_number_double);
     private final transient Pin valueAreaPin = new Pin(new PinValueArea(), R.string.pin_value_area, true);
 
     public NumberToValueArea() {

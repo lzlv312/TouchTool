@@ -17,7 +17,7 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.databinding.FloatChoiceExecuteBinding;
 import top.bogey.touch_tool.databinding.FloatChoiceExecuteItemBinding;
 import top.bogey.touch_tool.ui.blueprint.picker.FloatBaseCallback;
-import top.bogey.touch_tool.ui.setting.SettingSaver;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.callback.StringResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;

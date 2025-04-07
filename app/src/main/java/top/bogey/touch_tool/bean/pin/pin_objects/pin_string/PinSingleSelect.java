@@ -8,7 +8,6 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
@@ -61,7 +60,8 @@ public class PinSingleSelect extends PinString {
     public boolean isInstance(PinBase pin) {
         if (super.isInstance(pin)) {
             if (pin instanceof PinSingleSelect pinSingleSelect) {
-                if (dynamic) return true;
+                if (pin.isDynamic()) return true;
+                if (isDynamic()) return true;
                 return options.equals(pinSingleSelect.getOptions());
             }
         }
@@ -112,7 +112,7 @@ public class PinSingleSelect extends PinString {
     }
 
     public boolean isDynamic() {
-        return dynamic;
+        return dynamic && options.isEmpty();
     }
 
     public void setDynamic(boolean dynamic) {

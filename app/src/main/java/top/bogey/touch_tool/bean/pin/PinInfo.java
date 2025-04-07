@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -81,9 +82,9 @@ public class PinInfo {
     private final static PinInfo ADD_INFO = new PinInfo(PinType.ADD, PinSubType.NORMAL, PinAdd.class, NormalPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorSurfaceVariant), 0, PinWidgetAdd.class, false);
 
     private final static PinInfo OBJECT_INFO = new PinInfo(PinType.OBJECT, PinSubType.NORMAL, PinObject.class, NormalPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_object, null, false);
+    private final static PinInfo DYNAMIC_OBJECT_INFO = new PinInfo(PinType.OBJECT, PinSubType.DYNAMIC, PinObject.class, NormalPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_object, null, false);
 
     private final static PinInfo LIST_INFO = new PinInfo(PinType.LIST, PinSubType.NORMAL, PinList.class, ListPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_list, null, false);
-    private final static PinInfo APPS_INFO = new PinInfo(PinType.LIST, PinSubType.MULTI_APP, PinApplications.class, ListPinSlotView.class, getColor(R.color.AppPinColor), R.string.pin_list_app, PinWidgetApps.class, true);
 
     private final static PinInfo MAP_INFO = new PinInfo(PinType.MAP, PinSubType.NORMAL, PinMap.class, MapPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_map, null, false);
 
@@ -114,6 +115,7 @@ public class PinInfo {
     private final static PinInfo IMAGE_INFO = new PinInfo(PinType.IMAGE, PinSubType.NORMAL, PinImage.class, NormalPinSlotView.class, getColor(R.color.ImagePinColor), R.string.pin_image, PinWidgetImage.class, true);
     private final static PinInfo COLOR_INFO = new PinInfo(PinType.COLOR, PinSubType.NORMAL, PinColor.class, NormalPinSlotView.class, getColor(R.color.ColorPinColor), R.string.pin_color, PinWidgetColor.class, true);
     private final static PinInfo APP_INFO = new PinInfo(PinType.APP, PinSubType.NORMAL, PinApplication.class, NormalPinSlotView.class, getColor(R.color.AppPinColor), R.string.pin_app, PinWidgetApp.class, true);
+    private final static PinInfo APPS_INFO = new PinInfo(PinType.APPS, PinSubType.MULTI_APP, PinApplications.class, ListPinSlotView.class, getColor(R.color.AppPinColor), R.string.pin_list_app, PinWidgetApps.class, true);
 
     private static @ColorInt int getColor(@ColorRes int color) {
         return MainApplication.getInstance().getActivity().getColor(color);
@@ -142,13 +144,13 @@ public class PinInfo {
                 }
             }
             case ADD -> info = ADD_INFO;
-            case OBJECT -> info = OBJECT_INFO;
-            case LIST -> {
+            case OBJECT -> {
                 switch (subType) {
-                    case NORMAL -> info = LIST_INFO;
-                    case MULTI_APP, MULTI_APP_WITH_ACTIVITY, MULTI_APP_WITH_EXPORT_ACTIVITY -> info = APPS_INFO;
+                    case NORMAL -> info = OBJECT_INFO;
+                    case DYNAMIC -> info = DYNAMIC_OBJECT_INFO;
                 }
             }
+            case LIST -> info = LIST_INFO;
             case MAP -> info = MAP_INFO;
             case STRING -> {
                 switch (subType) {
@@ -183,6 +185,7 @@ public class PinInfo {
             case IMAGE -> info = IMAGE_INFO;
             case COLOR -> info = COLOR_INFO;
             case APP -> info = APP_INFO;
+            case APPS -> info = APPS_INFO;
         }
         return info;
     }
@@ -239,10 +242,22 @@ public class PinInfo {
         this.customAble = customAble;
     }
 
+    private static void setSubType(PinBase pinBase, Object value) {
+        try {
+            Field field = PinBase.class.getDeclaredField("subType");
+            field.setAccessible(true);
+            field.set(pinBase, value);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public PinBase newInstance() {
         try {
             Constructor<? extends PinBase> constructor = clazz.getConstructor();
-            return constructor.newInstance();
+            PinBase pinBase = constructor.newInstance();
+            if (subType != PinSubType.NORMAL) setSubType(pinBase, subType);
+            return pinBase;
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             e.printStackTrace();
         }

@@ -15,7 +15,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ListSizeAction extends ListCalculateAction {
-    private final transient Pin listPin = new Pin(new PinList());
+    private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list);
     private final transient Pin sizePin = new Pin(new PinInteger(), R.string.pin_number_integer, true);
 
     public ListSizeAction() {

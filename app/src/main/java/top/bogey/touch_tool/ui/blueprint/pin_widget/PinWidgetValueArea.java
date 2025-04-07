@@ -31,6 +31,7 @@ public class PinWidgetValueArea extends PinWidget<PinValueArea> {
         locked = pinBase.getMin() == pinBase.getMax();
         binding.lockButton.setChecked(locked);
         binding.lockButton.setIconResource(locked ? R.drawable.icon_lock : R.drawable.icon_unlock);
+        binding.highEdit.setEnabled(!locked);
 
         binding.lowEdit.addTextChangedListener(new TextChangedListener() {
             @Override

@@ -1,15 +1,16 @@
 package top.bogey.touch_tool.bean.task;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonParseException;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
@@ -23,13 +24,17 @@ import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.GsonUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
-public class Task extends Identity {
+public class Task extends Identity implements IActionManager, ITaskManager, IVariableManager, ITagManager {
     private final long createTime;
 
-    private List<Task> tasks;
-    private List<Action> actions = new ArrayList<>();
-    private List<Variable> vars;
-    private List<String> tags;
+    private final ActionManager actionManager;
+
+    private final TaskManager taskManager;
+    private final VariableManager variableManager;
+
+    private final TagManager tagManager;
+
+    private boolean detailLog = false;
 
     private transient Task parent;
     private transient ExecuteTaskAction startAction = null;
@@ -37,147 +42,146 @@ public class Task extends Identity {
     public Task() {
         super();
         createTime = System.currentTimeMillis();
+
+        actionManager = new ActionManager();
+
+        taskManager = new TaskManager(this);
+        variableManager = new VariableManager(this);
+
+        tagManager = new TagManager();
     }
 
     public Task(JsonObject jsonObject) {
         super(jsonObject);
         createTime = GsonUtil.getAsLong(jsonObject, "createTime", System.currentTimeMillis());
 
-        tasks = GsonUtil.getAsObject(jsonObject, "tasks", TypeToken.getParameterized(ArrayList.class, Task.class).getType(), null);
-        if (tasks != null) tasks.forEach(task -> task.parent = this);
+        actionManager = GsonUtil.getAsObject(jsonObject, "actionManager", ActionManager.class, new ActionManager());
 
-        actions = GsonUtil.getAsObject(jsonObject, "actions", TypeToken.getParameterized(ArrayList.class, Action.class).getType(), new ArrayList<>());
+        taskManager = GsonUtil.getAsObject(jsonObject, "taskManager", TaskManager.class, new TaskManager(this));
+        taskManager.setParent(this);
+        variableManager = GsonUtil.getAsObject(jsonObject, "variableManager", VariableManager.class, new VariableManager(this));
+        variableManager.setParent(this);
 
-        vars = GsonUtil.getAsObject(jsonObject, "vars", TypeToken.getParameterized(ArrayList.class, Variable.class).getType(), null);
-        if (vars != null) vars.forEach(var -> var.owner = this);
+        tagManager = GsonUtil.getAsObject(jsonObject, "tagManager", TagManager.class, new TagManager());
 
-        tags = GsonUtil.getAsObject(jsonObject, "tags", TypeToken.getParameterized(ArrayList.class, String.class).getType(), null);
+        detailLog = GsonUtil.getAsBoolean(jsonObject, "detailLog", false);
     }
 
-    public void addTask(Task task) {
-        if (tasks == null) {
-            tasks = new ArrayList<>();
-        }
-        tasks.add(task);
-        task.parent = this;
-    }
-
-    public void removeTask(String id) {
-        if (tasks != null) {
-            Task task = getTask(id);
-            tasks.remove(task);
-            if (tasks.isEmpty()) tasks = null;
-        }
-    }
-
-    public Task getTask(String id) {
-        if (tasks != null) {
-            for (Task task : tasks) {
-                if (task.getId().equals(id)) {
-                    return task;
-                }
-            }
-        }
-        return null;
-    }
-
-    public List<Task> getTasks(String tag) {
-        if (tasks == null) return null;
-        return tasks.stream().filter(task -> task.getTags().contains(tag)).collect(Collectors.toList());
-    }
-
-    public Task findTask(String taskId) {
-        Task task = getTask(taskId);
-        if (task != null) return task;
-        if (parent != null) return parent.findTask(taskId);
-        return null;
-    }
-
-    public Task findTaskParent(String taskId) {
-        Task task = getTask(taskId);
-        if (task != null) return this;
-        if (parent != null) return parent.findTaskParent(taskId);
-        return null;
-    }
-
+    @Override
     public void addAction(Action action) {
-        actions.add(action);
+        actionManager.addAction(action);
     }
 
-    public void removeAction(Action action) {
-        actions.remove(action);
+    @Override
+    public void removeAction(String id) {
+        actionManager.removeAction(id);
     }
 
+    @Override
     public Action getAction(String id) {
-        return actions.stream().filter(action -> action.getId().equals(id)).findFirst().orElse(null);
+        return actionManager.getAction(id);
     }
 
+    @Override
+    public List<Action> getActions() {
+        return actionManager.getActions();
+    }
+
+    @Override
+    public List<Action> getActions(String uid) {
+        return actionManager.getActions(uid);
+    }
+
+    @Override
     public List<Action> getActions(Class<? extends Action> actionClass) {
-        return actions.stream().filter(actionClass::isInstance).collect(Collectors.toList());
+        return actionManager.getActions(actionClass);
     }
 
-    public void addVar(Variable value) {
-        Variable var = getVar(value.getTitle());
-        if (var != null) return;
-        if (vars == null) {
-            vars = new ArrayList<>();
-        }
-        vars.add(value);
-        value.owner = this;
+
+    @Override
+    public void addTask(Task task) {
+        taskManager.addTask(task);
     }
 
-    public void removeVar(String id) {
-        if (vars != null) {
-            Variable var = getVar(id);
-            vars.remove(var);
-            if (vars.isEmpty()) vars = null;
-        }
+    @Override
+    public void removeTask(String id) {
+        taskManager.removeTask(id);
     }
 
-    public Variable getVar(String id) {
-        if (vars != null) {
-            for (Variable var : vars) {
-                if (id.equals(var.getId())) return var;
-            }
-        }
-        return null;
+    @Override
+    public Task getTask(String id) {
+        return taskManager.getTask(id);
     }
 
-    public Variable findVar(String id) {
-        Variable var = getVar(id);
-        if (var != null) return var;
-        if (parent != null) return parent.findVar(id);
-        return null;
+    @Override
+    public List<Task> getTasks() {
+        return taskManager.getTasks();
     }
 
-    public Task findVarParent(String key) {
-        Variable var = getVar(key);
-        if (var != null) return this;
-        if (parent != null) return parent.findVarParent(key);
-        return null;
+    @Override
+    public List<Task> getTasks(String tag) {
+        return taskManager.getTasks(tag);
     }
 
+    @Override
+    public Task findChildTask(String id) {
+        return taskManager.findChildTask(id);
+    }
+
+    @Override
+    public Task getParentTask(String id) {
+        return taskManager.getParentTask(id);
+    }
+
+
+    @Override
+    public boolean addVariable(Variable variable) {
+        return variableManager.addVariable(variable);
+    }
+
+    @Override
+    public void removeVariable(String id) {
+        variableManager.removeVariable(id);
+    }
+
+    @Override
+    public Variable getVariable(String id) {
+        return variableManager.getVariable(id);
+    }
+
+    @Override
+    public List<Variable> getVariables() {
+        return variableManager.getVariables();
+    }
+
+    @Override
+    public Variable findVariable(String id) {
+        return variableManager.findVariable(id);
+    }
+
+    @Override
     public void addTag(String tag) {
-        if (tags == null) {
-            tags = new ArrayList<>();
-        }
-        tags.add(tag);
+        tagManager.addTag(tag);
     }
 
+    @Override
     public void removeTag(String tag) {
-        if (tags != null) {
-            tags.remove(tag);
-            if (tags.isEmpty()) tags = null;
-        }
+        tagManager.removeTag(tag);
     }
 
+    @Override
+    public List<String> getTags() {
+        return tagManager.getTags();
+    }
+
+    @Override
+    public void setTags(List<String> tags) {
+        tagManager.setTags(tags);
+    }
+
+    @Override
     public String getTagString() {
-        if (tags == null || tags.isEmpty()) return "";
-        StringBuilder builder = new StringBuilder();
-        for (String tag : tags) {
-            builder.append(tag).append(",");
-        }
-        return builder.substring(0, builder.length() - 1);
+        return tagManager.getTagString();
     }
 
     public boolean checkCapturePermission() {
@@ -202,8 +206,8 @@ public class Task extends Identity {
     }
 
     public void check(ActionCheckResult result) {
-        actions.stream().filter(Objects::nonNull).forEach(action -> action.check(result, this));
-        if (tasks != null) tasks.forEach(task -> task.check(result));
+        getActions().stream().filter(Objects::nonNull).forEach(action -> action.check(result, this));
+        if (getTasks() != null) getTasks().forEach(task -> task.check(result));
     }
 
     public void save() {
@@ -213,16 +217,18 @@ public class Task extends Identity {
 
     @Override
     public Task copy() {
-        return GsonUtil.copy(this, Task.class);
+        Task copy = GsonUtil.copy(this, Task.class);
+        copy.parent = parent;
+        taskManager.setParent(copy);
+        variableManager.setParent(copy);
+        return copy;
     }
 
     @Override
     public Task newCopy() {
         Task copy = copy();
         copy.setId(UUID.randomUUID().toString());
-        if (copy.tasks != null && !copy.tasks.isEmpty()) {
-            copy.tasks.forEach(task -> task.parent = copy);
-        }
+        copy.parent = null;
         return copy;
     }
 
@@ -255,41 +261,26 @@ public class Task extends Identity {
         return createTime;
     }
 
-    public List<Task> getTasks() {
-        if (tasks == null) return Collections.emptyList();
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public List<Action> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
-    }
-
-    public List<Variable> getVars() {
-        if (vars == null) return Collections.emptyList();
-        return vars;
-    }
-
-    public void setVars(List<Variable> vars) {
-        this.vars = vars;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
-
     public Task getParent() {
         return parent;
+    }
+
+    void setParent(Task parent) {
+        this.parent = parent;
+    }
+
+    public boolean isDetailLog() {
+        return detailLog;
+    }
+
+    public void setDetailLog(boolean detailLog) {
+        this.detailLog = detailLog;
+    }
+
+    public static class TaskDeserialize implements JsonDeserializer<Task> {
+        @Override
+        public Task deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return new Task(json.getAsJsonObject());
+        }
     }
 }

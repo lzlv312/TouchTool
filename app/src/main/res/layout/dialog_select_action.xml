@@ -10,17 +10,26 @@
         android:layout_height="600dp"
         android:orientation="vertical">
 
-        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/searchBox"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="8dp"
+            app:selectionRequired="true"
+            app:singleSelection="true" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchBox"
+            style="?attr/textInputFilledStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="8dp"
             android:hint="@string/task_search"
             android:visibility="gone"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
             app:endIconMode="clear_text"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
             app:startIconDrawable="@drawable/icon_search">
@@ -33,29 +42,41 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/group"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            app:selectionRequired="true"
-            app:singleSelection="true" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabBox"
-            style="?attr/tabSecondaryStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginVertical="4dp"
-            app:tabMode="scrollable" />
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="96dp"
+                android:layout_height="match_parent">
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/actionsBox"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal" />
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/subGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:orientation="vertical"
+                    app:selectionRequired="true"
+                    app:singleSelection="true" />
+
+            </androidx.core.widget.NestedScrollView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/actionsBox"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:paddingBottom="96dp"
+                android:scrollbars="none"
+                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                app:spanCount="2"
+                tools:itemCount="20"
+                tools:listitem="@layout/dialog_select_action_item" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:layout_gravity="end"
-    android:minWidth="24dp"
     android:minHeight="24dp"
     android:orientation="horizontal">
 

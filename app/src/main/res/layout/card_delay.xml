@@ -68,7 +68,6 @@
             android:id="@+id/pinBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="4dp"
             android:baselineAligned="false">
 
             <LinearLayout
@@ -99,5 +98,15 @@
             android:paddingHorizontal="4dp" />
 
     </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/position"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="4dp"
+        android:alpha="0.1"
+        android:singleLine="true"
+        android:textColor="?attr/colorSecondary" />
 
 </FrameLayout>

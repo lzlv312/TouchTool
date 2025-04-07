@@ -43,6 +43,28 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="4dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/tag"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addTagBtn"
+            style="@style/Theme.TouchTool.IconButton.Filled"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="end"
+            app:icon="@drawable/icon_add" />
+
+    </FrameLayout>
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/tagBox"
         android:layout_width="match_parent"

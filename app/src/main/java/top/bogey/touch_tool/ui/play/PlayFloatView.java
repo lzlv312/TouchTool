@@ -21,7 +21,7 @@ import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatPlayBinding;
 import top.bogey.touch_tool.ui.blueprint.picker.FloatBaseCallback;
-import top.bogey.touch_tool.ui.setting.SettingSaver;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatDockSide;

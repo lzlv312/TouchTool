@@ -53,4 +53,10 @@ public class PinLeftCustomView extends PinCustomView {
     public ViewGroup getWidgetBox() {
         return binding.pinBox;
     }
+
+    @Override
+    public void refreshPin() {
+        super.refreshPin();
+        binding.pinBox.setVisibility(pin.isLinked() ? GONE : VISIBLE);
+    }
 }

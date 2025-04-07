@@ -1,5 +1,6 @@
 package top.bogey.touch_tool.ui.blueprint;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,8 +12,6 @@ import android.view.ViewGroup;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 
@@ -28,7 +27,6 @@ import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
-import top.bogey.touch_tool.ui.setting.SettingSaver;
 
 public class BlueprintView extends Fragment {
     private final Stack<Task> taskStack = new Stack<>();
@@ -36,11 +34,19 @@ public class BlueprintView extends Fragment {
 
     private ViewBlueprintBinding binding;
     private HistoryManager history;
+    private boolean needDelete = false;
 
     public static void tryPushStack(Task task) {
         Fragment fragment = MainActivity.getCurrentFragment();
         if (fragment instanceof BlueprintView blueprintView) {
             blueprintView.pushStack(task);
+        }
+    }
+
+    public static void tryShowFloatingToolBar(boolean show) {
+        Fragment fragment = MainActivity.getCurrentFragment();
+        if (fragment instanceof BlueprintView blueprintView) {
+            blueprintView.binding.floatingToolBar.setVisibility(show ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -58,14 +64,19 @@ public class BlueprintView extends Fragment {
             menu = currMenu;
             menuInflater.inflate(R.menu.menu_blueprint, currMenu);
             if (history != null) {
-                currMenu.findItem(R.id.back).setEnabled(history.canBack());
-                currMenu.findItem(R.id.forward).setEnabled(history.canForward());
+                menu.findItem(R.id.back).setEnabled(history.canBack());
+                menu.findItem(R.id.forward).setEnabled(history.canForward());
             }
         }
 
         @Override
         public void onPrepareMenu(@NonNull Menu menu) {
-            MenuProvider.super.onPrepareMenu(menu);
+            Task task = taskStack.peek();
+            while (task.getParent() != null) {
+                task = task.getParent();
+            }
+            MenuItem item = menu.findItem(R.id.taskDetailLog);
+            item.setChecked(task.isDetailLog());
         }
 
         @Override
@@ -85,12 +96,24 @@ public class BlueprintView extends Fragment {
                 binding.cardLayout.getTask().save();
                 return true;
             } else if (itemId == R.id.taskRunningLog) {
-                Task task = taskStack.stream().filter(t -> t.getParent() == null).findFirst().orElse(null);
-                if (task != null) {
-
+                Task task = taskStack.peek();
+                while (task.getParent() != null) {
+                    task = task.getParent();
                 }
+                // todo 显示日志
+                return true;
+            } else if (itemId == R.id.taskDetailLog) {
+                Task task = taskStack.peek();
+                while (task.getParent() != null) {
+                    task = task.getParent();
+                }
+                task.setDetailLog(!task.isDetailLog());
+                task.save();
+                menuItem.setChecked(task.isDetailLog());
                 return true;
             } else if (itemId == R.id.taskCapture) {
+                Bitmap bitmap = binding.cardLayout.takeTaskCapture();
+                // todo 保存图片
                 return true;
             }
             return false;
@@ -108,21 +131,37 @@ public class BlueprintView extends Fragment {
 
         binding = ViewBlueprintBinding.inflate(inflater, container, false);
 
+        binding.toolBar.addMenuProvider(menuProvider, getViewLifecycleOwner());
+
         binding.addButton.setOnClickListener(v -> new SelectActionDialog(requireContext(), taskStack.peek(), action -> {
             ActionCard card = binding.cardLayout.addCard(action);
+            if (card == null) return;
             binding.cardLayout.initCardPos(card);
         }).show());
 
-        binding.lockEditButton.setOnClickListener(v -> {
-            binding.cardLayout.setEditAble(!binding.cardLayout.isEditAble());
-            binding.lockEditButton.setImageResource(binding.cardLayout.isEditAble() ? R.drawable.icon_edit : R.drawable.icon_touch);
+        binding.copyButton.setOnClickListener(v -> {
+
         });
-        binding.cardLayout.setEditAble(!SettingSaver.getInstance().isLookFirst());
-        binding.lockEditButton.setImageResource(binding.cardLayout.isEditAble() ? R.drawable.icon_edit : R.drawable.icon_touch);
+
+        binding.deleteButton.setOnClickListener(v -> {
+            if (needDelete) {
+                for (ActionCard card : binding.cardLayout.selectedCards) {
+                    binding.cardLayout.removeCard(card);
+                }
+                binding.cardLayout.selectedCards.clear();
+                binding.floatingToolBar.setVisibility(View.GONE);
+            } else {
+                binding.deleteButton.setChecked(true);
+                needDelete = true;
+                binding.deleteButton.postDelayed(() -> {
+                    binding.deleteButton.setChecked(false);
+                    needDelete = false;
+                }, 1500);
+            }
+        });
 
         pushStack(task);
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
-        requireActivity().addMenuProvider(menuProvider, getViewLifecycleOwner());
 
         return binding.getRoot();
     }
@@ -158,8 +197,7 @@ public class BlueprintView extends Fragment {
             menu.findItem(R.id.forward).setEnabled(history.canForward());
         }
 
-        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
-        if (actionBar != null) actionBar.setTitle(task.getTitle());
+        binding.toolBar.setTitle(task.getTitle());
 
         callback.setEnabled(taskStack.size() > 1);
     }

@@ -41,6 +41,7 @@ public class NormalActionCard extends ActionCard {
         initCopy(binding.copyButton);
         initLock(binding.lockButton);
         initExpand(binding.expandButton);
+        initPosView(binding.position);
     }
 
     @Override
@@ -85,7 +86,9 @@ public class NormalActionCard extends ActionCard {
     }
 
     @Override
-    public boolean isEmptyPosition(float x, float y, float scale) {
+    public boolean isEmptyPosition(float x, float y) {
+        float scale = getScaleX();
+
         List<MaterialButton> buttons = Arrays.asList(binding.editButton, binding.lockButton, binding.expandButton, binding.copyButton, binding.removeButton);
         for (MaterialButton button : buttons) {
             PointF pointF = DisplayUtil.getLocationRelativeToView(button, this);
@@ -95,6 +98,6 @@ public class NormalActionCard extends ActionCard {
             float height = button.getHeight() * scale;
             if (new RectF(px, py, px + width, py + height).contains(x, y)) return false;
         }
-        return super.isEmptyPosition(x, y, scale);
+        return super.isEmptyPosition(x, y);
     }
 }

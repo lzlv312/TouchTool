@@ -31,6 +31,11 @@ public class PinAdd extends PinBase{
     }
 
     @Override
+    public boolean isDynamic() {
+        return false;
+    }
+
+    @Override
     public boolean isInstance(PinBase pin) {
         return false;
     }

@@ -6,16 +6,15 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.ActivityMainBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
-import top.bogey.touch_tool.ui.setting.SettingSaver;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class MainActivity extends BaseActivity {
@@ -35,7 +34,6 @@ public class MainActivity extends BaseActivity {
         MainApplication.getInstance().setActivity(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setSupportActionBar(binding.toolBar);
 
         setContentView(binding.getRoot());
 
@@ -49,8 +47,6 @@ public class MainActivity extends BaseActivity {
         NavController controller = Navigation.findNavController(this, R.id.conView);
         NavigationUI.setupWithNavController(binding.menuView, controller);
 
-        AppBarConfiguration configuration = new AppBarConfiguration.Builder(R.id.task, R.id.shortcut, R.id.setting).build();
-        NavigationUI.setupActionBarWithNavController(this, controller, configuration);
         controller.addOnDestinationChangedListener((navController, navDestination, bundle) -> {
             int id = navDestination.getId();
             if (id == R.id.task || id == R.id.shortcut || id == R.id.setting) {

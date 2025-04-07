@@ -135,10 +135,7 @@ public class ActionMap {
                     ActionType.GET_IMAGE,
                     ActionType.CROP_IMAGE,
                     ActionType.SAVE_IMAGE,
-                    ActionType.FIND_IMAGES
-            ));
-
-            case COLOR -> list.addAll(Arrays.asList(
+                    ActionType.FIND_IMAGES,
                     ActionType.GET_COLOR,
                     ActionType.FIND_COLORS
             ));
@@ -180,7 +177,7 @@ public class ActionMap {
     }
 
     public enum ActionGroupType {
-        START, LOGIC, NORMAL, SYSTEM, NUMBER, STRING, BOOLEAN, NODE, IMAGE, COLOR, AREA, POINT, LIST;
+        START, LOGIC, NORMAL, SYSTEM, NUMBER, STRING, BOOLEAN, NODE, IMAGE, AREA, POINT, LIST;
 
         public String getName() {
             String[] strings = MainApplication.getInstance().getResources().getStringArray(R.array.action_group);

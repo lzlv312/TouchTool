@@ -30,7 +30,7 @@
     <!-- 底部菜单 -->
     <string name="select_all">全选</string>
     <string name="remove_task">删除</string>
-    <string name="remove_task_tips">任务删除之后无法撤回，确定要删除选中的任务吗？</string>
+    <string name="remove_tips">删除之后无法撤回，确定要删除吗？</string>
     <string name="export_task">导出</string>
     <string name="export_task_tips">导出并发送</string>
     <string name="move_task">标签</string>
@@ -39,12 +39,13 @@
     <!-- 任务界面相关 -->
     <string name="title">标题</string>
     <string name="des">描述</string>
+    <string name="tag">标签</string>
     <string name="copy_title">%s_复制</string>
 
     <string name="task_add">添加任务</string>
     <string name="task_update">修改任务</string>
     <string name="task_search">搜索任务</string>
-    <string name="task_tag_add">添加分类</string>
+    <string name="task_tag_add">添加标签</string>
 
     <string name="task_import">导入任务</string>
     <string name="task_import_desc">从你选择的文件中选择需要导入的任务配置和通用自定义卡片</string>
@@ -56,8 +57,9 @@
     <string name="variable_update">修改变量</string>
 
     <!-- 蓝图界面相关 -->
-    <string name="task_running_log">任务日志</string>
+    <string name="task_running_log">查看任务日志</string>
     <string name="task_running_log_clear">清除日志</string>
+    <string name="task_running_detail_log">记录日志细节</string>
     <string name="task_capture">任务截图</string>
     <string name="task_capture_tips">保存任务截图还是分享任务截图？</string>
 
@@ -184,11 +186,12 @@
     <!-- 动作-Task -->
     <string name="execute_task_action">执行任务</string>
     <string name="execute_task_action_task_id">任务</string>
-    <string name="execute_task_action_just_cal">仅计算</string>
+    <string name="execute_task_action_just_cal">每次计算</string>
 
     <string name="custom_start_action">自定义开始</string>
     <string name="custom_end_action">自定义结束</string>
     <string name="custom_pin_name">针脚名</string>
+    <string name="custom_action_single_error">这张卡不能重复添加</string>
 
     <string name="set_value_action">设置变量</string>
     <string name="get_value_action">获取变量</string>
@@ -373,12 +376,12 @@
     <string name="string_replace_action_result">替换结果</string>
 
     <string name="get_ocr_text_action">OCR识别文本</string>
-    <string name="get_ocr_text_action_desc">识别屏幕中指定区域文字</string>
+    <string name="get_ocr_text_action_desc">识别图片中指定区域文字</string>
     <string name="get_ocr_text_action_type">模型</string>
     <string name="get_ocr_text_action_text">所有文字</string>
 
-    <string name="find_ocr_text_action">OCR匹配文本</string>
-    <string name="find_ocr_text_action_desc">在屏幕中查找指定文字</string>
+    <string name="find_ocr_text_action">OCR查找文本</string>
+    <string name="find_ocr_text_action_desc">在图片中查找指定文字</string>
     <string name="find_ocr_text_action_type">模型</string>
 
     <!-- 动作-Area -->
@@ -436,19 +439,22 @@
 
 
     <!-- 动作-Node -->
+    <string name="pin_node_first">首个控件</string>
+    <string name="pin_node_top">最上层控件</string>
+
     <string name="find_node_by_path_action">获取控件(身份)</string>
     <string name="find_node_by_path_action_desc">根据身份获取控件</string>
     <string name="find_node_by_path_action_path">身份</string>
 
     <string name="find_nodes_by_text_action">获取控件(文本)</string>
-    <string name="find_nodes_by_text_action_desc">根据文本获取控件</string>
+    <string name="find_nodes_by_text_action_desc">获取指定文本的所有控件</string>
 
     <string name="find_nodes_by_id_action">获取控件(ID)</string>
-    <string name="find_nodes_by_id_action_desc">根据ID获取控件</string>
+    <string name="find_nodes_by_id_action_desc">获取指定ID的所有控件</string>
     <string name="find_nodes_by_id_action_id">控件ID</string>
 
     <string name="find_nodes_in_area_action">获取控件(区域)</string>
-    <string name="find_nodes_in_area_action_desc">根据区域获取控件</string>
+    <string name="find_nodes_in_area_action_desc">获取与区域相交的所有控件</string>
 
     <string name="get_node_info_action">获取控件信息</string>
     <string name="get_node_info_action_desc">获取控件详细信息</string>
@@ -458,16 +464,16 @@
     <string name="get_node_info_action_visible">是否可见</string>
     <string name="get_node_info_action_usable">是否可用</string>
 
-    <string name="get_node_children_action">获取控件子控件</string>
-    <string name="get_node_children_action_desc">获取控件子控件</string>
+    <string name="get_node_children_action">获取子控件</string>
+    <string name="get_node_children_action_desc">获取控件所有子控件</string>
 
-    <string name="get_node_parent_action">获取控件父控件</string>
-    <string name="get_node_parent_action_desc">获取控件父控件</string>
+    <string name="get_node_parent_action">获取父控件</string>
+    <string name="get_node_parent_action_desc">获取控件的父控件</string>
 
     <string name="get_windows_action">获取所有窗口</string>
-    <string name="get_windows_action_desc">获取所有窗口</string>
+    <string name="get_windows_action_desc">获取界面上所有窗口</string>
 
-    <string name="check_node_valid_action">检查控件是否有效</string>
+    <string name="check_node_valid_action">是有效控件?</string>
     <string name="check_node_valid_action_desc">检查控件是否有效</string>
 
     <string name="node_touch_action">点击控件</string>
@@ -484,7 +490,7 @@
 
     <!-- 动作-Image -->
     <string name="get_image_action">获取图片</string>
-    <string name="get_image_action_desc">获取屏幕指定区域图片</string>
+    <string name="get_image_action_desc">获取当前屏幕指定区域图片</string>
 
     <string name="crop_image_action">裁剪图片</string>
     <string name="crop_image_action_desc">裁剪图片</string>
@@ -493,21 +499,17 @@
     <string name="save_image_action_desc">静默保存图片到图片文件夹</string>
 
     <string name="find_images_action">识别图片</string>
-    <string name="find_images_action_desc">识别屏幕指定区域所有图片</string>
+    <string name="find_images_action_desc">识别模板图片在图片中的所有区域</string>
     <string name="find_images_action_template">模板</string>
     <string name="find_images_action_similarity">相似度</string>
 
-    <string name="image_equal_action">图片相似度</string>
-    <string name="image_equal_action_desc">获取两图片相似度</string>
-
-
     <!-- 动作-Color -->
     <string name="get_color_action">获取颜色</string>
-    <string name="get_color_action_desc">获取屏幕指定位置颜色</string>
+    <string name="get_color_action_desc">获取图片指定位置颜色</string>
 
     <string name="find_colors_action">识别颜色</string>
-    <string name="find_colors_action_desc">识别屏幕指定区域所有颜色</string>
-    <string name="find_colors_action_template">模板</string>
+    <string name="find_colors_action_desc">识别指定颜色在图片中的所有区域</string>
+    <string name="find_colors_action_template">颜色</string>
     <string name="find_colors_action_similarity">相似度</string>
 
 
@@ -585,6 +587,7 @@
     <string name="pin_string_task">任务</string>
     <string name="pin_string_select">单选</string>
     <string name="pin_string_select_hint">选项(逗号分隔)</string>
+    <string name="pin_string_full_screen_edit">全屏编辑</string>
 
     <string name="pin_number_integer">整数</string>
     <string name="pin_number_float">小数</string>
@@ -653,13 +656,19 @@
 
     <!-- 设置 -->
     <string name="setting_need_notification_desc">前台服务和录屏服务需要发送通知，请授予应用发送通知的权限</string>
+
     <string name="setting_reload_accessibility_service">重启无障碍服务</string>
-    <string name="setting_write_secure_setting">写入安全设置</string>
+    <string name="setting_write_secure_setting">设置自动重启无障碍</string>
     <string name="setting_write_secure_setting_des">授予 写入安全设置 权限能够使应用自动重启无障碍服务</string>
-    <string name="setting_auto_give_capture_permission">自动开启录屏</string>
+
+    <string name="setting_auto_give_capture_permission">设置自动开启录屏</string>
     <string name="setting_auto_give_capture_permission_des">授予 自动开启录屏 权限能够在需要使用录屏时自动授权，这样可以更方便快捷的执行各种自动化无人值守任务</string>
+
     <string name="setting_copy_code">复制Shell指令</string>
     <string name="setting_rin_code">执行Shell指令</string>
+
+    <string name="setting_help_doc">帮助文档</string>
+    <string name="setting_help_video">视频教程</string>
 
     <!-- 设置-应用设置 -->
     <string name="app_setting">应用设置</string>
@@ -735,8 +744,5 @@
 
     <string name="preference_setting_manual_play_padding">手动执行悬浮窗靠边偏移</string>
     <string name="preference_setting_manual_play_padding_desc">设置手动执行悬浮窗靠边时的空白像素</string>
-
-    <string name="preference_setting_look_first">默认查看蓝图</string>
-    <string name="preference_setting_look_first_desc">打开蓝图时默认为查看模式，而不是编辑模式</string>
 
 </resources>

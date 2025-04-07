@@ -14,7 +14,7 @@ import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class NumberToIntegerAction extends CalculateAction {
-    private final transient Pin doublePin = new Pin(new PinDouble(), R.string.pin_number_float);
+    private final transient Pin doublePin = new Pin(new PinDouble(), R.string.pin_number_double);
     private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(R.array.to_int_type), R.string.number_to_integer_action_type);
     private final transient Pin integerPin = new Pin(new PinInteger(), R.string.pin_number_integer, true);
 

@@ -9,9 +9,9 @@ plugins {
 
 android {
     namespace = "top.bogey.touch_tool"
-    compileSdk = 35
+    compileSdk = 36
     ndkVersion = "21.4.7075529"
-    buildToolsVersion = "35.0.1"
+    buildToolsVersion = "36.0.0"
 
     val pattern = DateTimeFormatter.ofPattern("yyMMdd_HHmm")
     val now = LocalDateTime.now().format(pattern)
@@ -19,7 +19,7 @@ android {
     defaultConfig {
         applicationId = "top.bogey.touch_tool"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = now
 
@@ -77,7 +77,7 @@ android {
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.31.5"
+            version = "3.31.6"
         }
     }
 

@@ -16,8 +16,8 @@
     <color name="AppPinColor">#444444</color>
     <color name="TaskPinColor">#0088FF</color>
 
-    <color name="SelectedPinMul">#FFDF00</color>
-    <color name="SelectedPinAdd">#443322</color>
+    <color name="SelectedPinMul">#ffffff</color>
+    <color name="SelectedPinAdd">#222222</color>
 
     <color name="LauncherBackgroundColor">#FAFAFA</color>
     <color name="HalfAlpha">#66000000</color>

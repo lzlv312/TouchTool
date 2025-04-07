@@ -1,5 +1,6 @@
 package top.bogey.touch_tool.ui.blueprint.card;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.PointF;
@@ -35,6 +36,8 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
 
     protected final Map<String, PinView> pinViews = new HashMap<>();
     private boolean needDelete = false;
+
+    private MaterialTextView posView;
 
     public ActionCard(Context context, Task task, Action action) {
         super(context);
@@ -135,6 +138,10 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         });
     }
 
+    protected void initPosView(MaterialTextView posView) {
+        this.posView = posView;
+    }
+
     public abstract boolean check();
 
     public void addPin(Pin pin) {
@@ -170,9 +177,11 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         if (view != null) ((ViewGroup) view.getParent()).removeView(view);
     }
 
+    @SuppressLint("SetTextI18n")
     public void updateCardPos(float x, float y) {
         setX(x);
         setY(y);
+        if (posView != null) posView.setText(action.getPos().x + "," + action.getPos().y);
     }
 
     public void startFocusAnim() {
@@ -223,7 +232,9 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         return pinViews.get(pinId);
     }
 
-    public PinView getLinkAblePinView(float x, float y, float scale) {
+    public PinView getLinkAblePinView(float x, float y) {
+        float scale = getScaleX();
+
         for (Map.Entry<String, PinView> entry : pinViews.entrySet()) {
             PinView pinView = entry.getValue();
             if (pinView.getVisibility() != VISIBLE) continue;
@@ -248,7 +259,9 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         return null;
     }
 
-    public boolean isEmptyPosition(float x, float y, float scale) {
+    public boolean isEmptyPosition(float x, float y) {
+        float scale = getScaleX();
+
         for (Map.Entry<String, PinView> entry : pinViews.entrySet()) {
             PinView pinView = entry.getValue();
             PointF pointF = DisplayUtil.getLocationRelativeToView(pinView, this);
@@ -263,13 +276,13 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-        int heightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        int widthSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.UNSPECIFIED);
+        int heightSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.UNSPECIFIED);
         super.onMeasure(widthSpec, heightSpec);
     }
 
     @Override
-    public void onPinAdded(Pin pin) {
+    public void onPinAdded(Pin pin, int index) {
         List<Pin> pins = new ArrayList<>();
         // 找到pin方向方位一致的所有pin
         for (Pin currPin : action.getPins()) {
@@ -278,8 +291,8 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
                 pins.add(currPin);
             }
         }
-        int index = pins.indexOf(pin);
-        addPinView(pin, pins.size() - 1 - index);
+        int idx = pins.indexOf(pin);
+        addPinView(pin, pins.size() - 1 - idx);
     }
 
     @Override

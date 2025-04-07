@@ -41,6 +41,8 @@ public abstract class PinBase implements Copyable {
 
     public abstract void sync(PinBase value);
 
+    public abstract boolean isDynamic();
+
     @Override
     public PinBase copy() {
         return GsonUtil.copy(this, PinBase.class);

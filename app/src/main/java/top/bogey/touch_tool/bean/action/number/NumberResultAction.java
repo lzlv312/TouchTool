@@ -10,8 +10,8 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 
 public abstract class NumberResultAction extends CalculateAction {
-    protected final transient Pin firstPin = new Pin(new PinDouble(), R.string.pin_number_integer);
-    protected final transient Pin secondPin = new Pin(new PinDouble(), R.string.pin_number_integer);
+    protected final transient Pin firstPin = new Pin(new PinDouble(), R.string.pin_number_double);
+    protected final transient Pin secondPin = new Pin(new PinDouble(), R.string.pin_number_double);
     protected final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
 
     public NumberResultAction(ActionType type) {

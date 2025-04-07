@@ -1,7 +1,7 @@
 package top.bogey.touch_tool.bean.pin.pin_objects;
 
 public enum PinSubType {
-    NORMAL,
+    NORMAL, DYNAMIC,
 
     // 文本：链接，快捷方式，铃声路径，自动填充，多行文本，控件路径，任务ID
     URL, SHORTCUT, RINGTONE, AUTO_PIN,

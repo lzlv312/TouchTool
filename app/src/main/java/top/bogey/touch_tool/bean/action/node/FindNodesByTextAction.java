@@ -26,15 +26,16 @@ public class FindNodesByTextAction extends FindExecuteAction {
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area, false, false, true);
     private final transient Pin nodesPin = new Pin(new PinList(PinType.NODE), R.string.pin_node, true);
+    private final transient Pin firstNodePin = new Pin(new PinNode(), R.string.pin_node_first, true);
 
     public FindNodesByTextAction() {
         super(ActionType.FIND_NODES_BY_TEXT);
-        addPins(textPin, areaPin, nodesPin);
+        addPins(textPin, areaPin, nodesPin, firstNodePin);
     }
 
     public FindNodesByTextAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(textPin, areaPin, nodesPin);
+        reAddPins(textPin, areaPin, nodesPin, firstNodePin);
     }
 
     @Override
@@ -56,7 +57,8 @@ public class FindNodesByTextAction extends FindExecuteAction {
                 nodes.add(new PinNode(info));
             }
         }
-
-        return !nodes.isEmpty();
+        if (nodes.isEmpty()) return false;
+        firstNodePin.setValue(nodes.get(0));
+        return true;
     }
 }
