@@ -52,7 +52,7 @@
             <action android:name="android.intent.action.SEND" />
         </intent>
         <intent>
-            <action android:name="top.bogey.ocr_service" />
+            <action android:name="top.bogey.ocr.OcrService" />
         </intent>
     </queries>
 

@@ -23,7 +23,6 @@ import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.databinding.FloatPickerAreaBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
-import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 @SuppressLint("ViewConstructor")
 public class ImagePicker extends FullScreenPicker<Bitmap> {
@@ -155,7 +154,7 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
 
     @Override
     protected void realShow() {
-        List<Rect> rectList = DisplayUtil.matchTemplate(screenInfo.getScreenShot(), bitmap, null, 85);
+        List<Rect> rectList = DisplayUtil.matchTemplate(screenInfo.getScreenShot(), bitmap, null, 80, true);
         if (rectList != null && !rectList.isEmpty()) area.set(rectList.get(0));
         area.offset(-location[0], -location[1]);
         refreshUI();

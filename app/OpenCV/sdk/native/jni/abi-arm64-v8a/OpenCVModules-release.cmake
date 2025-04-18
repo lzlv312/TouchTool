@@ -45,20 +45,20 @@ set_target_properties(libwebp PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS libwebp )
 list(APPEND _IMPORT_CHECK_FILES_FOR_libwebp "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/liblibwebp.a" )
 
-# Import target "libjasper" for configuration "Release"
-set_property(TARGET libjasper APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(libjasper PROPERTIES
+# Import target "libopenjp2" for configuration "Release"
+set_property(TARGET libopenjp2 APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(libopenjp2 PROPERTIES
   IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "C"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/liblibjasper.a"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/liblibopenjp2.a"
   )
 
-list(APPEND _IMPORT_CHECK_TARGETS libjasper )
-list(APPEND _IMPORT_CHECK_FILES_FOR_libjasper "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/liblibjasper.a" )
+list(APPEND _IMPORT_CHECK_TARGETS libopenjp2 )
+list(APPEND _IMPORT_CHECK_FILES_FOR_libopenjp2 "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/liblibopenjp2.a" )
 
 # Import target "libpng" for configuration "Release"
 set_property(TARGET libpng APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(libpng PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "C"
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "ASM;C"
   IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/liblibpng.a"
   )
 
@@ -95,16 +95,6 @@ set_target_properties(libprotobuf PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS libprotobuf )
 list(APPEND _IMPORT_CHECK_FILES_FOR_libprotobuf "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/liblibprotobuf.a" )
 
-# Import target "quirc" for configuration "Release"
-set_property(TARGET quirc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-set_target_properties(quirc PROPERTIES
-  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "C"
-  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libquirc.a"
-  )
-
-list(APPEND _IMPORT_CHECK_TARGETS quirc )
-list(APPEND _IMPORT_CHECK_FILES_FOR_quirc "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libquirc.a" )
-
 # Import target "tegra_hal" for configuration "Release"
 set_property(TARGET tegra_hal APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(tegra_hal PROPERTIES
@@ -115,6 +105,36 @@ set_target_properties(tegra_hal PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS tegra_hal )
 list(APPEND _IMPORT_CHECK_FILES_FOR_tegra_hal "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libtegra_hal.a" )
 
+# Import target "kleidicv" for configuration "Release"
+set_property(TARGET kleidicv APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(kleidicv PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libkleidicv.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS kleidicv )
+list(APPEND _IMPORT_CHECK_FILES_FOR_kleidicv "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libkleidicv.a" )
+
+# Import target "kleidicv_thread" for configuration "Release"
+set_property(TARGET kleidicv_thread APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(kleidicv_thread PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libkleidicv_thread.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS kleidicv_thread )
+list(APPEND _IMPORT_CHECK_FILES_FOR_kleidicv_thread "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libkleidicv_thread.a" )
+
+# Import target "kleidicv_hal" for configuration "Release"
+set_property(TARGET kleidicv_hal APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(kleidicv_hal PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libkleidicv_hal.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS kleidicv_hal )
+list(APPEND _IMPORT_CHECK_FILES_FOR_kleidicv_hal "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libkleidicv_hal.a" )
+
 # Import target "ittnotify" for configuration "Release"
 set_property(TARGET ittnotify APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(ittnotify PROPERTIES
@@ -124,6 +144,16 @@ set_target_properties(ittnotify PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS ittnotify )
 list(APPEND _IMPORT_CHECK_FILES_FOR_ittnotify "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libittnotify.a" )
+
+# Import target "ade" for configuration "Release"
+set_property(TARGET ade APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(ade PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libade.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS ade )
+list(APPEND _IMPORT_CHECK_FILES_FOR_ade "${_IMPORT_PREFIX}/sdk/native/3rdparty/libs/arm64-v8a/libade.a" )
 
 # Import target "opencv_core" for configuration "Release"
 set_property(TARGET opencv_core APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
@@ -264,6 +294,16 @@ set_target_properties(opencv_video PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS opencv_video )
 list(APPEND _IMPORT_CHECK_FILES_FOR_opencv_video "${_IMPORT_PREFIX}/sdk/native/staticlibs/arm64-v8a/libopencv_video.a" )
+
+# Import target "opencv_gapi" for configuration "Release"
+set_property(TARGET opencv_gapi APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(opencv_gapi PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/sdk/native/staticlibs/arm64-v8a/libopencv_gapi.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS opencv_gapi )
+list(APPEND _IMPORT_CHECK_FILES_FOR_opencv_gapi "${_IMPORT_PREFIX}/sdk/native/staticlibs/arm64-v8a/libopencv_gapi.a" )
 
 # Import target "opencv_java" for configuration "Release"
 set_property(TARGET opencv_java APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)

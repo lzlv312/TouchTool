@@ -377,6 +377,7 @@
 
     <string name="get_ocr_text_action">OCR识别文本</string>
     <string name="get_ocr_text_action_desc">识别图片中指定区域文字</string>
+    <string name="get_ocr_text_action_similar">相似度</string>
     <string name="get_ocr_text_action_type">模型</string>
     <string name="get_ocr_text_action_text">所有文字</string>
 
@@ -404,6 +405,9 @@
     <string name="get_area_center_action">取区域中心</string>
     <string name="get_area_center_action_desc">取指定区域的中心位置</string>
 
+    <string name="get_area_random_action">取区域随机位置</string>
+    <string name="get_area_random_action_desc">取指定区域的随机位置</string>
+
     <string name="pick_area_action">手动选择区域</string>
     <string name="pick_area_action_desc">选择一个区域</string>
 
@@ -426,6 +430,12 @@
     <string name="touch_action_desc">执行指定手势</string>
     <string name="touch_action_time">手势速度</string>
     <string name="touch_action_offset">随机偏移</string>
+
+    <string name="touch_point_action">点击位置</string>
+    <string name="touch_point_action_desc">点击指定位置</string>
+    <string name="touch_point_action_time">触摸时间(ms)</string>
+    <string name="touch_point_action_offset">随机偏移</string>
+    <string name="touch_point_action_type">点击方式</string>
 
     <!-- 动作-Boolean -->
     <string name="boolean_and_action">所有条件达成</string>
@@ -489,8 +499,11 @@
 
 
     <!-- 动作-Image -->
-    <string name="get_image_action">获取图片</string>
+    <string name="pin_area_first">首个区域</string>
+
+    <string name="get_image_action">获取屏幕界面</string>
     <string name="get_image_action_desc">获取当前屏幕指定区域图片</string>
+    <string name="get_image_action_use_accessibility">无障碍截屏</string>
 
     <string name="crop_image_action">裁剪图片</string>
     <string name="crop_image_action_desc">裁剪图片</string>
@@ -502,6 +515,18 @@
     <string name="find_images_action_desc">识别模板图片在图片中的所有区域</string>
     <string name="find_images_action_template">模板</string>
     <string name="find_images_action_similarity">相似度</string>
+    <string name="find_images_action_fast">二值化</string>
+
+    <string name="create_qrcode_action">生成二维码</string>
+    <string name="create_qrcode_action_desc">生成二维码</string>
+    <string name="create_qrcode_action_content">内容</string>
+    <string name="create_qrcode_action_size">大小</string>
+    <string name="create_qrcode_action_qrcode">二维码</string>
+
+    <string name="parse_qrcode_action">解析二维码</string>
+    <string name="parse_qrcode_action_desc">解析二维码</string>
+    <string name="parse_qrcode_action_image">图片</string>
+    <string name="parse_qrcode_action_content">内容</string>
 
     <!-- 动作-Color -->
     <string name="get_color_action">获取颜色</string>

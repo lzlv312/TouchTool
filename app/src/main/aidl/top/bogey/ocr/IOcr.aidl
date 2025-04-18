@@ -2,10 +2,8 @@
 package top.bogey.ocr;
 
 import android.graphics.Bitmap;
-import top.bogey.touch_tool.service.ocr.OcrResult;
-
-parcelable OcrResult;
+import top.bogey.ocr.IOcrCallback;
 
 interface IOcr {
-    List<OcrResult> runOcr(in Bitmap bitmap);
+    void runOcr(in Bitmap bitmap, in IOcrCallback callback);
 }

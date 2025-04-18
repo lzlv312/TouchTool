@@ -6,10 +6,12 @@ nav = "2.8.9"
 treeview = "1.2.0"
 flexbox = "3.0.0"
 
-gson = "2.12.1"
+gson = "2.13.0"
 mmkv = "2.1.0"
 shizuku = "13.1.5"
 exp4j = "0.4.8"
+
+zxing = "3.2.0"
 
 agp = "8.9.1"
 
@@ -30,6 +32,7 @@ shizuku-api = { group = "dev.rikka.shizuku", name = "api", version.ref = "shizuk
 shizuku-provider = { group = "dev.rikka.shizuku", name = "provider", version.ref = "shizuku"}
 
 exp4j = {group = "net.objecthunter", name = "exp4j", version.ref = "exp4j"}
+zxing-lite = {group = "com.github.jenly1314", name = "zxing-lite", version.ref = "zxing"}
 
 [plugins]
 application = { id = "com.android.application", version.ref = "agp" }

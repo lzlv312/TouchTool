@@ -58,7 +58,7 @@
 //
 // - Use find_package() in app/CMakeLists.txt:
 //
-//   find_package(OpenCV 3.4 REQUIRED java)
+//   find_package(OpenCV 4.11 REQUIRED java)
 //   ...
 //   target_link_libraries(native-lib ${OpenCV_LIBRARIES})
 //
@@ -89,16 +89,29 @@
 //
 
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+try {
+    apply plugin: 'kotlin-android'
+    println "Configure OpenCV with Kotlin"
+} catch (Exception e) {
+    println "Configure OpenCV without Kotlin"
+}
 
-println "OpenCV: " + project.buildscript.sourceFile
+def openCVersionName = "4.11.0"
+def openCVersionCode = ((4 * 100 + 11) * 100 + 0) * 10 + 0
+
+println "OpenCV: " +openCVersionName + " " + project.buildscript.sourceFile
 
 android {
-    compileSdkVersion 26
-    //buildToolsVersion "x.y.z" // not needed since com.android.tools.build:gradle:3.0.0
+    namespace 'org.opencv'
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 34
+
+        versionCode openCVersionCode
+        versionName openCVersionName
 
         externalNativeBuild {
             cmake {
@@ -106,6 +119,16 @@ android {
                 targets "opencv_jni_shared"
             }
         }
+    }
+    
+    android {
+        buildFeatures {
+            buildConfig true
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     buildTypes {
@@ -122,16 +145,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
-    }
 
     sourceSets {
         main {
             jniLibs.srcDirs = ['native/libs']
             java.srcDirs = ['java/src']
-            aidl.srcDirs = ['java/src']
             res.srcDirs = ['java/res']
             manifest.srcFile 'java/AndroidManifest.xml'
         }
@@ -140,6 +158,45 @@ android {
     externalNativeBuild {
         cmake {
             path (project.projectDir.toString() + '/libcxx_helper/CMakeLists.txt')
+        }
+    }
+    
+    buildFeatures {
+        prefabPublishing true
+        buildConfig true
+    }
+
+    prefab {
+        opencv_jni_shared {
+            headers 'native/jni/include'
+        }
+    }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'org.opencv'
+            artifactId = 'opencv'
+            version = '4.11.0'
+
+            afterEvaluate {
+               from components.release
+           }
+        }
+    }
+    repositories {
+        maven {
+            name = 'myrepo'
+            url = "${project.buildDir}/repo"
         }
     }
 }

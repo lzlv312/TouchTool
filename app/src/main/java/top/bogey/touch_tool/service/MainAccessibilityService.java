@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.service;
 
+import static top.bogey.touch_tool.service.TaskInfoSummary.OCR_SERVICE_ACTION;
+
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;
 import android.annotation.SuppressLint;
@@ -12,12 +14,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Path;
+import android.hardware.HardwareBuffer;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -39,6 +43,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import top.bogey.ocr.IOcr;
+import top.bogey.ocr.IOcrCallback;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
@@ -51,6 +57,7 @@ import top.bogey.touch_tool.ui.PermissionActivity;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.utils.callback.BitmapResultCallback;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
+import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.thread.TaskQueue;
 import top.bogey.touch_tool.utils.thread.TaskThreadPoolExecutor;
 
@@ -384,45 +391,46 @@ public class MainAccessibilityService extends AccessibilityService {
 
     // 录屏 ----------------------------------------------------------------------------- start
     private BooleanResultCallback captureCallback;
-    private ServiceConnection connection = null;
-    private CaptureService.CaptureBinder binder = null;
+    private ServiceConnection captureConnection = null;
+    private CaptureService.CaptureBinder captureBinder = null;
 
     public boolean isCaptureEnabled() {
         if (isEnabled()) {
             if (SettingSaver.getInstance().getCaptureType() == 2 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
                 return true;
-            return binder != null;
+            return captureBinder != null;
         }
         return false;
     }
 
-    public void startCapture(BooleanResultCallback callback) {
-        if (binder == null) {
+    public boolean startCapture(BooleanResultCallback callback) {
+        if (captureBinder == null) {
             captureCallback = callback;
             Intent intent = new Intent(this, PermissionActivity.class);
             intent.putExtra(PermissionActivity.CAPTURE_PERMISSION, true);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            return true;
         } else {
-            if (callback != null) callback.onResult(true);
+            return false;
         }
     }
 
     public void stopCapture() {
-        if (connection != null) {
-            unbindService(connection);
-            connection = null;
+        if (captureConnection != null) {
+            unbindService(captureConnection);
+            captureConnection = null;
             stopService(new Intent(this, CaptureService.class));
         }
-        binder = null;
+        captureBinder = null;
     }
 
     public void bindCapture(boolean result, Intent data) {
         if (result) {
-            connection = new ServiceConnection() {
+            captureConnection = new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
-                    binder = (CaptureService.CaptureBinder) service;
+                    captureBinder = (CaptureService.CaptureBinder) service;
                     SettingSaver.getInstance().setCaptureType(1);
                     callCaptureCallback(true);
                 }
@@ -435,7 +443,7 @@ public class MainAccessibilityService extends AccessibilityService {
 
             Intent intent = new Intent(this, CaptureService.class);
             intent.putExtra(CaptureService.DATA, data);
-            if (!bindService(intent, connection, Context.BIND_AUTO_CREATE))
+            if (!bindService(intent, captureConnection, Context.BIND_AUTO_CREATE))
                 callCaptureCallback(false);
         } else {
             callCaptureCallback(false);
@@ -454,29 +462,25 @@ public class MainAccessibilityService extends AccessibilityService {
     // 截图 ----------------------------------------------------------------------------- start
     private Bitmap lastScreenShot;
 
-    public void getScreenShot(BitmapResultCallback callback) {
-        switch (SettingSaver.getInstance().getCaptureType()) {
-            case 0 -> callback.onResult(null);
-            case 1 -> {
-                if (binder != null) {
-                    callback.onResult(binder.getScreenShot());
-                } else {
-                    callback.onResult(null);
-                }
-            }
-            case 2 -> tryGetScreenShot(callback);
-        }
+    public Bitmap getScreenShotByCapture() {
+        return captureBinder != null ? captureBinder.getScreenShot() : null;
     }
 
-    public void tryGetScreenShot(BitmapResultCallback callback) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
+    public boolean getScreenByAccessibility(BitmapResultCallback callback) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
             takeScreenshot(0, executorService, new TakeScreenshotCallback() {
                 @Override
                 public void onSuccess(@NonNull ScreenshotResult screenshot) {
-                    Bitmap bitmap = Bitmap.wrapHardwareBuffer(screenshot.getHardwareBuffer(), screenshot.getColorSpace());
-                    if (bitmap != null) {
-                        lastScreenShot = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                    try(HardwareBuffer hardwareBuffer = screenshot.getHardwareBuffer()) {
+                        Bitmap bitmap = Bitmap.wrapHardwareBuffer(hardwareBuffer, screenshot.getColorSpace());
+                        if (bitmap != null) {
+                            lastScreenShot = bitmap.copy(Bitmap.Config.ARGB_8888, false);
+                            bitmap.recycle();
+                            callback.onResult(lastScreenShot);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                         callback.onResult(lastScreenShot);
                     }
                 }
@@ -486,15 +490,70 @@ public class MainAccessibilityService extends AccessibilityService {
                     callback.onResult(lastScreenShot);
                 }
             });
+            return true;
+        }
+        return false;
+    }
+
+    public void tryGetScreenShot(BitmapResultCallback callback) {
+        Bitmap bitmap = getScreenShotByCapture();
+        if (bitmap != null) {
+            callback.onResult(bitmap);
         } else {
-            executorService.submit(() -> {
-                if (binder != null) callback.onResult(binder.getScreenShot());
-                else callback.onResult(null);
-            });
+            getScreenByAccessibility(callback);
         }
     }
 
     // 截图 ----------------------------------------------------------------------------- end
+
+    // Ocr ----------------------------------------------------------------------------- start
+    private final Map<String, IOcr> ocrBinderMap = new HashMap<>();
+
+    public boolean runOcr(String packageName, Bitmap bitmap, ResultCallback<List<OcrResult>> callback) {
+        IOcr iOcr = ocrBinderMap.get(packageName);
+        if (iOcr == null) {
+            ServiceConnection connection = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    IOcr iOcr = IOcr.Stub.asInterface(service);
+                    ocrBinderMap.put(packageName, iOcr);
+                    try {
+                        iOcr.runOcr(bitmap, new IOcrCallback.Stub() {
+                            @Override
+                            public void onResult(List<OcrResult> result) {
+                                callback.onResult(result);
+                            }
+                        });
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    ocrBinderMap.remove(packageName);
+                }
+            };
+
+            Intent intent = new Intent(OCR_SERVICE_ACTION);
+            intent.setComponent(new ComponentName(packageName, OCR_SERVICE_ACTION));
+            return bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        } else {
+            try {
+                iOcr.runOcr(bitmap, new IOcrCallback.Stub() {
+                    @Override
+                    public void onResult(List<OcrResult> result) {
+                        callback.onResult(result);
+                    }
+                });
+                return true;
+            } catch (RemoteException e) {
+                return false;
+            }
+        }
+    }
+
+    // Ocr ----------------------------------------------------------------------------- end
 
     // 按键 ----------------------------------------------------------------------------- start
     private Handler handler;

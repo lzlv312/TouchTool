@@ -19,7 +19,7 @@
     <color name="SelectedPinMul">#ffffff</color>
     <color name="SelectedPinAdd">#222222</color>
 
-    <color name="LauncherBackgroundColor">#FAFAFA</color>
+    <color name="launcherBackgroundColor">#FFFAFAFA</color>
     <color name="HalfAlpha">#66000000</color>
     <color name="HalfAlphaRed">#66110000</color>
     <color name="HalfAlphaGreen">#66001100</color>

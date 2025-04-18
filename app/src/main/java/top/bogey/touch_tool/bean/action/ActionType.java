@@ -120,6 +120,8 @@ public enum ActionType {
     CROP_IMAGE,
     SAVE_IMAGE,
     FIND_IMAGES,
+    CREATE_QRCODE,
+    PARSE_QRCODE,
 
     // 颜色
     GET_COLOR,
@@ -132,6 +134,7 @@ public enum ActionType {
     CHECK_AREA_RELATION,
     GET_AREA_INTERSECTION,
     GET_AREA_CENTER,
+    GET_AREA_RANDOM,
     PICK_AREA,
 
     // 位置
@@ -140,6 +143,7 @@ public enum ActionType {
     POINT_OFFSET,
     POINT_TO_TOUCH,
     TOUCH,
+    TOUCH_POINT,
 
     // 数组
     LIST_MAKE,

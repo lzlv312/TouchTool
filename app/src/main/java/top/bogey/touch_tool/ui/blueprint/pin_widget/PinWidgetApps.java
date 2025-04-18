@@ -79,7 +79,7 @@ public class PinWidgetApps extends PinWidget<PinApplications>{
                 itemBinding.exclude.setVisibility(commonApplication == null ? GONE : VISIBLE);
                 if (pinBase.size() > 5 && count == 4) {
                     itemBinding.icon.setImageResource(R.drawable.icon_more);
-                    itemBinding.icon.setImageTintList(ColorStateList.valueOf(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimary)));
+                    itemBinding.icon.setImageTintList(ColorStateList.valueOf(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryVariant)));
                     itemBinding.numberText.setText(String.valueOf(pinBase.size() - count));
                     break;
                 } else {

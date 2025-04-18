@@ -128,7 +128,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         gridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         gridPaint.setStrokeWidth(1);
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimary));
+        gridPaint.setColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant));
         gridPaint.setAlpha(50);
 
         linkPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -843,7 +843,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         if (touchState == TOUCH_SELECT_AREA || selectedCards.size() > 1) {
             DashPathEffect dashPathEffect = new DashPathEffect(new float[]{gridSize, gridSize}, 0);
             linkPaint.setPathEffect(new ComposePathEffect(cornerPathEffect, dashPathEffect));
-            linkPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimary));
+            linkPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryVariant));
             RectF area = new RectF();
             if (touchState == TOUCH_SELECT_AREA) {
                 area.set(selectArea);

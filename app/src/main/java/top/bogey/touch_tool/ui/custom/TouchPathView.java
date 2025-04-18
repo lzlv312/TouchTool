@@ -37,7 +37,7 @@ public class TouchPathView extends View {
     public TouchPathView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         paint = new Paint();
-        paint.setColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimary));
+        paint.setColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant));
         paint.setStrokeWidth(lineWidth);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
@@ -54,7 +54,7 @@ public class TouchPathView extends View {
     public TouchPathView(Context context, List<PinTouchPath.PathPart> pathParts, boolean fullScreen) {
         super(context, null);
         paint = new Paint();
-        paint.setColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimary));
+        paint.setColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant));
         paint.setStrokeWidth(lineWidth);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);

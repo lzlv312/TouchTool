@@ -45,7 +45,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         this.action = action;
 
         setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceVariant));
-        setStrokeColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimary));
+        setStrokeColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant));
         setStrokeWidth(0);
         setPivotX(0);
         setPivotY(0);
@@ -126,7 +126,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     protected void initExpand(MaterialButton button) {
-        ColorStateList expandColor = ColorStateList.valueOf(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimary));
+        ColorStateList expandColor = ColorStateList.valueOf(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryVariant));
         ColorStateList unExpandColor = ColorStateList.valueOf(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorTertiary));
         button.setIconResource(action.getExpandType() == Action.ExpandType.FULL ? R.drawable.icon_zoom_in : R.drawable.icon_zoom_out);
         button.setIconTint(action.getExpandType() == Action.ExpandType.FULL ? expandColor : unExpandColor);

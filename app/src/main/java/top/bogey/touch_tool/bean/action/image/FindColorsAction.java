@@ -25,16 +25,17 @@ public class FindColorsAction extends FindExecuteAction {
     private final transient Pin templatePin = new Pin(new PinColor(), R.string.find_colors_action_template);
     private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.find_colors_action_similarity);
     private final transient Pin areasPin = new Pin(new PinList(PinType.AREA), R.string.pin_area, true);
+    private final transient Pin firstAreaPin = new Pin(new PinArea(), R.string.pin_area_first, true);
 
     public FindColorsAction() {
         super(ActionType.FIND_COLORS);
         intervalPin.getValue(PinInteger.class).setValue(200);
-        addPins(sourcePin, templatePin, similarityPin, areasPin);
+        addPins(sourcePin, templatePin, similarityPin, areasPin, firstAreaPin);
     }
 
     public FindColorsAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(sourcePin, templatePin, similarityPin, areasPin);
+        reAddPins(sourcePin, templatePin, similarityPin, areasPin, firstAreaPin);
     }
 
     @Override
@@ -43,9 +44,13 @@ public class FindColorsAction extends FindExecuteAction {
         PinColor template = getPinValue(runnable, templatePin);
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);
 
+        PinList list = areasPin.getValue(PinList.class);
         List<Rect> rectList = DisplayUtil.matchColor(source.getImage(), template.getValue().getColor(), null, similarity.intValue());
-        if (rectList != null) rectList.forEach(rect -> areasPin.getValue(PinList.class).add(new PinArea(rect)));
+        if (rectList != null && !rectList.isEmpty()) {
+            rectList.forEach(rect -> list.add(new PinArea(rect)));
+            firstAreaPin.getValue(PinArea.class).setValue(rectList.get(0));
+        }
 
-        return !areasPin.getValue(PinList.class).isEmpty();
+        return !list.isEmpty();
     }
 }

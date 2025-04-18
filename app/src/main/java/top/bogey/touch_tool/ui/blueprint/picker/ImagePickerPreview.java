@@ -60,7 +60,7 @@ public class ImagePickerPreview extends BasePicker<Bitmap> {
                     if (result != null) {
                         post(() -> {
                             int similar = (int) binding.timeSlider.getValue();
-                            List<Rect> rectList = DisplayUtil.matchTemplate(result, bitmap, null, similar);
+                            List<Rect> rectList = DisplayUtil.matchTemplate(result, bitmap, null, similar, true);
                             if (rectList == null || rectList.isEmpty()) binding.matchedImage.setImageDrawable(null);
                             else {
                                 Rect rect = rectList.get(0);

@@ -136,6 +136,8 @@ public class ActionMap {
                     ActionType.CROP_IMAGE,
                     ActionType.SAVE_IMAGE,
                     ActionType.FIND_IMAGES,
+                    ActionType.CREATE_QRCODE,
+                    ActionType.PARSE_QRCODE,
                     ActionType.GET_COLOR,
                     ActionType.FIND_COLORS
             ));
@@ -147,6 +149,7 @@ public class ActionMap {
                     ActionType.CHECK_AREA_RELATION,
                     ActionType.GET_AREA_INTERSECTION,
                     ActionType.GET_AREA_CENTER,
+                    ActionType.GET_AREA_RANDOM,
                     ActionType.PICK_AREA
             ));
 
@@ -155,7 +158,8 @@ public class ActionMap {
                     ActionType.POINT_TO_INT,
                     ActionType.POINT_OFFSET,
                     ActionType.POINT_TO_TOUCH,
-                    ActionType.TOUCH
+                    ActionType.TOUCH,
+                    ActionType.TOUCH_POINT
             ));
 
             case LIST -> list.addAll(Arrays.asList(

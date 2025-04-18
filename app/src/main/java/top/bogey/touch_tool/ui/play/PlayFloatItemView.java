@@ -47,18 +47,9 @@ public class PlayFloatItemView extends FrameLayout implements TaskListener {
                 pause();
             } else {
                 if (!resume()) {
-                    if (task.checkCapturePermission()) {
-                        play(task, action);
-                    } else {
-                        MainAccessibilityService service = MainApplication.getInstance().getService();
-                        if (service != null && service.isEnabled()) {
-                            if (service.isCaptureEnabled()) {
-                                play(task, action);
-                            } else {
-                                service.startCapture(null);
-                            }
-                        }
-                    }
+                    MainAccessibilityService service = MainApplication.getInstance().getService();
+                    if (service == null || !service.isEnabled()) return;
+                    runnable = service.runTask(task, startAction, this);
                 }
             }
         });
@@ -78,12 +69,6 @@ public class PlayFloatItemView extends FrameLayout implements TaskListener {
         else {
             ((ViewGroup) getParent()).removeView(this);
         }
-    }
-
-    private void play(Task task, StartAction startAction) {
-        MainAccessibilityService service = MainApplication.getInstance().getService();
-        if (service == null || !service.isEnabled()) return;
-        runnable = service.runTask(task, startAction, this);
     }
 
     private void pause() {

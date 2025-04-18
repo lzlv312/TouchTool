@@ -172,10 +172,6 @@ public abstract class Action extends Identity implements PinListener {
         return pins.stream().filter(p -> p.linkAble() && p.linkAble(pin)).findFirst().orElse(null);
     }
 
-    public boolean withCapture() {
-        return false;
-    }
-
     public void addListener(ActionListener listener) {
         listeners.add(listener);
     }

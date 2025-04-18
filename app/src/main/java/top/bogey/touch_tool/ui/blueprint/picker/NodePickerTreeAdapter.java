@@ -156,10 +156,10 @@ public class NodePickerTreeAdapter extends TreeViewAdapter {
             int color;
 
             if (node == selectedNode)
-                color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorError);
+                color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant);
             else {
                 if (nodeInfo.usable && nodeInfo.visible) {
-                    color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimary);
+                    color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant);
                 } else {
                     color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorOnSurface);
                 }

@@ -10,7 +10,7 @@ plugins {
 android {
     namespace = "top.bogey.touch_tool"
     compileSdk = 36
-    ndkVersion = "21.4.7075529"
+    ndkVersion = "27.2.12479018"
     buildToolsVersion = "36.0.0"
 
     val pattern = DateTimeFormatter.ofPattern("yyMMdd_HHmm")
@@ -25,14 +25,8 @@ android {
 
         externalNativeBuild {
             cmake {
-                cppFlags.add("-std=c++11")
-                cppFlags.add("-frtti")
-                cppFlags.add("-fexceptions")
-                cppFlags.add("-Wno-format")
-
-                arguments.add("-DANDROID_PLATFORM=android-23")
-                arguments.add("-DANDROID_STL=c++_shared")
-                arguments.add("-DANDROID_ARM_NEON=TRUE")
+                cppFlags += listOf("-std=c++14", "-Wno-format")
+                arguments += listOf("-DANDROID_STL=c++_shared")
             }
         }
 
@@ -104,4 +98,5 @@ dependencies {
     implementation(libs.shizuku.provider)
 
     implementation(libs.exp4j)
+    implementation(libs.zxing.lite)
 }

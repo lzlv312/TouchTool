@@ -95,7 +95,9 @@ public class PinSingleSelect extends PinString {
 
     public void setOptions(List<String> options) {
         this.options = options;
-        reset();
+        if (value != null && !value.isEmpty()) {
+            if (!options.contains(value)) reset();
+        }
     }
 
     @Override

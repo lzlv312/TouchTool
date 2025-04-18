@@ -4,19 +4,15 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.TypedValue;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.WindowManager;
 
 import androidx.annotation.ColorInt;
@@ -31,11 +27,12 @@ public class DisplayUtil {
     @ColorInt
     public static int getAttrColor(Context context, int id) {
         int[] attrs = {id};
-        TypedArray typedArray = context.obtainStyledAttributes(attrs);
-        int resourceId = typedArray.getResourceId(0, 0);
-        typedArray.recycle();
-        if (resourceId == 0) return 0;
-        return context.getColor(resourceId);
+        try (TypedArray typedArray = context.obtainStyledAttributes(attrs)) {
+            int resourceId = typedArray.getResourceId(0, 0);
+            return context.getColor(resourceId);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @ColorInt
@@ -204,9 +201,9 @@ public class DisplayUtil {
         return new Rect(x, y, x + width, y + height);
     }
 
-    public static native List<MatchResult> nativeMatchTemplate(Bitmap bitmap, Bitmap template, int similarity, int speed);
+    public static native List<MatchResult> nativeMatchTemplate(Bitmap bitmap, Bitmap template, int similarity, boolean fast, int speed);
 
-    public static synchronized List<Rect> matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity) {
+    public static synchronized List<Rect> matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, boolean fast) {
         if (bitmap == null) return null;
         if (template == null) return null;
         if (area == null) area = new Rect();
@@ -218,7 +215,7 @@ public class DisplayUtil {
             if (bitmap == null) return null;
         }
 
-        List<MatchResult> matchResults = nativeMatchTemplate(bitmap, template, similarity, 1);
+        List<MatchResult> matchResults = nativeMatchTemplate(bitmap, template, similarity, fast, 1);
         if (tmp != null) tmp.recycle();
 
         if (matchResults == null || matchResults.isEmpty()) return null;

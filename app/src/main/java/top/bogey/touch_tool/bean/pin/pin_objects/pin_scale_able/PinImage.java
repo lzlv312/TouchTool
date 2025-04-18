@@ -52,6 +52,7 @@ public class PinImage extends PinScaleAble<String> {
 
     public void setImage(Bitmap image) {
         this.image = image;
+        if (image == null) return;
 
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             image.compress(Bitmap.CompressFormat.WEBP, 100, stream);

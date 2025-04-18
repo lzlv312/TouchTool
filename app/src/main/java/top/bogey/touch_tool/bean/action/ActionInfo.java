@@ -14,15 +14,18 @@ import top.bogey.touch_tool.bean.action.area.CheckAreaContainPosAction;
 import top.bogey.touch_tool.bean.action.area.CheckAreaRelationAction;
 import top.bogey.touch_tool.bean.action.area.GetAreaCenterAction;
 import top.bogey.touch_tool.bean.action.area.GetAreaIntersectionAction;
+import top.bogey.touch_tool.bean.action.area.GetAreaRandomAction;
 import top.bogey.touch_tool.bean.action.area.PickAreaAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanAndAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanNotAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanOrAction;
+import top.bogey.touch_tool.bean.action.image.CreateQRCodeAction;
 import top.bogey.touch_tool.bean.action.image.FindColorsAction;
 import top.bogey.touch_tool.bean.action.image.GetColorAction;
 import top.bogey.touch_tool.bean.action.image.CropImageAction;
 import top.bogey.touch_tool.bean.action.image.FindImagesAction;
 import top.bogey.touch_tool.bean.action.image.GetImageAction;
+import top.bogey.touch_tool.bean.action.image.ParseQRCodeAction;
 import top.bogey.touch_tool.bean.action.image.SaveImageAction;
 import top.bogey.touch_tool.bean.action.list.ListAddAction;
 import top.bogey.touch_tool.bean.action.list.ListAppendAction;
@@ -80,6 +83,7 @@ import top.bogey.touch_tool.bean.action.point.PointOffsetAction;
 import top.bogey.touch_tool.bean.action.point.PointToIntegerAction;
 import top.bogey.touch_tool.bean.action.point.PointToTouchAction;
 import top.bogey.touch_tool.bean.action.point.TouchAction;
+import top.bogey.touch_tool.bean.action.point.TouchPointAction;
 import top.bogey.touch_tool.bean.action.start.ApplicationStartAction;
 import top.bogey.touch_tool.bean.action.start.BatteryStartAction;
 import top.bogey.touch_tool.bean.action.start.BluetoothStartAction;
@@ -98,7 +102,7 @@ import top.bogey.touch_tool.bean.action.string.StringMatchAction;
 import top.bogey.touch_tool.bean.action.string.StringReplaceAction;
 import top.bogey.touch_tool.bean.action.string.StringSplitAction;
 import top.bogey.touch_tool.bean.action.string.StringToNumberAction;
-import top.bogey.touch_tool.bean.action.system.CaptureSwitchAction;
+import top.bogey.touch_tool.bean.action.system.SwitchCaptureAction;
 import top.bogey.touch_tool.bean.action.system.CheckCaptureReadyAction;
 import top.bogey.touch_tool.bean.action.system.CheckInAppAction;
 import top.bogey.touch_tool.bean.action.system.GetBatteryStatusAction;
@@ -179,7 +183,7 @@ public class ActionInfo {
     private final static ActionInfo SWITCH_SCREEN_INFO = new ActionInfo(ActionType.SWITCH_SCREEN, SwitchScreenAction.class, R.drawable.icon_screen, R.string.switch_screen_action, R.string.switch_screen_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_SCREEN_STATUS_INFO = new ActionInfo(ActionType.GET_SCREEN_STATUS, GetScreenStatusAction.class, R.drawable.icon_screen, R.string.get_screen_status_action, R.string.get_screen_status_action_desc, 0, NormalActionCard.class);
 
-    private final static ActionInfo SWITCH_CAPTURE_INFO = new ActionInfo(ActionType.SWITCH_CAPTURE, CaptureSwitchAction.class, R.drawable.icon_capture, R.string.capture_switch_action, R.string.capture_switch_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SWITCH_CAPTURE_INFO = new ActionInfo(ActionType.SWITCH_CAPTURE, SwitchCaptureAction.class, R.drawable.icon_capture, R.string.capture_switch_action, R.string.capture_switch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHECK_CAPTURE_READY_INFO = new ActionInfo(ActionType.CHECK_CAPTURE_READY, CheckCaptureReadyAction.class, R.drawable.icon_capture, R.string.check_capture_ready_action, R.string.check_capture_ready_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo GET_CURRENT_APPLICATION_INFO = new ActionInfo(ActionType.GET_CURRENT_APPLICATION, GetCurrentAppAction.class, R.drawable.icon_task, R.string.get_current_app_action, R.string.get_current_app_action_desc, 0, NormalActionCard.class);
@@ -250,6 +254,8 @@ public class ActionInfo {
     private final static ActionInfo CROP_IMAGE_INFO = new ActionInfo(ActionType.CROP_IMAGE, CropImageAction.class, R.drawable.icon_image, R.string.crop_image_action, R.string.crop_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SAVE_IMAGE_INFO = new ActionInfo(ActionType.SAVE_IMAGE, SaveImageAction.class, R.drawable.icon_image, R.string.save_image_action, R.string.save_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_IMAGES_INFO = new ActionInfo(ActionType.FIND_IMAGES, FindImagesAction.class, R.drawable.icon_image, R.string.find_images_action, R.string.find_images_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo CREATE_QRCODE_INFO = new ActionInfo(ActionType.CREATE_QRCODE, CreateQRCodeAction.class, R.drawable.icon_image, R.string.create_qrcode_action, R.string.create_qrcode_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo PARSE_QRCODE_INFO = new ActionInfo(ActionType.PARSE_QRCODE, ParseQRCodeAction.class, R.drawable.icon_image, R.string.parse_qrcode_action, R.string.parse_qrcode_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_COLOR_INFO = new ActionInfo(ActionType.GET_COLOR, GetColorAction.class, R.drawable.icon_color, R.string.get_color_action, R.string.get_color_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_COLORS_INFO = new ActionInfo(ActionType.FIND_COLORS, FindColorsAction.class, R.drawable.icon_color, R.string.find_colors_action, R.string.find_colors_action_desc, 0, NormalActionCard.class);
 
@@ -261,6 +267,7 @@ public class ActionInfo {
     private final static ActionInfo CHECK_AREA_RELATION_INFO = new ActionInfo(ActionType.CHECK_AREA_RELATION, CheckAreaRelationAction.class, R.drawable.icon_stop, R.string.check_area_relation_action, R.string.check_area_relation_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_AREA_INTERSECTION_INFO = new ActionInfo(ActionType.GET_AREA_INTERSECTION, GetAreaIntersectionAction.class, R.drawable.icon_stop, R.string.get_area_intersection_action, R.string.get_area_intersection_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_AREA_CENTER_INFO = new ActionInfo(ActionType.GET_AREA_CENTER, GetAreaCenterAction.class, R.drawable.icon_stop, R.string.get_area_center_action, R.string.get_area_center_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_AREA_RANDOM_INFO = new ActionInfo(ActionType.GET_AREA_RANDOM, GetAreaRandomAction.class, R.drawable.icon_stop, R.string.get_area_random_action, R.string.get_area_random_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo PICK_AREA_INFO = new ActionInfo(ActionType.PICK_AREA, PickAreaAction.class, R.drawable.icon_stop, R.string.pick_area_action, R.string.pick_area_action_desc, 0, NormalActionCard.class);
 
 
@@ -270,6 +277,7 @@ public class ActionInfo {
     private final static ActionInfo POINT_OFFSET_INFO = new ActionInfo(ActionType.POINT_OFFSET, PointOffsetAction.class, R.drawable.icon_position, R.string.point_offset_action, R.string.point_offset_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo POINT_TO_TOUCH_INFO = new ActionInfo(ActionType.POINT_TO_TOUCH, PointToTouchAction.class, R.drawable.icon_touch, R.string.point_to_touch_action, R.string.point_to_touch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo TOUCH_INFO = new ActionInfo(ActionType.TOUCH, TouchAction.class, R.drawable.icon_touch, R.string.touch_action, R.string.touch_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo TOUCH_POINT_INFO = new ActionInfo(ActionType.TOUCH_POINT, TouchPointAction.class, R.drawable.icon_touch, R.string.touch_point_action, R.string.touch_point_action_desc, 0, NormalActionCard.class);
 
 
     // List操作
@@ -401,6 +409,8 @@ public class ActionInfo {
             case CROP_IMAGE -> CROP_IMAGE_INFO;
             case SAVE_IMAGE -> SAVE_IMAGE_INFO;
             case FIND_IMAGES -> FIND_IMAGES_INFO;
+            case CREATE_QRCODE -> CREATE_QRCODE_INFO;
+            case PARSE_QRCODE -> PARSE_QRCODE_INFO;
 
 
             case GET_COLOR -> GET_COLOR_INFO;
@@ -413,6 +423,7 @@ public class ActionInfo {
             case CHECK_AREA_RELATION -> CHECK_AREA_RELATION_INFO;
             case GET_AREA_INTERSECTION -> GET_AREA_INTERSECTION_INFO;
             case GET_AREA_CENTER -> GET_AREA_CENTER_INFO;
+            case GET_AREA_RANDOM -> GET_AREA_RANDOM_INFO;
             case PICK_AREA -> PICK_AREA_INFO;
 
 
@@ -421,6 +432,7 @@ public class ActionInfo {
             case POINT_OFFSET -> POINT_OFFSET_INFO;
             case POINT_TO_TOUCH -> POINT_TO_TOUCH_INFO;
             case TOUCH -> TOUCH_INFO;
+            case TOUCH_POINT -> TOUCH_POINT_INFO;
 
 
             case LIST_MAKE -> LIST_MAKE_INFO;

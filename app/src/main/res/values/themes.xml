@@ -1,6 +1,5 @@
 <resources>
     <attr name="colorPrimaryLight" format="color" />
-    <color name="launcherBackgroundColor">#FFFAFAFA</color>
 
     <style name="Theme.TouchTool.Base" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:navigationBarColor">@android:color/transparent</item>

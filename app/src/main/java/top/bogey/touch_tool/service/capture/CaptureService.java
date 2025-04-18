@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
@@ -21,7 +22,6 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
@@ -153,7 +153,6 @@ public class CaptureService extends Service {
         DisplayMetrics metrics = new DisplayMetrics();
         manager.getDefaultDisplay().getRealMetrics(metrics);
         imageReader = ImageReader.newInstance(metrics.widthPixels, metrics.heightPixels, PixelFormat.RGBA_8888, 2);
-        imageReader.setOnImageAvailableListener(reader -> Log.d("TAG", "OnImageAvailable"), null);
         virtualDisplay = projection.createVirtualDisplay("CaptureService", metrics.widthPixels, metrics.heightPixels, metrics.densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, imageReader.getSurface(), null, null);
     }
 
@@ -165,13 +164,9 @@ public class CaptureService extends Service {
                 if (image == null) return null;
                 Image.Plane[] planes = image.getPlanes();
                 ByteBuffer buffer = planes[0].getBuffer();
-                int pixelStride = planes[0].getPixelStride();
-                int rowStride = planes[0].getRowStride();
-                int width = image.getWidth();
-                int height = image.getHeight();
-                Bitmap bitmap = Bitmap.createBitmap(width + (rowStride - pixelStride * width) / pixelStride, height, Bitmap.Config.ARGB_8888);
-                bitmap.copyPixelsFromBuffer(buffer);
-                return bitmap;
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             } catch (Exception | Error e) {
                 e.printStackTrace();
             }

@@ -4,10 +4,8 @@
 #include <jni.h>
 #include <string>
 #include <algorithm>
-#include <paddle_api.h>
 
 #include "native-lib.h"
-#include "ocr_ppredictor.h"
 
 using namespace std;
 using namespace cv;
@@ -24,37 +22,27 @@ static int clamp(int up, int low, int value) {
     return max(low, min(up, value));
 }
 
-static paddle::lite_api::PowerMode str_to_cpu_mode(const std::string &cpu_mode) {
-    static std::map<std::string, paddle::lite_api::PowerMode> cpu_mode_map{
-            {"LITE_POWER_HIGH",      paddle::lite_api::LITE_POWER_HIGH},
-            {"LITE_POWER_LOW",       paddle::lite_api::LITE_POWER_LOW},
-            {"LITE_POWER_FULL",      paddle::lite_api::LITE_POWER_FULL},
-            {"LITE_POWER_NO_BIND",   paddle::lite_api::LITE_POWER_NO_BIND},
-            {"LITE_POWER_RAND_HIGH", paddle::lite_api::LITE_POWER_RAND_HIGH},
-            {"LITE_POWER_RAND_LOW",  paddle::lite_api::LITE_POWER_RAND_LOW}};
-    std::string upper_key;
-    std::transform(cpu_mode.cbegin(), cpu_mode.cend(), upper_key.begin(),
-                   ::toupper);
-    auto index = cpu_mode_map.find(upper_key);
-    if (index == cpu_mode_map.end()) {
-        LOGE("cpu_mode not found %s", upper_key.c_str());
-        return paddle::lite_api::LITE_POWER_HIGH;
-    } else {
-        return index->second;
-    }
-}
-
-extern "C"
-JNIEXPORT jobject JNICALL
-Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchTemplate(JNIEnv *env, jclass clazz, jobject bitmap, jobject temp, jint similarity, jint speed) {
+extern "C" JNIEXPORT jobject JNICALL
+Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchTemplate(JNIEnv *env, jclass clazz, jobject bitmap, jobject temp, jint similarity, jboolean fast, jint speed) {
     int scale = speed;
 
     Mat src = bitmap_to_cv_mat(env, bitmap);
     Mat tmp = bitmap_to_cv_mat(env, temp);
-    if (src.empty() || tmp.empty()) return createMatchResult(env, 0, 0, 0, 0, 0);
+    if (src.empty() || tmp.empty())
+        return createMatchResult(env, 0, 0, 0, 0, 0);
 
-    resize(src, src, Size(src.cols / scale, src.rows / scale));
-    resize(tmp, tmp, Size(tmp.cols / scale, tmp.rows / scale));
+    if (scale != 1) {
+        resize(src, src, Size(src.cols / scale, src.rows / scale));
+        resize(tmp, tmp, Size(tmp.cols / scale, tmp.rows / scale));
+    }
+
+    if (fast) {
+        cvtColor(src, src, COLOR_BGR2GRAY);
+        adaptiveThreshold(src, src, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 11, 2);
+        cvtColor(tmp, tmp, COLOR_BGR2GRAY);
+        adaptiveThreshold(tmp, tmp, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 11, 2);
+    }
+
     int resultCol = src.cols - tmp.cols + 1;
     int resultRow = src.rows - tmp.rows + 1;
 
@@ -68,14 +56,16 @@ Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchTemplate(JNIEnv *env, jc
     jobject listObj = env->NewObject(listCls, listInit);
     jmethodID listAdd = env->GetMethodID(listCls, "add", "(Ljava/lang/Object;)Z");
 
+
+    int similar = clamp(100, 1, similarity);
     vector<Rect> areas;
     for (int i = 0; i < result.rows; ++i) {
         for (int j = 0; j < result.cols; ++j) {
             bool flag = false;
-            float x = j;
-            float y = i;
-            float width = tmp.cols;
-            float height = tmp.rows;
+            int x = j;
+            int y = i;
+            int width = tmp.cols;
+            int height = tmp.rows;
 
             for (const auto &area: areas) {
                 if (area.x < width + x && x < area.x + area.width && area.y < height + y && y < area.y + area.height) {
@@ -83,12 +73,13 @@ Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchTemplate(JNIEnv *env, jc
                     break;
                 }
             }
-            if (flag) continue;
+            if (flag)
+                continue;
 
             float currValue = result.at<float>(i, j) * 100;
-            if (currValue >= similarity) {
+            if (currValue >= similar) {
                 env->CallBooleanMethod(listObj, listAdd, createMatchResult(env, currValue, x * scale, y * scale, width * scale, height * scale));
-                areas.push_back(Rect(x, y, width, height));
+                areas.emplace_back(x, y, width, height);
             }
         }
     }
@@ -99,11 +90,11 @@ Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchTemplate(JNIEnv *env, jc
     return listObj;
 }
 
-extern "C"
-JNIEXPORT jobject JNICALL
+extern "C" JNIEXPORT jobject JNICALL
 Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchColor(JNIEnv *env, jclass clazz, jobject bitmap, jintArray rgb, jint similarity) {
     Mat src = bitmap_to_cv_mat(env, bitmap);
-    if (src.empty()) return nullptr;
+    if (src.empty())
+        return nullptr;
 
     cvtColor(src, src, COLOR_BGR2HSV);
     GaussianBlur(src, src, Size(5, 5), 0);
@@ -115,19 +106,11 @@ Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchColor(JNIEnv *env, jclas
     cvtColor(bgr, hsv, COLOR_BGR2HSV);
     Vec3b hsvColor = hsv.at<Vec3b>(0, 0);
     int similar = clamp(100, 1, similarity);
-    double diff = (1 - (similar / 100.0)) * 0.2;
+    double diff = 1 - (similar / 100.0);
 
-    Vec3b lowHsv(
-            max(.0, hsvColor[0] - 180 * diff),
-            max(.0, hsvColor[1] - 255 * diff),
-            max(.0, hsvColor[2] - 255 * diff)
-            );
+    Vec3d lowHsv(max(.0, hsvColor[0] - 180 * diff), max(.0, hsvColor[1] - 255 * diff), max(.0, hsvColor[2] - 255 * diff));
 
-    Vec3b highHsv(
-            min(180.0, hsvColor[0] + 180 * diff),
-            min(255.0, hsvColor[1] + 255 * diff),
-            min(255.0, hsvColor[2] + 255 * diff)
-            );
+    Vec3d highHsv(min(180.0, hsvColor[0] + 180 * diff), min(255.0, hsvColor[1] + 255 * diff), min(255.0, hsvColor[2] + 255 * diff));
 
     Mat mask;
     inRange(src, lowHsv, highHsv, mask);
@@ -149,82 +132,6 @@ Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchColor(JNIEnv *env, jclas
 
     src.release();
     return listObj;
-}
-
-extern "C"
-JNIEXPORT jlong JNICALL
-Java_top_bogey_touch_1tool_service_ocr_OCR_initModule(JNIEnv *env, jclass clazz, jstring j_det_model_path, jstring j_rec_model_path, jstring j_cls_model_path) {
-    string det_model_path = jstring_to_cpp_string(env, j_det_model_path);
-    string rec_model_path = jstring_to_cpp_string(env, j_rec_model_path);
-    string cls_model_path = jstring_to_cpp_string(env, j_cls_model_path);
-    int thread_num = 8;
-    string cpu_mode = "LITE_POWER_HIGH";
-    ppredictor::OCR_Config conf;
-    conf.use_opencl = 0;
-    conf.thread_num = thread_num;
-    conf.mode = str_to_cpu_mode(cpu_mode);
-    auto *orc_predictor = new ppredictor::OCR_PPredictor{conf};
-    orc_predictor->init_from_file(det_model_path, rec_model_path, cls_model_path);
-    return reinterpret_cast<jlong>(orc_predictor);
-}
-
-extern "C"
-JNIEXPORT jfloatArray JNICALL
-Java_top_bogey_touch_1tool_service_ocr_OCR_forward(JNIEnv *env, jclass thiz, jlong j_pointer, jobject j_original_image, jint j_max_size_len, jint j_run_det, jint j_run_cls, jint j_run_rec) {
-    LOGI("begin to run native forward");
-    if (j_pointer == 0) {
-        LOGE("JAVA pointer is NULL");
-        return cpp_array_to_jfloatarray(env, nullptr, 0);
-    }
-
-    cv::Mat origin = bitmap_to_cv_mat(env, j_original_image);
-    if (origin.size == 0) {
-        LOGE("origin bitmap cannot convert to CV Mat");
-        return cpp_array_to_jfloatarray(env, nullptr, 0);
-    }
-
-    int max_size_len = j_max_size_len;
-    int run_det = j_run_det;
-    int run_cls = j_run_cls;
-    int run_rec = j_run_rec;
-
-    auto *predictor = (ppredictor::OCR_PPredictor *) j_pointer;
-    std::vector<int64_t> dims_arr;
-    std::vector<ppredictor::OCRPredictResult> results = predictor->infer_ocr(origin, max_size_len, run_det, run_cls, run_rec);
-    LOGI("infer_ocr finished with boxes %ld", results.size());
-
-    // 这里将std::vector<predictor::OCRPredictResult> 序列化成
-    // float数组，传输到java层再反序列化
-    std::vector<float> float_arr;
-    for (const ppredictor::OCRPredictResult &r: results) {
-        float_arr.push_back(r.points.size());
-        float_arr.push_back(r.word_index.size());
-        float_arr.push_back(r.score);
-        // add det point
-        for (const std::vector<int> &point: r.points) {
-            float_arr.push_back(point.at(0));
-            float_arr.push_back(point.at(1));
-        }
-        // add rec word idx
-        for (int index: r.word_index) {
-            float_arr.push_back(index);
-        }
-        // add cls result
-        float_arr.push_back(r.cls_label);
-        float_arr.push_back(r.cls_score);
-    }
-    return cpp_array_to_jfloatarray(env, float_arr.data(), float_arr.size());
-}
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_top_bogey_touch_1tool_service_ocr_OCR_releaseModule(JNIEnv *env, jclass thiz, jlong j_pointer) {
-    if (j_pointer == 0) {
-        LOGE("JAVA pointer is NULL");
-        return;
-    }
-    auto *predictor = (ppredictor::OCR_PPredictor *) j_pointer;
-    delete predictor;
 }
 
 #endif

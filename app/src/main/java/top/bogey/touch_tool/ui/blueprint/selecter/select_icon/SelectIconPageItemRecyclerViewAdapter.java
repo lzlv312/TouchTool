@@ -85,7 +85,7 @@ public class SelectIconPageItemRecyclerViewAdapter extends RecyclerView.Adapter<
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.icon.getLayoutParams();
                 params.leftMargin = params.rightMargin = params.topMargin = params.bottomMargin = (int) DisplayUtil.dp2px(context, 8);
                 binding.icon.setLayoutParams(params);
-                binding.icon.setImageTintList(ColorStateList.valueOf(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimary)));
+                binding.icon.setImageTintList(ColorStateList.valueOf(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant)));
             }
 
             if (object instanceof PackageInfo packageInfo) {

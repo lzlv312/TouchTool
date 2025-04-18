@@ -161,4 +161,9 @@
         <item>不相交</item>
     </string-array>
 
+    <string-array name="touch_point_type">
+        <item>无障碍</item>
+        <item>Shell</item>
+    </string-array>
+
 </resources>

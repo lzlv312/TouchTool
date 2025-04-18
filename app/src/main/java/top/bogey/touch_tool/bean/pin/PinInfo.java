@@ -52,6 +52,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinTaskString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinUrlString;
+import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.pin_slot.ExecutePinSlotView;
 import top.bogey.touch_tool.ui.blueprint.pin_slot.ListPinSlotView;
 import top.bogey.touch_tool.ui.blueprint.pin_slot.MapPinSlotView;
@@ -75,9 +76,9 @@ import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidgetValueArea;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class PinInfo {
-    private final static PinInfo EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.NORMAL, PinExecute.class, ExecutePinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimary), 0, null, false);
-    private final static PinInfo ICON_EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.WITH_ICON, PinIconExecute.class, ExecutePinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimary), 0, PinWidgetExecute.class, false);
-    private final static PinInfo STRING_EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.WITH_STRING, PinStringExecute.class, ExecutePinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimary), 0, PinWidgetExecute.class, false);
+    private final static PinInfo EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.NORMAL, PinExecute.class, ExecutePinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryVariant), 0, null, false);
+    private final static PinInfo ICON_EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.WITH_ICON, PinIconExecute.class, ExecutePinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryVariant), 0, PinWidgetExecute.class, false);
+    private final static PinInfo STRING_EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.WITH_STRING, PinStringExecute.class, ExecutePinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryVariant), 0, PinWidgetExecute.class, false);
 
     private final static PinInfo ADD_INFO = new PinInfo(PinType.ADD, PinSubType.NORMAL, PinAdd.class, NormalPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorSurfaceVariant), 0, PinWidgetAdd.class, false);
 
@@ -118,11 +119,13 @@ public class PinInfo {
     private final static PinInfo APPS_INFO = new PinInfo(PinType.APPS, PinSubType.MULTI_APP, PinApplications.class, ListPinSlotView.class, getColor(R.color.AppPinColor), R.string.pin_list_app, PinWidgetApps.class, true);
 
     private static @ColorInt int getColor(@ColorRes int color) {
-        return MainApplication.getInstance().getActivity().getColor(color);
+        return MainApplication.getInstance().getColor(color);
     }
 
     private static @ColorInt int getAttrColor(@AttrRes int attr) {
-        return DisplayUtil.getAttrColor(MainApplication.getInstance().getActivity(), attr);
+        MainActivity activity = MainApplication.getInstance().getActivity();
+        if (activity == null) return 0;
+        return DisplayUtil.getAttrColor(activity, attr);
     }
 
     public static PinInfo getPinInfo(PinBase pin) {

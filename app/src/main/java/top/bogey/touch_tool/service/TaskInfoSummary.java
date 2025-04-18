@@ -34,6 +34,8 @@ import top.bogey.touch_tool.ui.play.PlayFloatView;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class TaskInfoSummary {
+    public static final String OCR_SERVICE_ACTION = "top.bogey.ocr.OcrService";
+
     private static TaskInfoSummary instance;
 
     public static TaskInfoSummary getInstance() {
@@ -46,6 +48,8 @@ public class TaskInfoSummary {
     }
 
     private final Map<String, PackageInfo> apps = new ConcurrentHashMap<>();
+
+    private final List<String> ocrApps = new ArrayList<>();
 
     private PackageActivity packageActivity;
     private Notification notification;
@@ -66,6 +70,14 @@ public class TaskInfoSummary {
                 e.printStackTrace();
             }
         }
+
+        ocrApps.clear();
+        Intent intent = new Intent(OCR_SERVICE_ACTION);
+        List<ResolveInfo> resolveInfos = packageManager.queryIntentServices(intent, PackageManager.MATCH_ALL);
+        for (ResolveInfo resolveInfo : resolveInfos) {
+            ocrApps.add(resolveInfo.serviceInfo.packageName);
+        }
+        ocrApps.sort(String::compareTo);
     }
 
     public PackageInfo getAppInfo(String packageName) {
@@ -74,7 +86,7 @@ public class TaskInfoSummary {
 
     public String getAppName(String packageName) {
         PackageInfo packageInfo = getAppInfo(packageName);
-        if (packageInfo == null) return null;
+        if (packageInfo == null || packageInfo.applicationInfo == null) return null;
         return packageInfo.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString();
     }
 
@@ -82,8 +94,8 @@ public class TaskInfoSummary {
         List<PackageInfo> packages = new ArrayList<>();
 
         for (PackageInfo info : apps.values()) {
-            if (info.packageName.equals(MainApplication.getInstance().getPackageName()))
-                continue;
+            if (info.packageName.equals(MainApplication.getInstance().getPackageName())) continue;
+            if (info.applicationInfo == null) continue;
             if (system || (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
                 if (keyword == null || keyword.isEmpty()) {
                     packages.add(info);
@@ -112,7 +124,7 @@ public class TaskInfoSummary {
             if (resolveInfo.activityInfo.packageName.equals(MainApplication.getInstance().getPackageName()))
                 continue;
             PackageInfo info = apps.get(resolveInfo.activityInfo.packageName);
-            if (info == null) continue;
+            if (info == null || info.applicationInfo == null) continue;
             if (system || (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
                 if (keyword == null || keyword.isEmpty()) {
                     packages.add(info);
@@ -128,6 +140,20 @@ public class TaskInfoSummary {
             }
         }
         return packages;
+    }
+
+    public List<String> getOcrApps() {
+        return ocrApps;
+    }
+
+    public List<String> getOcrAppNames() {
+        List<String> names = new ArrayList<>();
+        for (String packageName : ocrApps) {
+            PackageInfo packageInfo = apps.get(packageName);
+            if (packageInfo == null || packageInfo.applicationInfo == null) continue;
+            names.add(packageInfo.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString());
+        }
+        return names;
     }
 
     public void tryStartActions(Class<? extends StartAction> clazz) {
@@ -274,6 +300,4 @@ public class TaskInfoSummary {
     public enum NotworkState {NONE, WIFI, MOBILE, VPN}
 
     public enum BatteryState {UNKNOWN, CHARGING, DISCHARGING, NOT_CHARGING, FULL}
-
-    public enum OcrType {CHINESE, ENGLISH}
 }

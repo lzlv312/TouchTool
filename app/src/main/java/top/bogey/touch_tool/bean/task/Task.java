@@ -184,13 +184,6 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         return tagManager.getTagString();
     }
 
-    public boolean checkCapturePermission() {
-        for (Action action : getActions()) {
-            if (action.withCapture()) return false;
-        }
-        return true;
-    }
-
     public boolean isEnable() {
         for (Action action : getActions(StartAction.class)) {
             if (((StartAction) action).isEnable()) return true;
