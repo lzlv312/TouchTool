@@ -41,8 +41,8 @@ public class GetNodeInfoAction extends CalculateAction {
         idPin.getValue(PinString.class).setValue(nodeInfo.id);
         textPin.getValue(PinString.class).setValue(nodeInfo.text);
         descPin.getValue(PinString.class).setValue(nodeInfo.desc);
+        areaPin.getValue(PinArea.class).setValue(nodeInfo.area);
         usablePin.getValue(PinBoolean.class).setValue(nodeInfo.usable);
         visiblePin.getValue(PinBoolean.class).setValue(nodeInfo.visible);
-        areaPin.getValue(PinArea.class).setValue(nodeInfo.area);
     }
 }

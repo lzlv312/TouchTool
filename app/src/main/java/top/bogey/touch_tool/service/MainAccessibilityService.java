@@ -15,7 +15,7 @@ import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Path;
 import android.hardware.HardwareBuffer;
-import android.media.AudioManager;
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -50,11 +50,11 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.capture.CaptureService;
 import top.bogey.touch_tool.service.receiver.SystemEventReceiver;
 import top.bogey.touch_tool.ui.PermissionActivity;
-import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.utils.callback.BitmapResultCallback;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
@@ -312,6 +312,7 @@ public class MainAccessibilityService extends AccessibilityService {
         }
     }
 
+    @SuppressLint("MissingPermission")
     public void addAlarm(Task task, TimeStartAction timeStartAction) {
         if (task == null || timeStartAction == null) return;
         if (!timeStartAction.isEnable()) return;
@@ -396,8 +397,6 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public boolean isCaptureEnabled() {
         if (isEnabled()) {
-            if (SettingSaver.getInstance().getCaptureType() == 2 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-                return true;
             return captureBinder != null;
         }
         return false;
@@ -431,7 +430,6 @@ public class MainAccessibilityService extends AccessibilityService {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     captureBinder = (CaptureService.CaptureBinder) service;
-                    SettingSaver.getInstance().setCaptureType(1);
                     callCaptureCallback(true);
                 }
 
@@ -472,7 +470,7 @@ public class MainAccessibilityService extends AccessibilityService {
             takeScreenshot(0, executorService, new TakeScreenshotCallback() {
                 @Override
                 public void onSuccess(@NonNull ScreenshotResult screenshot) {
-                    try(HardwareBuffer hardwareBuffer = screenshot.getHardwareBuffer()) {
+                    try (HardwareBuffer hardwareBuffer = screenshot.getHardwareBuffer()) {
                         Bitmap bitmap = Bitmap.wrapHardwareBuffer(hardwareBuffer, screenshot.getColorSpace());
                         if (bitmap != null) {
                             lastScreenShot = bitmap.copy(Bitmap.Config.ARGB_8888, false);
@@ -509,7 +507,7 @@ public class MainAccessibilityService extends AccessibilityService {
     // Ocr ----------------------------------------------------------------------------- start
     private final Map<String, IOcr> ocrBinderMap = new HashMap<>();
 
-    public boolean runOcr(String packageName, Bitmap bitmap, ResultCallback<List<OcrResult>> callback) {
+    public void runOcr(String packageName, Bitmap bitmap, ResultCallback<List<OcrResult>> callback) {
         IOcr iOcr = ocrBinderMap.get(packageName);
         if (iOcr == null) {
             ServiceConnection connection = new ServiceConnection() {
@@ -537,7 +535,7 @@ public class MainAccessibilityService extends AccessibilityService {
 
             Intent intent = new Intent(OCR_SERVICE_ACTION);
             intent.setComponent(new ComponentName(packageName, OCR_SERVICE_ACTION));
-            return bindService(intent, connection, Context.BIND_AUTO_CREATE);
+            bindService(intent, connection, Context.BIND_AUTO_CREATE);
         } else {
             try {
                 iOcr.runOcr(bitmap, new IOcrCallback.Stub() {
@@ -546,9 +544,8 @@ public class MainAccessibilityService extends AccessibilityService {
                         callback.onResult(result);
                     }
                 });
-                return true;
             } catch (RemoteException e) {
-                return false;
+                e.printStackTrace();
             }
         }
     }
@@ -646,12 +643,16 @@ public class MainAccessibilityService extends AccessibilityService {
 
     // 播放声音 ----------------------------------------------------------------------------- start
     private final Map<String, MediaPlayer> playerMap = new HashMap<>();
+
     public void playSound(String path) {
         stopSound(path);
         try {
             MediaPlayer mediaPlayer = new MediaPlayer();
             mediaPlayer.setDataSource(MainApplication.getInstance(), Uri.parse(path));
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_RING);
+            mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build());
             mediaPlayer.setOnPreparedListener(MediaPlayer::start);
             mediaPlayer.setOnCompletionListener(mp -> stopSound(path));
             mediaPlayer.prepareAsync();
@@ -679,6 +680,7 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     private TextToSpeech tts;
+
     public void speak(String text) {
         if (tts == null) {
             tts = new TextToSpeech(this, status -> {

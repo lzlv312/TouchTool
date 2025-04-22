@@ -2,6 +2,7 @@ package top.bogey.touch_tool.bean.pin.pin_objects.pin_application;
 
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
@@ -28,6 +29,15 @@ public class PinApplications extends PinList {
 
     public PinApplications(JsonObject jsonObject) {
         super(jsonObject);
+    }
+
+    public List<String> getPackageNames() {
+        List<String> packageNames = new ArrayList<>();
+        for (PinObject value : values) {
+            PinApplication application = (PinApplication) value;
+            packageNames.add(application.getPackageName());
+        }
+        return packageNames;
     }
 
     @Override

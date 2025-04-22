@@ -48,7 +48,6 @@ public class SettingSaver {
 
     private static final String SUPER_USER = "SUPER_USER";                              // 超级用户
     private static final String MANUAL_PLAY = "MANUAL_PLAY";                            // 手动执行
-    private static final String CAPTURE = "CAPTURE";                                    // 屏幕截图
     private static final String OCR = "OCR";                                            // 文字识别
     private static final String ALARM = "ALARM";                                        // 精确定时
     private static final String BLUETOOTH = "BLUETOOTH";                                // 蓝牙监听
@@ -197,14 +196,6 @@ public class SettingSaver {
 
     public void setManualPlayType(int type) {
         mmkv.encode(MANUAL_PLAY, type);
-    }
-
-    public int getCaptureType() {
-        return mmkv.decodeInt(CAPTURE, 0);
-    }
-
-    public void setCaptureType(int type) {
-        mmkv.encode(CAPTURE, type);
     }
 
     public boolean isOcrEnabled() {

@@ -25,7 +25,7 @@ import top.bogey.touch_tool.ui.blueprint.selecter.select_app.SelectAppDialog;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 @SuppressLint("ViewConstructor")
-public class PinWidgetApps extends PinWidget<PinApplications>{
+public class PinWidgetApps extends PinWidget<PinApplications> {
     private final PinWidgetAppBinding binding;
 
     public PinWidgetApps(@NonNull Context context, ActionCard card, PinView pinView, PinApplications pinBase, boolean custom) {
@@ -84,7 +84,7 @@ public class PinWidgetApps extends PinWidget<PinApplications>{
                     break;
                 } else {
                     PackageInfo info = TaskInfoSummary.getInstance().getAppInfo(app.getPackageName());
-                    if (info == null) {
+                    if (info == null || info.applicationInfo == null) {
                         itemBinding.icon.setImageResource(R.drawable.icon_menu_help);
                     } else {
                         itemBinding.icon.setImageDrawable(info.applicationInfo.loadIcon(manager));
@@ -95,10 +95,10 @@ public class PinWidgetApps extends PinWidget<PinApplications>{
                     } else {
                         itemBinding.numberText.setText(String.valueOf(classes.size()));
                     }
-                    itemBinding.getRoot().setOnClickListener(v -> {
-                        pinBase.remove(value);
-                        refreshApps();
-                    });
+//                    itemBinding.getRoot().setOnClickListener(v -> {
+//                        pinBase.remove(value);
+//                        refreshApps();
+//                    });
                 }
 
                 count++;

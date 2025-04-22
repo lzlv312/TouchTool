@@ -36,13 +36,13 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
         });
     }
 
-    public ToastFloatView(@NonNull Context context) {
+    private ToastFloatView(@NonNull Context context) {
         super(context);
         binding = FloatToastBinding.inflate(LayoutInflater.from(context), this, true);
         handler = new Handler();
     }
 
-    public void innerShowToast(String msg, EAnchor anchor, Point pos) {
+    private void innerShowToast(String msg, EAnchor anchor, Point pos) {
         binding.title.setText(msg);
         post(() -> {
             if (pos.x < 0 || pos.y < 0) {

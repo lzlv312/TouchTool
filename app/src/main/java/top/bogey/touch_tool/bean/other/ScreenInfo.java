@@ -33,10 +33,6 @@ public class ScreenInfo {
         return screenShot;
     }
 
-    public void setScreenShot(Bitmap screenShot) {
-        this.screenShot = screenShot;
-    }
-
     public List<NodeInfo> getRootNodes() {
         return rootNodes;
     }

@@ -1,6 +1,6 @@
 [versions]
 appcompat = "1.7.0"
-material = "1.13.0-alpha12"
+material = "1.13.0-alpha13"
 nav = "2.8.9"
 
 treeview = "1.2.0"
@@ -13,7 +13,7 @@ exp4j = "0.4.8"
 
 zxing = "3.2.0"
 
-agp = "8.9.1"
+agp = "8.11.0-alpha07"
 
 [libraries]
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

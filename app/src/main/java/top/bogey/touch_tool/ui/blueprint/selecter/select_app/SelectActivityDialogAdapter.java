@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_app;
 
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
@@ -16,20 +14,17 @@ import java.util.List;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
-import top.bogey.touch_tool.utils.AppUtil;
-import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
+import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActivityDialogAdapter.ViewHolder> {
     private final PinApplications applications;
     private final PinApplication application;
-    private final BooleanResultCallback callback;
 
-    private final List<ActivityInfo> activities = new ArrayList<>();
+    private final List<SelectActivityDialog.SelectActivityInfo> activities = new ArrayList<>();
 
-    public SelectActivityDialogAdapter(PinApplications applications, PinApplication application, BooleanResultCallback callback) {
+    public SelectActivityDialogAdapter(PinApplications applications, PinApplication application) {
         this.applications = applications;
         this.application = application;
-        this.callback = callback;
     }
 
     @NonNull
@@ -52,20 +47,19 @@ public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActi
         return activities.size();
     }
 
-    public void refreshActivities(List<ActivityInfo> newActivities) {
+    public void refreshActivities(List<SelectActivityDialog.SelectActivityInfo> newActivities) {
         if (newActivities == null || newActivities.isEmpty()) {
             int size = activities.size();
             activities.clear();
             notifyItemRangeRemoved(0, size);
             return;
         }
-        AppUtil.chineseSort(newActivities, info -> info.name);
 
         for (int i = activities.size() - 1; i >= 0; i--) {
-            ActivityInfo info = activities.get(i);
+            SelectActivityDialog.SelectActivityInfo info = activities.get(i);
             boolean flag = true;
-            for (ActivityInfo newInfo : newActivities) {
-                if (newInfo.name.equals(info.name)) {
+            for (SelectActivityDialog.SelectActivityInfo newInfo : newActivities) {
+                if (newInfo.name().equals(info.name())) {
                     flag = false;
                     break;
                 }
@@ -77,10 +71,10 @@ public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActi
         }
 
         for (int i = 0; i < newActivities.size(); i++) {
-            ActivityInfo newInfo = newActivities.get(i);
+            SelectActivityDialog.SelectActivityInfo newInfo = newActivities.get(i);
             boolean flag = true;
-            for (ActivityInfo info : activities) {
-                if (info.name.equals(newInfo.name)) {
+            for (SelectActivityDialog.SelectActivityInfo info : activities) {
+                if (info.name().equals(newInfo.name())) {
                     flag = false;
                     break;
                 }
@@ -104,7 +98,7 @@ public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActi
 
     private int getActivityIndex(String activity) {
         for (int i = 0; i < activities.size(); i++) {
-            if (activities.get(i).name.equals(activity)) {
+            if (activities.get(i).name().equals(activity)) {
                 return i;
             }
         }
@@ -113,30 +107,29 @@ public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final CompoundButton button;
-        private final PackageManager manager;
-        private ActivityInfo info;
+        private SelectActivityDialog.SelectActivityInfo info;
 
         public ViewHolder(@NonNull CompoundButton button) {
             super(button);
             this.button = button;
-            manager = button.getContext().getPackageManager();
 
             button.setOnClickListener(v -> selectActivity());
         }
 
-        public void refresh(ActivityInfo info) {
+        public void refresh(SelectActivityDialog.SelectActivityInfo info) {
             this.info = info;
             if (applications.isShared()) {
-                button.setText(info.processName);
+                button.setText(info.label());
             } else {
-                button.setText(info.name);
+                button.setText(info.name());
             }
-            button.setChecked(isSelectedActivity(info.name));
+            button.setChecked(isSelectedActivity(info.name()));
+            button.setTextColor(DisplayUtil.getAttrColor(button.getContext(), info.isLauncher() ? com.google.android.material.R.attr.colorPrimaryContainer : com.google.android.material.R.attr.colorOnSurface));
         }
 
         private void selectActivity() {
-            if (isSelectedActivity(info.name)) {
-                application.getActivityClasses().remove(info.name);
+            if (isSelectedActivity(info.name())) {
+                application.getActivityClasses().remove(info.name());
             } else {
                 List<String> classes = application.getActivityClasses();
                 if (classes == null) classes = new ArrayList<>();
@@ -147,7 +140,7 @@ public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActi
                     }
                     classes.clear();
                 }
-                classes.add(info.name);
+                classes.add(info.name());
                 application.setActivityClasses(classes);
             }
         }

@@ -177,17 +177,6 @@ public class SettingView extends Fragment {
             SettingSaver.getInstance().setPlayViewExpand(true);
         });
 
-        // 屏幕截图
-        binding.captureSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (isChecked) {
-                View view = group.findViewById(checkedId);
-                int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setCaptureType(index);
-                binding.ocrSwitch.setVisibility(index == 0 ? View.GONE : View.VISIBLE);
-            }
-        });
-        binding.captureSelect.checkIndex(SettingSaver.getInstance().getCaptureType());
-
         // 文字识别
         binding.ocrSwitch.setOnSwitchClickListener(v -> {
             if (binding.ocrSwitch.isChecked()) {

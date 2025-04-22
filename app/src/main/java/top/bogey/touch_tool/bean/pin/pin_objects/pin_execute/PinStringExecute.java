@@ -15,6 +15,10 @@ public class PinStringExecute extends PinExecute {
         super(PinSubType.WITH_STRING);
     }
 
+    public PinStringExecute(PinSubType subType) {
+        super(subType);
+    }
+
     public PinStringExecute(JsonObject jsonObject) {
         super(jsonObject);
         value = GsonUtil.getAsString(jsonObject, "value", null);
@@ -42,7 +46,7 @@ public class PinStringExecute extends PinExecute {
     }
 
     @Override
-    public final boolean equals(Object object) {
+    public boolean equals(Object object) {
         if (this == object) return true;
         if (!(object instanceof PinStringExecute that)) return false;
         if (!super.equals(object)) return false;

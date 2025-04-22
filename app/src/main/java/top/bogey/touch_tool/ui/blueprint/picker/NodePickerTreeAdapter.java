@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.ui.blueprint.picker;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -19,19 +21,23 @@ import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.other.NodeInfo;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.databinding.FloatPickerNodeItemBinding;
+import top.bogey.touch_tool.ui.custom.NodeInfoFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class NodePickerTreeAdapter extends TreeViewAdapter {
     private final List<TreeNode> treeNodes = new ArrayList<>();
     private final TreeNodeManager manager;
+    private final SelectNode picker;
     private final List<NodeInfo> roots;
     private TreeNode selectedNode;
 
     public NodePickerTreeAdapter(TreeNodeManager manager, SelectNode picker, List<NodeInfo> roots) {
         super(null, manager);
         this.manager = manager;
+        this.picker = picker;
         this.roots = roots;
         setTreeNodeLongClickListener((treeNode, view) -> {
             NodeInfo nodeInfo = (NodeInfo) treeNode.getValue();
@@ -133,7 +139,7 @@ public class NodePickerTreeAdapter extends TreeViewAdapter {
         void selectNode(NodeInfo nodeInfo);
     }
 
-    private static class ViewHolder extends TreeViewHolder {
+    private class ViewHolder extends TreeViewHolder {
         private final FloatPickerNodeItemBinding binding;
         private final Context context;
 
@@ -141,6 +147,21 @@ public class NodePickerTreeAdapter extends TreeViewAdapter {
             super(binding.getRoot());
             this.binding = binding;
             context = binding.getRoot().getContext();
+
+            binding.visibleButton.setOnClickListener(v -> {
+                int index = getBindingAdapterPosition();
+                TreeNode treeNode = manager.get(index);
+                NodeInfo nodeInfo = (NodeInfo) treeNode.getValue();
+                nodeInfo.visible = !nodeInfo.visible;
+                notifyItemChanged(index);
+            });
+
+            binding.infoButton.setOnClickListener(v -> {
+                int index = getBindingAdapterPosition();
+                TreeNode treeNode = manager.get(index);
+                NodeInfo nodeInfo = (NodeInfo) treeNode.getValue();
+                NodeInfoFloatView.showInfo(nodeInfo, picker::selectNode);
+            });
         }
 
         @Override
@@ -156,7 +177,7 @@ public class NodePickerTreeAdapter extends TreeViewAdapter {
             int color;
 
             if (node == selectedNode)
-                color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant);
+                color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorErrorContainer);
             else {
                 if (nodeInfo.usable && nodeInfo.visible) {
                     color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant);
@@ -169,6 +190,9 @@ public class NodePickerTreeAdapter extends TreeViewAdapter {
             binding.imageView.setImageTintList(ColorStateList.valueOf(color));
             binding.imageView.setVisibility(nodeInfo.children.isEmpty() ? View.INVISIBLE : View.VISIBLE);
             binding.imageView.setImageResource(node.isExpanded() ? R.drawable.icon_up : R.drawable.icon_down);
+
+            binding.visibleButton.setIconResource(nodeInfo.visible ? R.drawable.icon_eye : R.drawable.icon_no_eye);
+            binding.visibleButton.setAlpha(nodeInfo.visible ? 0.3f : 1);
         }
 
         private String getNodeTitle(NodeInfo nodeInfo) {

@@ -72,6 +72,19 @@ public class SelectAppDialog extends BottomSheetDialogFragment {
             info.packageName = getString(R.string.common_package);
             apps.add(0, info);
         }
+
+        List<String> packageNames = applications.getPackageNames();
+        int index = 0;
+        int i = 0;
+        while (i < apps.size()) {
+            PackageInfo packageInfo = apps.get(i);
+            if (packageNames.contains(packageInfo.packageName)) {
+                apps.add(index, apps.remove(i));
+                index++;
+            }
+            i++;
+        }
+
         return apps;
     }
 }

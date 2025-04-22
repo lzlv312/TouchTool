@@ -47,7 +47,7 @@ public enum ActionType {
     STOP_RINGTONE,
     TEXT_TO_SPEECH,
 
-    SHELL,
+    SEND_NOTIFICATION,
 
     WRITE_TO_CLIPBOARD,
 
@@ -66,6 +66,8 @@ public enum ActionType {
 
     GET_CURRENT_DATE,
     GET_CURRENT_TIME,
+
+    SHELL,
 
     // 数值
     NUMBER_ADD,

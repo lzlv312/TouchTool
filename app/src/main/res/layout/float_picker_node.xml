@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:minWidth="24dp"
-        android:textColor="?attr/colorError"
+        android:textColor="?attr/colorTertiary"
         android:textSize="11sp"
         app:layout_anchor="@id/markBox"
         app:layout_anchorGravity="top|center_horizontal" />
@@ -26,7 +26,8 @@
     <LinearLayout
         android:id="@+id/buttonBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/backButton"

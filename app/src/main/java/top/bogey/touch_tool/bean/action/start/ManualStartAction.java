@@ -11,7 +11,6 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinIconExecute;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -22,7 +21,6 @@ public class ManualStartAction extends StartAction {
 
     public ManualStartAction() {
         super(ActionType.MANUAL_START);
-        executePin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
         addPins(appsPin, appPin);
     }
 

@@ -21,22 +21,20 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
 import top.bogey.touch_tool.databinding.DialogSelectActivityBinding;
 import top.bogey.touch_tool.utils.AppUtil;
-import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
 public class SelectActivityDialog extends FrameLayout {
 
-    public SelectActivityDialog(@NonNull Context context, PinApplications applications, PinApplication application, BooleanResultCallback callback, PackageInfo info) {
+    public SelectActivityDialog(@NonNull Context context, PinApplications applications, PinApplication application, PackageInfo info) {
         super(context);
         DialogSelectActivityBinding binding = DialogSelectActivityBinding.inflate(LayoutInflater.from(context), this, true);
 
-        SelectActivityDialogAdapter adapter = new SelectActivityDialogAdapter(applications, application, callback);
+        SelectActivityDialogAdapter adapter = new SelectActivityDialogAdapter(applications, application);
         binding.activityBox.setAdapter(adapter);
-        List<ActivityInfo> activityInfoList = getActivities(applications.isShared(), info);
+        List<SelectActivityInfo> activityInfoList = getActivities(applications.isShared(), application, info);
         adapter.refreshActivities(activityInfoList);
 
-        PackageManager manager = getContext().getPackageManager();
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -44,22 +42,20 @@ public class SelectActivityDialog extends FrameLayout {
                 if (searchString.isEmpty()) {
                     adapter.refreshActivities(activityInfoList);
                 } else {
-                    List<ActivityInfo> newActivities = new ArrayList<>();
+                    List<SelectActivityInfo> newActivities = new ArrayList<>();
                     Pattern pattern = AppUtil.getPattern(searchString);
                     if (pattern == null) {
-                        for (ActivityInfo activityInfo : activityInfoList) {
+                        for (SelectActivityInfo activityInfo : activityInfoList) {
                             if (applications.isShared()) {
-                                CharSequence name = activityInfo.loadLabel(manager);
-                                if (name.toString().contains(searchString)) newActivities.add(activityInfo);
+                                if (activityInfo.label.contains(searchString)) newActivities.add(activityInfo);
                             } else {
                                 if (activityInfo.name.contains(searchString)) newActivities.add(activityInfo);
                             }
                         }
                     } else {
-                        for (ActivityInfo activityInfo : activityInfoList) {
+                        for (SelectActivityInfo activityInfo : activityInfoList) {
                             if (applications.isShared()) {
-                                CharSequence name = activityInfo.loadLabel(manager);
-                                if (pattern.matcher(name).find()) newActivities.add(activityInfo);
+                                if (pattern.matcher(activityInfo.label).find()) newActivities.add(activityInfo);
                             } else {
                                 if (pattern.matcher(activityInfo.name).find()) newActivities.add(activityInfo);
                             }
@@ -71,26 +67,66 @@ public class SelectActivityDialog extends FrameLayout {
         });
     }
 
-    private List<ActivityInfo> getActivities(boolean isShared, PackageInfo info) {
-        List<ActivityInfo> activityInfoList = new ArrayList<>();
+    private List<SelectActivityInfo> getActivities(boolean isShared, PinApplication application, PackageInfo info) {
+        List<SelectActivityInfo> activityInfoList = new ArrayList<>();
+        PackageManager manager = getContext().getPackageManager();
+        String launcherActivityName = "";
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setPackage(info.packageName);
+        List<ResolveInfo> resolveInfos = manager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
+        if (!resolveInfos.isEmpty()) {
+            launcherActivityName = resolveInfos.get(0).activityInfo.name;
+        }
+
         if (isShared) {
-            PackageManager manager = getContext().getPackageManager();
-            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent = new Intent(Intent.ACTION_SEND);
             intent.setType("*/*");
             intent.setPackage(info.packageName);
-            List<ResolveInfo> resolveInfos = manager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
+            resolveInfos = manager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
             for (ResolveInfo resolveInfo : resolveInfos) {
                 ActivityInfo activityInfo = resolveInfo.activityInfo;
                 activityInfo.processName = (String) resolveInfo.loadLabel(manager);
-                activityInfoList.add(activityInfo);
+                activityInfoList.add(new SelectActivityInfo(
+                        activityInfo,
+                        activityInfo.name,
+                        activityInfo.loadLabel(manager).toString(),
+                        launcherActivityName.equals(activityInfo.name)
+                ));
             }
         } else {
             if (info.activities != null) {
                 for (ActivityInfo activityInfo : info.activities) {
-                    if (activityInfo.exported) activityInfoList.add(activityInfo);
+                    if (activityInfo.exported)
+                        activityInfoList.add(new SelectActivityInfo(
+                                activityInfo,
+                                activityInfo.name,
+                                null,
+                                launcherActivityName.equals(activityInfo.name)
+                        ));
                 }
             }
         }
+
+        AppUtil.chineseSort(activityInfoList, activityInfo -> activityInfo.name);
+        int index = 0;
+
+        int i = 0;
+        while (i < activityInfoList.size()) {
+            SelectActivityInfo activityInfo = activityInfoList.get(i);
+            if (activityInfo.isLauncher) {
+                activityInfoList.add(0, activityInfoList.remove(i));
+                index++;
+            } else if (application.getActivityClasses() != null && application.getActivityClasses().contains(activityInfo.name)) {
+                activityInfoList.add(index, activityInfoList.remove(i));
+                index++;
+            }
+            i++;
+        }
+
         return activityInfoList;
+    }
+
+    public record SelectActivityInfo(ActivityInfo activityInfo, String name, String label, boolean isLauncher) {
     }
 }

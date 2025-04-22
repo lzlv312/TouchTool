@@ -41,7 +41,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         return tag;
     }
 
-    public StickScreenFloatView(@NonNull Context context, String tag) {
+    private StickScreenFloatView(@NonNull Context context, String tag) {
         super(context);
         binding = FloatStickScreenBinding.inflate(LayoutInflater.from(context), this, true);
         this.tag = tag;
@@ -56,7 +56,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         });
     }
 
-    public void innerShowStick(PinObject object, EAnchor anchor, Point location) {
+    private void innerShowStick(PinObject object, EAnchor anchor, Point location) {
         if (object instanceof PinImage pinImage) {
             binding.image.setVisibility(VISIBLE);
             binding.image.setImageBitmap(pinImage.getImage());

@@ -155,15 +155,6 @@
                         app:options="@array/manual_play_type"
                         app:title="@string/permission_setting_manual_play" />
 
-                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
-                        android:id="@+id/captureSelect"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:description="@string/permission_setting_capture_desc"
-                        app:icon="@drawable/icon_capture"
-                        app:options="@array/capture_type"
-                        app:title="@string/permission_setting_capture" />
-
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/ocrSwitch"
                         android:layout_width="match_parent"

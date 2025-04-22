@@ -77,11 +77,11 @@ public class TaskRunnable implements Runnable {
     }
 
     public Task getStartTask() {
-        return taskStack.firstElement();
+        return task;
     }
 
     public StartAction getStartAction() {
-        return (StartAction) actionStack.firstElement();
+        return startAction;
     }
 
     public void addListener(TaskListener listener) {

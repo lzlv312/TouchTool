@@ -7,9 +7,11 @@ import java.util.HashMap;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.start.InnerStartAction;
 import top.bogey.touch_tool.bean.action.start.OutCallStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
+import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
@@ -20,6 +22,7 @@ public class InstantActivity extends BaseActivity {
 
     public static final String TASK_ID = "TASK_ID";
     public static final String ACTION_ID = "ACTION_ID";
+    public static final String PIN_ID = "PIN_ID";
 
     @Override
     protected void onResume() {
@@ -61,8 +64,7 @@ public class InstantActivity extends BaseActivity {
                                     Variable var = copy.getVariable(key);
                                     if (var != null) var.getValue().cast(value);
                                 });
-
-                                service.runTask(task, (StartAction) action);
+                                service.runTask(copy, (StartAction) action);
                             }
                         }
                     }
@@ -81,11 +83,17 @@ public class InstantActivity extends BaseActivity {
                     Action action = task.getAction(actionId);
                     MainAccessibilityService service = MainApplication.getInstance().getService();
                     if (service != null && service.isEnabled()) {
-                        if (action instanceof StartAction startAction) {
-                            service.runTask(task, startAction);
-                        }
                         if (action instanceof TimeStartAction timeStartAction) {
                             service.addAlarm(task, timeStartAction);
+                        } else if (action instanceof StartAction startAction) {
+                            service.runTask(task, startAction);
+                        } else {
+                            String pinId = intent.getStringExtra(PIN_ID);
+                            Pin pin = action.getPinById(pinId);
+                            if (pin != null) {
+                                InnerStartAction innerStartAction = new InnerStartAction(pin);
+                                service.runTask(task.copy(), innerStartAction);
+                            }
                         }
                     }
                 }

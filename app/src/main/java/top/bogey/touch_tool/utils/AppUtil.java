@@ -388,7 +388,8 @@ public class AppUtil {
 
     public static List<AccessibilityNodeInfo> getWindows(AccessibilityService service) {
         List<AccessibilityNodeInfo> windows = new ArrayList<>();
-        for (AccessibilityWindowInfo window : service.getWindows()) {
+        List<AccessibilityWindowInfo> list = service.getWindows();
+        for (AccessibilityWindowInfo window : list) {
             if (window == null) continue;
             if (window.getType() == AccessibilityWindowInfo.TYPE_ACCESSIBILITY_OVERLAY) continue;
             AccessibilityNodeInfo root = window.getRoot();

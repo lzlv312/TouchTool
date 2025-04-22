@@ -166,4 +166,19 @@
         <item>Shell</item>
     </string-array>
 
+    <string-array name="node_info_type">
+        <item>控件类</item>
+        <item>控件ID</item>
+        <item>控件身份</item>
+        <item>文本</item>
+        <item>描述</item>
+        <item>同级序号</item>
+        <item>可点击</item>
+        <item>可见</item>
+        <item>区域</item>
+        <item>大小</item>
+        <item>父节点</item>
+        <item>有子节点</item>
+    </string-array>
+
 </resources>

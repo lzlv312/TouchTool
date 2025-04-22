@@ -2,6 +2,7 @@ package top.bogey.touch_tool.ui.blueprint.picker;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -26,8 +27,8 @@ import java.util.Map;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
-import top.bogey.touch_tool.databinding.FloatPickerNodeBinding;
 import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.databinding.FloatPickerNodeBinding;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
@@ -42,6 +43,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
 
     private final Paint gridPaint;
     private final Paint markPaint;
+    private final Paint bitmapPaint;
 
     private NodeInfo nodeInfo;
 
@@ -64,6 +66,10 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         markPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         markPaint.setStyle(Paint.Style.FILL);
         markPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
+
+        bitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        bitmapPaint.setFilterBitmap(true);
+        bitmapPaint.setDither(true);
 
         adapter = new NodePickerTreeAdapter(new TreeNodeManager(), this, roots);
         binding.widgetRecyclerView.setAdapter(adapter);
@@ -92,7 +98,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
                 View view = group.findViewById(checkedId);
                 int type = group.indexOfChild(view);
                 SettingSaver.getInstance().setSelectNodeType(type);
-                postInvalidate();
+                invalidate();
             }
         });
         binding.typeGroup.check(binding.typeGroup.getChildAt(SettingSaver.getInstance().getSelectNodeType()).getId());
@@ -153,22 +159,21 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
     protected void dispatchDraw(@NonNull Canvas canvas) {
         super.dispatchDraw(canvas);
 
-        canvas.saveLayer(getLeft(), getTop(), getRight(), getBottom(), gridPaint);
+        Bitmap screenShot = screenInfo.getScreenShot();
+        if (screenShot != null) canvas.drawBitmap(screenShot, 0, 0, bitmapPaint);
+
         for (int i = roots.size() - 1; i >= 0; i--) {
-            canvas.save();
             NodeInfo root = roots.get(i);
             Rect area = new Rect(root.area);
             area.offset(-location[0], -location[1]);
             if (area.width() != getWidth() || area.height() != getHeight()) {
-                canvas.drawRect(area, markPaint);
+                canvas.drawRect(area, gridPaint);
             }
             drawNode(canvas, root);
-            canvas.restore();
         }
-        canvas.restore();
 
         if (nodeInfo != null) {
-            canvas.save();
+            canvas.saveLayer(getLeft(), getTop(), getRight(), getBottom(), bitmapPaint);
             Rect area = new Rect(nodeInfo.area);
             area.offset(-location[0], -location[1]);
             canvas.drawRect(area, markPaint);

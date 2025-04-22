@@ -206,6 +206,9 @@ public class DisplayUtil {
     public static synchronized List<Rect> matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, boolean fast) {
         if (bitmap == null) return null;
         if (template == null) return null;
+        // 如果图片尺寸小于模板尺寸，则不匹配
+        if (bitmap.getWidth() < template.getWidth() || bitmap.getHeight() < template.getHeight()) return null;
+
         if (area == null) area = new Rect();
 
         Bitmap tmp = null;

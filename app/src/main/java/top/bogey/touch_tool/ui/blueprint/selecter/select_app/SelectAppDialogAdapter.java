@@ -134,8 +134,8 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
             binding.activityButton.setOnClickListener(v -> {
                 PinApplication app = getSelectedApp(info.packageName);
                 if (app == null) app = new PinApplication(info.packageName);
-                SelectActivityDialog view = new SelectActivityDialog(context, applications, app, callback, info);
                 PinApplication finalApp = app;
+                SelectActivityDialog view = new SelectActivityDialog(context, applications, finalApp, info);
                 new MaterialAlertDialogBuilder(context)
                         .setTitle(R.string.select_app_activity)
                         .setNegativeButton(R.string.cancel, null)
@@ -217,6 +217,11 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
                     }
                 }
                 applications.clear();
+            } else {
+                PinApplication selectedApp = getSelectedApp(app.getPackageName());
+                if (selectedApp != null) {
+                    applications.remove(selectedApp);
+                }
             }
             applications.add(app);
         }

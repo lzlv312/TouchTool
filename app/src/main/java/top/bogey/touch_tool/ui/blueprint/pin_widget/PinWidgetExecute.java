@@ -58,7 +58,8 @@ public class PinWidgetExecute extends PinWidget<PinExecute> {
                 });
             }
             case WITH_ICON -> {
-                binding.editBox.setVisibility(GONE);
+                pinView.getTitleView().setVisibility(GONE);
+                binding.editBox.setVisibility(VISIBLE);
                 binding.pickButton.setVisibility(VISIBLE);
                 PinIconExecute iconExecute = (PinIconExecute) pinBase;
                 binding.pickButton.setImageBitmap(iconExecute.getImage());
@@ -67,6 +68,14 @@ public class PinWidgetExecute extends PinWidget<PinExecute> {
                     pinView.getPin().notifyValueUpdated();
                     iconExecute.setImage(result);
                 }).show());
+                binding.editText.setText(iconExecute.getValue());
+                binding.editText.addTextChangedListener(new TextChangedListener() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        iconExecute.setValue(s.toString());
+                        pinView.getPin().notifyValueUpdated();
+                    }
+                });
             }
         }
     }

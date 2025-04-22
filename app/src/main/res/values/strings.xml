@@ -241,6 +241,14 @@
     <string name="text_to_speak_action">文本转语音</string>
     <string name="text_to_speak_action_desc">将文本转为语音并播放</string>
 
+    <string name="send_notification_action">自定义通知</string>
+    <string name="send_notification_action_desc">发送自定义通知到通知栏</string>
+    <string name="send_notification_action_title">标题</string>
+    <string name="send_notification_action_content">内容</string>
+    <string name="send_notification_action_icon">图标</string>
+    <string name="send_notification_action_execute">点按执行</string>
+
+
     <string name="write_to_clipboard_action">复制到剪贴板</string>
     <string name="write_to_clipboard_action_desc">将针脚值复制到剪贴板</string>
 
@@ -284,7 +292,9 @@
 
     <string name="get_screen_status_action">获取屏幕状态</string>
     <string name="get_screen_status_action_desc">获取屏幕当前开关或锁定状态</string>
-    <string name="get_screen_status_action_state">状态</string>
+    <string name="get_screen_status_action_state">锁屏状态</string>
+    <string name="get_screen_status_action_size">分辨率</string>
+    <string name="get_screen_status_action_orientation">是否竖屏</string>
 
     <string name="get_battery_status_action">获取电池状态</string>
     <string name="get_battery_status_action_desc">获取电池电量与充放电状态</string>
@@ -651,7 +661,7 @@
     <string name="picker_point_title">选择位置</string>
     <string name="picker_touch_title">采集手势</string>
     <string name="picker_node_title">选择控件</string>
-    <string name="picker_node_id">控件身份:</string>
+    <string name="picker_node_id">控件ID:</string>
     <string name="picker_node_text">控件文本:</string>
     <string name="picker_node_path">控件路径:</string>
     <string name="picker_node_search_hint">长按列表项选中</string>

@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
+import top.bogey.touch_tool.bean.action.start.InnerStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
@@ -227,7 +228,10 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
 
     public void execute(TaskRunnable runnable, StartAction startAction, BooleanResultCallback callback) {
         Task copy = copy();
-        Action action = copy.getAction(startAction.getId());
+        Action action = startAction;
+        if (!(startAction instanceof InnerStartAction)) {
+            action = copy.getAction(startAction.getId());
+        }
         runnable.pushStack(copy, action);
         callback.onResult(true);
         action.execute(runnable, null);

@@ -126,6 +126,7 @@ public class NodeInfo {
 
     public List<NodeInfo> findChildrenInArea(Rect area) {
         List<NodeInfo> result = new ArrayList<>();
+        if (!visible) return result;
         for (NodeInfo child : children) {
             if (Rect.intersects(area, child.area)) {
                 result.add(child);
@@ -136,6 +137,7 @@ public class NodeInfo {
     }
 
     public void findChildrenInArea(Map<NodeInfo, Integer> map, Rect area, int depth) {
+        if (!visible) return;
         for (NodeInfo child : children) {
             if (Rect.intersects(area, child.area)) {
                 map.put(child, depth);
