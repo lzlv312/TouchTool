@@ -45,6 +45,11 @@ public class NormalActionCard extends ActionCard {
     }
 
     @Override
+    public void refreshCardInfo() {
+        initCardInfo(binding.icon, binding.title, binding.des);
+    }
+
+    @Override
     public boolean check() {
         ActionCheckResult result = new ActionCheckResult();
         action.check(result, task);

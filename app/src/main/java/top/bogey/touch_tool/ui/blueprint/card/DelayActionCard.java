@@ -40,6 +40,11 @@ public class DelayActionCard extends ActionCard {
     }
 
     @Override
+    public void refreshCardInfo() {
+
+    }
+
+    @Override
     public boolean check() {
         return true;
     }

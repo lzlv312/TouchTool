@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.ui.task;
 
+import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionItemRecyclerViewAdapter.getTipsLinearLayout;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -15,9 +18,11 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +30,7 @@ import java.util.Set;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.other.Usage;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.TaskSaveListener;
 import top.bogey.touch_tool.bean.task.Task;
@@ -35,6 +41,7 @@ import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 public class TaskView extends Fragment implements TaskListener, TaskSaveListener {
@@ -116,14 +123,38 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
 
         binding.selectAllButton.setOnClickListener(v -> selectAll());
 
-        binding.deleteButton.setOnClickListener(v -> AppUtil.showDialog(requireContext(), R.string.remove_tips, result -> {
-            if (result) {
-                for (String id : selected) {
-                    Saver.getInstance().removeTask(id);
-                }
-                hideBottomBar();
+        binding.deleteButton.setOnClickListener(v -> {
+            List<Usage> usages = new ArrayList<>();
+            for (String id : selected) {
+                usages.addAll(Saver.getInstance().getTaskUses(id));
             }
-        }));
+            if (!usages.isEmpty()) {
+                LinearLayout linearLayout = getTipsLinearLayout(requireContext(), usages, R.string.task_delete_tips);
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.remove_task)
+                        .setView(linearLayout)
+                        .setPositiveButton(R.string.enter, null)
+                        .setNegativeButton(R.string.force_delete, (dialog, which) -> {
+                            for (String id : selected) {
+                                Saver.getInstance().removeTask(id);
+                            }
+                            hideBottomBar();
+                        })
+                        .show();
+
+                int px = (int) DisplayUtil.dp2px(requireContext(), 32);
+                DisplayUtil.setViewMargin(linearLayout, px, px / 2, px, px / 2);
+            } else {
+                AppUtil.showDialog(requireContext(), R.string.remove_tips, result -> {
+                    if (result) {
+                        for (String id : selected) {
+                            Saver.getInstance().removeTask(id);
+                        }
+                        hideBottomBar();
+                    }
+                });
+            }
+        });
 
         binding.exportButton.setOnClickListener(v -> {
             unselectAll();

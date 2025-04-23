@@ -43,6 +43,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionInfo;
 import top.bogey.touch_tool.bean.action.SyncAction;
+import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.save.Saver;
@@ -215,13 +216,16 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
             }
         }
 
-        if (action instanceof SyncAction) {
-            List<Action> actions = task.getActions(action.getClass());
-            if (!actions.isEmpty()) {
-                Action first = actions.get(0);
-                action = first.newCopy();
+        if (action instanceof SyncAction syncAction) {
+            // 自定义结束动作需要多卡同步
+            if (action instanceof CustomEndAction) {
+                List<Action> actions = task.getActions(action.getClass());
+                if (!actions.isEmpty()) {
+                    Action first = actions.get(0);
+                    syncAction = (SyncAction) first.newCopy();
+                }
             }
-            ((SyncAction) action).sync(task);
+            syncAction.sync(task);
         }
 
         task.addAction(action);
@@ -1011,8 +1015,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     public void syncCards() {
         for (ActionCard card : cards.values()) {
             Action action = card.getAction();
-            if (action instanceof SyncAction syncAction)
+            if (action instanceof SyncAction syncAction) {
                 syncAction.sync(task);
+                card.refreshCardInfo();
+            }
         }
     }
 

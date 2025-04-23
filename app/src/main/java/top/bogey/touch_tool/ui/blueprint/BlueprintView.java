@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 
+import java.text.Bidi;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -132,6 +133,13 @@ public class BlueprintView extends Fragment {
         binding = ViewBlueprintBinding.inflate(inflater, container, false);
 
         binding.toolBar.addMenuProvider(menuProvider, getViewLifecycleOwner());
+        binding.toolBar.setNavigationOnClickListener(v -> {
+            if (taskStack.size() > 1) {
+                popStack();
+            } else {
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
 
         binding.addButton.setOnClickListener(v -> new SelectActionDialog(requireContext(), taskStack.peek(), action -> {
             ActionCard card = binding.cardLayout.addCard(action);

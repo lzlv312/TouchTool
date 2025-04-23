@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.other.Usage;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.utils.AppUtil;
@@ -208,6 +209,15 @@ public class Saver {
         logSave.destroy();
     }
 
+    public List<Usage> getTaskUses(String id) {
+        List<Usage> usages = new ArrayList<>();
+        taskSaves.forEach((k, v) -> {
+            Task task = v.getTask();
+            usages.addAll(task.getTaskUses(id));
+        });
+        return usages;
+    }
+
     public void addListener(TaskSaveListener listener) {
         taskListeners.add(listener);
     }
@@ -255,6 +265,15 @@ public class Saver {
         varSave.remove();
     }
 
+    public List<Usage> getVarUses(String id) {
+        List<Usage> usages = new ArrayList<>();
+        taskSaves.forEach((k, v) -> {
+            Task task = v.getTask();
+            usages.addAll(task.getVariableUses(id));
+        });
+        return usages;
+    }
+
     public void addListener(VariableSaveListener listener) {
         variableListeners.add(listener);
     }
@@ -289,10 +308,8 @@ public class Saver {
         tagMMKV.remove(tag);
         taskSaves.forEach((id, taskSave) -> {
             Task task = taskSave.getTask();
-            if (matchTag(tag, task.getTags())) {
-                task.removeTag(tag);
-                task.save();
-            }
+            task.removeInnerTag(tag);
+            task.save();
         });
 
         variableSaves.forEach((id, variableSave) -> {

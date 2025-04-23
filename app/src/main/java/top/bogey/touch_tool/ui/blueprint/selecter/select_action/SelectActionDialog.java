@@ -42,6 +42,8 @@ public class SelectActionDialog extends BottomSheetDialog {
     protected final String PRIVATE = getContext().getString(R.string.select_action_group_private);
     protected final static String PARENT_PREFIX = "👨";
     protected final static String TAG_PREFIX = "🔗";
+    public final static String NEED_SAVE_FLAG = " 💾";
+    public final static String GLOBAL_FLAG = "🌍 ";
 
     protected final DialogSelectActionBinding binding;
     protected final Task task;
@@ -127,7 +129,11 @@ public class SelectActionDialog extends BottomSheetDialog {
             if (result) {
                 View view = binding.subGroup.findViewById(binding.subGroup.getCheckedButtonId());
                 String tag = (String) view.getTag();
-                if (PRIVATE.equals(tag)) task.addVariable(variable);
+                if (PRIVATE.equals(tag)) {
+                    task.addVariable(variable);
+                } else {
+                    variable.setNeedSave(true);
+                }
                 variable.save();
                 dataList.add(0, variable);
                 adapter.notifyItemInserted(0);

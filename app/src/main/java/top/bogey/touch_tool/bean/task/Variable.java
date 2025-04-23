@@ -22,6 +22,7 @@ import top.bogey.touch_tool.utils.GsonUtil;
 public class Variable extends Identity implements ITagManager {
     private transient Task parent;
     private PinObject value;
+    private boolean needSave = false;
     private final TagManager tagManager;
 
     public Variable(PinObject value) {
@@ -33,6 +34,7 @@ public class Variable extends Identity implements ITagManager {
     public Variable(JsonObject jsonObject) {
         super(jsonObject);
         value = (PinObject) GsonUtil.getAsObject(jsonObject, "value", PinBase.class, new PinObject());
+        needSave = GsonUtil.getAsBoolean(jsonObject, "needSave", false);
         tagManager = GsonUtil.getAsObject(jsonObject, "tagManager", TagManager.class, new TagManager());
     }
 
@@ -180,6 +182,14 @@ public class Variable extends Identity implements ITagManager {
     @Override
     public String getTagString() {
         return tagManager.getTagString();
+    }
+
+    public boolean isNeedSave() {
+        return needSave;
+    }
+
+    public void setNeedSave(boolean needSave) {
+        this.needSave = needSave;
     }
 
     public static class VariableDeserialize implements JsonDeserializer<Variable> {

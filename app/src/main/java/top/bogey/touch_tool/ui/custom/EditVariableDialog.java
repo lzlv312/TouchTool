@@ -15,24 +15,25 @@ import java.util.List;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Variable;
-import top.bogey.touch_tool.databinding.DialogCreateTaskBinding;
+import top.bogey.touch_tool.databinding.DialogCreateVariableBinding;
 import top.bogey.touch_tool.databinding.ViewTagListItemBinding;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
 public class EditVariableDialog extends MaterialAlertDialogBuilder {
-    private final DialogCreateTaskBinding binding;
+    private final DialogCreateVariableBinding binding;
     private final List<String> selectedTags = new ArrayList<>();
     private BooleanResultCallback callback;
 
     public EditVariableDialog(@NonNull Context context, Variable var) {
         super(context);
 
-        binding = DialogCreateTaskBinding.inflate(LayoutInflater.from(context), null, false);
+        binding = DialogCreateVariableBinding.inflate(LayoutInflater.from(context), null, false);
         setView(binding.getRoot());
 
         binding.titleEdit.setText(var.getTitle());
         binding.desEdit.setText(var.getDescription());
+        binding.needSaveCheck.setChecked(var.isNeedSave());
 
         binding.addTagBtn.setOnClickListener(v -> AppUtil.showEditDialog(context, R.string.task_tag_add, "", result -> {
             if (result != null && !result.isEmpty()) {
@@ -62,6 +63,7 @@ public class EditVariableDialog extends MaterialAlertDialogBuilder {
             }
             var.setTitle(getTitle());
             var.setDescription(getDescription());
+            var.setNeedSave(binding.needSaveCheck.isChecked());
             var.setTags(selectedTags);
             callback.onResult(true);
         });

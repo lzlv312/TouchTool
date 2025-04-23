@@ -1,5 +1,8 @@
 package top.bogey.touch_tool.bean.action.variable;
 
+import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.GLOBAL_FLAG;
+import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.NEED_SAVE_FLAG;
+
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.MainApplication;
@@ -23,8 +26,6 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
         varId = variable.getId();
         varPin = new Pin(variable.getValue(), true);
         varPin.setId(varId);
-        varPin.setTitle(variable.getTitle());
-        setTitle(MainApplication.getInstance().getString(R.string.get_value_action) + "-" + variable.getTitle());
         addPin(varPin);
     }
 
@@ -55,14 +56,19 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
 
     }
 
+    public String getVarId() {
+        return varId;
+    }
+
     @Override
     public void sync(Task context) {
         Variable variable = context.findVariable(varId);
-
         if (variable == null) variable = Saver.getInstance().getVar(varId);
         if (variable == null) return;
         varPin.setValue(variable.getValue());
         varPin.setTitle(variable.getTitle());
-        setTitle(MainApplication.getInstance().getString(R.string.get_value_action) + "-" + variable.getTitle());
+        String globalFlag = variable.getParent() == null ? GLOBAL_FLAG : "";
+        String saveFlag = variable.isNeedSave() ? NEED_SAVE_FLAG : "";
+        setTitle(MainApplication.getInstance().getString(R.string.get_value_action) + " - " + globalFlag + variable.getTitle() + saveFlag);
     }
 }

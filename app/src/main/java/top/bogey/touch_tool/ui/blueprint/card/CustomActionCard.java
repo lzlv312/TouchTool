@@ -65,6 +65,11 @@ public class CustomActionCard extends ActionCard {
     }
 
     @Override
+    public void refreshCardInfo() {
+        initCardInfo(null, binding.title, binding.des);
+    }
+
+    @Override
     public boolean check() {
         return true;
     }

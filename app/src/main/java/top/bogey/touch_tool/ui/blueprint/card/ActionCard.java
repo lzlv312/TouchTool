@@ -61,6 +61,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     public abstract void init();
+    public abstract void refreshCardInfo();
 
     protected void initCardInfo(ShapeableImageView icon, MaterialTextView title, MaterialTextView des) {
         if (icon != null) {

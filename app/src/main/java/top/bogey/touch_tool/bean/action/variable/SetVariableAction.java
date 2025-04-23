@@ -1,5 +1,8 @@
 package top.bogey.touch_tool.bean.action.variable;
 
+import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.GLOBAL_FLAG;
+import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.NEED_SAVE_FLAG;
+
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.MainApplication;
@@ -24,8 +27,6 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         varId = variable.getId();
         varPin = new Pin(variable.getValue());
         varPin.setId(varId);
-        varPin.setTitle(variable.getTitle());
-        setTitle(MainApplication.getInstance().getString(R.string.set_value_action) + "-" + variable.getTitle());
         addPin(varPin);
     }
 
@@ -50,10 +51,13 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         if (var != null) {
             PinObject value = getPinValue(runnable, varPin);
             var.setValue(value);
-            // 全局变量才需要保存
-            if (var.getParent() == null) var.save();
+            if (var.isNeedSave()) var.save();
         }
         executeNext(runnable, outPin);
+    }
+
+    public String getVarId() {
+        return varId;
     }
 
     @Override
@@ -63,6 +67,8 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         if (variable == null) return;
         varPin.setValue(variable.getValue());
         varPin.setTitle(variable.getTitle());
-        setTitle(MainApplication.getInstance().getString(R.string.set_value_action) + "-" + variable.getTitle());
+        String globalFlag = variable.getParent() == null ? GLOBAL_FLAG : "";
+        String saveFlag = variable.isNeedSave() ? NEED_SAVE_FLAG : "";
+        setTitle(MainApplication.getInstance().getString(R.string.get_value_action) + " - " + globalFlag + variable.getTitle() + saveFlag);
     }
 }

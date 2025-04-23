@@ -27,15 +27,31 @@
                 android:backgroundTint="?attr/colorOnSurfaceVariant"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/closeButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="end|center"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                app:icon="@drawable/icon_close" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/zoomButton"
+                    style="@style/Theme.TouchTool.IconButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:icon="@drawable/icon_zoom_in" />
+
+                <Space
+                    android:layout_width="8dp"
+                    android:layout_height="wrap_content"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/closeButton"
+                    style="@style/Theme.TouchTool.IconButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:icon="@drawable/icon_close" />
+
+            </LinearLayout>
+
         </FrameLayout>
 
         <com.google.android.material.card.MaterialCardView

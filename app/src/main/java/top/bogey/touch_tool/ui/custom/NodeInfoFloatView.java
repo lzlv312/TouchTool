@@ -74,6 +74,11 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
         });
 
         binding.closeButton.setOnClickListener(v -> dismiss());
+
+        binding.zoomButton.setOnClickListener(v -> {
+            binding.contentBox.setVisibility(binding.contentBox.getVisibility() == VISIBLE ? GONE : VISIBLE);
+            binding.zoomButton.setIconResource(binding.contentBox.getVisibility() == VISIBLE ? R.drawable.icon_zoom_in : R.drawable.icon_zoom_out);
+        });
     }
 
     private void innerShowToast(NodeInfo nodeInfo) {

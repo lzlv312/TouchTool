@@ -67,7 +67,7 @@ public class TaskInfoSummary {
                 PackageInfo packageInfo = packageManager.getPackageInfo(application.packageName, PackageManager.GET_ACTIVITIES);
                 if (packageInfo != null) apps.put(packageInfo.packageName, packageInfo);
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
         }
 

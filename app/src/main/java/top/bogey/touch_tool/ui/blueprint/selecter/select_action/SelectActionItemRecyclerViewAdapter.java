@@ -1,16 +1,23 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_action;
 
+import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.GLOBAL_FLAG;
+import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.NEED_SAVE_FLAG;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.divider.MaterialDivider;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +30,7 @@ import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
+import top.bogey.touch_tool.bean.other.Usage;
 import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
@@ -33,6 +41,8 @@ import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.ui.custom.EditVariableDialog;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.listener.SpinnerSelectedListener;
 
@@ -66,8 +76,15 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
     }
 
     public static String getObjectTitle(Object object) {
-        if (object instanceof Task task) return task.getTitle();
-        if (object instanceof Variable var) return var.getTitle();
+        if (object instanceof Task task) {
+            String globalFlag = task.getParent() == null ? GLOBAL_FLAG : "";
+            return globalFlag + task.getTitle();
+        }
+        if (object instanceof Variable var) {
+            String globalFlag = var.getParent() == null ? GLOBAL_FLAG : "";
+            String saveFlag = var.isNeedSave() ? NEED_SAVE_FLAG : "";
+            return globalFlag + var.getTitle() + saveFlag;
+        }
         if (object instanceof ActionType actionType) {
             ActionInfo info = ActionInfo.getActionInfo(actionType);
             if (info != null) {
@@ -103,6 +120,47 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
         }
         if (object instanceof ActionCard card) return getObjectIcon(card.getAction().getType());
         return 0;
+    }
+
+    public static String getUsageTitlePath(Usage usage) {
+        StringBuilder builder = new StringBuilder();
+        Task task = usage.task();
+        while (task != null) {
+            builder.insert(0, task.getTitle()).insert(0, " > ");
+            task = task.getParent();
+        }
+        builder.append(" (").append(usage.pos().x).append(",").append(usage.pos().y).append(")");
+        return builder.toString().substring(1);
+    }
+
+    public static LinearLayout getTipsLinearLayout(Context context, List<Usage> usages, @StringRes int tipString) {
+        LinearLayout linearLayout = new LinearLayout(context);
+
+        MaterialTextView tips = new MaterialTextView(context);
+        tips.setText(context.getString(tipString, usages.size()));
+        linearLayout.addView(tips);
+        MaterialDivider divider = new MaterialDivider(context);
+        DisplayUtil.setViewWidth(divider, ViewGroup.LayoutParams.MATCH_PARENT);
+        DisplayUtil.setViewHeight(divider, (int) DisplayUtil.dp2px(context, 1));
+        linearLayout.addView(divider);
+
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        usages.forEach(usage -> {
+            MaterialTextView title = new MaterialTextView(context);
+            title.setText(usage.task().getTitle());
+            linearLayout.addView(title);
+
+            MaterialTextView path = new MaterialTextView(context);
+            path.setTextSize(11);
+            path.setText(getUsageTitlePath(usage));
+            linearLayout.addView(path);
+
+            MaterialDivider div = new MaterialDivider(context);
+            DisplayUtil.setViewWidth(div, ViewGroup.LayoutParams.MATCH_PARENT);
+            DisplayUtil.setViewHeight(div, (int) DisplayUtil.dp2px(context, 1));
+            linearLayout.addView(div);
+        });
+        return linearLayout;
     }
 
     public void setData(List<Object> data, boolean sort) {
@@ -180,16 +238,20 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                     EditTaskDialog dialog = new EditTaskDialog(context, editTask);
                     dialog.setTitle(R.string.task_update);
                     dialog.setCallback(result -> {
-                        if (result) editTask.save();
+                        if (result) {
+                            editTask.save();
+                            notifyItemChanged(index);
+                        }
                     });
                     dialog.show();
-                }
-
-                if (object instanceof Variable var) {
+                } else if (object instanceof Variable var) {
                     EditVariableDialog dialog = new EditVariableDialog(context, var);
                     dialog.setTitle(R.string.variable_update);
                     dialog.setCallback(result -> {
-                        if (result) var.save();
+                        if (result) {
+                            var.save();
+                            notifyItemChanged(index);
+                        }
                     });
                     dialog.show();
                 }
@@ -227,46 +289,40 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 }
             });
 
-            binding.setVarValue.setOnClickListener(v -> {
-                int index = getBindingAdapterPosition();
-                Object object = data.get(index);
-
-                if (object instanceof Variable var) {
-                    Action action = new SetVariableAction(var);
-                    if (callback != null) callback.onResult(action);
-                }
-            });
-
             binding.deleteButton.setOnClickListener(v -> {
                 if (needDelete) {
-                    AppUtil.showDialog(context, R.string.remove_tips, result -> {
-                        if (result) {
-                            int index = getBindingAdapterPosition();
-                            Object object = data.get(index);
+                    int index = getBindingAdapterPosition();
+                    Object object = data.get(index);
 
-                            if (object instanceof Task task) {
-                                Task parent = task.getParent();
-                                if (parent == null) {
-                                    Saver.getInstance().removeTask(task.getId());
-                                } else {
-                                    parent.removeTask(task.getId());
-                                }
+                    if (object instanceof Task task) {
+                        deleteTask(task, result -> {
+                            Task parent = task.getParent();
+                            if (parent == null) {
+                                Saver.getInstance().removeTask(task.getId());
+                            } else {
+                                parent.removeTask(task.getId());
                             }
-
-                            if (object instanceof Variable var) {
-                                Task owner = var.getParent();
-                                if (owner == null) {
-                                    Saver.getInstance().removeVar(var.getId());
-                                } else {
-                                    owner.removeVariable(var.getId());
-                                }
-                            }
-
                             data.remove(index);
                             notifyItemRemoved(index);
                             deleteSameObject(object);
-                        }
-                    });
+                        });
+                    }
+
+                    if (object instanceof Variable var) {
+                        deleteVariable(var, result -> {
+                            if (result) {
+                                Task parent = var.getParent();
+                                if (parent == null) {
+                                    Saver.getInstance().removeVar(var.getId());
+                                } else {
+                                    parent.removeVariable(var.getId());
+                                }
+                                data.remove(index);
+                                notifyItemRemoved(index);
+                                deleteSameObject(object);
+                            }
+                        });
+                    }
                 } else {
                     binding.deleteButton.setChecked(true);
                     needDelete = true;
@@ -274,6 +330,16 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                         binding.deleteButton.setChecked(false);
                         needDelete = false;
                     }, 1500);
+                }
+            });
+
+            binding.helpButton.setOnClickListener(v -> {
+                int index = getBindingAdapterPosition();
+                Object object = data.get(index);
+
+                if (object instanceof Variable var) {
+                    Action action = new SetVariableAction(var);
+                    if (callback != null) callback.onResult(action);
                 }
             });
 
@@ -334,14 +400,14 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 }
             }
 
-            binding.setVarValue.setVisibility(ViewGroup.GONE);
+            binding.helpButton.setIconResource(R.drawable.icon_menu_help);
             binding.varBox.setVisibility(ViewGroup.GONE);
             if (object instanceof Variable var) {
                 binding.copyButton.setVisibility(ViewGroup.VISIBLE);
                 binding.editButton.setVisibility(ViewGroup.VISIBLE);
                 binding.deleteButton.setVisibility(ViewGroup.VISIBLE);
 
-                binding.setVarValue.setVisibility(ViewGroup.VISIBLE);
+                binding.helpButton.setIconResource(R.drawable.icon_set_value);
 
                 binding.varBox.setVisibility(ViewGroup.VISIBLE);
                 PinInfo pinInfo = var.getKeyPinInfo();
@@ -354,6 +420,56 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 if (pinInfo != null) {
                     binding.valueSlot.setText(pinInfo.getTitle());
                 }
+            }
+        }
+
+        private void deleteTask(Task task, BooleanResultCallback callback) {
+            List<Usage> usages;
+            Task parent = task.getParent();
+            if (parent == null) {
+                usages = Saver.getInstance().getTaskUses(task.getId());
+            } else {
+                usages = parent.getTaskUses(task.getId());
+            }
+
+            if (!usages.isEmpty()) {
+                LinearLayout linearLayout = getTipsLinearLayout(context, usages, R.string.task_delete_tips);
+                new MaterialAlertDialogBuilder(context)
+                        .setTitle(R.string.remove_task)
+                        .setView(linearLayout)
+                        .setPositiveButton(R.string.enter, null)
+                        .setNegativeButton(R.string.force_delete, (dialog, which) -> callback.onResult(true))
+                        .show();
+
+                int px = (int) DisplayUtil.dp2px(context, 32);
+                DisplayUtil.setViewMargin(linearLayout, px, px / 2, px, px / 2);
+            } else {
+                callback.onResult(true);
+            }
+        }
+
+        private void deleteVariable(Variable var, BooleanResultCallback callback) {
+            List<Usage> usages;
+            Task parent = var.getParent();
+            if (parent == null) {
+                usages = Saver.getInstance().getVarUses(var.getId());
+            } else {
+                usages = parent.getVariableUses(var.getId());
+            }
+
+            if (!usages.isEmpty()) {
+                LinearLayout linearLayout = getTipsLinearLayout(context, usages, R.string.variable_delete_tips);
+                new MaterialAlertDialogBuilder(context)
+                        .setTitle(R.string.remove_task)
+                        .setView(linearLayout)
+                        .setPositiveButton(R.string.enter, null)
+//                        .setNegativeButton(R.string.force_delete, (dialog, which) -> callback.onResult(true))
+                        .show();
+
+                int px = (int) DisplayUtil.dp2px(context, 32);
+                DisplayUtil.setViewMargin(linearLayout, px, px / 2, px, px / 2);
+            } else {
+                callback.onResult(true);
             }
         }
     }

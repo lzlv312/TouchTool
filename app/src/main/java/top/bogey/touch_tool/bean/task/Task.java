@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -18,7 +19,10 @@ import top.bogey.touch_tool.bean.action.start.InnerStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
+import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
+import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.bean.base.Identity;
+import top.bogey.touch_tool.bean.other.Usage;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -134,6 +138,20 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         return taskManager.getParentTask(id);
     }
 
+    public List<Usage> getTaskUses(String id) {
+        List<Usage> usages = new ArrayList<>();
+        for (Action action : getActions(ExecuteTaskAction.class)) {
+            ExecuteTaskAction execute = (ExecuteTaskAction) action;
+            String taskId = execute.getTaskId();
+            if (id.equals(taskId)) {
+                usages.add(new Usage(this, action.getPos()));
+            }
+        }
+        for (Task task : getTasks()) {
+            usages.addAll(task.getTaskUses(id));
+        }
+        return usages;
+    }
 
     @Override
     public boolean addVariable(Variable variable) {
@@ -160,6 +178,34 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         return variableManager.findVariable(id);
     }
 
+    public List<Usage> getVariableUses(String id) {
+        List<Usage> usages = new ArrayList<>();
+        boolean flag = true;
+        for (Action action : getActions(GetVariableAction.class)) {
+            GetVariableAction get = (GetVariableAction) action;
+            if (id.equals(get.getVarId())) {
+                usages.add(new Usage(this, action.getPos()));
+                flag = false;
+                break;
+            }
+        }
+        if (flag) {
+            for (Action action : getActions(SetVariableAction.class)) {
+                SetVariableAction set = (SetVariableAction) action;
+                if (id.equals(set.getVarId())) {
+                    usages.add(new Usage(this, action.getPos()));
+                    break;
+                }
+            }
+        }
+
+        for (Task task : getTasks()) {
+            usages.addAll(task.getVariableUses(id));
+        }
+
+        return usages;
+    }
+
     @Override
     public void addTag(String tag) {
         tagManager.addTag(tag);
@@ -168,6 +214,12 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
     @Override
     public void removeTag(String tag) {
         tagManager.removeTag(tag);
+    }
+
+    public void removeInnerTag(String tag) {
+        removeTag(tag);
+        getTasks().forEach(task -> task.removeInnerTag(tag));
+        getVariables().forEach(variable -> variable.removeTag(tag));
     }
 
     @Override
