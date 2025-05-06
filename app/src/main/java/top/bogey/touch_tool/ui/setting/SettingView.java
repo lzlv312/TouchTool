@@ -239,6 +239,10 @@ public class SettingView extends Fragment {
         binding.taskTipsSwitch.setChecked(SettingSaver.getInstance().isShowStartTips());
 
 
+        // 小窗优化
+        binding.supportFreeFormSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setSupportFreeForm(binding.supportFreeFormSwitch.isChecked()));
+        binding.supportFreeFormSwitch.setChecked(SettingSaver.getInstance().isSupportFreeForm());
+
         // 夜间模式
         binding.themeSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {

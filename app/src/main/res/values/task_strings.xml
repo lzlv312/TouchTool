@@ -135,6 +135,9 @@
 
     <string name="stick_close_all_action">关闭所有贴图</string>
 
+    <string name="input_param_action">手动输入参数</string>
+    <string name="input_param_action_desc">手动输入任务运行需要的参数</string>
+    <string name="input_param_action_param">参数</string>
 
     <!-- 动作-System -->
     <string name="open_app_action">打开应用</string>
@@ -156,12 +159,17 @@
     <string name="text_to_speak_action">文本转语音</string>
     <string name="text_to_speak_action_desc">将文本转为语音并播放</string>
 
-    <string name="send_notification_action">自定义通知</string>
+    <string name="send_notification_action">发送通知</string>
     <string name="send_notification_action_desc">发送自定义通知到通知栏</string>
     <string name="send_notification_action_title">标题</string>
     <string name="send_notification_action_content">内容</string>
     <string name="send_notification_action_icon">图标</string>
     <string name="send_notification_action_execute">点按执行</string>
+
+    <string name="send_toast_action">弹出提示</string>
+    <string name="send_toast_action_desc">弹出自定义提示文本</string>
+    <string name="send_toast_action_content">内容</string>
+    <string name="send_toast_action_duration">时长</string>
 
 
     <string name="write_to_clipboard_action">复制到剪贴板</string>

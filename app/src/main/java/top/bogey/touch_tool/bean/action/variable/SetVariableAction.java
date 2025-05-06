@@ -69,6 +69,6 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         varPin.setTitle(variable.getTitle());
         String globalFlag = variable.getParent() == null ? GLOBAL_FLAG : "";
         String saveFlag = variable.isNeedSave() ? NEED_SAVE_FLAG : "";
-        setTitle(MainApplication.getInstance().getString(R.string.get_value_action) + " - " + globalFlag + variable.getTitle() + saveFlag);
+        setTitle(MainApplication.getInstance().getString(R.string.set_value_action) + " - " + globalFlag + variable.getTitle() + saveFlag);
     }
 }

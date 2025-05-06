@@ -17,12 +17,13 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
+import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class PointToTouchAction extends CalculateAction implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinPoint(), R.string.pin_point);
     private final transient Pin pointPin = new Pin(new PinPoint(), R.string.pin_point);
-    private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin);
+    private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_pin);
     private final transient Pin timePin = new Pin(new PinInteger(100), R.string.point_to_touch_action_time);
     private final transient Pin touchPin = new Pin(new PinTouchPath(), R.string.pin_touch, true);
 

@@ -60,6 +60,7 @@ import top.bogey.touch_tool.bean.action.node.GetNodeParentAction;
 import top.bogey.touch_tool.bean.action.node.GetWindowsAction;
 import top.bogey.touch_tool.bean.action.node.NodeTouchAction;
 import top.bogey.touch_tool.bean.action.normal.DelayAction;
+import top.bogey.touch_tool.bean.action.normal.InputParamAction;
 import top.bogey.touch_tool.bean.action.normal.LoggerAction;
 import top.bogey.touch_tool.bean.action.normal.StickCloseAction;
 import top.bogey.touch_tool.bean.action.normal.StickCloseAllAction;
@@ -103,6 +104,7 @@ import top.bogey.touch_tool.bean.action.string.StringReplaceAction;
 import top.bogey.touch_tool.bean.action.string.StringSplitAction;
 import top.bogey.touch_tool.bean.action.string.StringToNumberAction;
 import top.bogey.touch_tool.bean.action.system.SendNotificationAction;
+import top.bogey.touch_tool.bean.action.system.SendToastAction;
 import top.bogey.touch_tool.bean.action.system.SwitchCaptureAction;
 import top.bogey.touch_tool.bean.action.system.CheckCaptureReadyAction;
 import top.bogey.touch_tool.bean.action.system.CheckInAppAction;
@@ -168,6 +170,7 @@ public class ActionInfo {
     private final static ActionInfo STICK_INFO = new ActionInfo(ActionType.STICK, StickScreenAction.class, R.drawable.icon_home, R.string.stick_screen_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo CLOSE_STICK_INFO = new ActionInfo(ActionType.CLOSE_STICK, StickCloseAction.class, R.drawable.icon_home, R.string.stick_close_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo CLOSE_ALL_STICK_INFO = new ActionInfo(ActionType.CLOSE_ALL_STICK, StickCloseAllAction.class, R.drawable.icon_home, R.string.stick_close_all_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo INPUT_PARAM_INFO = new ActionInfo(ActionType.INPUT_PARAM, InputParamAction.class, R.drawable.icon_edit, R.string.input_param_action, R.string.input_param_action_desc, 0, NormalActionCard.class);
 
 
     // 系统动作
@@ -179,6 +182,7 @@ public class ActionInfo {
     private final static ActionInfo STOP_RINGTONE_INFO = new ActionInfo(ActionType.STOP_RINGTONE, StopRingtoneAction.class, R.drawable.icon_notification, R.string.stop_ringtone_action, R.string.stop_ringtone_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo TEXT_TO_SPEECH_INFO = new ActionInfo(ActionType.TEXT_TO_SPEECH, TextToSpeechAction.class, R.drawable.icon_notification, R.string.text_to_speak_action, R.string.text_to_speak_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SEND_NOTIFICATION_INFO = new ActionInfo(ActionType.SEND_NOTIFICATION, SendNotificationAction.class, R.drawable.icon_notification, R.string.send_notification_action, R.string.send_notification_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SEND_TOAST_INFO = new ActionInfo(ActionType.SEND_TOAST, SendToastAction.class, R.drawable.icon_notification, R.string.send_toast_action, R.string.send_toast_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo WRITE_TO_CLIPBOARD_INFO = new ActionInfo(ActionType.WRITE_TO_CLIPBOARD, WriteToClipboardAction.class, R.drawable.icon_copy, R.string.write_to_clipboard_action, R.string.write_to_clipboard_action_desc, 0, NormalActionCard.class);
 
@@ -330,6 +334,7 @@ public class ActionInfo {
             case STICK -> STICK_INFO;
             case CLOSE_STICK -> CLOSE_STICK_INFO;
             case CLOSE_ALL_STICK -> CLOSE_ALL_STICK_INFO;
+            case INPUT_PARAM -> INPUT_PARAM_INFO;
 
 
             case OPEN_APP -> OPEN_APP_INFO;
@@ -340,6 +345,7 @@ public class ActionInfo {
             case STOP_RINGTONE -> STOP_RINGTONE_INFO;
             case TEXT_TO_SPEECH -> TEXT_TO_SPEECH_INFO;
             case SEND_NOTIFICATION -> SEND_NOTIFICATION_INFO;
+            case SEND_TOAST -> SEND_TOAST_INFO;
 
             case WRITE_TO_CLIPBOARD -> WRITE_TO_CLIPBOARD_INFO;
 

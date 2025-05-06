@@ -51,7 +51,7 @@ public class Saver {
     private final Set<TaskSaveListener> taskListeners = new HashSet<>();
 
     private final Map<String, VariableSave> variableSaves = new HashMap<>();
-    private final MMKV variableMMKV = MMKV.mmkvWithID("Variable_DB", MMKV.SINGLE_PROCESS_MODE);
+    private final MMKV variableMMKV = MMKV.mmkvWithID("VARIABLE_DB", MMKV.SINGLE_PROCESS_MODE);
     private final Set<VariableSaveListener> variableListeners = new HashSet<>();
 
     private final MMKV tagMMKV = MMKV.mmkvWithID("TAG_DB", MMKV.SINGLE_PROCESS_MODE);

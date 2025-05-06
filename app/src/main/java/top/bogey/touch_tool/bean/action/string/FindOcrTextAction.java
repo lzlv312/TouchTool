@@ -18,6 +18,7 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleLineString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
@@ -30,7 +31,7 @@ import top.bogey.touch_tool.utils.AppUtil;
 
 public class FindOcrTextAction extends FindExecuteAction implements SyncAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image);
-    private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
+    private final transient Pin textPin = new Pin(new PinSingleLineString(), R.string.pin_string);
     private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(), R.string.find_ocr_text_action_type, false, false, true);
     private final transient Pin resultAreaPin = new Pin(new PinArea(), R.string.pin_area, true);
     private final transient Pin resultTextPin = new Pin(new PinString(), R.string.pin_string, true);

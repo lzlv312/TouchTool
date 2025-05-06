@@ -15,11 +15,12 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class MakeListAction extends ListCalculateAction implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.pin_object);
-    private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin);
+    private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_pin);
     private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list, true);
 
     public MakeListAction() {

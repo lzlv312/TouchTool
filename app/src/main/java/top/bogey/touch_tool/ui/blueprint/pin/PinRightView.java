@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
+import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.databinding.PinRightBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 
@@ -22,8 +22,8 @@ public class PinRightView extends PinView {
         super(context, card, pin, false);
 
         binding = PinRightBinding.inflate(LayoutInflater.from(context), this, true);
-        // 输出针脚不需要UI，除非是添加针脚
-        binding.pinBox.setVisibility(pin.isSameClass(PinAdd.class) ? VISIBLE : GONE);
+        // 输出针脚不需要UI，除非是常显针脚
+        binding.pinBox.setVisibility(pin instanceof AlwaysShowPin ? VISIBLE : GONE);
 
         init();
     }

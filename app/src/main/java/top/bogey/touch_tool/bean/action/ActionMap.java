@@ -46,10 +46,11 @@ public class ActionMap {
                     ActionType.CLOSE_ALL_STICK,
 
                     ActionType.TOUCH,
+                    ActionType.TOUCH_POINT,
                     ActionType.NODE_TOUCH,
-                    ActionType.EDITTEXT_INPUT,
 
-                    ActionType.OPEN_APP
+                    ActionType.OPEN_APP,
+                    ActionType.INPUT_PARAM
             ));
 
             case SYSTEM -> list.addAll(Arrays.asList(
@@ -61,6 +62,7 @@ public class ActionMap {
                     ActionType.STOP_RINGTONE,
                     ActionType.TEXT_TO_SPEECH,
                     ActionType.SEND_NOTIFICATION,
+                    ActionType.SEND_TOAST,
 
                     ActionType.WRITE_TO_CLIPBOARD,
 

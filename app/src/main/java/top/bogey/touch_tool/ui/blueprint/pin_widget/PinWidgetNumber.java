@@ -160,6 +160,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
             case DATE -> {
                 PinDate date = (PinDate) pinBase;
                 binding.editText.setText(AppUtil.formatDate(date.getValue()));
+                binding.editText.setEnabled(false);
                 binding.pickButton.setIconResource(R.drawable.icon_date);
                 binding.pickButton.setVisibility(VISIBLE);
                 binding.pickButton.setOnClickListener(v -> {
@@ -187,6 +188,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
             case TIME -> {
                 PinTime time = (PinTime) pinBase;
                 binding.editText.setText(AppUtil.formatTime(time.getValue()));
+                binding.editText.setEnabled(false);
                 binding.pickButton.setIconResource(R.drawable.icon_time);
                 binding.pickButton.setVisibility(VISIBLE);
                 binding.pickButton.setOnClickListener(v -> {
@@ -216,6 +218,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
             case PERIODIC -> {
                 PinPeriodic periodic = (PinPeriodic) pinBase;
                 binding.editText.setText(AppUtil.formatDuration(getContext(), periodic.getValue()));
+                binding.editText.setEnabled(false);
                 binding.pickButton.setIconResource(R.drawable.icon_delay);
                 binding.pickButton.setVisibility(VISIBLE);
                 binding.pickButton.setOnClickListener(v -> {

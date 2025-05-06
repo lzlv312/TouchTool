@@ -15,6 +15,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
+import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAction {
@@ -24,7 +25,7 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
     private final transient Pin allowRepeatPin = new Pin(new PinBoolean(false), R.string.random_action_allow_repeat);
 
     private final transient Pin secondPin = new Pin(new PinExecute(), R.string.pin_execute, true);
-    private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_execute, true);
+    private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_execute, true);
     private final transient Pin completePin = new Pin(new PinExecute(), R.string.random_action_complete, true);
 
     public RandomExecuteAction() {

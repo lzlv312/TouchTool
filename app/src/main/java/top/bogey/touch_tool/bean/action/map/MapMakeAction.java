@@ -14,12 +14,13 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class MapMakeAction extends MapCalculateAction implements DynamicPinsAction {
     private final static Pin keyMorePin = new Pin(new PinObject(), R.string.map_make_action_key);
     private final static Pin valueMorePin = new Pin(new PinObject(), R.string.map_make_action_value);
-    private final transient Pin addPin = new Pin(new PinAdd(keyMorePin), R.string.pin_add_pin);
+    private final transient Pin addPin = new AlwaysShowPin(new PinAdd(keyMorePin), R.string.pin_add_pin);
     private final transient Pin mapPin = new Pin(new PinMap(), R.string.pin_map, true);
 
     public MapMakeAction() {

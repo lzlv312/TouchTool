@@ -72,12 +72,18 @@
 
     </FrameLayout>
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/tagBox"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="4dp"
-        app:chipSpacingHorizontal="8dp"
-        app:chipSpacingVertical="0dp" />
+        android:layout_marginVertical="4dp">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/tagBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="8dp"
+            app:chipSpacingVertical="0dp" />
+
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

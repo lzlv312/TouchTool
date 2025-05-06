@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinListener;
@@ -256,7 +257,15 @@ public abstract class Action extends Identity implements PinListener {
     }
 
     public void check(ActionCheckResult result, Task task) {
-
+        // 检查所有输入针脚是否真的能连上
+        getPins().forEach(pin -> {
+            if (!pin.isOut() && !pin.isVertical()) {
+                Pin linkedPin = pin.getLinkedPin(task);
+                if (linkedPin != null && !pin.linkAble(linkedPin)) {
+                    result.addResult(ActionCheckResult.ResultType.ERROR, R.string.check_pin_linkable_error);
+                }
+            }
+        });
     }
 
     @Override

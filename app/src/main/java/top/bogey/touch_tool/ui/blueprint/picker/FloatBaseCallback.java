@@ -6,12 +6,16 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.ui.MainActivity;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.float_window_manager.FloatCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class FloatBaseCallback implements FloatCallback {
     private static final String TAG = FloatBaseCallback.class.getName();
+    public static boolean Block = false;
+
 
     @Override
     public void onCreate() {
@@ -22,8 +26,10 @@ public class FloatBaseCallback implements FloatCallback {
     public void onShow(String tag) {
         Log.d(TAG, "onShow: " + tag);
         FloatWindow.hideAll(tag);
+
         MainActivity activity = MainApplication.getInstance().getActivity();
         if (activity != null) {
+            if (Block || (SettingSaver.getInstance().isSupportFreeForm() && DisplayUtil.isInFreeFormMode(activity))) return;
             activity.moveTaskToBack(true);
         }
     }
@@ -39,6 +45,7 @@ public class FloatBaseCallback implements FloatCallback {
         if (!FloatWindow.showLast()) {
             MainActivity activity = MainApplication.getInstance().getActivity();
             if (activity != null) {
+                if (Block || (SettingSaver.getInstance().isSupportFreeForm() && DisplayUtil.isInFreeFormMode(activity))) return;
                 ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
                 try {
                     manager.moveTaskToFront(activity.getTaskId(), 0);

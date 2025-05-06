@@ -253,7 +253,7 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
 
     public void check(ActionCheckResult result) {
         getActions().stream().filter(Objects::nonNull).forEach(action -> action.check(result, this));
-        if (getTasks() != null) getTasks().forEach(task -> task.check(result));
+        getTasks().forEach(task -> task.check(result));
     }
 
     public void save() {

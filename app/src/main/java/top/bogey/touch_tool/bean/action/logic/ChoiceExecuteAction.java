@@ -16,6 +16,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinIconExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
+import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -31,7 +32,7 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
     private final transient Pin posPin = new Pin(new PinPoint(-1, -1), R.string.choice_action_show_pos, false, false, true);
 
     private final transient Pin secondPin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
-    private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_execute, true);
+    private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_execute, true);
     private final transient Pin defaultPin = new Pin(new PinExecute(), R.string.choice_action_default, true);
 
     public ChoiceExecuteAction() {

@@ -55,6 +55,7 @@ public class SettingSaver {
     private static final String SHOW_TOUCH = "SHOW_TOUCH";                              // 手势轨迹
     private static final String START_TIPS = "START_TIPS";                              // 任务运行提示
 
+    private static final String SUPPORT_FREE_FORM = "SUPPORT_FREE_FORM";                // 小窗支持
     private static final String THEME = "THEME";                                        // 深色模式
     private static final String COLOR = "COLOR";                                        // 动态颜色
     private static final String PLAY_VIEW_PADDING = "PLAY_VIEW_PADDING";                // 手动执行悬浮窗偏移
@@ -239,6 +240,14 @@ public class SettingSaver {
         mmkv.encode(START_TIPS, enable);
     }
 
+
+    public boolean isSupportFreeForm() {
+        return mmkv.decodeBool(SUPPORT_FREE_FORM, false);
+    }
+
+    public void setSupportFreeForm(boolean enable) {
+        mmkv.encode(SUPPORT_FREE_FORM, enable);
+    }
 
     public int getTheme() {
         return mmkv.decodeInt(THEME, 0);

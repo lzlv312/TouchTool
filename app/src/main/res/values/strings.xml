@@ -85,6 +85,8 @@
     <!-- 错误 -->
     <string name="card_check_error_tips">存在%d个问题卡片</string>
 
+    <string name="check_pin_linkable_error">针脚类型不匹配</string>
+
     <!-- 任务 -->
     <string name="action_add_pin">添加针脚</string>
     <string name="action_add_execute">添加执行</string>
@@ -107,7 +109,7 @@
     <string name="pin_string_url">链接</string>
     <string name="pin_string_shortcut">快捷方式</string>
     <string name="pin_string_ringtone">铃声</string>
-    <string name="pin_string_multi_line">多行文本</string>
+    <string name="pin_string_single_line">单行文本</string>
     <string name="pin_string_node_path">控件路径</string>
     <string name="pin_string_log">通配文本</string>
     <string name="pin_string_task">任务</string>
@@ -262,6 +264,9 @@
 
     <!-- 设置-偏好设置 -->
     <string name="preference_setting">偏好设置</string>
+
+    <string name="preference_setting_support_free_form">小窗优化</string>
+    <string name="preference_setting_support_free_form_desc">当软件运行在小窗模式下时，蓝图编辑时采集悬浮窗不再将软件切到后台</string>
 
     <string name="preference_setting_theme">深色模式</string>
 

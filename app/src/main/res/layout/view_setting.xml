@@ -13,8 +13,8 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
-            app:title="@string/setting"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/setting" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -252,6 +252,15 @@
                         android:layout_marginBottom="8dp"
                         android:text="@string/preference_setting"
                         android:textAppearance="@style/TextAppearance.Material3.TitleSmall" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
+                        android:id="@+id/supportFreeFormSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/preference_setting_support_free_form_desc"
+                        app:icon="@drawable/icon_screen"
+                        app:options="@array/theme_type"
+                        app:title="@string/preference_setting_support_free_form" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
                         android:id="@+id/themeSelect"

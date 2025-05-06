@@ -35,6 +35,7 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
             ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getContext());
+            choiceView.remember = location.x == -1 && location.y == -1;
             choiceView.show();
             choiceView.innerShowChoice(choices, callback, anchor, location);
         });
@@ -51,12 +52,10 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
     }
 
     public void innerShowChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, Point location) {
-        if (location.x == -1 && location.y == -1) {
-            remember = true;
+        if (remember) {
             Point point = SettingSaver.getInstance().getChoiceViewPos();
             FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), EAnchor.CENTER, point);
         } else {
-            remember = false;
             FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), anchor, location);
         }
         this.callback = callback;
@@ -79,7 +78,7 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
                 .setTag(ChoiceExecuteFloatView.class.getName())
                 .setSpecial(true)
                 .setLocation(EAnchor.CENTER, point.x, point.y)
-                .setCallback(new PlayFloatCallback())
+                .setCallback(new ActionFloatViewCallback(ChoiceExecuteFloatView.class.getName(), remember))
                 .show();
     }
 
@@ -89,28 +88,5 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
     }
 
     public record Choice(String id, String title, Bitmap icon) {
-    }
-
-    private class PlayFloatCallback extends FloatBaseCallback {
-
-        @Override
-        public void onShow(String tag) {
-
-        }
-
-        @Override
-        public void onDragEnd() {
-            super.onDragEnd();
-            FloatWindowHelper helper = FloatWindow.getHelper(ChoiceExecuteFloatView.class.getName());
-            if (helper != null && remember) {
-                Point point = helper.getRelativePoint();
-                SettingSaver.getInstance().setChoiceViewPos(point);
-            }
-        }
-
-        @Override
-        public void onDismiss() {
-
-        }
     }
 }

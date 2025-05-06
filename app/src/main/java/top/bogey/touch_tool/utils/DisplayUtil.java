@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -58,6 +59,16 @@ public class DisplayUtil {
     public static boolean isPortrait(Context context) {
         WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         return manager.getDefaultDisplay().getRotation() % 2 == Surface.ROTATION_0;
+    }
+
+    public static boolean isInFreeFormMode(Activity activity) {
+        if (activity.isInMultiWindowMode()) return true;
+        Point screenSize = getScreenSize(activity);
+
+        View decorView = activity.getWindow().getDecorView();
+        Rect rect = new Rect();
+        decorView.getWindowVisibleDisplayFrame(rect);
+        return screenSize.x != rect.width() || screenSize.y != rect.height();
     }
 
     public static Rect getScreenArea(Context context) {

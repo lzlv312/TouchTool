@@ -38,6 +38,8 @@ public enum ActionType {
     CLOSE_STICK,
     CLOSE_ALL_STICK,
 
+    INPUT_PARAM,
+
     // 系统动作
     OPEN_APP,
     OPEN_URI_SCHEME,
@@ -48,6 +50,7 @@ public enum ActionType {
     TEXT_TO_SPEECH,
 
     SEND_NOTIFICATION,
+    SEND_TOAST,
 
     WRITE_TO_CLIPBOARD,
 

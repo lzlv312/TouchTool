@@ -12,13 +12,14 @@ import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
+import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class BooleanAndAction extends CalculateAction implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinBoolean(), R.string.pin_boolean_condition);
     private final transient Pin firstPin = new Pin(new PinBoolean(), R.string.pin_boolean_condition);
     private final transient Pin secondPin = new Pin(new PinBoolean(), R.string.pin_boolean_condition);
-    private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin);
+    private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_pin);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
 
     public BooleanAndAction() {
