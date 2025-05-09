@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.utils.GsonUtil;
 
-public class PinInteger extends PinNumber<Integer>{
+public class PinInteger extends PinNumber<Integer> {
 
     public PinInteger() {
         super(PinSubType.INTEGER);

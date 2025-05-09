@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -132,18 +131,11 @@ public class Saver {
 
     public List<Task> searchTasks(String title) {
         List<Task> tasks = new ArrayList<>();
-        Pattern pattern = AppUtil.getPattern(title);
         for (Map.Entry<String, TaskSave> entry : taskSaves.entrySet()) {
             TaskSave v = entry.getValue();
             Task task = v.getTask();
-            if (pattern != null) {
-                if (pattern.matcher(task.getTitle()).find()) {
-                    tasks.add(task);
-                }
-            } else {
-                if (task.getFullDescription().contains(title)) {
-                    tasks.add(task);
-                }
+            if (AppUtil.isStringContains(task.getFullDescription(), title)) {
+                tasks.add(task);
             }
         }
         return tasks;

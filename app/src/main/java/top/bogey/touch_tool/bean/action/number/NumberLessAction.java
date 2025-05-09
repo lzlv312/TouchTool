@@ -8,7 +8,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class NumberLessAction extends NumberResultAction{
+public class NumberLessAction extends NumberResultAction {
 
     public NumberLessAction() {
         super(ActionType.NUMBER_LESS);

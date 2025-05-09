@@ -744,6 +744,9 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
                     if (actionCard == null) return;
 
+                    // 两卡都不可见，跳过
+                    if (card.getVisibility() != VISIBLE && actionCard.getVisibility() != VISIBLE) return;
+
                     if (selectedCards.contains(actionCard)) return;
 
                     PinView pinView = actionCard.getPinView(key);
@@ -777,6 +780,9 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                     ActionCard actionCard = cards.get(value);
 
                     if (actionCard == null) return;
+
+                    // 两卡都不可见，跳过
+                    if (card.getVisibility() != VISIBLE && actionCard.getVisibility() != VISIBLE) return;
 
                     PinView pinView = actionCard.getPinView(key);
                     if (pinView == null) return;

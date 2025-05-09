@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.ui.blueprint.picker;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -21,7 +19,6 @@ import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.other.NodeInfo;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.databinding.FloatPickerNodeItemBinding;
 import top.bogey.touch_tool.ui.custom.NodeInfoFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
@@ -189,9 +186,9 @@ public class NodePickerTreeAdapter extends TreeViewAdapter {
 
             binding.imageView.setImageTintList(ColorStateList.valueOf(color));
             binding.imageView.setVisibility(nodeInfo.children.isEmpty() ? View.INVISIBLE : View.VISIBLE);
-            binding.imageView.setImageResource(node.isExpanded() ? R.drawable.icon_up : R.drawable.icon_down);
+            binding.imageView.setImageResource(node.isExpanded() ? R.drawable.icon_arrow_up : R.drawable.icon_arrow_down);
 
-            binding.visibleButton.setIconResource(nodeInfo.visible ? R.drawable.icon_eye : R.drawable.icon_no_eye);
+            binding.visibleButton.setIconResource(nodeInfo.visible ? R.drawable.icon_visibility : R.drawable.icon_visibility_off);
             binding.visibleButton.setAlpha(nodeInfo.visible ? 0.3f : 1);
         }
 

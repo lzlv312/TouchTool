@@ -73,7 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/app_setting_hide_back_desc"
-                        app:icon="@drawable/icon_service"
+                        app:icon="@drawable/icon_visibility_off"
                         app:title="@string/app_setting_hide_back" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
@@ -97,7 +97,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/app_setting_auto_start_desc"
-                        app:icon="@drawable/icon_refresh"
+                        app:icon="@drawable/icon_auto_play"
                         app:title="@string/app_setting_auto_start" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal
@@ -105,7 +105,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/app_setting_clean_cache_desc"
-                        app:icon="@drawable/icon_folder"
+                        app:icon="@drawable/icon_delete"
                         app:title="@string/app_setting_clean_cache" />
 
                 </LinearLayout>
@@ -156,19 +156,11 @@
                         app:title="@string/permission_setting_manual_play" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
-                        android:id="@+id/ocrSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:description="@string/permission_setting_ocr_desc"
-                        app:icon="@drawable/icon_text"
-                        app:title="@string/permission_setting_ocr" />
-
-                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/alarmSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/permission_setting_alarm_desc"
-                        app:icon="@drawable/icon_delay"
+                        app:icon="@drawable/icon_timer"
                         app:title="@string/permission_setting_alarm" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
@@ -213,7 +205,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/task_setting_show_touch_desc"
-                        app:icon="@drawable/icon_path"
+                        app:icon="@drawable/icon_gesture"
                         app:title="@string/task_setting_show_touch" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
@@ -258,7 +250,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/preference_setting_support_free_form_desc"
-                        app:icon="@drawable/icon_screen"
+                        app:icon="@drawable/icon_phone"
                         app:options="@array/theme_type"
                         app:title="@string/preference_setting_support_free_form" />
 
@@ -266,7 +258,7 @@
                         android:id="@+id/themeSelect"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:icon="@drawable/icon_night"
+                        app:icon="@drawable/icon_dark_mode"
                         app:options="@array/theme_type"
                         app:title="@string/preference_setting_theme" />
 
@@ -275,7 +267,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/preference_setting_color_desc"
-                        app:icon="@drawable/icon_color"
+                        app:icon="@drawable/icon_palette"
                         app:title="@string/preference_setting_color" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSlider
@@ -283,8 +275,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/preference_setting_manual_play_padding_desc"
-                        app:icon="@drawable/icon_screen"
-                        app:max="50"
+                        app:icon="@drawable/icon_phone"
+                        app:max="10"
                         app:title="@string/preference_setting_manual_play_padding"
                         app:value="0" />
 

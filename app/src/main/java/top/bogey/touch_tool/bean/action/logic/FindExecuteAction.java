@@ -27,7 +27,7 @@ public abstract class FindExecuteAction extends ExecuteAction {
     }
 
     @Override
-    public void execute(TaskRunnable runnable, Pin pin) {
+    public final void execute(TaskRunnable runnable, Pin pin) {
         boolean found = find(runnable);
 
         PinNumber<?> timeout = getPinValue(runnable, timeoutPin);

@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 
-public class PinAutoPinString extends PinString{
+public class PinAutoPinString extends PinString {
 
     public PinAutoPinString() {
         super(PinSubType.AUTO_PIN);

@@ -16,9 +16,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import rikka.shizuku.Shizuku;
 import top.bogey.touch_tool.MainApplication;
-import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.service.super_user.ISuperUser;
 import top.bogey.touch_tool.service.super_user.SuperUser;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class ShizukuSuperUser implements ISuperUser {
     private final static int SHIZUKU_CODE = 16777114;

@@ -62,4 +62,8 @@ public class MakeListAction extends ListCalculateAction implements DynamicPinsAc
         }
         return pins;
     }
+
+    public Pin getListPin() {
+        return listPin;
+    }
 }

@@ -65,7 +65,6 @@
     <string name="choice_action_show_anchor">屏幕锚点</string>
     <string name="choice_action_show_pos">相对锚点位置</string>
 
-
     <string name="for_loop_action">循环执行…次</string>
     <string name="for_loop_action_desc">循环多次执行节点</string>
     <string name="for_loop_action_help">从开始值执行，当前值每次执行后增加步长量，直到当前值大于结束值</string>
@@ -109,6 +108,7 @@
     <string name="custom_action_single_error">这张卡不能重复添加</string>
 
     <string name="set_value_action">设置变量</string>
+    <string name="set_value_action_save">保存值</string>
     <string name="get_value_action">获取变量</string>
 
     <!-- 动作-Normal -->
@@ -318,6 +318,9 @@
     <string name="find_ocr_text_action_desc">在图片中查找指定文字</string>
     <string name="find_ocr_text_action_type">模型</string>
 
+    <string name="is_ocr_text_exist_action">OCR文本是否存在</string>
+    <string name="is_ocr_text_exist_action_desc">判断图片中是否存在指定文字</string>
+
     <!-- 动作-Area -->
     <string name="area_to_integer_action">区域转数值</string>
     <string name="area_to_integer_action_desc">提取区域的上下左右数值</string>
@@ -385,18 +388,29 @@
     <string name="pin_node_first">首个控件</string>
     <string name="pin_node_top">最上层控件</string>
 
-    <string name="find_node_by_path_action">获取控件(身份)</string>
+    <string name="find_node_by_path_action">查找控件(身份)</string>
     <string name="find_node_by_path_action_desc">根据身份获取控件</string>
     <string name="find_node_by_path_action_path">身份</string>
 
-    <string name="find_nodes_by_text_action">获取控件(文本)</string>
+    <string name="is_node_exist_by_path_action">控件是否存在(身份)</string>
+    <string name="is_node_exist_by_path_action_desc">根据身份判断控件是否存在</string>
+    <string name="is_node_exist_by_path_action_path">身份</string>
+
+    <string name="find_nodes_by_text_action">查找控件(文本)</string>
     <string name="find_nodes_by_text_action_desc">获取指定文本的所有控件</string>
 
-    <string name="find_nodes_by_id_action">获取控件(ID)</string>
+    <string name="is_node_exist_by_text_action">控件是否存在(文本)</string>
+    <string name="is_node_exist_by_text_action_desc">根据文本判断控件是否存在</string>
+
+    <string name="find_nodes_by_id_action">查找控件(ID)</string>
     <string name="find_nodes_by_id_action_desc">获取指定ID的所有控件</string>
     <string name="find_nodes_by_id_action_id">控件ID</string>
 
-    <string name="find_nodes_in_area_action">获取控件(区域)</string>
+    <string name="is_node_exist_by_id_action">控件是否存在(ID)</string>
+    <string name="is_node_exist_by_id_action_desc">根据ID判断控件是否存在</string>
+    <string name="is_node_exist_by_id_action_id">控件ID</string>
+
+    <string name="find_nodes_in_area_action">获取区域内控件</string>
     <string name="find_nodes_in_area_action_desc">获取与区域相交的所有控件</string>
 
     <string name="get_node_info_action">获取控件信息</string>
@@ -425,7 +439,7 @@
     <string name="node_touch_action_else">未完成</string>
 
     <string name="edit_text_input_action">输入文本</string>
-    <string name="edit_text_input_action_desc">输入文本</string>
+    <string name="edit_text_input_action_desc">对文本框控件输入文本</string>
     <string name="edit_text_input_action_edit_text">输入框</string>
     <string name="edit_text_input_action_append">追加</string>
     <string name="edit_text_input_action_enter">模拟回车</string>
@@ -450,6 +464,12 @@
     <string name="find_images_action_similarity">相似度</string>
     <string name="find_images_action_fast">二值化</string>
 
+    <string name="is_image_exist_action">图片是否存在</string>
+    <string name="is_image_exist_action_desc">判断模板图片是否存在</string>
+    <string name="is_image_exist_action_template">模板</string>
+    <string name="is_image_exist_action_similarity">相似度</string>
+    <string name="is_image_exist_action_fast">二值化</string>
+
     <string name="create_qrcode_action">生成二维码</string>
     <string name="create_qrcode_action_desc">生成二维码</string>
     <string name="create_qrcode_action_content">内容</string>
@@ -469,6 +489,11 @@
     <string name="find_colors_action_desc">识别指定颜色在图片中的所有区域</string>
     <string name="find_colors_action_template">颜色</string>
     <string name="find_colors_action_similarity">相似度</string>
+
+    <string name="is_color_exist_action">颜色是否存在</string>
+    <string name="is_color_exist_action_desc">判断指定颜色是否存在</string>
+    <string name="is_color_exist_action_template">颜色</string>
+    <string name="is_color_exist_action_similarity">相似度</string>
 
 
     <!-- 动作-List -->

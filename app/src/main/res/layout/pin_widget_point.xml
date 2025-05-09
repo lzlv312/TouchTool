@@ -51,12 +51,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/pickButton"
-        style="@style/Theme.TouchTool.IconButton.Filled"
+        style="@style/Theme.TouchTool.IconButton.Outlined"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_gravity="center_vertical"
         android:layout_marginHorizontal="4dp"
-        app:icon="@drawable/icon_position"
+        app:icon="@drawable/icon_location"
         app:iconSize="16dp" />
 
 </LinearLayout>

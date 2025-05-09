@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 
-public class PinDate extends PinLong{
+public class PinDate extends PinLong {
     public PinDate() {
         super(PinSubType.DATE);
         value = System.currentTimeMillis();

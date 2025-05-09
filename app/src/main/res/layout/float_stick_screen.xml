@@ -48,7 +48,7 @@
             android:layout_margin="4dp"
             android:alpha="0.5"
             android:visibility="gone"
-            app:icon="@drawable/icon_menu_save" />
+            app:icon="@drawable/icon_save" />
 
     </com.google.android.material.card.MaterialCardView>
 

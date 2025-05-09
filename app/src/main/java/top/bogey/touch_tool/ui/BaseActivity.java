@@ -20,9 +20,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.accessibility.selecttospeak.SelectToSpeakService;
+
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ActivityResultCallback;
 
@@ -232,7 +234,7 @@ public class BaseActivity extends AppCompatActivity {
 
         // 没有开启去开启
         String enabledService = Settings.Secure.getString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-        Settings.Secure.putString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, String.format("%s:%s/%s", enabledService, getPackageName(), MainAccessibilityService.class.getName()));
+        Settings.Secure.putString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, String.format("%s:%s/%s", enabledService, getPackageName(), SelectToSpeakService.class.getName()));
         Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, 1);
     }
 
@@ -244,7 +246,7 @@ public class BaseActivity extends AppCompatActivity {
         if (AppUtil.isAccessibilityServiceEnabled(this)) {
             // 开启去关闭
             String enabledService = Settings.Secure.getString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-            String replace = enabledService.replaceFirst(String.format(":?%s/%s", getPackageName(), MainAccessibilityService.class.getName()), "");
+            String replace = enabledService.replaceFirst(String.format(":?%s/%s", getPackageName(), SelectToSpeakService.class.getName()), "");
             Settings.Secure.putString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, replace);
             Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, 1);
         }

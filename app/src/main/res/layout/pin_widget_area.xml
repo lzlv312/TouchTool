@@ -87,13 +87,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/pickButton"
-        style="@style/Theme.TouchTool.IconButton.Filled"
+        style="@style/Theme.TouchTool.IconButton.Outlined"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_gravity="center_vertical"
         android:layout_marginHorizontal="4dp"
-        android:rotation="45"
-        app:icon="@drawable/icon_zoom_out"
+        app:icon="@drawable/icon_area"
         app:iconSize="12dp" />
 
 </LinearLayout>

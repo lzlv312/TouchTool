@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 
-public class PinUrlString extends PinString{
+public class PinUrlString extends PinString {
 
     public PinUrlString() {
         super(PinSubType.URL);

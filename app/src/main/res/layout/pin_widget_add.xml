@@ -7,7 +7,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/addPinButton"
-        style="@style/Theme.TouchTool.IconButton.Filled"
+        style="@style/Theme.TouchTool.IconButton.Outlined"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginHorizontal="4dp"

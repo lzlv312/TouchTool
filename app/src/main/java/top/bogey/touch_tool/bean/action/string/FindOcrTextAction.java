@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -55,8 +54,7 @@ public class FindOcrTextAction extends FindExecuteAction implements SyncAction {
 
         String value = text.toString();
         if (value.isEmpty()) return false;
-        Pattern pattern = AppUtil.getPattern(value);
-        if (pattern == null) return false;
+
         Bitmap bitmap = source.getImage();
         if (bitmap == null) return false;
         List<String> ocrApps = TaskInfoSummary.getInstance().getOcrApps();
@@ -73,13 +71,12 @@ public class FindOcrTextAction extends FindExecuteAction implements SyncAction {
             runnable.resume();
         });
         if (pause.get()) runnable.await();
-        else return false;
 
         List<OcrResult> ocrResults = ocrResultsReference.get();
         if (ocrResults == null) return false;
 
         for (OcrResult ocrResult : ocrResults) {
-            if (pattern.matcher(ocrResult.getText()).find()) {
+            if (AppUtil.isStringContains(ocrResult.getText(), value)) {
                 resultAreaPin.getValue(PinArea.class).setValue(ocrResult.getArea());
                 resultTextPin.getValue(PinString.class).setValue(ocrResult.getText());
                 return true;

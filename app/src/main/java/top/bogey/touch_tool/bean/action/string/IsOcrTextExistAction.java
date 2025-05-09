@@ -1,0 +1,94 @@
+package top.bogey.touch_tool.bean.action.string;
+
+import android.graphics.Bitmap;
+
+import com.google.gson.JsonObject;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+
+import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionType;
+import top.bogey.touch_tool.bean.action.CalculateAction;
+import top.bogey.touch_tool.bean.action.SyncAction;
+import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleLineString;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
+import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
+import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.service.OcrResult;
+import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.utils.AppUtil;
+
+public class IsOcrTextExistAction extends CalculateAction implements SyncAction {
+    private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image);
+    private final transient Pin textPin = new Pin(new PinSingleLineString(), R.string.pin_string);
+    private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(), R.string.find_ocr_text_action_type, false, false, true);
+    private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
+    private final transient Pin resultAreaPin = new Pin(new PinArea(), R.string.pin_area, true);
+    private final transient Pin resultTextPin = new Pin(new PinString(), R.string.pin_string, true);
+
+    public IsOcrTextExistAction() {
+        super(ActionType.IS_OCR_TEXT_EXIST);
+        addPins(sourcePin, textPin, typePin, resultPin, resultAreaPin, resultTextPin);
+    }
+
+    public IsOcrTextExistAction(JsonObject jsonObject) {
+        super(jsonObject);
+        reAddPins(sourcePin, textPin, typePin, resultPin, resultAreaPin, resultTextPin);
+    }
+
+    @Override
+    public void calculate(TaskRunnable runnable, Pin pin) {
+        sync(runnable.getTask());
+        PinImage source = getPinValue(runnable, sourcePin);
+        PinObject text = getPinValue(runnable, textPin);
+        PinSingleSelect type = getPinValue(runnable, typePin);
+
+        String value = text.toString();
+        if (value.isEmpty()) return;
+
+        Bitmap bitmap = source.getImage();
+        if (bitmap == null) return;
+        List<String> ocrApps = TaskInfoSummary.getInstance().getOcrApps();
+        if (ocrApps.size() <= type.getIndex()) return;
+
+        AtomicReference<List<OcrResult>> ocrResultsReference = new AtomicReference<>();
+        AtomicBoolean pause = new AtomicBoolean(true);
+
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        String packageName = ocrApps.get(type.getIndex());
+        service.runOcr(packageName, bitmap, result -> {
+            ocrResultsReference.set(result);
+            pause.set(false);
+            runnable.resume();
+        });
+        if (pause.get()) runnable.await();
+
+        List<OcrResult> ocrResults = ocrResultsReference.get();
+        if (ocrResults == null) return;
+
+        for (OcrResult ocrResult : ocrResults) {
+            if (AppUtil.isStringContains(ocrResult.getText(), value)) {
+                resultPin.getValue(PinBoolean.class).setValue(true);
+                resultAreaPin.getValue(PinArea.class).setValue(ocrResult.getArea());
+                resultTextPin.getValue(PinString.class).setValue(ocrResult.getText());
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void sync(Task context) {
+        typePin.getValue(PinSingleSelect.class).setOptions(TaskInfoSummary.getInstance().getOcrAppNames());
+    }
+}

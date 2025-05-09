@@ -88,23 +88,49 @@ public class PinMap extends PinObject implements Map<PinObject, PinObject> {
     }
 
     @Override
-    public boolean isInstance(PinBase pin) {
-        if (super.isInstance(pin)) {
+    public boolean linkFromAble(PinBase pin) {
+        if (pin.isDynamic()) return true;
+
+        if (super.linkFromAble(pin)) {
             if (pin instanceof PinMap pinMap) {
-                if (dynamic && keyType == PinType.OBJECT) {
-                    if (valueType == PinType.OBJECT) {
+                if (isDynamic() && getKeyType() == PinType.OBJECT) {
+                    if (getValueType() == PinType.OBJECT) {
                         return true;
                     }
-                    return valueType == pinMap.valueType;
+                    return getValueType() == pinMap.getValueType();
                 }
 
-                if (dynamic && valueType == PinType.OBJECT) {
-                    return keyType == pinMap.keyType;
+                if (isDynamic() && getValueType() == PinType.OBJECT) {
+                    return getKeyType() == pinMap.getKeyType();
                 }
 
-                return keyType == pinMap.keyType && valueType == pinMap.valueType;
+                return getKeyType() == pinMap.getKeyType() && getValueType() == pinMap.getValueType();
             }
         }
+        return false;
+    }
+
+    @Override
+    public boolean linkToAble(PinBase pin) {
+        if (pin.isDynamic()) return true;
+
+        if (super.linkToAble(pin)) {
+            if (pin instanceof PinMap pinMap) {
+                if (pinMap.isDynamic() && pinMap.getKeyType() == PinType.OBJECT) {
+                    if (pinMap.getValueType() == PinType.OBJECT) {
+                        return true;
+                    }
+                    return pinMap.getValueType() == getValueType();
+                }
+
+                if (pinMap.isDynamic() && pinMap.getValueType() == PinType.OBJECT) {
+                    return pinMap.getKeyType() == getKeyType();
+                }
+
+                return getKeyType() == pinMap.getKeyType() && getValueType() == pinMap.getValueType();
+            }
+        }
+
         return false;
     }
 

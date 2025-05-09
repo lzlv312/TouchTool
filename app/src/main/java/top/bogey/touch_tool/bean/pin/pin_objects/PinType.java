@@ -6,7 +6,7 @@ public enum PinType {
     // 特殊类型
     EXECUTE,
     ADD,
-    COMMON,
+    PARAM,
 
     // 值类型
     OBJECT,

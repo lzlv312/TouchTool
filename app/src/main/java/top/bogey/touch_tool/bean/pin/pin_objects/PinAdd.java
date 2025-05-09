@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.utils.GsonUtil;
 
-public class PinAdd extends PinBase{
+public class PinAdd extends PinBase {
     private final Pin pin;
 
     public PinAdd(Pin pin) {
@@ -36,7 +36,12 @@ public class PinAdd extends PinBase{
     }
 
     @Override
-    public boolean isInstance(PinBase pin) {
+    public boolean linkFromAble(PinBase pin) {
+        return false;
+    }
+
+    @Override
+    public boolean linkToAble(PinBase pin) {
         return false;
     }
 

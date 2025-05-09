@@ -18,12 +18,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionMap;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.ITagManager;
 import top.bogey.touch_tool.bean.task.Task;
@@ -122,18 +121,14 @@ public class SelectActionDialog extends BottomSheetDialog {
     }
 
     private void showNewVariableDialog() {
-        Variable variable = new Variable(new PinObject());
+        Variable variable = new Variable(new PinString());
         EditVariableDialog dialog = new EditVariableDialog(getContext(), variable);
         dialog.setTitle(R.string.variable_add);
         dialog.setCallback(result -> {
             if (result) {
                 View view = binding.subGroup.findViewById(binding.subGroup.getCheckedButtonId());
                 String tag = (String) view.getTag();
-                if (PRIVATE.equals(tag)) {
-                    task.addVariable(variable);
-                } else {
-                    variable.setNeedSave(true);
-                }
+                if (PRIVATE.equals(tag)) task.addVariable(variable);
                 variable.save();
                 dataList.add(0, variable);
                 adapter.notifyItemInserted(0);
@@ -271,21 +266,12 @@ public class SelectActionDialog extends BottomSheetDialog {
             refreshSubGroup(dataMap);
         } else {
             List<Object> data = new ArrayList<>();
-            Pattern pattern = AppUtil.getPattern(text.toString());
-
             for (Map.Entry<String, List<Object>> entry : dataMap.entrySet()) {
                 List<Object> list = entry.getValue();
                 for (Object object : list) {
                     String name = SelectActionItemRecyclerViewAdapter.getObjectTitle(object);
-
-                    if (pattern != null) {
-                        if (pattern.matcher(name).find()) {
-                            data.add(object);
-                        }
-                    } else {
-                        if (name.contains(text)) {
-                            data.add(object);
-                        }
+                    if (AppUtil.isStringContains(name, text.toString())) {
+                        data.add(object);
                     }
                 }
             }

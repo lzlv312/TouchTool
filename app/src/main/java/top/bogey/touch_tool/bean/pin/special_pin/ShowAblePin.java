@@ -1,8 +1,11 @@
 package top.bogey.touch_tool.bean.pin.special_pin;
 
+import android.os.Build;
+
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.image.GetImageAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;

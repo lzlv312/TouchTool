@@ -4,9 +4,9 @@ import androidx.annotation.Keep;
 
 import java.lang.reflect.Constructor;
 
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.service.super_user.root.RootSuperUser;
 import top.bogey.touch_tool.service.super_user.shizuku.ShizukuSuperUser;
-import top.bogey.touch_tool.bean.save.SettingSaver;
 
 public class SuperUser implements ISuperUser {
     private static ISuperUser instance;

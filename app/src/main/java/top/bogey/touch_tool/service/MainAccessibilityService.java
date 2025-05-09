@@ -96,6 +96,7 @@ public class MainAccessibilityService extends AccessibilityService {
             String title = notification.extras.getString(Notification.EXTRA_TITLE);
             String text = notification.extras.getString(Notification.EXTRA_TEXT);
             if (title == null && text == null) return;
+            Log.d("TAG", "onAccessibilityEvent: notification = " + title + "/" + text);
 
             taskInfoSummary.setNotification(packageName, title, text);
         }

@@ -1,7 +1,6 @@
 package top.bogey.touch_tool.bean.action.variable;
 
 import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.GLOBAL_FLAG;
-import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.NEED_SAVE_FLAG;
 
 import com.google.gson.JsonObject;
 
@@ -68,7 +67,6 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
         varPin.setValue(variable.getValue());
         varPin.setTitle(variable.getTitle());
         String globalFlag = variable.getParent() == null ? GLOBAL_FLAG : "";
-        String saveFlag = variable.isNeedSave() ? NEED_SAVE_FLAG : "";
-        setTitle(MainApplication.getInstance().getString(R.string.get_value_action) + " - " + globalFlag + variable.getTitle() + saveFlag);
+        setTitle(MainApplication.getInstance().getString(R.string.get_value_action) + " - " + globalFlag + variable.getTitle());
     }
 }

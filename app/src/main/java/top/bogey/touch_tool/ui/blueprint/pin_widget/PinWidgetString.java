@@ -37,10 +37,10 @@ import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinAutoPinString;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleLineString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinRingtoneString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinShortcutString;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleLineString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinTaskString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinUrlString;
@@ -147,7 +147,7 @@ public class PinWidgetString extends PinWidget<PinString> {
             }
             case SHORTCUT -> {
                 binding.editText.setVisibility(GONE);
-                binding.pickButton.setIconResource(R.drawable.icon_shortcut);
+                binding.pickButton.setIconResource(R.drawable.icon_star);
                 binding.pickButton.setOnClickListener(v -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         ShortcutManager manager = (ShortcutManager) getContext().getSystemService(Context.SHORTCUT_SERVICE);
@@ -159,7 +159,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                             intent.putExtra(InstantActivity.ACTION_ID, card.getAction().getId());
                             ShortcutInfo info = new ShortcutInfo.Builder(getContext(), card.getAction().getId())
                                     .setShortLabel(card.getTask().getTitle())
-                                    .setIcon(Icon.createWithResource(getContext(), R.drawable.icon_shortcut))
+                                    .setIcon(Icon.createWithResource(getContext(), R.drawable.icon_star))
                                     .setIntent(intent)
                                     .build();
                             manager.requestPinShortcut(info, null);
@@ -231,7 +231,7 @@ public class PinWidgetString extends PinWidget<PinString> {
             case TASK_ID -> {
                 Task task = Saver.getInstance().getTask(card.getTask(), pinBase.getValue());
                 if (task != null) binding.editText.setText(task.getTitle());
-                binding.pickButton.setIconResource(R.drawable.icon_task);
+                binding.pickButton.setIconResource(R.drawable.icon_assignment);
                 binding.pickButton.setOnClickListener(v -> new SelectActionByCustomActionDialog(getContext(), card.getTask(), action -> {
                     ExecuteTaskAction executeTaskAction = (ExecuteTaskAction) action;
                     Task executeTask = executeTaskAction.getTask(card.getTask());

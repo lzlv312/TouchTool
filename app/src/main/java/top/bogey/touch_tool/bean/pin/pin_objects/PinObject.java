@@ -42,9 +42,15 @@ public class PinObject extends PinBase {
     }
 
     @Override
-    public boolean isInstance(PinBase pin) {
-        if (pin instanceof PinObject ) return pin.isDynamic() || super.isInstance(pin);
-        return false;
+    public boolean linkFromAble(PinBase pin) {
+        if (pin.isDynamic() || isDynamic()) return true;
+        return super.linkFromAble(pin);
+    }
+
+    @Override
+    public boolean linkToAble(PinBase pin) {
+        if (pin.isDynamic() || isDynamic()) return true;
+        return super.linkToAble(pin);
     }
 
     public boolean cast(String value) {

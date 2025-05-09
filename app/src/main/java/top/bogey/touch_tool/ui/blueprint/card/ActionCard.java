@@ -61,6 +61,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     public abstract void init();
+
     public abstract void refreshCardInfo();
 
     protected void initCardInfo(ShapeableImageView icon, MaterialTextView title, MaterialTextView des) {
@@ -108,7 +109,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     protected void initLock(MaterialButton button) {
-        button.setIconResource(action.isLocked() ? R.drawable.icon_lock : R.drawable.icon_unlock);
+        button.setIconResource(action.isLocked() ? R.drawable.icon_lock : R.drawable.icon_lock_open);
         if (action.isLocked()) {
             setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceContainerHighest));
         } else {
@@ -117,7 +118,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
 
         button.setOnClickListener(v -> {
             action.setLocked(!action.isLocked());
-            button.setIconResource(action.isLocked() ? R.drawable.icon_lock : R.drawable.icon_unlock);
+            button.setIconResource(action.isLocked() ? R.drawable.icon_lock : R.drawable.icon_lock_open);
             if (action.isLocked()) {
                 setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceContainerHighest));
             } else {
@@ -277,8 +278,8 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.UNSPECIFIED);
-        int heightSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.UNSPECIFIED);
+        int widthSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        int heightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         super.onMeasure(widthSpec, heightSpec);
     }
 

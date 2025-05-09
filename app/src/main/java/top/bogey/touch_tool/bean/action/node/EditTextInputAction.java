@@ -44,7 +44,9 @@ public class EditTextInputAction extends ExecuteAction {
         NodeInfo nodeInfo = node.getNodeInfo();
         String contentValue = content.getValue();
         boolean result = false;
-        if (nodeInfo != null && nodeInfo.usable && contentValue != null) {
+        if (nodeInfo != null && nodeInfo.usable && nodeInfo.nodeInfo != null && nodeInfo.nodeInfo.isFocusable() && contentValue != null) {
+            nodeInfo.nodeInfo.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
+
             if (append.getValue() && nodeInfo.text != null) {
                 contentValue = nodeInfo.text + contentValue;
             }

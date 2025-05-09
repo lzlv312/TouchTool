@@ -8,7 +8,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class NumberMulAction extends DynamicNumberAction{
+public class NumberMulAction extends DynamicNumberAction {
 
     public NumberMulAction() {
         super(ActionType.NUMBER_MUL);

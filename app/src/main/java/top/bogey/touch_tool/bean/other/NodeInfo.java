@@ -109,13 +109,8 @@ public class NodeInfo {
         for (NodeInfo child : children) {
 
             if (child.text != null && !child.text.isEmpty()) {
-                Pattern pattern = AppUtil.getPattern(text);
-                if (pattern == null) {
-                    if (child.text.contains(text)) result.add(child);
-                } else {
-                    if (pattern.matcher(child.text).find()) {
-                        result.add(child);
-                    }
+                if (AppUtil.isStringContains(child.text, text)) {
+                    result.add(child);
                 }
             }
 

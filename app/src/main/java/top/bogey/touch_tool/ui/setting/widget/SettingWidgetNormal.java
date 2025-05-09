@@ -19,8 +19,8 @@ public class SettingWidgetNormal extends FrameLayout {
         super(context, attrs);
         binding = WidgetSettingNormalBinding.inflate(LayoutInflater.from(context), this, true);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingWidgetNormal);
-        try {
+
+        try (TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingWidgetNormal)) {
             int icon = typedArray.getResourceId(R.styleable.SettingWidgetNormal_icon, 0);
             binding.icon.setImageResource(icon);
 
@@ -30,9 +30,6 @@ public class SettingWidgetNormal extends FrameLayout {
             String description = typedArray.getString(R.styleable.SettingWidgetNormal_description);
             binding.description.setText(description);
             binding.description.setVisibility(description == null || description.isEmpty() ? GONE : VISIBLE);
-
-        } finally {
-            typedArray.recycle();
         }
     }
 

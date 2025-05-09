@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 
-public class PinRingtoneString extends PinString{
+public class PinRingtoneString extends PinString {
 
     public PinRingtoneString() {
         super(PinSubType.RINGTONE);

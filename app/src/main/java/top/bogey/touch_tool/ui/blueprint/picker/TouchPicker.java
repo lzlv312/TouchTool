@@ -25,7 +25,6 @@ import top.bogey.touch_tool.databinding.FloatPickerTouchBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
-import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 @SuppressLint("ViewConstructor")
 public class TouchPicker extends FullScreenPicker<PinTouchPath> {

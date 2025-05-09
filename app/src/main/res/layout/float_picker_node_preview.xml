@@ -61,7 +61,7 @@
                     android:layout_height="16dp"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginVertical="2dp"
-                    android:src="@drawable/icon_eye"
+                    android:src="@drawable/icon_visibility"
                     app:tint="?attr/colorPrimary" />
 
             </LinearLayout>
@@ -151,7 +151,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginHorizontal="8dp"
-                    app:icon="@drawable/icon_menu_save" />
+                    app:icon="@drawable/icon_save" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/pickerButton"

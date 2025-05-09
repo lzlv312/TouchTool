@@ -1,7 +1,6 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_action;
 
 import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.GLOBAL_FLAG;
-import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.NEED_SAVE_FLAG;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -82,8 +81,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
         }
         if (object instanceof Variable var) {
             String globalFlag = var.getParent() == null ? GLOBAL_FLAG : "";
-            String saveFlag = var.isNeedSave() ? NEED_SAVE_FLAG : "";
-            return globalFlag + var.getTitle() + saveFlag;
+            return globalFlag + var.getTitle();
         }
         if (object instanceof ActionType actionType) {
             ActionInfo info = ActionInfo.getActionInfo(actionType);
@@ -110,8 +108,8 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
 
     @DrawableRes
     public static int getObjectIcon(Object object) {
-        if (object instanceof Task) return R.drawable.icon_task;
-        if (object instanceof Variable) return R.drawable.icon_get_value;
+        if (object instanceof Task) return R.drawable.icon_assignment;
+        if (object instanceof Variable) return R.drawable.icon_upload;
         if (object instanceof ActionType actionType) {
             ActionInfo info = ActionInfo.getActionInfo(actionType);
             if (info != null) {
@@ -400,14 +398,14 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 }
             }
 
-            binding.helpButton.setIconResource(R.drawable.icon_menu_help);
+            binding.helpButton.setIconResource(R.drawable.icon_help);
             binding.varBox.setVisibility(ViewGroup.GONE);
             if (object instanceof Variable var) {
                 binding.copyButton.setVisibility(ViewGroup.VISIBLE);
                 binding.editButton.setVisibility(ViewGroup.VISIBLE);
                 binding.deleteButton.setVisibility(ViewGroup.VISIBLE);
 
-                binding.helpButton.setIconResource(R.drawable.icon_set_value);
+                binding.helpButton.setIconResource(R.drawable.icon_download);
 
                 binding.varBox.setVisibility(ViewGroup.VISIBLE);
                 PinInfo pinInfo = var.getKeyPinInfo();

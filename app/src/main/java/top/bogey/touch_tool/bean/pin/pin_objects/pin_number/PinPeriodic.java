@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 
-public class PinPeriodic extends PinLong{
+public class PinPeriodic extends PinLong {
     public PinPeriodic() {
         super(PinSubType.PERIODIC);
     }

@@ -21,8 +21,7 @@ public class SettingWidgetSlider extends FrameLayout {
         super(context, attrs);
         binding = WidgetSettingSliderBinding.inflate(LayoutInflater.from(context), this, true);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingWidgetSlider);
-        try {
+        try (TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingWidgetSlider)) {
             int icon = typedArray.getResourceId(R.styleable.SettingWidgetSlider_icon, 0);
             binding.icon.setImageResource(icon);
 
@@ -41,9 +40,6 @@ public class SettingWidgetSlider extends FrameLayout {
             binding.slider.setValueTo(max);
             binding.slider.setValueFrom(min);
             binding.slider.setValue(value);
-
-        } finally {
-            typedArray.recycle();
         }
     }
 
@@ -52,6 +48,7 @@ public class SettingWidgetSlider extends FrameLayout {
     }
 
     public void setValue(float value) {
+        value = Math.max(Math.min(value, binding.slider.getValueTo()), binding.slider.getValueFrom());
         binding.slider.setValue(value);
     }
 

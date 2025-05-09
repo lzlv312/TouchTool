@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/task"
-        android:icon="@drawable/icon_task"
+        android:icon="@drawable/icon_assignment"
         android:title="@string/task" />
 
     <item
         android:id="@+id/shortcut"
-        android:icon="@drawable/icon_shortcut"
+        android:icon="@drawable/icon_star"
         android:title="@string/shortcut" />
 
     <item

@@ -14,6 +14,7 @@ import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 @SuppressLint("ViewConstructor")
 public class PinWidgetBoolean extends PinWidget<PinBoolean> {
     private final PinWidgetBooleanBinding binding;
+
     public PinWidgetBoolean(@NonNull Context context, ActionCard card, PinView pinView, PinBoolean pinBase, boolean custom) {
         super(context, card, pinView, pinBase, custom);
         binding = PinWidgetBooleanBinding.inflate(LayoutInflater.from(context), this, true);

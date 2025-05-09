@@ -8,7 +8,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class NumberDivAction extends NumberAction{
+public class NumberDivAction extends NumberAction {
     public NumberDivAction() {
         super(ActionType.NUMBER_DIV);
     }

@@ -50,8 +50,15 @@ public class PinString extends PinObject {
     }
 
     @Override
-    public boolean isInstance(PinBase pin) {
+    public boolean linkFromAble(PinBase pin) {
+        if (pin.isDynamic() || isDynamic()) return true;
         return pin instanceof PinObject;
+    }
+
+    @Override
+    public boolean linkToAble(PinBase pin) {
+        if (pin.isDynamic() || isDynamic()) return true;
+        return pin instanceof PinString;
     }
 
     @Override

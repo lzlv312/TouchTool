@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 
-import java.text.Bidi;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;

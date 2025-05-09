@@ -14,15 +14,13 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.FloatChoiceExecuteBinding;
 import top.bogey.touch_tool.databinding.FloatChoiceExecuteItemBinding;
-import top.bogey.touch_tool.ui.blueprint.picker.FloatBaseCallback;
-import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.callback.StringResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
-import top.bogey.touch_tool.utils.float_window_manager.FloatWindowHelper;
 
 @SuppressLint("ViewConstructor")
 public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterface {

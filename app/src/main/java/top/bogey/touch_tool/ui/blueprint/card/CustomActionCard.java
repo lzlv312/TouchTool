@@ -48,14 +48,14 @@ public class CustomActionCard extends ActionCard {
         if (isOut) {
             binding.outPinBox.setAdapter(adapter);
             touchHelper.attachToRecyclerView(binding.outPinBox);
-            ((View)binding.inPinBox.getParent()).setVisibility(GONE);
+            ((View) binding.inPinBox.getParent()).setVisibility(GONE);
         } else {
             binding.inPinBox.setAdapter(adapter);
             touchHelper.attachToRecyclerView(binding.inPinBox);
-            ((View)binding.outPinBox.getParent()).setVisibility(GONE);
+            ((View) binding.outPinBox.getParent()).setVisibility(GONE);
         }
 
-        initCardInfo(null, binding.title, binding.des);
+        initCardInfo(binding.icon, binding.title, binding.des);
         initEditDesc(binding.editButton, binding.des);
         initDelete(binding.removeButton);
         initLock(binding.lockButton);

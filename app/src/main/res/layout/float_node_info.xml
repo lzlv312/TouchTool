@@ -84,7 +84,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                app:icon="@drawable/icon_up"
+                app:icon="@drawable/icon_arrow_up"
                 app:tint="?attr/colorPrimary" />
 
             <com.google.android.material.button.MaterialButton
@@ -94,7 +94,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                app:icon="@drawable/icon_back"
+                app:icon="@drawable/icon_arrow_left"
                 app:tint="?attr/colorPrimary" />
 
             <com.google.android.material.button.MaterialButton
@@ -104,8 +104,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:rotation="180"
-                app:icon="@drawable/icon_back"
+                app:icon="@drawable/icon_arrow_right"
                 app:tint="?attr/colorPrimary" />
 
             <com.google.android.material.button.MaterialButton
@@ -115,7 +114,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                app:icon="@drawable/icon_down"
+                app:icon="@drawable/icon_arrow_down"
                 app:tint="?attr/colorPrimary" />
 
         </LinearLayout>

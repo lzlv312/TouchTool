@@ -20,7 +20,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
 import top.bogey.touch_tool.databinding.FloatPickerColorBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
-import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 @SuppressLint("ViewConstructor")
 public class ColorPicker extends FullScreenPicker<PinColor.ColorInfo> {

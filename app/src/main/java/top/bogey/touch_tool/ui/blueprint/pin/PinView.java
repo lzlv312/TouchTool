@@ -18,9 +18,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.PinListener;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
-import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
@@ -172,7 +172,8 @@ public abstract class PinView extends FrameLayout implements PinListener {
     }
 
     @Override
-    public void onValueUpdated(Pin origin, PinBase value) {}
+    public void onValueUpdated(Pin origin, PinBase value) {
+    }
 
     @Override
     public void onTitleChanged(Pin origin, String title) {

@@ -85,7 +85,7 @@ public class PinWidgetApps extends PinWidget<PinApplications> {
                 } else {
                     PackageInfo info = TaskInfoSummary.getInstance().getAppInfo(app.getPackageName());
                     if (info == null || info.applicationInfo == null) {
-                        itemBinding.icon.setImageResource(R.drawable.icon_menu_help);
+                        itemBinding.icon.setImageResource(R.drawable.icon_help);
                     } else {
                         itemBinding.icon.setImageDrawable(info.applicationInfo.loadIcon(manager));
                     }

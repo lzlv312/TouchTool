@@ -103,9 +103,8 @@ public abstract class Action extends Identity implements PinListener {
         addPin(def);
     }
 
-    public void reAddPins(Pin pin, Pin... pins) {
-        ArrayList<Pin> list = new ArrayList<>(Arrays.asList(pins));
-        list.add(0, pin);
+    public void reAddPins(Pin... pins) {
+        List<Pin> list = new ArrayList<>(Arrays.asList(pins));
         for (Pin e : list) reAddPin(e);
     }
 
@@ -251,7 +250,7 @@ public abstract class Action extends Identity implements PinListener {
     }
 
     // 列表和集合类型返回引用，其他类型返回拷贝
-    protected  <T extends PinObject> T returnValue(T value) {
+    protected <T extends PinObject> T returnValue(T value) {
         if (value instanceof PinList || value instanceof PinMap) return value;
         return (T) value.copy();
     }

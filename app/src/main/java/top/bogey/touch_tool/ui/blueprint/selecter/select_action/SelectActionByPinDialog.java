@@ -81,13 +81,13 @@ public class SelectActionByPinDialog extends SelectActionDialog {
             case VARIABLE -> {
                 List<Object> privateVars = new ArrayList<>();
                 for (Variable var : task.getVariables()) {
-                    if (touchedPin.getValue().isInstance(var.getValue())) privateVars.add(var);
+                    if (touchedPin.getValue().linkFromAble(var.getValue())) privateVars.add(var);
                 }
                 map.put(PRIVATE, privateVars);
 
                 List<Object> publicVars = new ArrayList<>();
                 for (Variable var : Saver.getInstance().getVars()) {
-                    if (touchedPin.getValue().isInstance(var.getValue())) publicVars.add(var);
+                    if (touchedPin.getValue().linkFromAble(var.getValue())) publicVars.add(var);
                 }
                 map.put(GLOBAL, publicVars);
 
@@ -95,7 +95,7 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                 while (parent != null) {
                     List<Object> list = new ArrayList<>();
                     for (Variable var : parent.getVariables()) {
-                        if (touchedPin.getValue().isInstance(var.getValue())) list.add(var);
+                        if (touchedPin.getValue().linkFromAble(var.getValue())) list.add(var);
                     }
                     if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
                     parent = parent.getParent();

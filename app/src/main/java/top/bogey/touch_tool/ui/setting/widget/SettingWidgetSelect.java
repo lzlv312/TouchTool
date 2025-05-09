@@ -23,8 +23,7 @@ public class SettingWidgetSelect extends FrameLayout {
         super(context, attrs);
         binding = WidgetSettingSelectBinding.inflate(LayoutInflater.from(context), this, true);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingWidgetSelect);
-        try {
+        try (TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingWidgetSelect)){
             int icon = typedArray.getResourceId(R.styleable.SettingWidgetSelect_icon, 0);
             binding.icon.setImageResource(icon);
 
@@ -42,8 +41,6 @@ public class SettingWidgetSelect extends FrameLayout {
                 buttonBinding.getRoot().setId(generateViewId());
             }
             binding.group.check(binding.group.getChildAt(0).getId());
-        } finally {
-            typedArray.recycle();
         }
     }
 

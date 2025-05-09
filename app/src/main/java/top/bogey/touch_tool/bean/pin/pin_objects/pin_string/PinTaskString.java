@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 
-public class PinTaskString extends PinString{
+public class PinTaskString extends PinString {
 
     public PinTaskString() {
         super(PinSubType.TASK_ID);

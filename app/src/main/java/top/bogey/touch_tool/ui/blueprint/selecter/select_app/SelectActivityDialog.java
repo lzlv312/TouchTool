@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
@@ -43,22 +42,11 @@ public class SelectActivityDialog extends FrameLayout {
                     adapter.refreshActivities(activityInfoList);
                 } else {
                     List<SelectActivityInfo> newActivities = new ArrayList<>();
-                    Pattern pattern = AppUtil.getPattern(searchString);
-                    if (pattern == null) {
-                        for (SelectActivityInfo activityInfo : activityInfoList) {
-                            if (applications.isShared()) {
-                                if (activityInfo.label.contains(searchString)) newActivities.add(activityInfo);
-                            } else {
-                                if (activityInfo.name.contains(searchString)) newActivities.add(activityInfo);
-                            }
-                        }
-                    } else {
-                        for (SelectActivityInfo activityInfo : activityInfoList) {
-                            if (applications.isShared()) {
-                                if (pattern.matcher(activityInfo.label).find()) newActivities.add(activityInfo);
-                            } else {
-                                if (pattern.matcher(activityInfo.name).find()) newActivities.add(activityInfo);
-                            }
+                    for (SelectActivityInfo activityInfo : activityInfoList) {
+                        if (applications.isShared()) {
+                            if (AppUtil.isStringContains(activityInfo.label, searchString)) newActivities.add(activityInfo);
+                        } else {
+                            if (AppUtil.isStringContains(activityInfo.name, searchString)) newActivities.add(activityInfo);
                         }
                     }
                     adapter.refreshActivities(newActivities);

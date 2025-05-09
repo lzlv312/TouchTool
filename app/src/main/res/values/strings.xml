@@ -87,6 +87,9 @@
 
     <string name="check_pin_linkable_error">针脚类型不匹配</string>
 
+    <!-- 警告 -->
+    <string name="check_need_capture_warning">获取截图需要开启录屏</string>
+
     <!-- 任务 -->
     <string name="action_add_pin">添加针脚</string>
     <string name="action_add_execute">添加执行</string>
@@ -234,16 +237,10 @@
     <string name="permission_setting_manual_play">手动执行</string>
     <string name="permission_setting_manual_play_desc">启用手动执行决定手动执行悬浮窗是否或何时显示，手动执行悬浮窗只在关联应用或界面打开时才显示</string>
 
-    <string name="permission_setting_capture">屏幕截图</string>
-    <string name="permission_setting_capture_desc">启用屏幕截图可以使用图片、颜色、文字识别等相关能力</string>
     <string name="permission_setting_capture_channel_name">录屏服务快捷关闭通知</string>
     <string name="permission_setting_capture_channel_tips">能在通知栏快速关闭录屏服务</string>
     <string name="permission_setting_capture_channel_title">录屏服务 正在运行</string>
     <string name="permission_setting_capture_channel_desc">点按即可关闭服务和通知</string>
-    <string name="permission_setting_capture_low_sdk">Android版本过低，无法使用</string>
-
-    <string name="permission_setting_ocr">文字识别</string>
-    <string name="permission_setting_ocr_desc">启用文字识别能使用识别图片内文字的能力</string>
 
     <string name="permission_setting_alarm">精确定时</string>
     <string name="permission_setting_alarm_desc">启用精确定时能使用定时执行的能力</string>

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
@@ -77,7 +76,7 @@ public class PinWidgetApp extends PinWidget<PinApplication> {
 
         PackageInfo info = TaskInfoSummary.getInstance().getAppInfo(pinBase.getPackageName());
         if (info == null) {
-            itemBinding.icon.setImageResource(R.drawable.icon_menu_help);
+            itemBinding.icon.setImageResource(R.drawable.icon_help);
         } else {
             itemBinding.icon.setImageDrawable(info.applicationInfo.loadIcon(manager));
         }

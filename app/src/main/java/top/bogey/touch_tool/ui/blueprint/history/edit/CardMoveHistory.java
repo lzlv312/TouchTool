@@ -2,7 +2,7 @@ package top.bogey.touch_tool.ui.blueprint.history.edit;
 
 import android.graphics.Point;
 
-public class CardMoveHistory extends EditHistory{
+public class CardMoveHistory extends EditHistory {
     private final String actionId;
     private final Point start;
     private final Point end;

@@ -28,6 +28,7 @@ public class ActionMap {
 
             case LOGIC -> list.addAll(Arrays.asList(
                     ActionType.IF_LOGIC,
+                    ActionType.WAIT_IF_LOGIC,
                     ActionType.FOR_LOGIC,
                     ActionType.WHILE_LOGIC,
                     ActionType.RANDOM_LOGIC,
@@ -110,7 +111,8 @@ public class ActionMap {
                     ActionType.STRING_EQUAL,
                     ActionType.STRING_REPLACE,
                     ActionType.GET_OCR_TEXT,
-                    ActionType.FIND_OCR_TEXT
+                    ActionType.FIND_OCR_TEXT,
+                    ActionType.IS_OCR_TEXT_EXIST
             ));
 
             case BOOLEAN -> list.addAll(Arrays.asList(
@@ -123,7 +125,10 @@ public class ActionMap {
                     ActionType.FIND_NODE_BY_PATH,
                     ActionType.FIND_NODES_BY_TEXT,
                     ActionType.FIND_NODES_BY_ID,
-                    ActionType.FIND_NODES_IN_AREA,
+                    ActionType.IS_NODE_EXIST_BY_PATH,
+                    ActionType.IS_NODE_EXIST_BY_TEXT,
+                    ActionType.IS_NODE_EXIST_BY_ID,
+                    ActionType.GET_NODES_IN_AREA,
                     ActionType.GET_NODE_INFO,
                     ActionType.GET_NODE_CHILDREN,
                     ActionType.GET_NODE_PARENT,
@@ -139,10 +144,12 @@ public class ActionMap {
                     ActionType.CROP_IMAGE,
                     ActionType.SAVE_IMAGE,
                     ActionType.FIND_IMAGES,
+                    ActionType.IS_IMAGE_EXIST,
                     ActionType.CREATE_QRCODE,
                     ActionType.PARSE_QRCODE,
                     ActionType.GET_COLOR,
-                    ActionType.FIND_COLORS
+                    ActionType.FIND_COLORS,
+                    ActionType.IS_COLOR_EXIST
             ));
 
             case AREA -> list.addAll(Arrays.asList(

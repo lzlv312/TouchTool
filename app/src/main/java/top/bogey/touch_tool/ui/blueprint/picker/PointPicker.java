@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import top.bogey.touch_tool.databinding.FloatPickerPointBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
-import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 @SuppressLint("ViewConstructor")
 public class PointPicker extends FullScreenPicker<Point> {

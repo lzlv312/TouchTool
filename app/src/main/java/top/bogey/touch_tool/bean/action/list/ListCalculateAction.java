@@ -29,12 +29,6 @@ public abstract class ListCalculateAction extends CalculateAction implements Dyn
         super.onLinkedTo(task, origin, to);
     }
 
-    @Override
-    public void onUnLinkedFrom(Task task, Pin origin, Pin from) {
-        ListActionLinkEventHandler.onUnLinkedFrom(getDynamicValueTypePins(), origin);
-        super.onUnLinkedFrom(task, origin, from);
-    }
-
     @NonNull
     @Override
     public List<Pin> getDynamicKeyTypePins() {

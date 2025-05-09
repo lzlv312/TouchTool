@@ -11,7 +11,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.GsonUtil;
 
-public class PinColor extends PinScaleAble<PinColor.ColorInfo>{
+public class PinColor extends PinScaleAble<PinColor.ColorInfo> {
 
     public PinColor() {
         super(PinType.COLOR);
@@ -31,7 +31,8 @@ public class PinColor extends PinScaleAble<PinColor.ColorInfo>{
     @Override
     public void reset() {
         super.reset();
-        value = new ColorInfo(Color.BLACK, 0, 0);;
+        value = new ColorInfo(Color.BLACK, 0, 0);
+        ;
     }
 
     @NonNull

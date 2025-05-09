@@ -100,6 +100,7 @@ public enum ActionType {
     STRING_REPLACE,
     GET_OCR_TEXT,
     FIND_OCR_TEXT,
+    IS_OCR_TEXT_EXIST,
 
     // 条件
     BOOLEAN_OR,
@@ -108,9 +109,12 @@ public enum ActionType {
 
     // 控件
     FIND_NODE_BY_PATH,
+    IS_NODE_EXIST_BY_PATH,
     FIND_NODES_BY_TEXT,
+    IS_NODE_EXIST_BY_TEXT,
     FIND_NODES_BY_ID,
-    FIND_NODES_IN_AREA,
+    IS_NODE_EXIST_BY_ID,
+    GET_NODES_IN_AREA,
     GET_NODE_INFO,
     GET_NODE_CHILDREN,
     GET_NODE_PARENT,
@@ -125,12 +129,14 @@ public enum ActionType {
     CROP_IMAGE,
     SAVE_IMAGE,
     FIND_IMAGES,
+    IS_IMAGE_EXIST,
     CREATE_QRCODE,
     PARSE_QRCODE,
 
     // 颜色
     GET_COLOR,
     FIND_COLORS,
+    IS_COLOR_EXIST,
 
     // 区域
     AREA_TO_INT,

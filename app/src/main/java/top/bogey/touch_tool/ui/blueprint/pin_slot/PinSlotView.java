@@ -9,8 +9,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.PinInfo;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 
 public abstract class PinSlotView extends FrameLayout {
     protected final Pin pin;

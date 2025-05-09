@@ -18,10 +18,10 @@ import java.util.Set;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.start.ManualStartAction;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatPlayBinding;
 import top.bogey.touch_tool.ui.blueprint.picker.FloatBaseCallback;
-import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatDockSide;
@@ -32,7 +32,7 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindowHelper;
 public class PlayFloatView extends FrameLayout implements FloatInterface {
 
     private final FloatPlayBinding binding;
-    private final int padding = SettingSaver.getInstance().getPlayViewPadding();
+    private final int padding = SettingSaver.getInstance().getPlayViewPadding() * 5;
 
     public PlayFloatView(@NonNull Context context) {
         super(context);
@@ -103,7 +103,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
         SettingSaver.getInstance().setPlayViewExpand(expand);
         binding.playButtonBox.setVisibility(expand ? VISIBLE : GONE);
         binding.dragSpace.setVisibility(expand ? GONE : VISIBLE);
-        binding.dragSpaceButton.setIconResource(inLeft() ? R.drawable.icon_down : R.drawable.icon_up);
+        binding.dragSpaceButton.setIconResource(inLeft() ? R.drawable.icon_arrow_down : R.drawable.icon_arrow_up);
         binding.getRoot().animate().alpha(expand ? 1 : 0.3f);
     }
 

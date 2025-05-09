@@ -16,7 +16,6 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -161,7 +160,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                 PinDate date = (PinDate) pinBase;
                 binding.editText.setText(AppUtil.formatDate(date.getValue()));
                 binding.editText.setEnabled(false);
-                binding.pickButton.setIconResource(R.drawable.icon_date);
+                binding.pickButton.setIconResource(R.drawable.icon_calendar);
                 binding.pickButton.setVisibility(VISIBLE);
                 binding.pickButton.setOnClickListener(v -> {
                     CalendarConstraints calendarConstraints = new CalendarConstraints.Builder()
@@ -189,7 +188,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                 PinTime time = (PinTime) pinBase;
                 binding.editText.setText(AppUtil.formatTime(time.getValue()));
                 binding.editText.setEnabled(false);
-                binding.pickButton.setIconResource(R.drawable.icon_time);
+                binding.pickButton.setIconResource(R.drawable.icon_schedule);
                 binding.pickButton.setVisibility(VISIBLE);
                 binding.pickButton.setOnClickListener(v -> {
                     Calendar calendar = Calendar.getInstance();
@@ -219,7 +218,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                 PinPeriodic periodic = (PinPeriodic) pinBase;
                 binding.editText.setText(AppUtil.formatDuration(getContext(), periodic.getValue()));
                 binding.editText.setEnabled(false);
-                binding.pickButton.setIconResource(R.drawable.icon_delay);
+                binding.pickButton.setIconResource(R.drawable.icon_timer);
                 binding.pickButton.setVisibility(VISIBLE);
                 binding.pickButton.setOnClickListener(v -> {
                     MaterialTimePicker picker = new MaterialTimePicker.Builder()

@@ -27,10 +27,12 @@ import top.bogey.touch_tool.bean.action.start.NotificationStartAction;
 import top.bogey.touch_tool.bean.action.start.ScreenStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.ui.play.PlayFloatView;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class TaskInfoSummary {
@@ -55,7 +57,6 @@ public class TaskInfoSummary {
     private Notification notification;
     private BatteryInfo batteryInfo;
     private BluetoothInfo bluetoothInfo;
-    private PhoneState phoneState;
     private List<NotworkState> networkState;
 
     public void resetApps() {
@@ -185,6 +186,12 @@ public class TaskInfoSummary {
             }
         }
 
+        // 手动悬浮窗显示限制
+        int playType = SettingSaver.getInstance().getManualPlayType();
+        if (playType == 0 || (playType == 1 && getPhoneState() != PhoneState.ON)) {
+            actionTasks.clear();
+        }
+
         View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (view != null) {
             new Handler(Looper.getMainLooper()).post(() -> {
@@ -266,12 +273,12 @@ public class TaskInfoSummary {
     }
 
     public PhoneState getPhoneState() {
-        return phoneState;
+        return AppUtil.getPhoneState(MainApplication.getInstance());
     }
 
-    public void setPhoneState(PhoneState phoneState) {
-        this.phoneState = phoneState;
+    public void onPhoneStateChanged() {
         tryStartActions(ScreenStartAction.class);
+        tryShowManualPlayView(!packageActivity.activityName.equals(MainActivity.class.getName()));
     }
 
     public List<NotworkState> getNetworkState() {

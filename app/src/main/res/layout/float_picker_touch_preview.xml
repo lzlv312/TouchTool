@@ -57,14 +57,14 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginHorizontal="8dp"
-                app:icon="@drawable/icon_menu_save" />
+                app:icon="@drawable/icon_save" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pickerButton"
                 style="@style/Theme.TouchTool.IconButton.Filled"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                app:icon="@drawable/icon_touch" />
+                app:icon="@drawable/icon_gesture" />
 
         </LinearLayout>
 

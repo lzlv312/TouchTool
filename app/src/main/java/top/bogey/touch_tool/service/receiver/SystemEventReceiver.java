@@ -47,7 +47,7 @@ public class SystemEventReceiver extends BroadcastReceiver {
                 TaskInfoSummary.getInstance().setBatteryInfo(level * 100 / scale, TaskInfoSummary.BatteryState.values()[state - 1]);
             }
 
-            case Intent.ACTION_SCREEN_ON, Intent.ACTION_SCREEN_OFF, Intent.ACTION_USER_PRESENT -> TaskInfoSummary.getInstance().setPhoneState(AppUtil.getPhoneState(context));
+            case Intent.ACTION_SCREEN_ON, Intent.ACTION_SCREEN_OFF, Intent.ACTION_USER_PRESENT -> TaskInfoSummary.getInstance().onPhoneStateChanged();
 
             case Intent.ACTION_PACKAGE_ADDED, Intent.ACTION_PACKAGE_REMOVED, Intent.ACTION_PACKAGE_REPLACED -> TaskInfoSummary.getInstance().resetApps();
 
@@ -61,7 +61,7 @@ public class SystemEventReceiver extends BroadcastReceiver {
 
     public IntentFilter getFilter() {
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_TIME_TICK);
+//        filter.addAction(Intent.ACTION_TIME_TICK);
         // 电量变动
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
         // 屏幕与锁屏状态变更

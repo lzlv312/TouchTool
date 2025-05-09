@@ -10,9 +10,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.ref.WeakReference;
 
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.MainActivity;
-import top.bogey.touch_tool.bean.save.SettingSaver;
 
 public class MainApplication extends Application implements Thread.UncaughtExceptionHandler {
     private static MainApplication instance;

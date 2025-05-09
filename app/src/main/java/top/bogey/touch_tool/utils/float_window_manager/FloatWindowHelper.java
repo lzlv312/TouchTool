@@ -7,7 +7,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;

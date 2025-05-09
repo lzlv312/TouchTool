@@ -9,7 +9,7 @@
         android:layout_height="48dp"
         android:layout_gravity="top|center"
         android:alpha="0.1"
-        app:srcCompat="@drawable/icon_delay"
+        app:srcCompat="@drawable/icon_schedule"
         app:tint="?attr/colorSecondary" />
 
     <LinearLayout
@@ -38,7 +38,7 @@
                 style="@style/Theme.TouchTool.IconButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:icon="@drawable/icon_unlock"
+                app:icon="@drawable/icon_lock_open"
                 app:iconSize="16dp" />
 
             <com.google.android.material.button.MaterialButton

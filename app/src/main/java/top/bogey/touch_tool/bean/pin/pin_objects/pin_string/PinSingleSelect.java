@@ -57,12 +57,24 @@ public class PinSingleSelect extends PinString {
     }
 
     @Override
-    public boolean isInstance(PinBase pin) {
-        if (super.isInstance(pin)) {
+    public boolean linkFromAble(PinBase pin) {
+        if (pin.isDynamic() || isDynamic()) return true;
+
+        if (super.linkFromAble(pin)) {
             if (pin instanceof PinSingleSelect pinSingleSelect) {
-                if (pin.isDynamic()) return true;
-                if (isDynamic()) return true;
-                return options.equals(pinSingleSelect.getOptions());
+                return getOptions().equals(pinSingleSelect.getOptions());
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean linkToAble(PinBase pin) {
+        if (pin.isDynamic() || isDynamic()) return true;
+
+        if (super.linkToAble(pin)) {
+            if (pin instanceof PinSingleSelect pinSingleSelect) {
+                return getOptions().equals(pinSingleSelect.getOptions());
             }
         }
         return false;

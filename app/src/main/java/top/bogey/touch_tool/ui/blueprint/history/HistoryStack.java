@@ -3,7 +3,7 @@ package top.bogey.touch_tool.ui.blueprint.history;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class HistoryStack<T>{
+public class HistoryStack<T> {
     private final Deque<T> stack;
     private final int maxSize;
 

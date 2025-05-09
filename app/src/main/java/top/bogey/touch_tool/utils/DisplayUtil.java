@@ -14,6 +14,7 @@ import android.graphics.RectF;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.WindowManager;
 
 import androidx.annotation.ColorInt;
@@ -109,14 +110,16 @@ public class DisplayUtil {
         return statusHeight;
     }
 
+    // 不用getLocationOnScreen，因为这种方法没有考虑缩放
     public static PointF getLocationRelativeToView(View view, View relativeView) {
-        int[] viewLocation = new int[2];
-        view.getLocationOnScreen(viewLocation);
-
-        int[] relativeLocation = new int[2];
-        relativeView.getLocationOnScreen(relativeLocation);
-
-        return new PointF(viewLocation[0] - relativeLocation[0], viewLocation[1] - relativeLocation[1]);
+        PointF pointF = new PointF(view.getX(), view.getY());
+        ViewParent viewParent = view.getParent();
+        while (viewParent != null && viewParent != relativeView) {
+            View parentView = (View) viewParent;
+            pointF.offset(parentView.getX(), parentView.getY());
+            viewParent = viewParent.getParent();
+        }
+        return pointF;
     }
 
     public static void setViewWidth(View view, int width) {

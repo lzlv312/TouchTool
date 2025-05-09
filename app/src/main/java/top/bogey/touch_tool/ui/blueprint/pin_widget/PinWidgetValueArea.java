@@ -18,6 +18,7 @@ import top.bogey.touch_tool.utils.listener.TextChangedListener;
 public class PinWidgetValueArea extends PinWidget<PinValueArea> {
     private final PinWidgetValueAreaBinding binding;
     private boolean locked;
+
     public PinWidgetValueArea(@NonNull Context context, ActionCard card, PinView pinView, PinValueArea pinBase, boolean custom) {
         super(context, card, pinView, pinBase, custom);
         binding = PinWidgetValueAreaBinding.inflate(LayoutInflater.from(context), this, true);
@@ -30,7 +31,7 @@ public class PinWidgetValueArea extends PinWidget<PinValueArea> {
         binding.highEdit.setText(String.valueOf(pinBase.getMax()));
         locked = pinBase.getMin() == pinBase.getMax();
         binding.lockButton.setChecked(locked);
-        binding.lockButton.setIconResource(locked ? R.drawable.icon_lock : R.drawable.icon_unlock);
+        binding.lockButton.setIconResource(locked ? R.drawable.icon_lock : R.drawable.icon_lock_open);
         binding.highEdit.setEnabled(!locked);
 
         binding.lowEdit.addTextChangedListener(new TextChangedListener() {
@@ -58,7 +59,7 @@ public class PinWidgetValueArea extends PinWidget<PinValueArea> {
             binding.highEdit.setEnabled(!locked);
             binding.highEdit.setText(binding.lowEdit.getText());
             binding.lockButton.setChecked(locked);
-            binding.lockButton.setIconResource(locked ? R.drawable.icon_lock : R.drawable.icon_unlock);
+            binding.lockButton.setIconResource(locked ? R.drawable.icon_lock : R.drawable.icon_lock_open);
         });
     }
 

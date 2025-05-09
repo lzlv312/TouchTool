@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/export_task"
-                    app:icon="@drawable/icon_menu_export" />
+                    app:icon="@drawable/icon_upload" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/copyButton"

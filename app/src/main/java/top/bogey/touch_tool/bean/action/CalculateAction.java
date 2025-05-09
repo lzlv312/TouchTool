@@ -6,7 +6,7 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public abstract class CalculateAction extends Action{
+public abstract class CalculateAction extends Action {
 
     public CalculateAction(ActionType type) {
         super(type);

@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.bean.action.task;
 
+import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.GLOBAL_FLAG;
+
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -135,7 +137,8 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
     }
 
     public void sync(Task context, Task task) {
-        setTitle(task.getTitle());
+        String globalFlag = task.getParent() == null ? GLOBAL_FLAG : "";
+        setTitle(globalFlag + task.getTitle());
 
         if (isJustCall(context)) {
             inPin.clearLinks(context);

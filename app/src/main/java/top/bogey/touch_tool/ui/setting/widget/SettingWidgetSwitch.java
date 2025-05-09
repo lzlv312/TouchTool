@@ -19,8 +19,7 @@ public class SettingWidgetSwitch extends FrameLayout {
         super(context, attrs);
         binding = WidgetSettingSwitchBinding.inflate(LayoutInflater.from(context), this, true);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingWidgetSwitch);
-        try {
+        try (TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingWidgetSwitch)) {
             int icon = typedArray.getResourceId(R.styleable.SettingWidgetSwitch_icon, 0);
             binding.icon.setImageResource(icon);
 
@@ -32,9 +31,6 @@ public class SettingWidgetSwitch extends FrameLayout {
             binding.description.setVisibility(description == null || description.isEmpty() ? GONE : VISIBLE);
 
             binding.switchButton.setSaveEnabled(false);
-
-        } finally {
-            typedArray.recycle();
         }
     }
 

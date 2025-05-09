@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.R;
@@ -214,6 +215,16 @@ public class AppUtil {
             return Pattern.compile(pattern);
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    public static boolean isStringContains(String str, String value) {
+        Pattern pattern = getPattern(value);
+        if (pattern == null) {
+            return str.contains(value);
+        } else {
+            Matcher matcher = pattern.matcher(str);
+            return matcher.find();
         }
     }
 

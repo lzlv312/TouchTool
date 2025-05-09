@@ -2,7 +2,6 @@ package top.bogey.touch_tool.bean.other;
 
 import android.graphics.Bitmap;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.view.accessibility.AccessibilityWindowInfo;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -177,16 +177,6 @@ public class SettingView extends Fragment {
             SettingSaver.getInstance().setPlayViewExpand(true);
         });
 
-        // 文字识别
-        binding.ocrSwitch.setOnSwitchClickListener(v -> {
-            if (binding.ocrSwitch.isChecked()) {
-
-            } else {
-                SettingSaver.getInstance().setOcrEnabled(false);
-            }
-        });
-        binding.ocrSwitch.setChecked(SettingSaver.getInstance().isOcrEnabled());
-
         // 精确定时
         AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
         boolean canScheduleExactAlarms = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms();
