@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.service.TaskInfoSummary;
-import top.bogey.touch_tool.utils.AppUtil;
 
 public class SystemEventReceiver extends BroadcastReceiver {
     private final Context context;

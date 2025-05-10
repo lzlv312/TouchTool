@@ -23,7 +23,7 @@ public class SettingWidgetSelect extends FrameLayout {
         super(context, attrs);
         binding = WidgetSettingSelectBinding.inflate(LayoutInflater.from(context), this, true);
 
-        try (TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingWidgetSelect)){
+        try (TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SettingWidgetSelect)) {
             int icon = typedArray.getResourceId(R.styleable.SettingWidgetSelect_icon, 0);
             binding.icon.setImageResource(icon);
 

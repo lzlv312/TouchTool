@@ -24,7 +24,6 @@ import com.google.android.accessibility.selecttospeak.SelectToSpeakService;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.SettingSaver;
-import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ActivityResultCallback;
 
