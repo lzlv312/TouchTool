@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 
+import java.util.List;
+
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.databinding.PinWidgetAddBinding;
@@ -25,11 +27,13 @@ public class PinWidgetAdd extends PinWidget<PinAdd> {
     @Override
     protected void initBase() {
         binding.addPinButton.setOnClickListener(v -> {
-            Pin pin = pinBase.getPin();
-            Pin copy = pin.newCopy();
-            copy.setTitleId(pin.getTitleId());
-            copy.setDynamic(true);
-            card.addPin(pinView.getPin(), copy);
+            List<Pin> pins = pinBase.getPins();
+            for (Pin pin : pins) {
+                Pin copy = pin.newCopy();
+                copy.setTitleId(pin.getTitleId());
+                copy.setDynamic(true);
+                card.addPin(pinView.getPin(), copy);
+            }
         });
     }
 

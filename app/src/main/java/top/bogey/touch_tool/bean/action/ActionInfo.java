@@ -50,6 +50,19 @@ import top.bogey.touch_tool.bean.action.logic.SequenceExecuteAction;
 import top.bogey.touch_tool.bean.action.logic.SwitchAction;
 import top.bogey.touch_tool.bean.action.logic.WaitConditionAction;
 import top.bogey.touch_tool.bean.action.logic.WhileLoopAction;
+import top.bogey.touch_tool.bean.action.map.MakeMapAction;
+import top.bogey.touch_tool.bean.action.map.MapAppendAction;
+import top.bogey.touch_tool.bean.action.map.MapClearAction;
+import top.bogey.touch_tool.bean.action.map.MapContainKeyAction;
+import top.bogey.touch_tool.bean.action.map.MapContainValueAction;
+import top.bogey.touch_tool.bean.action.map.MapForeachAction;
+import top.bogey.touch_tool.bean.action.map.MapGetAction;
+import top.bogey.touch_tool.bean.action.map.MapGetKeysAction;
+import top.bogey.touch_tool.bean.action.map.MapGetValuesAction;
+import top.bogey.touch_tool.bean.action.map.MapIsEmptyAction;
+import top.bogey.touch_tool.bean.action.map.MapRemoveAction;
+import top.bogey.touch_tool.bean.action.map.MapSetAction;
+import top.bogey.touch_tool.bean.action.map.MapSizeAction;
 import top.bogey.touch_tool.bean.action.node.CheckNodeValidAction;
 import top.bogey.touch_tool.bean.action.node.EditTextInputAction;
 import top.bogey.touch_tool.bean.action.node.FindNodeByPathAction;
@@ -314,6 +327,22 @@ public class ActionInfo {
     private final static ActionInfo LIST_INDEX_OF_INFO = new ActionInfo(ActionType.LIST_INDEX_OF, ListIndexOfAction.class, R.drawable.icon_number, R.string.list_index_of_action, R.string.list_index_of_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_FOREACH_INFO = new ActionInfo(ActionType.LIST_FOREACH, ListForeachAction.class, R.drawable.icon_repeat, R.string.list_foreach_action, R.string.list_foreach_action_desc, 0, NormalActionCard.class);
 
+
+    // Map操作
+    private final static ActionInfo MAP_MAKE_INFO = new ActionInfo(ActionType.MAP_MAKE, MakeMapAction.class, R.drawable.icon_map, R.string.map_make_action, R.string.map_make_action_desc, 0, CreateListActionCard.class);
+    private final static ActionInfo MAP_SIZE_INFO = new ActionInfo(ActionType.MAP_SIZE, MapSizeAction.class, R.drawable.icon_straighten, R.string.map_size_action, R.string.map_size_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_IS_EMPTY_INFO = new ActionInfo(ActionType.MAP_IS_EMPTY, MapIsEmptyAction.class, R.drawable.icon_map, R.string.map_is_empty_action, R.string.map_is_empty_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_CONTAIN_KEY_INFO = new ActionInfo(ActionType.MAP_CONTAIN_KEY, MapContainKeyAction.class, R.drawable.icon_check_circle, R.string.map_contain_key_action, R.string.map_contain_key_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_CONTAIN_VALUE_INFO = new ActionInfo(ActionType.MAP_CONTAIN_VALUE, MapContainValueAction.class, R.drawable.icon_check_circle, R.string.map_contain_value_action, R.string.map_contain_value_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_REMOVE_INFO = new ActionInfo(ActionType.MAP_REMOVE, MapRemoveAction.class, R.drawable.icon_remove, R.string.map_remove_action, R.string.map_remove_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_APPEND_INFO = new ActionInfo(ActionType.MAP_APPEND, MapAppendAction.class, R.drawable.icon_add, R.string.map_append_action, R.string.map_append_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_CLEAR_INFO = new ActionInfo(ActionType.MAP_CLEAR, MapClearAction.class, R.drawable.icon_delete, R.string.map_clear_action, R.string.map_clear_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_GET_INFO = new ActionInfo(ActionType.MAP_GET, MapGetAction.class, R.drawable.icon_upload, R.string.map_get_action, R.string.map_get_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_SET_INFO = new ActionInfo(ActionType.MAP_SET, MapSetAction.class, R.drawable.icon_download, R.string.map_set_action, R.string.map_set_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_KEYS_INFO = new ActionInfo(ActionType.MAP_KEYS, MapGetKeysAction.class, R.drawable.icon_arrow_left, R.string.map_keys_action, R.string.map_keys_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_VALUES_INFO = new ActionInfo(ActionType.MAP_VALUES, MapGetValuesAction.class, R.drawable.icon_arrow_right, R.string.map_values_action, R.string.map_values_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_FOREACH_INFO = new ActionInfo(ActionType.MAP_FOREACH, MapForeachAction.class, R.drawable.icon_repeat, R.string.map_foreach_action, R.string.map_foreach_action_desc, 0, NormalActionCard.class);
+
     public static ActionInfo getActionInfo(ActionType type) {
         return switch (type) {
             case MANUAL_START -> MANUAL_START_INFO;
@@ -476,6 +505,20 @@ public class ActionInfo {
             case LIST_SET -> LIST_SET_INFO;
             case LIST_INDEX_OF -> LIST_INDEX_OF_INFO;
             case LIST_FOREACH -> LIST_FOREACH_INFO;
+
+            case MAP_MAKE -> MAP_MAKE_INFO;
+            case MAP_SIZE -> MAP_SIZE_INFO;
+            case MAP_IS_EMPTY -> MAP_IS_EMPTY_INFO;
+            case MAP_CONTAIN_KEY -> MAP_CONTAIN_KEY_INFO;
+            case MAP_CONTAIN_VALUE -> MAP_CONTAIN_VALUE_INFO;
+            case MAP_REMOVE -> MAP_REMOVE_INFO;
+            case MAP_APPEND -> MAP_APPEND_INFO;
+            case MAP_CLEAR -> MAP_CLEAR_INFO;
+            case MAP_GET -> MAP_GET_INFO;
+            case MAP_SET -> MAP_SET_INFO;
+            case MAP_KEYS -> MAP_KEYS_INFO;
+            case MAP_VALUES -> MAP_VALUES_INFO;
+            case MAP_FOREACH -> MAP_FOREACH_INFO;
 
             default -> null;
         };

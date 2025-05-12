@@ -177,21 +177,37 @@ public class ActionMap {
                     ActionType.LIST_FOREACH,
                     ActionType.LIST_ADD,
                     ActionType.LIST_GET,
+                    ActionType.LIST_SET,
                     ActionType.LIST_SIZE,
                     ActionType.LIST_IS_EMPTY,
                     ActionType.LIST_CONTAIN,
                     ActionType.LIST_REMOVE,
                     ActionType.LIST_APPEND,
                     ActionType.LIST_CLEAR,
-                    ActionType.LIST_SET,
                     ActionType.LIST_INDEX_OF
+            ));
+
+            case MAP -> list.addAll(Arrays.asList(
+                    ActionType.MAP_MAKE,
+                    ActionType.MAP_FOREACH,
+                    ActionType.MAP_GET,
+                    ActionType.MAP_SET,
+                    ActionType.MAP_SIZE,
+                    ActionType.MAP_IS_EMPTY,
+                    ActionType.MAP_CONTAIN_KEY,
+                    ActionType.MAP_CONTAIN_VALUE,
+                    ActionType.MAP_REMOVE,
+                    ActionType.MAP_APPEND,
+                    ActionType.MAP_CLEAR,
+                    ActionType.MAP_KEYS,
+                    ActionType.MAP_VALUES
             ));
         }
         return list;
     }
 
     public enum ActionGroupType {
-        START, LOGIC, NORMAL, SYSTEM, NUMBER, STRING, BOOLEAN, NODE, IMAGE, AREA, POINT, LIST;
+        START, LOGIC, NORMAL, SYSTEM, NUMBER, STRING, BOOLEAN, NODE, IMAGE, AREA, POINT, LIST, MAP;
 
         public String getName() {
             String[] strings = MainApplication.getInstance().getResources().getStringArray(R.array.action_group);

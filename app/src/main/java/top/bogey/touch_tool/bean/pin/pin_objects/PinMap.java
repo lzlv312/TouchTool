@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,9 +21,9 @@ import top.bogey.touch_tool.utils.GsonUtil;
 public class PinMap extends PinObject implements Map<PinObject, PinObject> {
     protected PinType keyType = PinType.OBJECT;
     protected PinType valueType = PinType.OBJECT;
-    protected Map<PinObject, PinObject> valueMap = new HashMap<>();
+    protected Map<PinObject, PinObject> valueMap = new LinkedHashMap<>();
     protected boolean changeAble = true;
-    protected boolean dynamic = false;
+    protected boolean dynamic = true;
 
     public PinMap() {
         super(PinType.MAP);
@@ -37,6 +38,7 @@ public class PinMap extends PinObject implements Map<PinObject, PinObject> {
         this();
         this.keyType = keyType;
         this.valueType = valueType;
+        dynamic = false;
     }
 
     public PinMap(PinType keyType, PinType valueType, boolean changeAble) {
@@ -44,6 +46,7 @@ public class PinMap extends PinObject implements Map<PinObject, PinObject> {
         this.keyType = keyType;
         this.valueType = valueType;
         this.changeAble = changeAble;
+        dynamic = false;
     }
 
     public PinMap(PinType keyType, PinType valueType, boolean changeAble, boolean dynamic) {
@@ -89,48 +92,63 @@ public class PinMap extends PinObject implements Map<PinObject, PinObject> {
 
     @Override
     public boolean linkFromAble(PinBase pin) {
-        if (pin.isDynamic()) return true;
+        if (pin instanceof PinMap pinMap) {
+            if (isDynamic()) return true;
+            if (pinMap.isDynamic()) return true;
 
-        if (super.linkFromAble(pin)) {
-            if (pin instanceof PinMap pinMap) {
-                if (isDynamic() && getKeyType() == PinType.OBJECT) {
-                    if (getValueType() == PinType.OBJECT) {
-                        return true;
-                    }
-                    return getValueType() == pinMap.getValueType();
+            if (pinMap.isDynamicKey() || isDynamicKey()) {
+                if (pinMap.getValueType() == PinType.OBJECT) {
+                    return true;
                 }
-
-                if (isDynamic() && getValueType() == PinType.OBJECT) {
-                    return getKeyType() == pinMap.getKeyType();
+                if (getValueType() == PinType.OBJECT) {
+                    return true;
                 }
-
-                return getKeyType() == pinMap.getKeyType() && getValueType() == pinMap.getValueType();
+                return pinMap.getValueType() == getValueType();
             }
+
+            if (pinMap.isDynamicValue() || isDynamicValue()) {
+                if (pinMap.getKeyType() == PinType.OBJECT) {
+                    return true;
+                }
+                if (getKeyType() == PinType.OBJECT) {
+                    return true;
+                }
+                return pinMap.getKeyType() == getKeyType();
+            }
+
+            return getKeyType() == pinMap.getKeyType() && getValueType() == pinMap.getValueType();
         }
         return false;
     }
 
     @Override
     public boolean linkToAble(PinBase pin) {
-        if (pin.isDynamic()) return true;
+        if (pin instanceof PinMap pinMap) {
+            if (isDynamic()) return true;
+            if (pinMap.isDynamic()) return true;
 
-        if (super.linkToAble(pin)) {
-            if (pin instanceof PinMap pinMap) {
-                if (pinMap.isDynamic() && pinMap.getKeyType() == PinType.OBJECT) {
-                    if (pinMap.getValueType() == PinType.OBJECT) {
-                        return true;
-                    }
-                    return pinMap.getValueType() == getValueType();
+            if (pinMap.isDynamicKey() || isDynamicKey()) {
+                if (pinMap.getValueType() == PinType.OBJECT) {
+                    return true;
                 }
-
-                if (pinMap.isDynamic() && pinMap.getValueType() == PinType.OBJECT) {
-                    return pinMap.getKeyType() == getKeyType();
+                if (getValueType() == PinType.OBJECT) {
+                    return true;
                 }
-
-                return getKeyType() == pinMap.getKeyType() && getValueType() == pinMap.getValueType();
+                return pinMap.getValueType() == getValueType();
             }
-        }
 
+            if (pinMap.isDynamicValue() || isDynamicValue()) {
+                if (pinMap.getKeyType() == PinType.OBJECT) {
+                    return true;
+                }
+                if (getKeyType() == PinType.OBJECT) {
+                    return true;
+                }
+                return pinMap.getKeyType() == getKeyType();
+            }
+
+            return getKeyType() == pinMap.getKeyType() && getValueType() == pinMap.getValueType();
+        }
         return false;
     }
 
@@ -164,8 +182,21 @@ public class PinMap extends PinObject implements Map<PinObject, PinObject> {
 
     @Override
     public boolean isDynamic() {
-        return dynamic;
+        return dynamic && keyType == PinType.OBJECT && valueType == PinType.OBJECT;
     }
+
+    public boolean isHalfDynamic() {
+        return dynamic && (keyType == PinType.OBJECT || valueType == PinType.OBJECT);
+    }
+
+    public boolean isDynamicKey() {
+        return dynamic && keyType == PinType.OBJECT;
+    }
+
+    public boolean isDynamicValue() {
+        return dynamic && valueType == PinType.OBJECT;
+    }
+
 
     @Override
     public final boolean equals(Object object) {

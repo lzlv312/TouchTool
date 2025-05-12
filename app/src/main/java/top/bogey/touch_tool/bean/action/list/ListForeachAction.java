@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
@@ -21,7 +22,7 @@ public class ListForeachAction extends ListExecuteAction {
     private final transient Pin breakPin = new Pin(new PinExecute(), R.string.list_foreach_action_break);
     private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list);
     private final transient Pin elementPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.pin_object, true);
-    private final transient Pin indexPin = new Pin(new PinInteger(), R.string.list_foreach_action_index, true);
+    private final transient Pin indexPin = new Pin(new PinInteger(), R.string.list_action_index, true);
     private final transient Pin completePin = new Pin(new PinExecute(), R.string.for_loop_action_complete, true);
 
     private transient boolean isBreak = false;
@@ -57,7 +58,7 @@ public class ListForeachAction extends ListExecuteAction {
 
     @NonNull
     @Override
-    public List<Pin> getDynamicValueTypePins() {
+    public List<Pin> getDynamicTypePins() {
         return Arrays.asList(listPin, elementPin);
     }
 }

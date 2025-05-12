@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
@@ -19,7 +20,7 @@ import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ListRemoveAction extends ListExecuteAction {
     private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list);
-    private final transient Pin indexPin = new Pin(new PinInteger(), R.string.list_remove_action_index);
+    private final transient Pin indexPin = new Pin(new PinInteger(), R.string.list_action_index);
     private final transient Pin resultPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.pin_object, true);
 
     public ListRemoveAction() {
@@ -46,7 +47,7 @@ public class ListRemoveAction extends ListExecuteAction {
 
     @NonNull
     @Override
-    public List<Pin> getDynamicValueTypePins() {
+    public List<Pin> getDynamicTypePins() {
         return Arrays.asList(listPin, resultPin);
     }
 

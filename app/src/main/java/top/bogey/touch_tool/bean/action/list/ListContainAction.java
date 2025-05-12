@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
@@ -42,7 +43,7 @@ public class ListContainAction extends ListCalculateAction {
 
     @NonNull
     @Override
-    public List<Pin> getDynamicValueTypePins() {
+    public List<Pin> getDynamicTypePins() {
         return Arrays.asList(listPin, elementPin);
     }
 

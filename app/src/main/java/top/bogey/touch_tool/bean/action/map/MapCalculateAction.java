@@ -1,6 +1,11 @@
 package top.bogey.touch_tool.bean.action.map;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonObject;
+
+import java.util.Collections;
+import java.util.List;
 
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
@@ -20,13 +25,33 @@ public abstract class MapCalculateAction extends CalculateAction implements Dyna
 
     @Override
     public void onLinkedTo(Task task, Pin origin, Pin to) {
-        MapActionLinkEventHandler.onLinkedTo(getDynamicKeyTypePins(), getDynamicValueTypePins(), task, origin, to);
+        handleLinkTo(task, origin, to);
         super.onLinkedTo(task, origin, to);
+    }
+
+    protected void handleLinkTo(Task task, Pin origin, Pin to) {
+        MapActionLinkEventHandler.onLinkedTo(getDynamicTypePins(), getDynamicKeyTypePins(), getDynamicValueTypePins(), task, origin, to);
     }
 
     @Override
     public void onUnLinkedFrom(Task task, Pin origin, Pin from) {
-        MapActionLinkEventHandler.onUnLinkedFrom(getDynamicKeyTypePins(), getDynamicValueTypePins(), origin);
+        handleUnLinkFrom(origin);
         super.onUnLinkedFrom(task, origin, from);
+    }
+
+    protected void handleUnLinkFrom(Pin origin) {
+        MapActionLinkEventHandler.onUnLinkedFrom(getDynamicTypePins(), getDynamicKeyTypePins(), getDynamicValueTypePins(), origin);
+    }
+
+    @NonNull
+    @Override
+    public List<Pin> getDynamicKeyTypePins() {
+        return Collections.emptyList();
+    }
+
+    @NonNull
+    @Override
+    public List<Pin> getDynamicValueTypePins() {
+        return Collections.emptyList();
     }
 }

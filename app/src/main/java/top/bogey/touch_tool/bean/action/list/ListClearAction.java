@@ -35,7 +35,7 @@ public class ListClearAction extends ListExecuteAction {
 
     @NonNull
     @Override
-    public List<Pin> getDynamicValueTypePins() {
+    public List<Pin> getDynamicTypePins() {
         return Collections.singletonList(listPin);
     }
 

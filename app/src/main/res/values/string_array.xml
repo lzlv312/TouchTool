@@ -13,6 +13,7 @@
         <item>区域</item>
         <item>位置</item>
         <item>列表</item>
+        <item>字典</item>
     </string-array>
 
     <string-array name="group_type">

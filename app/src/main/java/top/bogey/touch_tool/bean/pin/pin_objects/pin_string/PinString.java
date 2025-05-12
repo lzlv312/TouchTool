@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
@@ -51,13 +53,12 @@ public class PinString extends PinObject {
 
     @Override
     public boolean linkFromAble(PinBase pin) {
-        if (pin.isDynamic() || isDynamic()) return true;
-        return pin instanceof PinObject;
+        if (pin.isDynamic()) return true;
+        return pin instanceof PinObject && !(pin instanceof PinList) && !(pin instanceof PinMap);
     }
 
     @Override
     public boolean linkToAble(PinBase pin) {
-        if (pin.isDynamic() || isDynamic()) return true;
         return pin instanceof PinString;
     }
 

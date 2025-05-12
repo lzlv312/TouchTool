@@ -497,6 +497,8 @@
 
 
     <!-- 动作-List -->
+    <string name="list_action_index">索引</string>
+
     <string name="list_make_action">新建列表</string>
     <string name="list_make_action_desc">新建一个列表</string>
 
@@ -514,7 +516,6 @@
 
     <string name="list_remove_action">移除元素</string>
     <string name="list_remove_action_desc">从列表中移除元素</string>
-    <string name="list_remove_action_index">索引</string>
 
     <string name="list_append_action">列表拼接</string>
     <string name="list_append_action_desc">将两个列表拼接</string>
@@ -524,27 +525,63 @@
 
     <string name="list_get_action">获取元素</string>
     <string name="list_get_action_desc">从列表中获取元素</string>
-    <string name="list_get_action_index">索引</string>
 
     <string name="list_set_action">设置元素</string>
     <string name="list_set_action_desc">向列表中设置元素</string>
-    <string name="list_set_action_index">索引</string>
     <string name="list_set_action_value">之前的对象</string>
 
     <string name="list_index_of_action">元素索引</string>
     <string name="list_index_of_action_desc">获取元素在列表中的索引</string>
-    <string name="list_index_of_action_index">索引</string>
 
     <string name="list_foreach_action">遍历列表</string>
     <string name="list_foreach_action_desc">遍历列表中的每个元素</string>
     <string name="list_foreach_action_break">跳出循环</string>
-    <string name="list_foreach_action_index">索引</string>
 
 
     <!-- 动作-Map -->
+    <string name="map_action_key">键</string>
+    <string name="map_action_value">值</string>
+
     <string name="map_make_action">新建字典</string>
     <string name="map_make_action_desc">新建一个字典</string>
-    <string name="map_make_action_key">键</string>
-    <string name="map_make_action_value">值</string>
+
+    <string name="map_size_action">字典长度</string>
+    <string name="map_size_action_desc">获取字典长度</string>
+
+    <string name="map_is_empty_action">字典是否为空</string>
+    <string name="map_is_empty_action_desc">判断字典是否为空</string>
+
+    <string name="map_contain_key_action">字典是否包含键</string>
+    <string name="map_contain_key_action_desc">判断字典是否包含键</string>
+
+    <string name="map_contain_value_action">字典是否包含值</string>
+    <string name="map_contain_value_action_desc">判断字典是否包含值</string>
+
+    <string name="map_remove_action">移除键值对</string>
+    <string name="map_remove_action_desc">从字典中移除键值对</string>
+    <string name="map_remove_action_pre_value">之前的值</string>
+
+    <string name="map_append_action">字典拼接</string>
+    <string name="map_append_action_desc">将两个字典拼接</string>
+
+    <string name="map_clear_action">清空字典</string>
+    <string name="map_clear_action_desc">清空字典</string>
+
+    <string name="map_get_action">获取值</string>
+    <string name="map_get_action_desc">从字典中获取值</string>
+
+    <string name="map_set_action">设置值</string>
+    <string name="map_set_action_desc">向字典中设置值</string>
+    <string name="map_set_action_pre_value">之前的值</string>
+
+    <string name="map_keys_action">获取键</string>
+    <string name="map_keys_action_desc">获取字典中的所有键</string>
+
+    <string name="map_values_action">获取值</string>
+    <string name="map_values_action_desc">获取字典中的所有值</string>
+
+    <string name="map_foreach_action">遍历字典</string>
+    <string name="map_foreach_action_desc">遍历字典中的每个键值对</string>
+    <string name="map_foreach_action_break">跳出循环</string>
 
 </resources>

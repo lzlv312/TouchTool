@@ -43,13 +43,13 @@ public abstract class PinNumber<T extends Number> extends PinObject {
 
     @Override
     public boolean linkFromAble(PinBase pin) {
-        if (super.linkFromAble(pin)) return true;
+        if (pin.isDynamic()) return true;
         return pin instanceof PinNumber<?>;
     }
 
     @Override
     public boolean linkToAble(PinBase pin) {
-        if (super.linkToAble(pin)) return true;
+        if (isDynamic()) return true;
         return pin instanceof PinNumber<?>;
     }
 

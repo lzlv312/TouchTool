@@ -24,6 +24,7 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.utils.GsonUtil;
@@ -33,6 +34,7 @@ public class Pin extends Identity {
     private Map<String, String> links = new HashMap<>();
 
     private boolean out;
+    // 是否为动态针脚，动态针脚可以被删除
     private boolean dynamic;
     private boolean hide;
 
@@ -309,6 +311,12 @@ public class Pin extends Identity {
             PinList list = getValue();
             PinInfo info = PinInfo.getPinInfo(list.getValueType());
             if (info != null) return info.getTitle() + MainApplication.getInstance().getString(R.string.pin_list);
+        }
+        if (isSameClass(PinMap.class)) {
+            PinMap map = getValue();
+            PinInfo keyInfo = PinInfo.getPinInfo(map.getKeyType());
+            PinInfo valueInfo = PinInfo.getPinInfo(map.getValueType());
+            if (keyInfo != null && valueInfo != null) return keyInfo.getTitle() + "-" + valueInfo.getTitle();
         }
         return MainApplication.getInstance().getString(titleId);
     }

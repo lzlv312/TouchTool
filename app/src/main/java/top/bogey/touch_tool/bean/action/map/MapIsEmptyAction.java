@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.action.list;
+package top.bogey.touch_tool.bean.action.map;
 
 import androidx.annotation.NonNull;
 
@@ -11,33 +11,33 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class ListIsEmptyAction extends ListCalculateAction {
-    private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list);
+public class MapIsEmptyAction extends MapCalculateAction {
+    private final transient Pin mapPin = new Pin(new PinMap(), R.string.pin_map);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
 
-    public ListIsEmptyAction() {
-        super(ActionType.LIST_IS_EMPTY);
-        addPins(listPin, resultPin);
+    public MapIsEmptyAction() {
+        super(ActionType.MAP_IS_EMPTY);
+        addPins(mapPin, resultPin);
     }
 
-    public ListIsEmptyAction(JsonObject jsonObject) {
+    public MapIsEmptyAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(listPin, resultPin);
+        reAddPins(mapPin, resultPin);
     }
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
-        PinList list = getPinValue(runnable, listPin);
-        resultPin.getValue(PinBoolean.class).setValue(list.isEmpty());
+        PinMap map = getPinValue(runnable, mapPin);
+        resultPin.getValue(PinBoolean.class).setValue(map.isEmpty());
     }
 
     @NonNull
     @Override
     public List<Pin> getDynamicTypePins() {
-        return Collections.singletonList(listPin);
+        return Collections.singletonList(mapPin);
     }
 
 }

@@ -10,16 +10,14 @@
         android:layout_width="5dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:cardCornerRadius="2dp"
         app:strokeWidth="1dp" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/valueSlot"
         style="?attr/materialCardViewFilledStyle"
-        android:layout_width="8dp"
+        android:layout_width="7.5dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        app:cardCornerRadius="2dp"
         app:strokeWidth="1dp" />
 
 </FrameLayout>

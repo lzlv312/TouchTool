@@ -17,10 +17,11 @@ public class ListActionLinkEventHandler {
     public static void onLinkedTo(List<Pin> valuePins, Task task, Pin origin, Pin to) {
         int count = 0;
         for (Pin pin : valuePins) {
-            if (pin.isDynamic()) continue;
             if (pin.isLinked()) {
                 Pin linkedPin = pin.getLinkedPin(task);
                 if (linkedPin == null) continue;
+                // 两边的值都是动态的，无法确定类型，跳过
+                if (pin.getValue().isDynamic() && linkedPin.getValue().isDynamic()) continue;
                 count++;
             }
         }

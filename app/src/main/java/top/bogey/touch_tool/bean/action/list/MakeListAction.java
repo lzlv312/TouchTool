@@ -36,6 +36,10 @@ public class MakeListAction extends ListCalculateAction implements DynamicPinsAc
     }
 
     @Override
+    public void handleUnLinkFrom(Pin origin) {
+    }
+
+    @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
         for (Pin dynamicPin : getDynamicPins()) {
             PinObject value = getPinValue(runnable, dynamicPin);
@@ -45,7 +49,7 @@ public class MakeListAction extends ListCalculateAction implements DynamicPinsAc
 
     @NonNull
     @Override
-    public List<Pin> getDynamicValueTypePins() {
+    public List<Pin> getDynamicTypePins() {
         List<Pin> dynamicPins = getDynamicPins();
         dynamicPins.add(addPin);
         dynamicPins.add(listPin);

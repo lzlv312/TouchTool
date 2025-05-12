@@ -41,6 +41,7 @@ public abstract class PinBase implements Copyable {
 
     public abstract void sync(PinBase value);
 
+    // 是否为动态值
     public abstract boolean isDynamic();
 
     @Override

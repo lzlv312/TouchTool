@@ -15,6 +15,8 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.list.ListActionLinkEventHandler;
 import top.bogey.touch_tool.bean.action.list.MakeListAction;
+import top.bogey.touch_tool.bean.action.map.MakeMapAction;
+import top.bogey.touch_tool.bean.action.map.MapActionLinkEventHandler;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.CardCreateListBinding;
@@ -47,8 +49,10 @@ public class CreateListActionCard extends ActionCard {
 
         binding.resetButton.setOnClickListener(v -> {
             if (action instanceof MakeListAction makeListAction) {
-
-                ListActionLinkEventHandler.onUnLinkedFrom(makeListAction.getDynamicValueTypePins(), makeListAction.getListPin());
+                ListActionLinkEventHandler.onUnLinkedFrom(makeListAction.getDynamicTypePins(), makeListAction.getListPin());
+            }
+            if (action instanceof MakeMapAction makeMapAction) {
+                MapActionLinkEventHandler.onUnLinkedFrom(makeMapAction.getDynamicTypePins(), makeMapAction.getDynamicKeyTypePins(), makeMapAction.getDynamicValueTypePins(), makeMapAction.getMapPin());
             }
         });
     }

@@ -10,14 +10,13 @@ import java.util.List;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ListAppendAction extends ListExecuteAction {
     private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list);
     private final transient Pin list2Pin = new Pin(new PinList(), R.string.pin_list);
-    private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
+    private final transient Pin resultPin = new Pin(new PinList(), R.string.pin_boolean_result, true);
 
     public ListAppendAction() {
         super(ActionType.LIST_APPEND);
@@ -32,16 +31,17 @@ public class ListAppendAction extends ListExecuteAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         PinList list = getPinValue(runnable, listPin);
-        PinList element = getPinValue(runnable, list2Pin);
-        boolean result = list.addAll(element);
-        resultPin.getValue(PinBoolean.class).setValue(result);
+        PinList list2 = getPinValue(runnable, list2Pin);
+        PinList pinList = resultPin.getValue(PinList.class);
+        pinList.addAll(list);
+        pinList.addAll(list2);
         executeNext(runnable, outPin);
     }
 
     @NonNull
     @Override
-    public List<Pin> getDynamicValueTypePins() {
-        return Arrays.asList(listPin, list2Pin);
+    public List<Pin> getDynamicTypePins() {
+        return Arrays.asList(listPin, list2Pin, resultPin);
     }
 
 }

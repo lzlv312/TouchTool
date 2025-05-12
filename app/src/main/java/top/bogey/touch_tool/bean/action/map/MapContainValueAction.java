@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.action.list;
+package top.bogey.touch_tool.bean.action.map;
 
 import androidx.annotation.NonNull;
 
@@ -12,41 +12,45 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class ListAddAction extends ListExecuteAction {
-    private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list);
+public class MapContainValueAction extends MapCalculateAction {
+    private final transient Pin mapPin = new Pin(new PinMap(), R.string.pin_map);
     private final transient Pin elementPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.pin_object);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
 
-    public ListAddAction() {
-        super(ActionType.LIST_ADD);
-        addPins(listPin, elementPin, resultPin);
+    public MapContainValueAction() {
+        super(ActionType.MAP_CONTAIN_VALUE);
+        addPins(mapPin, elementPin, resultPin);
     }
 
-    public ListAddAction(JsonObject jsonObject) {
+    public MapContainValueAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPin(listPin);
+        reAddPin(mapPin);
         reAddPin(elementPin, true);
         reAddPin(resultPin);
     }
 
     @Override
-    public void execute(TaskRunnable runnable, Pin pin) {
-        PinList list = getPinValue(runnable, listPin);
+    public void calculate(TaskRunnable runnable, Pin pin) {
+        PinMap map = getPinValue(runnable, mapPin);
         PinObject element = getPinValue(runnable, elementPin);
-        boolean result = list.add(element);
-        resultPin.getValue(PinBoolean.class).setValue(result);
-        executeNext(runnable, outPin);
+        resultPin.getValue(PinBoolean.class).setValue(map.containsValue(element));
     }
 
     @NonNull
     @Override
     public List<Pin> getDynamicTypePins() {
-        return Arrays.asList(listPin, elementPin);
+        return Arrays.asList(mapPin, elementPin);
     }
 
+
+    @NonNull
+    @Override
+    public List<Pin> getDynamicValueTypePins() {
+        return Collections.singletonList(elementPin);
+    }
 }

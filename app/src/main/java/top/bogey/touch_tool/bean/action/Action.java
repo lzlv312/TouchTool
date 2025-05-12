@@ -42,7 +42,7 @@ public abstract class Action extends Identity implements PinListener {
     private Point pos = new Point();
 
     protected transient List<Pin> tmpPins = new ArrayList<>();
-    private final transient Set<ActionListener> listeners = new HashSet<>();
+    protected final transient Set<ActionListener> listeners = new HashSet<>();
 
     protected Action(ActionType type) {
         this.type = type;
@@ -156,6 +156,7 @@ public abstract class Action extends Identity implements PinListener {
     }
 
     public void removePin(Task context, Pin pin) {
+        if (pin == null) return;
         pin.clearLinks(context);
         removePin(pin);
     }

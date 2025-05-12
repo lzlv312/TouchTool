@@ -25,19 +25,33 @@ public abstract class ListExecuteAction extends ExecuteAction implements Dynamic
 
     @Override
     public void onLinkedTo(Task task, Pin origin, Pin to) {
-        ListActionLinkEventHandler.onLinkedTo(getDynamicValueTypePins(), task, origin, to);
+        handleLinkTo(task, origin, to);
         super.onLinkedTo(task, origin, to);
+    }
+
+    protected void handleLinkTo(Task task, Pin origin, Pin to) {
+        ListActionLinkEventHandler.onLinkedTo(getDynamicTypePins(), task, origin, to);
     }
 
     @Override
     public void onUnLinkedFrom(Task task, Pin origin, Pin from) {
-        ListActionLinkEventHandler.onUnLinkedFrom(getDynamicValueTypePins(), origin);
+        handleUnLinkFrom(origin);
         super.onUnLinkedFrom(task, origin, from);
+    }
+
+    protected void handleUnLinkFrom(Pin origin) {
+        ListActionLinkEventHandler.onUnLinkedFrom(getDynamicTypePins(), origin);
     }
 
     @NonNull
     @Override
     public List<Pin> getDynamicKeyTypePins() {
+        return Collections.emptyList();
+    }
+
+    @NonNull
+    @Override
+    public List<Pin> getDynamicValueTypePins() {
         return Collections.emptyList();
     }
 }

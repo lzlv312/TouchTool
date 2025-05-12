@@ -8,6 +8,8 @@ import top.bogey.touch_tool.bean.pin.Pin;
 
 public interface DynamicTypePinsAction {
     @NonNull
+    List<Pin> getDynamicTypePins();
+    @NonNull
     List<Pin> getDynamicKeyTypePins();
 
     @NonNull
