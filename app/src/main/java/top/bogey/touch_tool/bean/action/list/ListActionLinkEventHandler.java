@@ -8,6 +8,7 @@ import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
@@ -15,6 +16,10 @@ import top.bogey.touch_tool.bean.task.Task;
 
 public class ListActionLinkEventHandler {
     public static void onLinkedTo(List<Pin> valuePins, Task task, Pin origin, Pin to) {
+        // 连接的针脚本身不为动态的，不执行
+        if (!origin.getValue().isDynamic()) return;
+
+        // 判断当前连接的针脚是否可以确定动态针脚类型
         int count = 0;
         for (Pin pin : valuePins) {
             if (pin.isLinked()) {
@@ -25,39 +30,39 @@ public class ListActionLinkEventHandler {
                 count++;
             }
         }
-        // 当有效连接针脚后只有一个连接时，说明是第一个连接，这时需要设置所有动态针脚为目标类型
-        if (count == 1) {
-            PinInfo toInfo;
-            if (to.isSameClass(PinList.class)) {
-                PinList toList = to.getValue(PinList.class);
-                toInfo = PinInfo.getPinInfo(toList.getValueType());
+
+        if (count != 1) return;
+
+        // 第一个有效连接针脚时，设置动态针脚类型
+        PinBase template;
+        PinBase originValue = origin.getValue();
+        PinBase toValue = to.getValue();
+        // 列表操作只有列表针脚和普通针脚能连接
+        if (originValue instanceof PinList && toValue instanceof PinList toPinList) {
+            template = toPinList.getValueType().copy();
+        } else {
+            template = toValue.copy();
+        }
+
+        for (Pin pin : valuePins) {
+            PinBase value = pin.getValue();
+
+            if (value instanceof PinAdd pinAdd) {
+                pinAdd.getPin().setValue(template.copy());
+            } else if (value instanceof PinList pinList) {
+                pinList.setValueType((PinObject) template.copy());
+                pinList.reset();
+                pin.setValue(pinList); // 通知针脚刷新
             } else {
-                toInfo = PinInfo.getPinInfo(to.getValue());
+                pin.setValue(template.copy());
             }
 
-            for (Pin pin : valuePins) {
-                boolean isDynamic = pin.getValue().isDynamic();
-
-                if (pin.isSameClass(PinObject.class)) {
-                    pin.setValue(toInfo.newInstance());
-                } else if (pin.isSameClass(PinAdd.class)) {
-                    PinAdd add = pin.getValue(PinAdd.class);
-                    add.getPin().setValue(toInfo.newInstance());
-                } else if (pin.isSameClass(PinList.class)) {
-                    PinList list = pin.getValue(PinList.class);
-                    list.setValueType(toInfo.getType());
-                    list.reset();
-                    // 通知针脚刷新
-                    pin.setValue(list);
-                }
-
-                // 已连接的动态针脚需要继续更新连接的动作
-                if (isDynamic && pin.isLinked() && pin != origin) {
-                    Pin linkedPin = pin.getLinkedPin(task);
-                    if (linkedPin != null && linkedPin.getValue().isDynamic()) {
-                        Action action = task.getAction(linkedPin.getOwnerId());
-                        if (action != null) action.onLinkedTo(task, linkedPin, pin);
-                    }
+            // 已连接的动态针脚需要继续更新连接的动作
+            if (pin.isLinked() && pin != origin) {
+                Pin linkedPin = pin.getLinkedPin(task);
+                if (linkedPin != null && linkedPin.getValue().isDynamic()) {
+                    Action action = task.getAction(linkedPin.getOwnerId());
+                    if (action != null) action.onLinkedTo(task, linkedPin, pin);
                 }
             }
         }
@@ -79,10 +84,9 @@ public class ListActionLinkEventHandler {
                     if (value instanceof PinAdd pinAdd) {
                         pinAdd.getPin().setValue(new PinObject(PinSubType.DYNAMIC));
                     } else if (value instanceof PinList pinList) {
-                        pinList.setValueType(PinType.OBJECT);
+                        pinList.setValueType(new PinObject(PinSubType.DYNAMIC));
                         pinList.reset();
-                        // 通知针脚刷新
-                        pin.setValue(pinList);
+                        pin.setValue(pinList); // 通知针脚刷新
                     } else {
                         pin.setValue(new PinObject(PinSubType.DYNAMIC));
                     }

@@ -43,13 +43,13 @@ public class PinObject extends PinBase {
 
     @Override
     public boolean linkFromAble(PinBase pin) {
-        if (pin.isDynamic()) return true;
+        if (isDynamic() || pin.isDynamic()) return true;
         return super.linkFromAble(pin);
     }
 
     @Override
     public boolean linkToAble(PinBase pin) {
-        if (isDynamic()) return true;
+        if (isDynamic() || pin.isDynamic()) return true;
         return super.linkToAble(pin);
     }
 

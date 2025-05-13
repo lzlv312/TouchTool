@@ -277,8 +277,7 @@ public class PinInfo {
             PinBase pinBase = constructor.newInstance();
             if (subType != PinSubType.NORMAL) setSubType(pinBase, subType);
             return pinBase;
-        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException ignored) {
         }
         return null;
     }

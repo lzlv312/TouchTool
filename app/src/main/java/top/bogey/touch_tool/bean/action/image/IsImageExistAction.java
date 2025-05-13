@@ -26,7 +26,7 @@ public class IsImageExistAction extends CalculateAction {
     private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.find_images_action_similarity);
     private final transient Pin fastPin = new Pin(new PinBoolean(true), R.string.find_images_action_fast);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
-    private final transient Pin areasPin = new Pin(new PinList(PinType.AREA), R.string.pin_area, true);
+    private final transient Pin areasPin = new Pin(new PinList(new PinArea()), R.string.pin_area, true);
     private final transient Pin firstAreaPin = new Pin(new PinArea(), R.string.pin_area_first, true);
 
     public IsImageExistAction() {

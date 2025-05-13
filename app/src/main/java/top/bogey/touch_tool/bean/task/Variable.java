@@ -72,12 +72,12 @@ public class Variable extends Identity implements ITagManager {
             case NORMAL -> setValue((PinObject) pinInfo.newInstance());
             case LIST -> {
                 PinList pinList = new PinList();
-                pinList.setValueType(pinInfo.getType());
+                pinList.setValueType((PinObject) pinInfo.newInstance());
                 setValue(pinList);
             }
             case MAP -> {
                 PinMap pinMap = new PinMap();
-                pinMap.setKeyType(pinInfo.getType());
+                pinMap.setKeyType((PinObject) pinInfo.newInstance());
                 setValue(pinMap);
             }
         }
@@ -126,12 +126,12 @@ public class Variable extends Identity implements ITagManager {
             case NORMAL -> setValue((PinObject) pinInfo.newInstance());
             case LIST -> {
                 PinList pinList = (PinList) value;
-                pinList.setValueType(pinInfo.getType());
+                pinList.setValueType((PinObject) pinInfo.newInstance());
                 pinList.reset();
             }
             case MAP -> {
                 PinMap pinMap = (PinMap) value;
-                pinMap.setKeyType(pinInfo.getType());
+                pinMap.setKeyType((PinObject) pinInfo.newInstance());
                 pinMap.reset();
             }
         }
@@ -140,7 +140,7 @@ public class Variable extends Identity implements ITagManager {
     public void setValuePinInfo(PinInfo pinInfo) {
         if (getType() == VariableType.MAP) {
             PinMap pinMap = (PinMap) value;
-            pinMap.setValueType(pinInfo.getType());
+            pinMap.setValueType((PinObject) pinInfo.newInstance());
         }
     }
 

@@ -34,7 +34,12 @@ public class MakeMapAction extends MapCalculateAction implements DynamicPinsActi
 
     public MakeMapAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(null, false);
+        Pin pin = tmpPins.get(0);
+        while (!pin.isSameClass(PinAdd.class)) {
+            reAddPin(keyMorePin.newCopy(), true);
+            reAddPin(valueMorePin.newCopy(), true);
+            pin = tmpPins.get(0);
+        }
         reAddPins(addPin, mapPin);
     }
 

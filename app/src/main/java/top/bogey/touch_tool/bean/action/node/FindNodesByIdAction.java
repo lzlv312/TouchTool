@@ -25,7 +25,7 @@ import top.bogey.touch_tool.service.TaskRunnable;
 public class FindNodesByIdAction extends FindExecuteAction {
     private final transient Pin idPin = new Pin(new PinString(), R.string.find_nodes_by_id_action_id);
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area, false, false, true);
-    private final transient Pin nodesPin = new Pin(new PinList(PinType.NODE), R.string.pin_node, true);
+    private final transient Pin nodesPin = new Pin(new PinList(new PinNode()), R.string.pin_node, true);
     private final transient Pin firstNodePin = new Pin(new PinNode(), R.string.pin_node_first, true);
 
     public FindNodesByIdAction() {

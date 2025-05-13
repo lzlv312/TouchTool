@@ -19,7 +19,7 @@ public class StringSplitAction extends CalculateAction {
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin separatorPin = new Pin(new PinString(), R.string.string_split_action_split);
     private final transient Pin emptyPin = new Pin(new PinBoolean(true), R.string.string_split_action_empty);
-    private final transient Pin resultPin = new Pin(new PinList(PinType.STRING), R.string.pin_string, true);
+    private final transient Pin resultPin = new Pin(new PinList(new PinString()), R.string.pin_string, true);
 
     public StringSplitAction() {
         super(ActionType.STRING_SPLIT);

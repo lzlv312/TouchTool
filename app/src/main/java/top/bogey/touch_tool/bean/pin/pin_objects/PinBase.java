@@ -56,16 +56,10 @@ public abstract class PinBase implements Copyable {
         return copy;
     }
 
-    /**
-     * 对方能连上我吗？对方得是我的子类才能连上我
-     **/
     public boolean linkFromAble(PinBase pin) {
         return getClass().isInstance(pin);
     }
 
-    /**
-     * 我能连上对方吗？我得是对方的子类才能连上对方
-     **/
     public boolean linkToAble(PinBase pin) {
         return pin.getClass().isInstance(this);
     }

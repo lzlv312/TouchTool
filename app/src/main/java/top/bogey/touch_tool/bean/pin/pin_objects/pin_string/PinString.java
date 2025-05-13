@@ -54,7 +54,7 @@ public class PinString extends PinObject {
     @Override
     public boolean linkFromAble(PinBase pin) {
         if (pin.isDynamic()) return true;
-        return pin instanceof PinObject && !(pin instanceof PinList) && !(pin instanceof PinMap);
+        return pin instanceof PinObject;
     }
 
     @Override

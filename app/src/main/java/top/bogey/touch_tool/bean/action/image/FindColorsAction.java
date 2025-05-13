@@ -24,7 +24,7 @@ public class FindColorsAction extends FindExecuteAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image);
     private final transient Pin templatePin = new Pin(new PinColor(), R.string.find_colors_action_template);
     private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.find_colors_action_similarity);
-    private final transient Pin areasPin = new Pin(new PinList(PinType.AREA), R.string.pin_area, true);
+    private final transient Pin areasPin = new Pin(new PinList(new PinArea()), R.string.pin_area, true);
     private final transient Pin firstAreaPin = new Pin(new PinArea(), R.string.pin_area_first, true);
 
     public FindColorsAction() {

@@ -27,7 +27,7 @@ public class IsNodeExistByTextAction extends CalculateAction {
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area, false, false, true);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
-    private final transient Pin nodesPin = new Pin(new PinList(PinType.NODE), R.string.pin_node, true);
+    private final transient Pin nodesPin = new Pin(new PinList(new PinNode()), R.string.pin_node, true);
     private final transient Pin firstNodePin = new Pin(new PinNode(), R.string.pin_node_first, true);
 
     public IsNodeExistByTextAction() {

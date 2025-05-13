@@ -14,7 +14,7 @@ import top.bogey.touch_tool.service.TaskRunnable;
 
 public class GetNodeChildrenAction extends CalculateAction {
     private final transient Pin nodePin = new Pin(new PinNode(), R.string.pin_node);
-    private final transient Pin childrenPin = new Pin(new PinList(PinType.NODE), R.string.pin_node, true);
+    private final transient Pin childrenPin = new Pin(new PinList(new PinNode()), R.string.pin_node, true);
 
     public GetNodeChildrenAction() {
         super(ActionType.GET_NODE_CHILDREN);

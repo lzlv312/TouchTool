@@ -34,8 +34,8 @@ public class GetOcrTextAction extends ExecuteAction implements SyncAction {
     private final transient Pin similarPin = new Pin(new PinInteger(60), R.string.get_ocr_text_action_similar);
     private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(), R.string.get_ocr_text_action_type, false, false, true);
     private final transient Pin textPin = new Pin(new PinString(), R.string.get_ocr_text_action_text, true);
-    private final transient Pin textArrayPin = new Pin(new PinList(PinType.STRING), R.string.pin_string, true);
-    private final transient Pin areaArrayPin = new Pin(new PinList(PinType.AREA), R.string.pin_area, true);
+    private final transient Pin textArrayPin = new Pin(new PinList(new PinString()), R.string.pin_string, true);
+    private final transient Pin areaArrayPin = new Pin(new PinList(new PinArea()), R.string.pin_area, true);
 
     public GetOcrTextAction() {
         super(ActionType.GET_OCR_TEXT);

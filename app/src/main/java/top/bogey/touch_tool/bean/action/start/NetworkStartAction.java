@@ -14,7 +14,7 @@ import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class NetworkStartAction extends StartAction {
-    private final transient Pin statePin = new Pin(new PinList(PinType.STRING), R.string.network_start_action_state, true);
+    private final transient Pin statePin = new Pin(new PinList(new PinString()), R.string.network_start_action_state, true);
 
     public NetworkStartAction() {
         super(ActionType.NETWORK_START);

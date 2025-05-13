@@ -20,37 +20,31 @@ import java.util.ListIterator;
 import top.bogey.touch_tool.utils.GsonUtil;
 
 public class PinList extends PinObject implements List<PinObject> {
-    protected PinType valueType = PinType.OBJECT;
+    protected PinObject valueType = new PinObject(PinSubType.DYNAMIC);
     protected List<PinObject> values = new ArrayList<>();
-    protected boolean dynamic = true;
 
     public PinList() {
         super(PinType.LIST);
     }
 
-    // 有指定值类型的，不是动态的
-    public PinList(PinType valueType) {
+    public PinList(PinObject valueType) {
         this();
         this.valueType = valueType;
-        dynamic = false;
     }
 
-    public PinList(PinType type, PinType valueType) {
+    public PinList(PinType type, PinObject valueType) {
         super(type);
         this.valueType = valueType;
-        dynamic = false;
     }
 
-    public PinList(PinType type, PinSubType subType, PinType valueType) {
+    public PinList(PinType type, PinSubType subType, PinObject valueType) {
         super(type, subType);
         this.valueType = valueType;
-        dynamic = false;
     }
 
     public PinList(JsonObject jsonObject) {
         super(jsonObject);
-        valueType = GsonUtil.getAsObject(jsonObject, "valueType", PinType.class, PinType.OBJECT);
-        dynamic = GsonUtil.getAsBoolean(jsonObject, "dynamic", true);
+        valueType = (PinObject) GsonUtil.getAsObject(jsonObject, "valueType", PinBase.class, new PinObject(PinSubType.DYNAMIC));
         values = GsonUtil.getAsObject(jsonObject, "values", TypeToken.getParameterized(ArrayList.class, PinBase.class).getType(), new ArrayList<>());
     }
 
@@ -64,7 +58,6 @@ public class PinList extends PinObject implements List<PinObject> {
     public void sync(PinBase value) {
         if (value instanceof PinList pinList) {
             valueType = pinList.valueType;
-            dynamic = pinList.dynamic;
             values = pinList.values;
         }
     }
@@ -72,7 +65,6 @@ public class PinList extends PinObject implements List<PinObject> {
     @Override
     public PinList copy() {
         PinList pinList = new PinList(type, subType, valueType);
-        pinList.dynamic = dynamic;
         for (PinObject value : values) {
             pinList.values.add((PinObject) value.copy());
         }
@@ -81,20 +73,20 @@ public class PinList extends PinObject implements List<PinObject> {
 
     @Override
     public boolean linkFromAble(PinBase pin) {
+        if (pin.isDynamic()) return true;
         if (pin instanceof PinList pinList) {
             if (isDynamic()) return true;
-            if (pinList.isDynamic()) return true;
-            return pinList.valueType == valueType;
+            return getValueType().linkFromAble(pinList.getValueType());
         }
         return false;
     }
 
     @Override
     public boolean linkToAble(PinBase pin) {
+        if (pin.isDynamic()) return true;
         if (pin instanceof PinList pinList) {
             if (isDynamic()) return true;
-            if (pinList.isDynamic()) return true;
-            return pinList.valueType == valueType;
+            return getValueType().linkToAble(pinList.getValueType());
         }
         return false;
     }
@@ -105,17 +97,17 @@ public class PinList extends PinObject implements List<PinObject> {
         return values.toString();
     }
 
-    public PinType getValueType() {
+    public PinObject getValueType() {
         return valueType;
     }
 
-    public void setValueType(PinType valueType) {
+    public void setValueType(PinObject valueType) {
         this.valueType = valueType;
     }
 
     @Override
     public boolean isDynamic() {
-        return dynamic && valueType == PinType.OBJECT;
+        return valueType.isDynamic();
     }
 
     @Override
@@ -263,9 +255,8 @@ public class PinList extends PinObject implements List<PinObject> {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("type", src.getType().name());
             jsonObject.addProperty("subType", src.getSubType().name());
-            jsonObject.addProperty("valueType", src.getValueType().name());
+            jsonObject.add("valueType", context.serialize(src.getValueType()));
             jsonObject.add("values", context.serialize(src.values));
-            jsonObject.addProperty("dynamic", src.dynamic);
             return jsonObject;
         }
     }
