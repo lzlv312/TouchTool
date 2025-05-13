@@ -20,13 +20,12 @@ public class MapGetValuesAction extends MapCalculateAction {
     private final transient Pin values = new Pin(new PinList(), R.string.map_action_value, true);
 
     public MapGetValuesAction() {
-        super(ActionType.MAP_KEYS);
+        super(ActionType.MAP_VALUES);
         addPins(mapPin, values);
     }
 
     public MapGetValuesAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(null, false);
         reAddPins(mapPin, values);
     }
 

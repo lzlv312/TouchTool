@@ -32,7 +32,6 @@ public class MapGetKeysAction extends MapCalculateAction {
 
     public MapGetKeysAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(null, false);
         reAddPins(mapPin, keysPin);
     }
 

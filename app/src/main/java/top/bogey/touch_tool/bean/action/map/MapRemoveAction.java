@@ -38,6 +38,7 @@ public class MapRemoveAction extends MapExecuteAction {
         PinMap map = getPinValue(runnable, mapPin);
         PinObject key = getPinValue(runnable, keyPin);
         resultPin.setValue(map.remove(key));
+        executeNext(runnable, outPin);
     }
 
     @NonNull

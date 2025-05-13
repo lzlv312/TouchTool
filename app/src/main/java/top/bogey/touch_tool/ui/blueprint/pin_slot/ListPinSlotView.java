@@ -30,15 +30,4 @@ public class ListPinSlotView extends PinSlotView {
         binding.getRoot().setCardBackgroundColor(linked ? getPinColor() : DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant));
         binding.getRoot().setStrokeColor(getPinColor());
     }
-
-    @Override
-    public @ColorInt int getPinColor() {
-        if (pin.linkAble()) {
-            PinBase pinBase = pin.getValue();
-            PinList pinList = (PinList) pinBase;
-            return PinInfo.getPinInfo(pinList.getValueType()).getColor();
-        }
-        return Color.GRAY;
-
-    }
 }

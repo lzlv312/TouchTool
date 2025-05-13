@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
+import top.bogey.touch_tool.utils.DisplayUtil;
 
 public abstract class PinSlotView extends FrameLayout {
     protected final Pin pin;
@@ -26,8 +29,20 @@ public abstract class PinSlotView extends FrameLayout {
     public abstract void setLinked(boolean linked);
 
     public @ColorInt int getPinColor() {
+        return getPinColor(pin);
+    }
+
+    public static @ColorInt int getPinColor(Pin pin) {
         if (pin.linkAble()) {
             PinBase pinBase = pin.getValue();
+            if (pinBase instanceof PinList pinList) {
+                return getPinColor(new Pin(pinList.getValueType()));
+            }
+            if (pinBase instanceof PinMap pinMap) {
+                int keyColor = getPinColor(new Pin(pinMap.getKeyType()));
+                int valueColor = getPinColor(new Pin(pinMap.getValueType()));
+                return DisplayUtil.blendColor(keyColor, valueColor, 0.7f);
+            }
             return PinInfo.getPinInfo(pinBase.getType(), pinBase.getSubType()).getColor();
         }
         return Color.GRAY;

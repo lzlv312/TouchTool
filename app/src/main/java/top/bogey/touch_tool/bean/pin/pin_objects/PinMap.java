@@ -37,7 +37,7 @@ public class PinMap extends PinObject implements Map<PinObject, PinObject> {
         super(jsonObject);
         keyType = (PinObject) GsonUtil.getAsObject(jsonObject, "keyType", PinBase.class, new PinObject(PinSubType.DYNAMIC));
         valueType = (PinObject) GsonUtil.getAsObject(jsonObject, "valueType", PinBase.class, new PinObject(PinSubType.DYNAMIC));
-        valueMap = GsonUtil.getAsObject(jsonObject, "valueMap", TypeToken.getParameterized(HashMap.class, PinBase.class, PinBase.class).getType(), new HashMap<>());
+        valueMap = GsonUtil.getAsObject(jsonObject, "valueMap", TypeToken.getParameterized(LinkedHashMap.class, PinBase.class, PinBase.class).getType(), new LinkedHashMap<>());
     }
 
     @Override

@@ -12,7 +12,6 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.databinding.PinSlotMapBinding;
@@ -53,19 +52,11 @@ public class MapPinSlotView extends PinSlotView {
         binding.valueSlot.setStrokeColor(getPinValueColor());
     }
 
-    @Override
-    public int getPinColor() {
-        if (pin.linkAble()) {
-            return DisplayUtil.blendColor(getPinKeyColor(), getPinValueColor(), 0.7f);
-        }
-        return Color.GRAY;
-    }
-
     private @ColorInt int getPinKeyColor() {
         if (pin.linkAble()) {
             PinBase pinBase = pin.getValue();
             PinMap pinMap = (PinMap) pinBase;
-            return PinInfo.getPinInfo(pinMap.getKeyType()).getColor();
+            return getPinColor(new Pin(pinMap.getKeyType()));
         }
         return Color.GRAY;
     }
@@ -74,7 +65,7 @@ public class MapPinSlotView extends PinSlotView {
         if (pin.linkAble()) {
             PinBase pinBase = pin.getValue();
             PinMap pinMap = (PinMap) pinBase;
-            return PinInfo.getPinInfo(pinMap.getValueType()).getColor();
+            return getPinColor(new Pin(pinMap.getValueType()));
         }
         return Color.GRAY;
     }
