@@ -116,6 +116,22 @@ public class FloatWindow {
         }
     }
 
+    public static void setDragAble(String tag, boolean dragAble) {
+        tag = checkTag(tag);
+        FloatWindowHelper helper = getHelper(tag);
+        if (helper != null) {
+            helper.config.dragAble = dragAble;
+        }
+    }
+
+    public static void updateLayoutParam(String tag) {
+        tag = checkTag(tag);
+        FloatWindowHelper helper = getHelper(tag);
+        if (helper != null) {
+            helper.manager.updateViewLayout(helper.viewParent, helper.params);
+        }
+    }
+
     private static String checkTag(String tag) {
         if (tag == null) {
             return DEFAULT_TAG;

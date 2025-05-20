@@ -3,9 +3,13 @@ package top.bogey.touch_tool.ui.custom;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -28,6 +32,9 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
     private final String tag;
 
     private boolean needDelete = false;
+    private float lastX = 0, lastY = 0, scale = 1;
+    private int originWidth = 0, originHeight = 0;
+    private boolean draging = false;
 
     public static String showStick(PinObject object, EAnchor anchor, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
@@ -45,15 +52,17 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         super(context);
         binding = FloatStickScreenBinding.inflate(LayoutInflater.from(context), this, true);
         this.tag = tag;
+    }
 
-        binding.getRoot().setOnClickListener(v -> {
-            if (needDelete) {
-                dismiss();
-            } else {
-                needDelete = true;
-                postDelayed(() -> needDelete = false, 1500);
-            }
-        });
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (originWidth == 0 || originHeight == 0) {
+            originWidth = binding.scaleBox.getWidth();
+            originHeight = binding.scaleBox.getHeight();
+            originWidth = Math.max(1, originWidth);
+            originHeight = Math.max(1, originHeight);
+        }
     }
 
     private void innerShowStick(PinObject object, EAnchor anchor, Point location) {
@@ -78,6 +87,64 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
                 FloatWindow.setLocation(StickScreenFloatView.class.getName(), anchor, location);
             }
         });
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getRawX();
+        float y = event.getRawY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN -> {
+                int[] location = new int[2];
+                binding.dragImage.getLocationOnScreen(location);
+                if (new RectF(location[0], location[1], location[0] + binding.dragImage.getWidth(), location[1] + binding.dragImage.getHeight()).contains(x, y)) {
+                    draging = true;
+                    FloatWindow.setDragAble(tag, false);
+                    lastX = x;
+                    lastY = y;
+                }
+                return true;
+            }
+
+            case MotionEvent.ACTION_MOVE -> {
+                if (draging) {
+                    float dx = x - lastX;
+                    float dy = y - lastY;
+                    float ds = (dx + dy) / (originWidth + originHeight);
+                    Log.d("TAG", "onTouchEvent: " + originWidth + ", " + originHeight);
+                    Log.d("TAG", "onTouchEvent: " + ds);
+                    scale = Math.max(0.75f, Math.min(2, scale + ds));
+                    Log.d("TAG", "onTouchEvent: " + scale);
+                    binding.scaleBox.setScaleX(scale);
+                    binding.scaleBox.setScaleY(scale);
+                    ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
+                    params.width = (int) (originWidth * scale);
+                    params.height = (int) (originHeight * scale);
+                    binding.getRoot().setLayoutParams(params);
+                    FloatWindow.updateLayoutParam(tag);
+                    lastX = x;
+                    lastY = y;
+                    return true;
+                }
+            }
+
+            case MotionEvent.ACTION_UP -> {
+                if (draging) {
+                    draging = false;
+                    FloatWindow.setDragAble(tag, true);
+                } else {
+                    if (needDelete) {
+                        dismiss();
+                    } else {
+                        needDelete = true;
+                        postDelayed(() -> needDelete = false, 1500);
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

@@ -4,52 +4,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:clipToPadding="false"
-    android:padding="4dp">
+    android:clipToPadding="false">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardLayout"
-        style="?attr/materialCardViewFilledStyle"
+    <FrameLayout
+        android:id="@+id/scaleBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="48dp"
-        android:minHeight="24dp"
-        app:cardElevation="3dp"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
-        app:strokeColor="?attr/colorPrimaryLight"
-        app:strokeWidth="1px"
-        tools:targetApi="p">
+        android:transformPivotX="0dp"
+        android:transformPivotY="0dp">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/title"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardLayout"
+            style="?attr/materialCardViewFilledStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:minWidth="32dp"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="4dp"
-            android:textColor="?attr/colorPrimary"
-            android:visibility="visible" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/saveButton"
-            style="@style/Theme.TouchTool.IconButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="end|bottom"
             android:layout_margin="4dp"
-            android:alpha="0.5"
-            android:visibility="gone"
-            app:icon="@drawable/icon_save" />
+            android:minWidth="48dp"
+            android:minHeight="24dp"
+            app:cardElevation="0dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+            app:strokeColor="?attr/colorOutlineVariant"
+            app:strokeWidth="1px"
+            tools:targetApi="p">
 
-    </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minWidth="32dp"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:textColor="?attr/colorPrimary"
+                android:visibility="visible" />
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end|top"
+                android:alpha="0.5"
+                android:visibility="gone"
+                app:icon="@drawable/icon_save" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/dragImage"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/icon_drag_right_bottom"
+        android:tint="?attr/colorPrimaryLight"
+        android:visibility="visible" />
 </FrameLayout>

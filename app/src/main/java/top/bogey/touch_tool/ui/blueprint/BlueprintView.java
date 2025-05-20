@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -184,7 +185,7 @@ public class BlueprintView extends Fragment {
 
         binding.deleteButton.setOnClickListener(v -> {
             if (needDelete) {
-                for (ActionCard card : binding.cardLayout.selectedCards) {
+                for (ActionCard card : new HashSet<>(binding.cardLayout.selectedCards)) {
                     binding.cardLayout.removeCard(card);
                 }
                 binding.cardLayout.selectedCards.clear();
