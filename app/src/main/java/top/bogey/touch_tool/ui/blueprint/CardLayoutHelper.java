@@ -228,16 +228,11 @@ public class CardLayoutHelper {
             commonParamsArea = new RectF();
         }
 
-        public void arrange(CardLayoutView cardLayoutView, Point start, RectF parentCommonParamsArea) {
+        public int arrange(CardLayoutView cardLayoutView, Point start, RectF parentCommonParamsArea) {
             gridSize = cardLayoutView.getGridSize();
             float scaleGridSize = gridSize * SCALE;
 
             if (action != null) {
-                Log.d("TAG", "arrange: " + commonParamsArea + " " + action.getTitle());
-                Log.d("TAG", "arrange: " + allArea + " " + actionArea);
-                Log.d("TAG", "arrange: \n");
-
-                // 卡片起始位置, 默认为左上角
                 int actionStartX;
                 if (execute) {
                     actionStartX = (int) (start.x + commonParamsArea.width());
@@ -250,11 +245,17 @@ public class CardLayoutHelper {
                 action.setPos(x, y);
             }
 
+            int executeWidth = (int) (actionArea.width());
+
+            int areaTotalExecuteWidth = 0;
             int executeStartX = start.x;
             int executeStartY = (int) (start.y + allArea.height() + (action == null ? 0 : scaleGridSize));
-            for (ActionArea area : executes) {
-                area.arrange(cardLayoutView, new Point(executeStartX, executeStartY), commonParamsArea);
-                executeStartX += (int) (scaleGridSize + area.commonParamsArea.width() + area.actionArea.width());
+            for (int i = 0; i < executes.size(); i++) {
+                ActionArea area = executes.get(i);
+                int areaExecuteWidth = area.arrange(cardLayoutView, new Point(executeStartX, executeStartY), commonParamsArea);
+                executeStartX += (int) (scaleGridSize + area.commonParamsArea.width() + areaExecuteWidth);
+                if (i == 0) areaTotalExecuteWidth += areaExecuteWidth;
+                else areaTotalExecuteWidth += (int) (scaleGridSize + area.commonParamsArea.width() + areaExecuteWidth);
             }
 
             int paramStartX = start.x;
@@ -263,6 +264,8 @@ public class CardLayoutHelper {
                 area.arrange(cardLayoutView, new Point(paramStartX, paramStartY), commonParamsArea);
                 paramStartY += (int) (gridSize + area.allArea.height());
             }
+
+            return Math.max(executeWidth, areaTotalExecuteWidth);
         }
 
         private int formatToGridPx(float size) {

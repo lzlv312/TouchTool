@@ -1,8 +1,10 @@
 package top.bogey.touch_tool.ui.blueprint;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +40,7 @@ import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class BlueprintView extends Fragment {
     private final Stack<Task> taskStack = new Stack<>();
@@ -122,7 +127,25 @@ public class BlueprintView extends Fragment {
                 return true;
             } else if (itemId == R.id.taskCapture) {
                 Bitmap bitmap = binding.cardLayout.takeTaskCapture();
-                // todo 保存图片
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setType("image/*");
+
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                byte[] bytes = outputStream.toByteArray();
+                String path = requireActivity().getCacheDir() + File.separator + "share_" + System.currentTimeMillis() + ".jpg";
+
+                Uri uri = AppUtil.writeToInner(requireContext(), path, bytes);
+                if (uri != null) {
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.putExtra(Intent.EXTRA_STREAM, uri);
+                }
+
+                Intent chooser = Intent.createChooser(intent, null);
+                chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                requireActivity().startActivity(chooser);
                 return true;
             }
             return false;
