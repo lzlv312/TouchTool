@@ -139,7 +139,7 @@ public class MapActionLinkEventHandler {
             if (value instanceof PinAdd pinAdd) {
                 if (keyFlag) pinAdd.getPin(0).setValue(new PinObject(PinSubType.DYNAMIC));
                 if (valueFlag) pinAdd.getPin(1).setValue(new PinObject(PinSubType.DYNAMIC));
-            } else if (value instanceof PinMap pinMap) {
+            } else if (!pin.isDynamic() && value instanceof PinMap pinMap) {
                 if (keyFlag) pinMap.setKeyType(new PinObject(PinSubType.DYNAMIC));
                 if (valueFlag) pinMap.setValueType(new PinObject(PinSubType.DYNAMIC));
                 pinMap.reset();

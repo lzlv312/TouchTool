@@ -110,12 +110,12 @@ public class MakeMapAction extends MapCalculateAction implements DynamicPinsActi
         int index = pins.indexOf(pin);
         int i = index % 2;
         if (i == 0) {
-            super.removePin(pin);
             super.removePin(pins.get(index + 1));
+            super.removePin(pin);
         }
         if (i == 1) {
-            super.removePin(pins.get(index - 1));
             super.removePin(pin);
+            super.removePin(pins.get(index - 1));
         }
     }
 

@@ -83,7 +83,7 @@ public class ListActionLinkEventHandler {
                     PinBase value = pin.getValue();
                     if (value instanceof PinAdd pinAdd) {
                         pinAdd.getPin().setValue(new PinObject(PinSubType.DYNAMIC));
-                    } else if (value instanceof PinList pinList) {
+                    } else if (!pin.isDynamic() && value instanceof PinList pinList) {
                         pinList.setValueType(new PinObject(PinSubType.DYNAMIC));
                         pinList.reset();
                         pin.setValue(pinList); // 通知针脚刷新
