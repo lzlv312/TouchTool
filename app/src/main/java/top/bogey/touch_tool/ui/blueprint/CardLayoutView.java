@@ -657,6 +657,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
         // 将所有卡片设置为未缩放大小
         scale = 1;
+        offsetX = 0;
+        offsetY = 0;
         updateCardsPos();
         cards.values().forEach(card -> card.setVisibility(VISIBLE));
 
@@ -670,6 +672,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         // 设置偏移
         offsetX = -area.left;
         offsetY = -area.top;
+        updateCardsPos();
+        cards.values().forEach(card -> card.setVisibility(VISIBLE));
 
         Bitmap bitmap = Bitmap.createBitmap((int) area.width(), (int) area.height(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
