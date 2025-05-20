@@ -22,8 +22,8 @@ public class SelectEditTextDialog extends BottomSheetDialog {
 
         binding.editText.setText(from.getText());
         binding.editText.setEnabled(from.isEnabled());
-        binding.editText.setMaxLines(from.getMaxLines());
-        binding.editText.setMinLines(from.getMinLines());
+        if (from.getMaxLines() <= 1) binding.editText.setSingleLine();
+        else binding.editText.setSingleLine(false);
         binding.editText.setInputType(from.getInputType());
 
         binding.editText.addTextChangedListener(new TextChangedListener() {

@@ -112,7 +112,8 @@ public class ActionMap {
                     ActionType.STRING_REPLACE,
                     ActionType.GET_OCR_TEXT,
                     ActionType.FIND_OCR_TEXT,
-                    ActionType.IS_OCR_TEXT_EXIST
+                    ActionType.IS_OCR_TEXT_EXIST,
+                    ActionType.PARSE_JSON
             ));
 
             case BOOLEAN -> list.addAll(Arrays.asList(

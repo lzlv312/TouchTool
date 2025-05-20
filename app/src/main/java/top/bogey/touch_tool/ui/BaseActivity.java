@@ -34,7 +34,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> intentLauncher;
     private ActivityResultLauncher<String> permissionLauncher;
-    private ActivityResultLauncher<String> contentLauncher;
+    private ActivityResultLauncher<String[]> openDocumentLauncher;
     private ActivityResultLauncher<String> createDocumentLauncher;
 
     private ActivityResultCallback resultCallback;
@@ -61,7 +61,7 @@ public class BaseActivity extends AppCompatActivity {
             if (result && resultCallback != null) resultCallback.onResult(RESULT_OK, null);
         });
 
-        contentLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), result -> {
+        openDocumentLauncher = registerForActivityResult(new ActivityResultContracts.OpenDocument(), result -> {
             if (result != null && resultCallback != null) {
                 Intent intent = new Intent();
                 intent.setData(result);
@@ -109,7 +109,7 @@ public class BaseActivity extends AppCompatActivity {
         Log.d("BaseActivity", "onDestroy: " + this.getClass().getName());
         intentLauncher = null;
         permissionLauncher = null;
-        contentLauncher = null;
+        openDocumentLauncher = null;
         createDocumentLauncher = null;
         resultCallback = null;
     }
@@ -151,13 +151,13 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void launcherContent(ActivityResultCallback callback) {
-        if (contentLauncher == null) {
+    public void launcherContent(ActivityResultCallback callback, String mimeType) {
+        if (openDocumentLauncher == null) {
             if (callback != null) callback.onResult(Activity.RESULT_CANCELED, null);
             return;
         }
         resultCallback = callback;
-        contentLauncher.launch("*/*");
+        openDocumentLauncher.launch(new String[]{mimeType});
     }
 
     public void launcherCreateDocument(String fileName, ActivityResultCallback callback) {

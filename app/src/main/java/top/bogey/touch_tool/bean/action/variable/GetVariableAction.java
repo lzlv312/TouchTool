@@ -64,6 +64,7 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
         Variable variable = context.findVariable(varId);
         if (variable == null) variable = Saver.getInstance().getVar(varId);
         if (variable == null) return;
+        if (varPin == null) return;
         varPin.setValue(variable.getValue());
         varPin.setTitle(variable.getTitle());
         String globalFlag = variable.getParent() == null ? GLOBAL_FLAG : "";

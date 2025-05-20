@@ -10,9 +10,10 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,7 +38,8 @@ public class PinMap extends PinObject implements Map<PinObject, PinObject> {
         super(jsonObject);
         keyType = (PinObject) GsonUtil.getAsObject(jsonObject, "keyType", PinBase.class, new PinObject(PinSubType.DYNAMIC));
         valueType = (PinObject) GsonUtil.getAsObject(jsonObject, "valueType", PinBase.class, new PinObject(PinSubType.DYNAMIC));
-        valueMap = GsonUtil.getAsObject(jsonObject, "valueMap", TypeToken.getParameterized(LinkedHashMap.class, PinBase.class, PinBase.class).getType(), new LinkedHashMap<>());
+        List<PinObject> values = GsonUtil.getAsObject(jsonObject, "values", TypeToken.getParameterized(List.class, PinBase.class).getType(), new ArrayList<>());
+        valueMap = getValueMap(values);
     }
 
     @Override
@@ -245,8 +247,25 @@ public class PinMap extends PinObject implements Map<PinObject, PinObject> {
             jsonObject.addProperty("subType", src.getSubType().name());
             jsonObject.add("keyType", context.serialize(src.keyType));
             jsonObject.add("valueType", context.serialize(src.valueType));
-            jsonObject.add("valueMap", context.serialize(src.valueMap));
+            jsonObject.add("values", context.serialize(getValueList(src.valueMap)));
             return jsonObject;
         }
+    }
+
+    private static List<PinObject> getValueList(Map<PinObject, PinObject> valueMap) {
+        List<PinObject> list = new ArrayList<>();
+        for (Entry<PinObject, PinObject> entry : valueMap.entrySet()) {
+            list.add(entry.getKey());
+            list.add(entry.getValue());
+        }
+        return list;
+    }
+
+    private static Map<PinObject, PinObject> getValueMap(List<PinObject> list) {
+        Map<PinObject, PinObject> map = new LinkedHashMap<>();
+        for (int i = 0; i < list.size(); i += 2) {
+            map.put(list.get(i), list.get(i + 1));
+        }
+        return map;
     }
 }

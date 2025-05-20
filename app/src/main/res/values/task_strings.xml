@@ -321,6 +321,9 @@
     <string name="is_ocr_text_exist_action">OCR文本是否存在</string>
     <string name="is_ocr_text_exist_action_desc">判断图片中是否存在指定文字</string>
 
+    <string name="parse_json_action">JSON解析</string>
+    <string name="parse_json_action_desc">解析JSON字符串</string>
+
     <!-- 动作-Area -->
     <string name="area_to_integer_action">区域转数值</string>
     <string name="area_to_integer_action_desc">提取区域的上下左右数值</string>

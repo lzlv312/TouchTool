@@ -102,6 +102,7 @@ public enum ActionType {
     FIND_OCR_TEXT,
     IS_OCR_TEXT_EXIST,
     PARSE_JSON,
+    TO_JSON,
 
     // 条件
     BOOLEAN_OR,

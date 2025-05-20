@@ -2,12 +2,17 @@ package top.bogey.touch_tool.bean.task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import top.bogey.touch_tool.bean.action.Action;
 
 public class ActionManager implements IActionManager {
     private final List<Action> actions = new ArrayList<>();
+
+    public void filteNullAction() {
+        actions.removeIf(Objects::isNull);
+    }
 
     @Override
     public void addAction(Action action) {

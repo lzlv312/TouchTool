@@ -37,6 +37,7 @@ import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinAutoPinString;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinFileContentString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinRingtoneString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinShortcutString;
@@ -123,6 +124,11 @@ public class PinWidgetString extends PinWidget<PinString> {
         this(context, card, pinView, (PinString) pinBase, custom);
     }
 
+    public PinWidgetString(@NonNull Context context, ActionCard card, PinView pinView, PinFileContentString pinBase, boolean custom) {
+        this(context, card, pinView, (PinString) pinBase, custom);
+    }
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void initBase() {
         binding.editText.setSaveEnabled(false);
@@ -241,6 +247,37 @@ public class PinWidgetString extends PinWidget<PinString> {
                     ExecuteTaskAction cardAction = (ExecuteTaskAction) card.getAction();
                     cardAction.sync(card.getTask(), executeTask);
                 }).show());
+            }
+            case FILE_CONTENT -> {
+                binding.editText.setEnabled(true);
+                binding.editText.setText(pinBase.getValue());
+                binding.editText.setSingleLine(false);
+                binding.editText.setMaxLines(10);
+                binding.editText.setInputType(binding.editText.getInputType() | EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE);
+                binding.editText.addTextChangedListener(new TextChangedListener() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        pinBase.setValue(s.toString());
+                        pinView.getPin().notifyValueUpdated();
+                    }
+                });
+                binding.pickButton.setIconResource(R.drawable.icon_folder);
+                binding.pickButton.setOnClickListener(v -> {
+                    MainActivity activity = MainApplication.getInstance().getActivity();
+                    activity.launcherContent((code, intent) -> {
+                        if (code == Activity.RESULT_OK) {
+                            Uri uri = intent.getData();
+                            if (uri == null) {
+                                binding.editText.setText("");
+                            } else {
+                                String content = AppUtil.readFile(getContext(), uri);
+                                binding.editText.setText(content);
+                                pinBase.setValue(content);
+                                pinView.getPin().notifyValueUpdated();
+                            }
+                        }
+                    }, "*/*");
+                });
             }
             default -> {
                 binding.editText.setEnabled(true);

@@ -61,6 +61,7 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         createTime = GsonUtil.getAsLong(jsonObject, "createTime", System.currentTimeMillis());
 
         actionManager = GsonUtil.getAsObject(jsonObject, "actionManager", ActionManager.class, new ActionManager());
+        actionManager.filteNullAction();
 
         taskManager = GsonUtil.getAsObject(jsonObject, "taskManager", TaskManager.class, new TaskManager(this));
         taskManager.setParent(this);

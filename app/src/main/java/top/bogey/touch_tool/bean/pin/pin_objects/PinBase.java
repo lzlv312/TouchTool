@@ -102,8 +102,7 @@ public abstract class PinBase implements Copyable {
             } catch (Exception e) {
                 Log.d("TAG", "deserialize pin: " + pinInfo);
                 Log.d("TAG", "deserialize pin json: " + json);
-                e.printStackTrace();
-                return null;
+                throw new JsonParseException(e);
             }
         }
     }

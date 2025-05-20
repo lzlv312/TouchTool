@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.ui.blueprint;
 
+import static top.bogey.touch_tool.ui.blueprint.CardLayoutHelper.CORNER_OFFSET_SCALE;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -85,7 +87,6 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     private static final int TOUCH_DRAG_LINK = 9;
 
     private static final long LONG_TOUCH_TIME = 300L;
-    private static final int CORNER_OFFSET_SCALE = 2;
 
     private final Handler longTouchHandler;
 
@@ -190,9 +191,9 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
             cards.put(action.getId(), card);
             addView(card);
         });
-        updateCardsPos();
         checkCards();
         invalidate();
+        updateCardsPos();
     }
 
     public ActionCard newCard(Action action) {
@@ -276,8 +277,12 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         card.setVisibility(RectF.intersects(new RectF(0, 0, getWidth(), getHeight()), area) ? VISIBLE : INVISIBLE);
     }
 
-    private void updateCardsPos() {
+    public void updateCardsPos() {
         cards.values().forEach(this::updateCardPos);
+    }
+
+    public ActionCard getActionCard(Action action) {
+        return cards.get(action.getId());
     }
 
     private ActionCard getActionCard(float x, float y, boolean checkLock) {
@@ -356,8 +361,12 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         return DisplayUtil.getPointFsArea(points);
     }
 
-    private float getScaleGridSize() {
+    public float getScaleGridSize() {
         return gridSize * scale;
+    }
+
+    public float getGridSize() {
+        return gridSize;
     }
 
     @Override
@@ -872,140 +881,16 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     private Path calculateLinkPath(PinView start, PinView end) {
         PointF startPoint = start.getSlotPosInLayout(scale);
         PointF endPoint = end.getSlotPosInLayout(scale);
-        return calculateLinkPath(startPoint, endPoint, start.getPin().isVertical());
+        return CardLayoutHelper.calculateLinkPath(getScaleGridSize(), startPoint, endPoint, start.getPin().isVertical());
     }
 
     private Path calculateLinkPath(PinView pinView) {
         PointF pos = pinView.getSlotPosInLayout(scale);
         if (pinView.getPin().isOut()) {
-            return calculateLinkPath(pos, new PointF(lastX, lastY), pinView.getPin().isVertical());
+            return CardLayoutHelper.calculateLinkPath(getScaleGridSize(), pos, new PointF(lastX, lastY), pinView.getPin().isVertical());
         } else {
-            return calculateLinkPath(new PointF(lastX, lastY), pos, pinView.getPin().isVertical());
+            return CardLayoutHelper.calculateLinkPath(getScaleGridSize(), new PointF(lastX, lastY), pos, pinView.getPin().isVertical());
         }
-    }
-
-    private Path calculateLinkPath(PointF start, PointF end, boolean vertical) {
-        Path path = new Path();
-        path.moveTo(start.x, start.y);
-
-        float gridSize = getScaleGridSize();
-        float gridSizeOffset = gridSize / 8;
-        float dx = Math.abs(start.x - end.x);
-        float dy = Math.abs(start.y - end.y);
-        if (Math.max(dx, dy) <= gridSize * CORNER_OFFSET_SCALE * 2 + gridSizeOffset) {
-            path.lineTo(end.x, end.y);
-            return path;
-        }
-
-        PointF startPoint = new PointF(start.x, start.y);
-        PointF endPoint = new PointF(end.x, end.y);
-        if (vertical) {
-            startPoint.y += gridSize * CORNER_OFFSET_SCALE;
-            endPoint.y -= gridSize * CORNER_OFFSET_SCALE;
-        } else {
-            startPoint.x += gridSize * CORNER_OFFSET_SCALE;
-            endPoint.x -= gridSize * CORNER_OFFSET_SCALE;
-        }
-
-        boolean isXPositive = startPoint.x < endPoint.x;
-        boolean isYPositive = startPoint.y < endPoint.y;
-        int xScale = isXPositive ? 1 : -1;
-        int yScale = isYPositive ? 1 : -1;
-
-        dx = Math.abs(endPoint.x - startPoint.x);
-        dy = Math.abs(endPoint.y - startPoint.y);
-        boolean xLong = dx > dy;
-        float halfLen = Math.abs(dx - dy) / 2;
-
-        path.lineTo(startPoint.x, startPoint.y);
-        /*
-        vertical:
-            xLong:
-                isYPositive: ↓ ← ↓, ↓ → ↓
-                ! isYPositive: ← ↖ ←, → ↗ →
-            ! xLong:
-                isYPositive: ↓ ↙ ↓, ↓ ↘ ↓
-                ! isYPositive: ← ↑ ←, → ↑ →
-            dx < gridSize / 2:
-                isYPositive: ↓
-                ! isYPositive: ← ↑ →
-        ! vertical:
-            xLong:
-                isXPositive:  → ↗ →, → ↘ →
-                ! isXPositive: ↑ ← ↑, ↓ ← ↓
-            ! xLong:
-                isXPositive:  → ↑ →, → ↓ →
-                ! isXPositive: ↑ ↖ ↑, ↓ ↙ ↓
-            dy < gridSize / 2:
-                isXPositive:  →
-                ! isXPositive: ↓ ← ↑
-        */
-
-        boolean flag = true;
-        if (vertical) {
-            if (!isYPositive) {
-                if (dx < gridSize * (2 + CORNER_OFFSET_SCALE) - gridSizeOffset) { //← ↑ →
-                    float x = Math.min(endPoint.x, startPoint.x) - gridSize * (CORNER_OFFSET_SCALE + 2);
-                    path.lineTo(x, startPoint.y);
-                    path.lineTo(x, endPoint.y);
-                    flag = false;
-                }
-            }
-
-            if (flag) {
-                if (xLong) {
-                    if (isYPositive) {  //↓ ← ↓, ↓ → ↓
-                        path.lineTo(startPoint.x, startPoint.y + dy / 2);
-                        path.lineTo(endPoint.x, endPoint.y - dy / 2);
-                    } else {            //← ↖ ←, → ↗ →
-                        path.lineTo(startPoint.x + halfLen * xScale, startPoint.y);
-                        path.lineTo(endPoint.x - halfLen * xScale, endPoint.y);
-                    }
-                } else {
-                    if (isYPositive) {  //↓ ↙ ↓, ↓ ↘ ↓
-                        path.lineTo(startPoint.x, startPoint.y + halfLen);
-                        path.lineTo(endPoint.x, endPoint.y - halfLen);
-                    } else {            //← ↑ ←, → ↑ →
-                        path.lineTo(startPoint.x + dx * xScale / 2, startPoint.y);
-                        path.lineTo(endPoint.x - dx * xScale / 2, endPoint.y);
-                    }
-                }
-            }
-        } else {
-            if (!isXPositive) {
-                if (dy < gridSize * (2 + CORNER_OFFSET_SCALE) - gridSizeOffset) { //↓ ← ↑
-                    float y = Math.max(endPoint.y, startPoint.y) + gridSize * (CORNER_OFFSET_SCALE + 4);
-                    path.lineTo(startPoint.x, y);
-                    path.lineTo(endPoint.x, y);
-                    flag = false;
-                }
-            }
-
-            if (flag) {
-                if (xLong) {
-                    if (isXPositive) {  //→ ↗ →, → ↘ →
-                        path.lineTo(startPoint.x + halfLen, startPoint.y);
-                        path.lineTo(endPoint.x - halfLen, endPoint.y);
-                    } else {            //↑ ← ↑, ↓ ← ↓
-                        path.lineTo(startPoint.x, startPoint.y + dy * yScale / 2);
-                        path.lineTo(endPoint.x, endPoint.y - dy * yScale / 2);
-                    }
-                } else {
-                    if (isXPositive) {  //→ ↑ →, → ↓ →
-                        path.lineTo(startPoint.x + dx / 2, startPoint.y);
-                        path.lineTo(endPoint.x - dx / 2, endPoint.y);
-                    } else {            //↑ ↖ ↑, ↓ ↙ ↓
-                        path.lineTo(startPoint.x, startPoint.y + halfLen * yScale);
-                        path.lineTo(endPoint.x, endPoint.y - halfLen * yScale);
-                    }
-                }
-            }
-        }
-
-        path.lineTo(endPoint.x, endPoint.y);
-        path.lineTo(end.x, end.y);
-
-        return path;
     }
 
     public void checkCards() {
@@ -1030,6 +915,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     public Task getTask() {
         return task;
+    }
+
+    public float getScale() {
+        return scale;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.bean.save;
 
 import android.os.Handler;
+import android.os.Looper;
 
 import com.tencent.mmkv.MMKV;
 
@@ -60,7 +61,7 @@ public class Saver {
 
 
     private Saver() {
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
         recycle();
         loadTasks();
         loadVars();

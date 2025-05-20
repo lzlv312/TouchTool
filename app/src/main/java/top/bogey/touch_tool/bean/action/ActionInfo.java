@@ -115,6 +115,7 @@ import top.bogey.touch_tool.bean.action.start.TimeStartAction;
 import top.bogey.touch_tool.bean.action.string.FindOcrTextAction;
 import top.bogey.touch_tool.bean.action.string.GetOcrTextAction;
 import top.bogey.touch_tool.bean.action.string.IsOcrTextExistAction;
+import top.bogey.touch_tool.bean.action.string.ParseJsonAction;
 import top.bogey.touch_tool.bean.action.string.StringAppendAction;
 import top.bogey.touch_tool.bean.action.string.StringEqualAction;
 import top.bogey.touch_tool.bean.action.string.StringFromObjectAction;
@@ -253,6 +254,7 @@ public class ActionInfo {
     private final static ActionInfo GET_OCR_TEXT_INFO = new ActionInfo(ActionType.GET_OCR_TEXT, GetOcrTextAction.class, R.drawable.icon_ocr, R.string.get_ocr_text_action, R.string.get_ocr_text_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo IS_OCR_TEXT_EXIST_INFO = new ActionInfo(ActionType.IS_OCR_TEXT_EXIST, IsOcrTextExistAction.class, R.drawable.icon_ocr, R.string.is_ocr_text_exist_action, R.string.is_ocr_text_exist_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_OCR_TEXT_INFO = new ActionInfo(ActionType.FIND_OCR_TEXT, FindOcrTextAction.class, R.drawable.icon_ocr, R.string.find_ocr_text_action, R.string.find_ocr_text_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo PARSE_JSON_INFO = new ActionInfo(ActionType.PARSE_JSON, ParseJsonAction.class, R.drawable.icon_text, R.string.parse_json_action, R.string.parse_json_action_desc, 0, NormalActionCard.class);
 
 
     // 条件判断
@@ -437,6 +439,7 @@ public class ActionInfo {
             case GET_OCR_TEXT -> GET_OCR_TEXT_INFO;
             case FIND_OCR_TEXT -> FIND_OCR_TEXT_INFO;
             case IS_OCR_TEXT_EXIST -> IS_OCR_TEXT_EXIST_INFO;
+            case PARSE_JSON -> PARSE_JSON_INFO;
 
 
             case BOOLEAN_OR -> BOOLEAN_OR_INFO;
@@ -602,8 +605,7 @@ public class ActionInfo {
         try {
             Constructor<? extends Action> constructor = clazz.getConstructor();
             return constructor.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
             return null;
         }
     }

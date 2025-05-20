@@ -1,6 +1,8 @@
 package top.bogey.touch_tool.ui.blueprint;
 
 import android.graphics.Bitmap;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,11 +17,18 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.start.StartAction;
+import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewBlueprintBinding;
@@ -165,6 +174,14 @@ public class BlueprintView extends Fragment {
                     needDelete = false;
                 }, 1500);
             }
+        });
+
+        binding.sortButton.setOnClickListener(v -> {
+            Task currTask = taskStack.peek();
+            List<Action> startActions = currTask.getActions(StartAction.class);
+            CardLayoutHelper.ActionArea actionArea = new CardLayoutHelper.ActionArea(binding.cardLayout, new ArrayList<>(), startActions);
+            actionArea.arrange(binding.cardLayout, new Point(), null);
+            binding.cardLayout.updateCardsPos();
         });
 
         pushStack(task);

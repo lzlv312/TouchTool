@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/shortcut"
         android:name="top.bogey.touch_tool.ui.shortcut.ShortcutView"
-        android:label="@string/shortcut"
+        android:label="@string/tool"
         tools:layout="@layout/view_shortcut" />
 
     <fragment

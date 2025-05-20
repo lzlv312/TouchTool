@@ -78,6 +78,7 @@ public class Variable extends Identity implements ITagManager {
             case MAP -> {
                 PinMap pinMap = new PinMap();
                 pinMap.setKeyType((PinObject) pinInfo.newInstance());
+                pinMap.setValueType((PinObject) pinInfo.newInstance());
                 setValue(pinMap);
             }
         }

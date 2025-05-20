@@ -23,7 +23,7 @@
 
     <!-- 标题 -->
     <string name="task">任务</string>
-    <string name="shortcut">快捷键</string>
+    <string name="tool">工具</string>
     <string name="blueprint">蓝图</string>
     <string name="setting">设置</string>
 
@@ -112,6 +112,7 @@
     <string name="pin_string_url">链接</string>
     <string name="pin_string_shortcut">快捷方式</string>
     <string name="pin_string_ringtone">铃声</string>
+    <string name="pin_string_file_content">文件内容</string>
     <string name="pin_string_single_line">单行文本</string>
     <string name="pin_string_node_path">控件路径</string>
     <string name="pin_string_log">通配文本</string>
@@ -270,7 +271,7 @@
     <string name="preference_setting_color">动态颜色</string>
     <string name="preference_setting_color_desc">在支持的Android版本上，开启后应用将使用壁纸颜色作为主色调</string>
 
-    <string name="preference_setting_manual_play_padding">手动执行悬浮窗靠边偏移</string>
-    <string name="preference_setting_manual_play_padding_desc">设置手动执行悬浮窗靠边时的空白像素</string>
+    <string name="preference_setting_manual_play_padding">手动执行悬浮窗贴边距离</string>
+    <string name="preference_setting_manual_play_padding_desc">设置手动执行悬浮窗贴边距离</string>
 
 </resources>
