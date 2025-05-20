@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import top.bogey.touch_tool.utils.EAnchor;
 
@@ -97,6 +98,16 @@ public class FloatWindow {
             return helper.config.layoutView;
         }
         return null;
+    }
+
+    public static List<View> getViews(Class<?> viewClass) {
+        List<View> result = new ArrayList<>();
+        views.forEach((tag, helper) -> {
+            if (helper.config.layoutView.getClass() == viewClass) {
+                result.add(helper.config.layoutView);
+            }
+        });
+        return result;
     }
 
     public static Point getLocation(String tag) {

@@ -264,7 +264,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                 binding.pickButton.setIconResource(R.drawable.icon_folder);
                 binding.pickButton.setOnClickListener(v -> {
                     MainActivity activity = MainApplication.getInstance().getActivity();
-                    activity.launcherContent((code, intent) -> {
+                    activity.launcherOpenDocument((code, intent) -> {
                         if (code == Activity.RESULT_OK) {
                             Uri uri = intent.getData();
                             if (uri == null) {

@@ -703,30 +703,33 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
         startX = startX - offsetX;
         startY = startY - offsetY;
-        int startRow = (int) (startY / gridSize);
-        int startCol = (int) (startX / gridSize);
 
         float row = canvas.getHeight() / gridSize;
         float col = canvas.getWidth() / gridSize;
 
+        float bigGridSize = gridSize * 10;
         for (int i = 0; i < row; i++) {
-            if (startRow == i) {
+            float y = i * gridSize;
+            if (startY == y) {
                 gridPaint.setStrokeWidth(5);
             } else {
-                boolean isBig = (startRow - i) % 10 == 0;
+                float offset = Math.abs((startY - y) % bigGridSize);
+                boolean isBig = offset < 1 || offset > bigGridSize - 1;
                 gridPaint.setStrokeWidth(isBig ? 2 : 0.5f);
             }
-            canvas.drawLine(-gridSize, i * gridSize, canvas.getWidth() + gridSize, i * gridSize, gridPaint);
+            canvas.drawLine(-gridSize, y, canvas.getWidth() + gridSize, y, gridPaint);
         }
 
         for (int i = 0; i < col; i++) {
-            if (startCol == i) {
+            float x = i * gridSize;
+            if (startX == x) {
                 gridPaint.setStrokeWidth(5);
             } else {
-                boolean isBig = (startCol - i) % 10 == 0;
+                float offset = Math.abs((startX - x) % bigGridSize);
+                boolean isBig = offset < 1 || offset > bigGridSize - 1;
                 gridPaint.setStrokeWidth(isBig ? 2 : 0.5f);
             }
-            canvas.drawLine(i * gridSize, -gridSize, i * gridSize, canvas.getHeight() + gridSize, gridPaint);
+            canvas.drawLine(x, -gridSize, x, canvas.getHeight() + gridSize, gridPaint);
         }
 
         canvas.restore();

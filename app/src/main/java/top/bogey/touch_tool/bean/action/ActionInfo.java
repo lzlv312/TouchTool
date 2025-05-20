@@ -27,6 +27,7 @@ import top.bogey.touch_tool.bean.action.image.GetColorAction;
 import top.bogey.touch_tool.bean.action.image.GetImageAction;
 import top.bogey.touch_tool.bean.action.image.IsColorExistAction;
 import top.bogey.touch_tool.bean.action.image.IsImageExistAction;
+import top.bogey.touch_tool.bean.action.image.LoadImageAction;
 import top.bogey.touch_tool.bean.action.image.ParseQRCodeAction;
 import top.bogey.touch_tool.bean.action.image.SaveImageAction;
 import top.bogey.touch_tool.bean.action.list.ListAddAction;
@@ -284,6 +285,7 @@ public class ActionInfo {
 
     // 图片与颜色操作
     private final static ActionInfo GET_IMAGE_INFO = new ActionInfo(ActionType.GET_IMAGE, GetImageAction.class, R.drawable.icon_image, R.string.get_image_action, R.string.get_image_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo LOAD_IMAGE_INFO = new ActionInfo(ActionType.LOAD_IMAGE, LoadImageAction.class, R.drawable.icon_image, R.string.load_image_action, R.string.load_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CROP_IMAGE_INFO = new ActionInfo(ActionType.CROP_IMAGE, CropImageAction.class, R.drawable.icon_crop, R.string.crop_image_action, R.string.crop_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SAVE_IMAGE_INFO = new ActionInfo(ActionType.SAVE_IMAGE, SaveImageAction.class, R.drawable.icon_save, R.string.save_image_action, R.string.save_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_IMAGES_INFO = new ActionInfo(ActionType.FIND_IMAGES, FindImagesAction.class, R.drawable.icon_visibility, R.string.find_images_action, R.string.find_images_action_desc, 0, NormalActionCard.class);
@@ -465,6 +467,7 @@ public class ActionInfo {
 
 
             case GET_IMAGE -> GET_IMAGE_INFO;
+            case LOAD_IMAGE -> LOAD_IMAGE_INFO;
             case CROP_IMAGE -> CROP_IMAGE_INFO;
             case SAVE_IMAGE -> SAVE_IMAGE_INFO;
             case FIND_IMAGES -> FIND_IMAGES_INFO;

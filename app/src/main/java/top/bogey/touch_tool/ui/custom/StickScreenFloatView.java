@@ -11,16 +11,19 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import java.util.UUID;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.databinding.FloatStickScreenBinding;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
@@ -69,6 +72,11 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         if (object instanceof PinImage pinImage) {
             binding.image.setVisibility(VISIBLE);
             binding.image.setImageBitmap(pinImage.getImage());
+            binding.saveButton.setVisibility(VISIBLE);
+            binding.saveButton.setOnClickListener(v -> {
+                AppUtil.saveImage(getContext(), pinImage.getImage());
+                Toast.makeText(getContext(), R.string.save_image_action, Toast.LENGTH_SHORT).show();
+            });
         } else if (object instanceof PinColor pinColor) {
             binding.cardLayout.setCardBackgroundColor(pinColor.getValue().getColor());
 

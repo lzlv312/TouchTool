@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class BaseActivity extends AppCompatActivity {
     private ActivityResultLauncher<String> permissionLauncher;
     private ActivityResultLauncher<String[]> openDocumentLauncher;
     private ActivityResultLauncher<String> createDocumentLauncher;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMediaLauncher;
 
     private ActivityResultCallback resultCallback;
 
@@ -70,6 +72,14 @@ public class BaseActivity extends AppCompatActivity {
         });
 
         createDocumentLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument("text/*"), result -> {
+            if (result != null && resultCallback != null) {
+                Intent intent = new Intent();
+                intent.setData(result);
+                resultCallback.onResult(RESULT_OK, intent);
+            }
+        });
+
+        pickMediaLauncher = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), result -> {
             if (result != null && resultCallback != null) {
                 Intent intent = new Intent();
                 intent.setData(result);
@@ -111,6 +121,7 @@ public class BaseActivity extends AppCompatActivity {
         permissionLauncher = null;
         openDocumentLauncher = null;
         createDocumentLauncher = null;
+        pickMediaLauncher = null;
         resultCallback = null;
     }
 
@@ -151,13 +162,17 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void launcherContent(ActivityResultCallback callback, String mimeType) {
+    public void launcherOpenDocument(ActivityResultCallback callback, String mimeType) {
         if (openDocumentLauncher == null) {
             if (callback != null) callback.onResult(Activity.RESULT_CANCELED, null);
             return;
         }
         resultCallback = callback;
-        openDocumentLauncher.launch(new String[]{mimeType});
+        try {
+            openDocumentLauncher.launch(new String[]{mimeType});
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public void launcherCreateDocument(String fileName, ActivityResultCallback callback) {
@@ -168,6 +183,22 @@ public class BaseActivity extends AppCompatActivity {
         resultCallback = callback;
         try {
             createDocumentLauncher.launch(fileName);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void launcherPickMedia(ActivityResultCallback callback, ActivityResultContracts.PickVisualMedia.VisualMediaType type) {
+        if (pickMediaLauncher == null) {
+            if (callback != null) callback.onResult(Activity.RESULT_CANCELED, null);
+            return;
+        }
+        resultCallback = callback;
+
+        try {
+            pickMediaLauncher.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(type)
+                    .build());
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
         }

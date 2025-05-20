@@ -508,7 +508,7 @@ public class MainAccessibilityService extends AccessibilityService {
     // Ocr ----------------------------------------------------------------------------- start
     private final Map<String, IOcr> ocrBinderMap = new HashMap<>();
 
-    public void runOcr(String packageName, Bitmap bitmap, ResultCallback<List<OcrResult>> callback) {
+    public synchronized void runOcr(String packageName, Bitmap bitmap, ResultCallback<List<OcrResult>> callback) {
         IOcr iOcr = ocrBinderMap.get(packageName);
         if (iOcr == null) {
             ServiceConnection connection = new ServiceConnection() {

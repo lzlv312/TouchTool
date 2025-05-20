@@ -140,6 +140,11 @@
         <item>新的执行</item>
     </string-array>
 
+    <string-array name="manual_action_show_type">
+        <item>集合显示</item>
+        <item>单独显示</item>
+    </string-array>
+
     <string-array name="share_type">
         <item>文字</item>
         <item>文件</item>

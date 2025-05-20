@@ -48,7 +48,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
-                style="@style/Theme.TouchTool.IconButton"
+                style="@style/Theme.TouchTool.IconButton.Filled"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="end|top"

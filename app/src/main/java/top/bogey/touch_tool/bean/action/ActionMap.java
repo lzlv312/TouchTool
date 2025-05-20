@@ -142,6 +142,7 @@ public class ActionMap {
 
             case IMAGE -> list.addAll(Arrays.asList(
                     ActionType.GET_IMAGE,
+                    ActionType.LOAD_IMAGE,
                     ActionType.CROP_IMAGE,
                     ActionType.SAVE_IMAGE,
                     ActionType.FIND_IMAGES,

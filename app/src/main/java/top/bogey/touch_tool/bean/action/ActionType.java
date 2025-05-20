@@ -128,6 +128,7 @@ public enum ActionType {
 
     // 图片
     GET_IMAGE,
+    LOAD_IMAGE,
     CROP_IMAGE,
     SAVE_IMAGE,
     FIND_IMAGES,

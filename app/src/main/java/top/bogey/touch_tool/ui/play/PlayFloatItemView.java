@@ -1,5 +1,6 @@
 package top.bogey.touch_tool.ui.play;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -20,23 +21,20 @@ import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskListener;
 import top.bogey.touch_tool.service.TaskRunnable;
 
+@SuppressLint("ViewConstructor")
 public class PlayFloatItemView extends FrameLayout implements TaskListener {
-    private final FloatPlayItemBinding binding;
+    protected final FloatPlayItemBinding binding;
 
-    private Task task;
-    private StartAction startAction;
+    protected Task task;
+    protected StartAction startAction;
 
-    private boolean playing = false;
-    private TaskRunnable runnable;
-    private boolean remove = false;
-
-    public PlayFloatItemView(@NonNull Context context) {
-        super(context);
-        binding = FloatPlayItemBinding.inflate(LayoutInflater.from(context), this, true);
-    }
+    protected boolean playing = false;
+    protected TaskRunnable runnable;
+    protected boolean remove = false;
 
     public PlayFloatItemView(@NonNull Context context, Task task, StartAction action) {
-        this(context);
+        super(context);
+        binding = FloatPlayItemBinding.inflate(LayoutInflater.from(context), this, true);
         this.task = task;
         this.startAction = action;
 
@@ -65,7 +63,7 @@ public class PlayFloatItemView extends FrameLayout implements TaskListener {
     }
 
     public void tryRemoveFromParent() {
-        if (playing) this.remove = true;
+        if (playing) remove = true;
         else {
             ((ViewGroup) getParent()).removeView(this);
         }
@@ -94,7 +92,7 @@ public class PlayFloatItemView extends FrameLayout implements TaskListener {
         return true;
     }
 
-    private void stop() {
+    protected void stop() {
         if (runnable == null) return;
         runnable.stop();
         runnable = null;

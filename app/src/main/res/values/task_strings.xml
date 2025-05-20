@@ -7,6 +7,9 @@
 
     <string name="manual_start_action">手动执行</string>
     <string name="manual_start_action_app">触发界面</string>
+    <string name="manual_start_action_type">显示模式</string>
+    <string name="manual_start_action_anchor">屏幕锚点</string>
+    <string name="manual_start_action_pos">相对锚点位置</string>
 
     <string name="application_start_action">进应用或界面时执行</string>
     <string name="application_start_action_break">自动中断</string>
@@ -454,6 +457,9 @@
     <string name="get_image_action">获取屏幕界面</string>
     <string name="get_image_action_desc">获取当前屏幕指定区域图片</string>
     <string name="get_image_action_use_accessibility">无障碍截屏</string>
+
+    <string name="load_image_action">加载图片</string>
+    <string name="load_image_action_desc">加载图片到任务</string>
 
     <string name="crop_image_action">裁剪图片</string>
     <string name="crop_image_action_desc">裁剪图片</string>

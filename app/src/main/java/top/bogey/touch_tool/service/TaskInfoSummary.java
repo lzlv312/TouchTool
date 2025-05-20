@@ -11,9 +11,11 @@ import android.os.Looper;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import top.bogey.touch_tool.MainApplication;
@@ -32,6 +34,7 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.ui.play.PlayFloatView;
+import top.bogey.touch_tool.ui.play.SinglePlayView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
@@ -174,13 +177,18 @@ public class TaskInfoSummary {
         if (service == null || !service.isEnabled()) return;
 
         Map<ManualStartAction, Task> actionTasks = new LinkedHashMap<>();
+        Map<ManualStartAction, Task> singleShowActionTasks = new LinkedHashMap<>();
 
         if (show) {
             for (Task task : Saver.getInstance().getTasks(ManualStartAction.class)) {
                 for (Action action : task.getActions(ManualStartAction.class)) {
                     ManualStartAction startAction = (ManualStartAction) action;
-                    if (startAction.isEnable() && startAction.isEnable()) {
-                        actionTasks.put(startAction, task);
+                    if (startAction.isEnable() && startAction.ready()) {
+                        if (startAction.isSingleShow()) {
+                            singleShowActionTasks.put(startAction, task);
+                        } else {
+                            actionTasks.put(startAction, task);
+                        }
                     }
                 }
             }
@@ -190,6 +198,7 @@ public class TaskInfoSummary {
         int playType = SettingSaver.getInstance().getManualPlayType();
         if (playType == 0 || (playType == 1 && getPhoneState() != PhoneState.ON)) {
             actionTasks.clear();
+            singleShowActionTasks.clear();
         }
 
         View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
@@ -199,8 +208,21 @@ public class TaskInfoSummary {
                 if (playFloatView != null) {
                     ((PlayFloatView) playFloatView).setActions(actionTasks);
                 } else {
-                    if (!actionTasks.isEmpty())
-                        new PlayFloatView(view.getContext(), actionTasks).show();
+                    if (!actionTasks.isEmpty()) new PlayFloatView(view.getContext(), actionTasks).show();
+                }
+
+                Set<ManualStartAction> keySet = new HashSet<>(singleShowActionTasks.keySet());
+                for (View singleShowView : FloatWindow.getViews(SinglePlayView.class)) {
+                    SinglePlayView itemView = (SinglePlayView) singleShowView;
+                    ManualStartAction startAction = (ManualStartAction) itemView.getStartAction();
+                    if (!keySet.remove(startAction)) {
+                        itemView.tryRemoveFromParent();
+                    }
+                }
+
+                for (ManualStartAction startAction : keySet) {
+                    Task task = singleShowActionTasks.get(startAction);
+                    new SinglePlayView(view.getContext(), task, startAction).show();
                 }
             });
         }

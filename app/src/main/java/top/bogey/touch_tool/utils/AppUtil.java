@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.PowerManager;
@@ -385,6 +386,14 @@ public class AppUtil {
                 outputStream.write(buffer, 0, length);
             }
             return outputStream.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Bitmap loadImage(Context context, Uri uri) {
+        try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
+            return BitmapFactory.decodeStream(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

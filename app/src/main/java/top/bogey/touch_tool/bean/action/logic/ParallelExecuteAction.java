@@ -58,6 +58,7 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
         CountDownLatch latch = new CountDownLatch(count.intValue() > 0 ? count.intValue() : 1);
         List<TaskRunnable> runnableList = new ArrayList<>();
         for (Pin dynamicPin : getDynamicPins()) {
+            if (!dynamicPin.isLinked()) continue;
             TaskRunnable taskRunnable = service.runTask(runnable.getTask(), new InnerStartAction(dynamicPin), new TaskListener() {
                 @Override
                 public void onStart(TaskRunnable runnable) {
