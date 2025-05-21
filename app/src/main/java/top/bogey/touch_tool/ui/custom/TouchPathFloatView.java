@@ -35,8 +35,7 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class TouchPathFloatView extends AppCompatImageView implements FloatInterface {
     private final static int LINE_WIDTH = 10;
-    private final static int PADDING_SCALE = 4;
-    private final static int PADDING = LINE_WIDTH * PADDING_SCALE / 2;
+    private final static int PADDING = LINE_WIDTH * 2;
 
     private final String tag = UUID.randomUUID().toString();
 

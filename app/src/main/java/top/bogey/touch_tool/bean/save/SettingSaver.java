@@ -53,6 +53,7 @@ public class SettingSaver {
     private static final String BLUETOOTH = "BLUETOOTH";                                // 蓝牙监听
 
     private static final String SHOW_TOUCH = "SHOW_TOUCH";                              // 手势轨迹
+    private static final String SHOW_TARGET_AREA = "SHOW_TARGET_AREA";                  // 标记目标区域
     private static final String START_TIPS = "START_TIPS";                              // 任务运行提示
 
     private static final String SUPPORT_FREE_FORM = "SUPPORT_FREE_FORM";                // 小窗支持
@@ -230,6 +231,14 @@ public class SettingSaver {
 
     public void setShowTouch(boolean enable) {
         mmkv.encode(SHOW_TOUCH, enable);
+    }
+
+    public boolean isShowTargetArea() {
+        return mmkv.decodeBool(SHOW_TARGET_AREA, false);
+    }
+
+    public void setShowTargetArea(boolean enable) {
+        mmkv.encode(SHOW_TARGET_AREA, enable);
     }
 
     public boolean isShowStartTips() {

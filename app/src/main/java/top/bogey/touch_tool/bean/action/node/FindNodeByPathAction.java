@@ -17,6 +17,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.ui.custom.MarkTargetFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class FindNodeByPathAction extends FindExecuteAction {
@@ -45,6 +46,7 @@ public class FindNodeByPathAction extends FindExecuteAction {
         if (node == null) return false;
 
         nodePin.getValue(PinNode.class).setNodeInfo(node);
+        MarkTargetFloatView.showTargetArea(node.area);
         return true;
     }
 }

@@ -224,6 +224,10 @@ public class SettingView extends Fragment {
         binding.showTouchSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowTouch(binding.showTouchSwitch.isChecked()));
         binding.showTouchSwitch.setChecked(SettingSaver.getInstance().isShowTouch());
 
+        // 标记目标区域
+        binding.showTargetAreaSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowTargetArea(binding.showTouchSwitch.isChecked()));
+        binding.showTargetAreaSwitch.setChecked(SettingSaver.getInstance().isShowTargetArea());
+
         // 任务提示
         binding.taskTipsSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowStartTips(binding.taskTipsSwitch.isChecked()));
         binding.taskTipsSwitch.setChecked(SettingSaver.getInstance().isShowStartTips());

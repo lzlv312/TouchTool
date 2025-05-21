@@ -256,6 +256,9 @@
     <string name="task_setting_show_touch">手势轨迹</string>
     <string name="task_setting_show_touch_desc">执行点击或手势时，在界面上显示轨迹</string>
 
+    <string name="task_setting_show_target_area">目标标记</string>
+    <string name="task_setting_show_target_area_desc">检测控件时，如果检测到目标，会标记显示目标区域</string>
+
     <string name="task_setting_start_tips">任务运行提示</string>
     <string name="task_setting_start_tips_desc">任务开始运行时，在屏幕顶部中间位置显示一个小圆点提示</string>
 

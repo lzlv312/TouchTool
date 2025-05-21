@@ -3,7 +3,6 @@
     <attr name="icon" format="reference" />
     <attr name="title" format="string" />
     <attr name="description" format="string" />
-    <attr name="options" format="reference" />
 
     <declare-styleable name="SettingWidgetNormal">
         <attr name="icon" />
@@ -21,7 +20,7 @@
         <attr name="icon" />
         <attr name="title" />
         <attr name="description" />
-        <attr name="options" />
+        <attr name="options" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="SettingWidgetSlider">

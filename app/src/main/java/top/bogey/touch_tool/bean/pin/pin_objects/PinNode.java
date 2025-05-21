@@ -41,7 +41,7 @@ public class PinNode extends PinObject {
     @Override
     public String toString() {
         if (nodeInfo == null) return super.toString();
-        if (nodeInfo.text == null) return super.toString();
+        if (nodeInfo.text == null) return nodeInfo.toString();
         return nodeInfo.text;
     }
 

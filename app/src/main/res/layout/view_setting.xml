@@ -209,6 +209,14 @@
                         app:title="@string/task_setting_show_touch" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
+                        android:id="@+id/showTargetAreaSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/task_setting_show_target_area_desc"
+                        app:icon="@drawable/icon_area"
+                        app:title="@string/task_setting_show_target_area" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/taskTipsSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

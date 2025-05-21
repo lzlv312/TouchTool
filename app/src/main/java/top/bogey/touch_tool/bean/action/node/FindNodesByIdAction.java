@@ -21,6 +21,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.ui.custom.MarkTargetFloatView;
 
 public class FindNodesByIdAction extends FindExecuteAction {
     private final transient Pin idPin = new Pin(new PinString(), R.string.find_nodes_by_id_action_id);
@@ -55,6 +56,7 @@ public class FindNodesByIdAction extends FindExecuteAction {
         for (NodeInfo info : childrenById) {
             if (nodeInfoSet.contains(info)) {
                 nodes.add(new PinNode(info));
+                MarkTargetFloatView.showTargetArea(info.area);
             }
         }
 

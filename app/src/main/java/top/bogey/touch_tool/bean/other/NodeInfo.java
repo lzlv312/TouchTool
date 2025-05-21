@@ -165,6 +165,11 @@ public class NodeInfo {
         return clazz.equals(node.clazz);
     }
 
+    /**
+     * 用自身的信息在节点中找到和自身差不多的
+     * @param node
+     * @return
+     */
     public NodeInfo findSelfInNode(NodeInfo node) {
         NodeInfo result = null;
 
@@ -191,6 +196,9 @@ public class NodeInfo {
                 if (checkClass(child)) result = child;
             }
         }
+
+        // 带标记，却没有找到，不再继续
+        if (index > 1 || id != null) return result;
 
         // 如果还是没找到，再根据class查找
         if (result == null) {

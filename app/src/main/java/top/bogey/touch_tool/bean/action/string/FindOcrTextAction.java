@@ -26,6 +26,7 @@ import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.OcrResult;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.ui.custom.MarkTargetFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class FindOcrTextAction extends FindExecuteAction implements SyncAction {
