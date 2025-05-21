@@ -28,6 +28,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -250,9 +251,9 @@ public abstract class Action extends Identity implements PinListener {
         return returnValue(pin.getValue());
     }
 
-    // 列表和集合类型返回引用，其他类型返回拷贝
+    // 控件、列表和集合类型返回引用，其他类型返回拷贝
     protected <T extends PinObject> T returnValue(T value) {
-        if (value instanceof PinList || value instanceof PinMap) return value;
+        if (value instanceof PinList || value instanceof PinMap || value instanceof PinNode) return value;
         return (T) value.copy();
     }
 

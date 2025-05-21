@@ -2,6 +2,7 @@ package top.bogey.touch_tool.ui.custom;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.os.Handler;
@@ -70,23 +71,24 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
 
     private void innerShowStick(PinObject object, EAnchor anchor, Point location) {
         if (object instanceof PinImage pinImage) {
-            binding.image.setVisibility(VISIBLE);
             binding.image.setImageBitmap(pinImage.getImage());
             binding.saveButton.setVisibility(VISIBLE);
             binding.saveButton.setOnClickListener(v -> {
                 AppUtil.saveImage(getContext(), pinImage.getImage());
                 Toast.makeText(getContext(), R.string.save_image_action, Toast.LENGTH_SHORT).show();
             });
-        } else if (object instanceof PinColor pinColor) {
-            binding.cardLayout.setCardBackgroundColor(pinColor.getValue().getColor());
-
-            binding.title.setVisibility(VISIBLE);
-            binding.title.setText(pinColor.getValue().getColorString());
-            binding.title.setTextColor(DisplayUtil.getTextColor(pinColor.getValue().getColor()));
-            binding.title.setTextSize(9);
         } else {
-            binding.title.setVisibility(VISIBLE);
-            binding.title.setText(object.toString());
+            int textSize = 13;
+            int textColor = DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorOnSurface);
+
+            if (object instanceof PinColor pinColor) {
+                binding.cardLayout.setCardBackgroundColor(pinColor.getValue().getColor());
+                textSize = 9;
+                textColor = DisplayUtil.getTextColor(pinColor.getValue().getColor());
+            }
+            int maxWidth = DisplayUtil.getScreenWidth(getContext()) * 2 / 3;
+            Bitmap textBitmap = DisplayUtil.createTextBitmap(getContext(), object.toString(), textColor, textSize, maxWidth, 0, (int) DisplayUtil.dp2px(getContext(), 8));
+            binding.image.setImageBitmap(textBitmap);
         }
         post(() -> {
             if (location.x < 0 || location.y < 0) {

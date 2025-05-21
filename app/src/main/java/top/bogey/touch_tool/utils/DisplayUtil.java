@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -55,6 +57,10 @@ public class DisplayUtil {
 
     public static float dp2px(Context context, float dp) {
         return dp * context.getResources().getDisplayMetrics().density;
+    }
+
+    public static float sp2px(Context context, float sp) {
+        return sp * context.getResources().getDisplayMetrics().scaledDensity;
     }
 
     public static boolean isPortrait(Context context) {
@@ -213,6 +219,61 @@ public class DisplayUtil {
         if (x + width > bitmapWidth) width = bitmapWidth - x;
         if (y + height > bitmapHeight) height = bitmapHeight - y;
         return new Rect(x, y, x + width, y + height);
+    }
+
+
+    public static Bitmap createTextBitmap(Context context, String text, int textColor, int textSizeSp, int maxWidth, int lineSpacing, int padding) {
+        // 1. 初始化Paint
+        Paint paint = new Paint();
+        paint.setColor(textColor);
+        paint.setTextSize(sp2px(context, textSizeSp));
+        paint.setAntiAlias(true);
+
+        // 2. 分割文本为多行并记录每行实际宽度
+        List<String> lines = new ArrayList<>();
+        List<Float> lineWidths = new ArrayList<>();
+        int start = 0;
+
+        while (start < text.length()) {
+            // 测量能显示多少个字符
+            int count = paint.breakText(text, start, text.length(), true, maxWidth - 2 * padding, null);
+            String line = text.substring(start, start + count);
+            lines.add(line);
+
+            // 记录每行实际宽度
+            float lineWidth = paint.measureText(line);
+            lineWidths.add(lineWidth);
+
+            start += count;
+        }
+
+        // 3. 计算实际需要的宽度（取最长行宽度）
+        float maxLineWidth = 0;
+        for (float width : lineWidths) {
+            if (width > maxLineWidth) {
+                maxLineWidth = width;
+            }
+        }
+        int totalWidth = (int) (maxLineWidth + 2 * padding);
+
+        // 4. 测量总高度
+        Paint.FontMetrics fm = paint.getFontMetrics();
+        float lineHeight = fm.descent - fm.ascent;
+        int totalHeight = (int) (lines.size() * lineHeight + (lines.size() - 1) * lineSpacing + 2 * padding);
+
+        // 5. 创建Bitmap（使用实际需要的宽度而非最大宽度）
+        Bitmap bitmap = Bitmap.createBitmap(totalWidth, totalHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        // 6. 逐行绘制文本
+        float y = padding - fm.ascent; // 初始y位置
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            canvas.drawText(line, padding, y, paint);
+            y += lineHeight + lineSpacing;
+        }
+
+        return bitmap;
     }
 
     public static native List<MatchResult> nativeMatchTemplate(Bitmap bitmap, Bitmap template, int similarity, boolean fast, int speed);
