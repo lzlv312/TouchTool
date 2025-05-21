@@ -17,8 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.utils.EAnchor;
+import top.bogey.touch_tool.utils.GsonUtil;
 
 public class PinTouchPath extends PinScaleAble<String> {
     private transient List<PathPart> pathParts = new ArrayList<>();
@@ -41,6 +43,7 @@ public class PinTouchPath extends PinScaleAble<String> {
 
     public PinTouchPath(JsonObject jsonObject) {
         super(jsonObject);
+        value = GsonUtil.getAsString(jsonObject, "value", null);
         pathParts = deserialize(value);
     }
 
@@ -162,6 +165,12 @@ public class PinTouchPath extends PinScaleAble<String> {
         pathParts.clear();
     }
 
+    @Override
+    public void sync(PinBase value) {
+        super.sync(value);
+        pathParts = deserialize(this.value);
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -213,7 +222,7 @@ public class PinTouchPath extends PinScaleAble<String> {
 
     public void setPathParts(EAnchor anchor, List<PathPart> pathParts) {
         setAnchor(anchor);
-        if (pathParts == null) {
+        if (pathParts == null || pathParts.isEmpty()) {
             reset();
             return;
         }

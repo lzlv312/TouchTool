@@ -34,10 +34,6 @@ public class PinWidgetTouch extends PinWidget<PinTouchPath> {
 
         binding.pathView.setOnClickListener(v -> {
             TouchPathView view = new TouchPathView(getContext(), pinBase.getPathParts(), true);
-            Point size = DisplayUtil.getScreenSize(getContext());
-            DisplayUtil.setViewWidth(view, size.x / 2);
-            DisplayUtil.setViewHeight(view, size.y / 2);
-
             new MaterialAlertDialogBuilder(getContext())
                     .setPositiveButton(R.string.enter, null)
                     .setView(view)

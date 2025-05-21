@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,7 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
     private final Handler handler;
 
     public static void showToast(String msg, EAnchor anchor, Point pos) {
-        KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
+        View keepView = FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
             ToastFloatView toastView = (ToastFloatView) FloatWindow.getView(ToastFloatView.class.getName());

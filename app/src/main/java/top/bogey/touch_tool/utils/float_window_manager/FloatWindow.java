@@ -197,6 +197,11 @@ public class FloatWindow {
             return this;
         }
 
+        public Builder setFlag(int flag) {
+            config.flag = flag;
+            return this;
+        }
+
         public Builder setDockSide(FloatDockSide side) {
             config.side = side;
             return this;

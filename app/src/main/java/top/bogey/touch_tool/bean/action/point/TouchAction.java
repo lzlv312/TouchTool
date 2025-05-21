@@ -15,6 +15,8 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.ui.custom.TouchPathFloatView;
+import top.bogey.touch_tool.utils.EAnchor;
 
 public class TouchAction extends ExecuteAction {
     private final transient Pin touchPin = new Pin(new PinTouchPath(), R.string.pin_touch);
@@ -43,6 +45,7 @@ public class TouchAction extends ExecuteAction {
         } else {
             service.runGesture(path.getStrokes(time.floatValue(), offset.intValue()), result -> runnable.resume());
         }
+        TouchPathFloatView.showGesture(path.getPathParts(EAnchor.TOP_LEFT), time.floatValue());
         runnable.await();
         executeNext(runnable, outPin);
     }

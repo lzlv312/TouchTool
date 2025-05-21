@@ -11,6 +11,8 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinTouchPath;
 import top.bogey.touch_tool.databinding.FloatPickerTouchPreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.ui.custom.TouchPathFloatView;
+import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 
 @SuppressLint("ViewConstructor")
@@ -35,6 +37,7 @@ public class TouchPickerPreview extends BasePicker<PinTouchPath> {
                 } else {
                     service.runGesture(touchPath.getStrokes(1, 0), null);
                 }
+                TouchPathFloatView.showGesture(touchPath.getPathParts(EAnchor.TOP_LEFT), 1);
             }
         });
 

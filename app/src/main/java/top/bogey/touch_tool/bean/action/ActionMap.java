@@ -46,6 +46,8 @@ public class ActionMap {
                     ActionType.CLOSE_STICK,
                     ActionType.CLOSE_ALL_STICK,
 
+                    ActionType.SEND_TOAST,
+
                     ActionType.TOUCH,
                     ActionType.TOUCH_POINT,
                     ActionType.NODE_TOUCH,

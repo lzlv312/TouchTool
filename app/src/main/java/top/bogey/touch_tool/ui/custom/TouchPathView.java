@@ -148,6 +148,7 @@ public class TouchPathView extends View {
 
         if (fullScreen) {
             float px = DisplayUtil.dp2px(getContext(), 28);
+            paint.setAlpha(128);
             canvas.drawRoundRect(0, 0, getWidth(), getHeight(), px, px, paint);
         }
     }

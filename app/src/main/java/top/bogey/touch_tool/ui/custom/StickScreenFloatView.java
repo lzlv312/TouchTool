@@ -37,7 +37,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
     private boolean needDelete = false;
     private float lastX = 0, lastY = 0, scale = 1;
     private int originWidth = 0, originHeight = 0;
-    private boolean draging = false;
+    private boolean dragging = false;
 
     public static String showStick(PinObject object, EAnchor anchor, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
@@ -107,7 +107,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
                 int[] location = new int[2];
                 binding.dragImage.getLocationOnScreen(location);
                 if (new RectF(location[0], location[1], location[0] + binding.dragImage.getWidth(), location[1] + binding.dragImage.getHeight()).contains(x, y)) {
-                    draging = true;
+                    dragging = true;
                     FloatWindow.setDragAble(tag, false);
                     lastX = x;
                     lastY = y;
@@ -116,7 +116,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             }
 
             case MotionEvent.ACTION_MOVE -> {
-                if (draging) {
+                if (dragging) {
                     float dx = x - lastX;
                     float dy = y - lastY;
                     float ds = (dx + dy) / (originWidth + originHeight);
@@ -138,8 +138,8 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             }
 
             case MotionEvent.ACTION_UP -> {
-                if (draging) {
-                    draging = false;
+                if (dragging) {
+                    dragging = false;
                     FloatWindow.setDragAble(tag, true);
                 } else {
                     if (needDelete) {
