@@ -7,7 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.databinding.ViewTaskPageBinding;
@@ -17,6 +19,7 @@ public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapte
     private final TaskView taskView;
     final List<String> tags = new ArrayList<>();
     private boolean search = false;
+    private final Set<TaskPageItemRecyclerViewAdapter> adapters = new HashSet<>();
 
     public TaskPageViewAdapter(TaskView taskView) {
         this.taskView = taskView;
@@ -25,7 +28,19 @@ public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ViewTaskPageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        ViewHolder viewHolder = new ViewHolder(ViewTaskPageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        Saver.getInstance().addListener(viewHolder.adapter);
+        adapters.add(viewHolder.adapter);
+        return viewHolder;
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        for (TaskPageItemRecyclerViewAdapter adapter : adapters) {
+            if (adapter == null) continue;
+            Saver.getInstance().removeListener(adapter);
+        }
     }
 
     @Override

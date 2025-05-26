@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import androidx.core.content.FileProvider;
+
 import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
@@ -56,9 +58,12 @@ public class ShareToAction extends ExecuteAction {
                 intent.putExtra(Intent.EXTRA_TEXT, value.toString());
             }
             case 1 -> {
+                String parent;
+                String fileName;
                 byte[] bytes = new byte[0];
-                String path;
                 if (value instanceof PinImage image) {
+                    parent = AppUtil.PICTURE_DIR_NAME;
+                    fileName = parent + "_" + AppUtil.formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg";
                     intent.setType("image/*");
                     Bitmap bitmap = image.getImage();
                     if (bitmap != null) {
@@ -66,16 +71,19 @@ public class ShareToAction extends ExecuteAction {
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                         bytes = outputStream.toByteArray();
                     }
-                    path = context.getCacheDir() + File.separator + "share_" + System.currentTimeMillis() + ".jpg";
                 } else {
+                    parent = AppUtil.TEXT_DIR_NAME;
+                    fileName = parent + "_" + AppUtil.formatDateTime(context, System.currentTimeMillis(), false, true) + ".txt";
                     intent.setType("text/*");
                     bytes = value.toString().getBytes();
-                    path = context.getCacheDir() + File.separator + "share_" + System.currentTimeMillis() + ".txt";
                 }
-                Uri uri = AppUtil.writeToInner(context, path, bytes);
-                if (uri != null) {
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    intent.putExtra(Intent.EXTRA_STREAM, uri);
+                File file = AppUtil.writeFile(context, parent, fileName, bytes);
+                if (file != null) {
+                    Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
+                    if (uri != null) {
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.putExtra(Intent.EXTRA_STREAM, uri);
+                    }
                 }
             }
         }

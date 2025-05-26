@@ -2,10 +2,12 @@ package top.bogey.touch_tool.ui;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.InnerStartAction;
 import top.bogey.touch_tool.bean.action.start.OutCallStartAction;
@@ -81,21 +83,29 @@ public class InstantActivity extends BaseActivity {
                 Task task = Saver.getInstance().getTask(taskId);
                 if (task != null) {
                     Action action = task.getAction(actionId);
-                    MainAccessibilityService service = MainApplication.getInstance().getService();
-                    if (service != null && service.isEnabled()) {
-                        if (action instanceof TimeStartAction timeStartAction) {
-                            service.addAlarm(task, timeStartAction);
-                        } else if (action instanceof StartAction startAction) {
-                            service.runTask(task, startAction);
-                        } else {
-                            String pinId = intent.getStringExtra(PIN_ID);
-                            Pin pin = action.getPinById(pinId);
-                            if (pin != null) {
-                                InnerStartAction innerStartAction = new InnerStartAction(pin);
-                                service.runTask(task.copy(), innerStartAction);
+                    if (action != null) {
+                        MainAccessibilityService service = MainApplication.getInstance().getService();
+                        if (service != null && service.isEnabled()) {
+                            if (action instanceof TimeStartAction timeStartAction) {
+                                service.addAlarm(task, timeStartAction);
+                            } else if (action instanceof StartAction startAction) {
+                                service.runTask(task, startAction);
+                            } else {
+                                String pinId = intent.getStringExtra(PIN_ID);
+                                Pin pin = action.getPinById(pinId);
+                                if (pin != null) {
+                                    InnerStartAction innerStartAction = new InnerStartAction(pin);
+                                    service.runTask(task.copy(), innerStartAction);
+                                }
                             }
+                        } else {
+                            Toast.makeText(this, R.string.app_setting_enable_error, Toast.LENGTH_SHORT).show();
                         }
+                    } else {
+                        Toast.makeText(this, R.string.execute_with_action_not_found, Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(this, R.string.execute_with_task_not_found, Toast.LENGTH_SHORT).show();
                 }
             }
         }

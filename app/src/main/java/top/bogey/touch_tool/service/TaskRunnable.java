@@ -8,6 +8,8 @@ import java.util.concurrent.Future;
 
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
+import top.bogey.touch_tool.bean.save.LogInfo;
+import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 
 public class TaskRunnable implements Runnable {
@@ -18,6 +20,7 @@ public class TaskRunnable implements Runnable {
 
     private final Task task;
     private final StartAction startAction;
+    private boolean debug;
 
     private int progress = 0;
 
@@ -29,6 +32,7 @@ public class TaskRunnable implements Runnable {
     public TaskRunnable(Task task, StartAction startAction) {
         this.task = task;
         this.startAction = startAction;
+        this.debug = task.isFlag();
     }
 
     @Override
@@ -60,11 +64,13 @@ public class TaskRunnable implements Runnable {
     public void pushStack(Task task, Action action) {
         taskStack.push(task);
         actionStack.push(action);
+        debug = task.isFlag();
     }
 
     public void popStack() {
         taskStack.pop();
         actionStack.pop();
+        debug = taskStack.peek().isFlag();
         if (taskStack.isEmpty() || actionStack.isEmpty()) stop();
     }
 
@@ -91,6 +97,7 @@ public class TaskRunnable implements Runnable {
     public void addExecuteProgress(Action action) {
         progress++;
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onExecute(this, action, progress));
+        if (debug) Saver.getInstance().addLog(getTask().getId(), new LogInfo(progress, action));
 
         StartAction startAction = getStartAction();
         if (startAction == null || startAction.stop(this)) stop();
@@ -99,6 +106,7 @@ public class TaskRunnable implements Runnable {
 
     public void addCalculateProgress(Action action) {
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onCalculate(this, action));
+        if (debug) Saver.getInstance().addLog(getTask().getId(), new LogInfo(progress, action));
         checkStatus();
     }
 

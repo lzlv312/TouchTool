@@ -158,7 +158,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
 
             case DATE -> {
                 PinDate date = (PinDate) pinBase;
-                binding.editText.setText(AppUtil.formatDate(date.getValue()));
+                binding.editText.setText(AppUtil.formatDate(getContext(), date.getValue(), true));
                 binding.editText.setEnabled(false);
                 binding.pickButton.setIconResource(R.drawable.icon_calendar);
                 binding.pickButton.setVisibility(VISIBLE);
@@ -179,14 +179,14 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                     picker.addOnPositiveButtonClickListener(selection -> {
                         date.setValue(selection);
                         pinView.getPin().notifyValueUpdated();
-                        binding.editText.setText(AppUtil.formatDate(date.getValue()));
+                        binding.editText.setText(AppUtil.formatDate(getContext(), date.getValue(), true));
                     });
                 });
             }
 
             case TIME -> {
                 PinTime time = (PinTime) pinBase;
-                binding.editText.setText(AppUtil.formatTime(time.getValue()));
+                binding.editText.setText(AppUtil.formatTime(getContext(), time.getValue(), true));
                 binding.editText.setEnabled(false);
                 binding.pickButton.setIconResource(R.drawable.icon_schedule);
                 binding.pickButton.setVisibility(VISIBLE);
@@ -209,7 +209,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                         calendar.set(Calendar.SECOND, 0);
                         time.setValue(calendar.getTimeInMillis());
                         pinView.getPin().notifyValueUpdated();
-                        binding.editText.setText(AppUtil.formatTime(time.getValue()));
+                        binding.editText.setText(AppUtil.formatTime(getContext(), time.getValue(), true));
                     });
                 });
             }

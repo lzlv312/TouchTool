@@ -14,10 +14,10 @@ import top.bogey.touch_tool.service.TaskRunnable;
 
 public abstract class StartAction extends Action {
 
-    private final static Pin enablePin = new NotLinkAblePin(new PinBoolean(true), R.string.start_action_enable);
-    private final static Pin restartPin = new NotLinkAblePin(new PinSingleSelect(R.array.restart_type), R.string.start_action_restart);
+    private final transient Pin enablePin = new NotLinkAblePin(new PinBoolean(true), R.string.start_action_enable);
+    private final transient Pin restartPin = new NotLinkAblePin(new PinSingleSelect(R.array.restart_type), R.string.start_action_restart);
     private final transient Pin breakPin = new Pin(new PinBoolean(false), R.string.start_action_break);
-    protected transient Pin executePin = new Pin(new PinExecute(), R.string.pin_execute, true);
+    protected final transient Pin executePin = new Pin(new PinExecute(), R.string.pin_execute, true);
 
     private transient boolean checking;
 

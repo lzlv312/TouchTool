@@ -38,18 +38,6 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
         this.taskView = taskView;
     }
 
-    @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        Saver.getInstance().addListener(this);
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        Saver.getInstance().removeListener(this);
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -162,13 +150,12 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
                 dialog.show();
             });
 
-            binding.enableSwitch.setOnCheckedChangeListener((view, isChecked) -> {
+            binding.enableSwitch.setOnClickListener(v -> {
                 int position = getBindingAdapterPosition();
                 Task task = tasks.get(position);
 
-                if (isChecked == task.isEnable()) return;
-                task.setEnable(isChecked);
-                task.save();
+                if (binding.enableSwitch.isChecked() == task.isEnable()) return;
+                task.setEnable(binding.enableSwitch.isChecked());
             });
 
             binding.stopButton.setOnClickListener(v -> {
@@ -200,7 +187,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
                 });
             }
 
-            binding.timeText.setText(AppUtil.formatDate(task.getCreateTime()));
+            binding.timeText.setText(AppUtil.formatDate(context, task.getCreateTime(), true));
 
             String tagString = task.getTagString();
             binding.taskTag.setText(tagString);

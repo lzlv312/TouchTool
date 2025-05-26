@@ -13,6 +13,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.View;
 import android.view.WindowManager;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,10 +25,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.accessibility.selecttospeak.SelectToSpeakService;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.ActivityResultCallback;
+import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class BaseActivity extends AppCompatActivity {
     static {
@@ -92,6 +98,24 @@ public class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d("BaseActivity", "onStart: " + this.getClass().getName());
+
+        MainAccessibilityService.enabled.observe(this, enabled -> {
+            if (MainApplication.getInstance().getService() == null) return;
+            if (enabled) {
+                View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
+                if (view != null) return;
+                new KeepAliveFloatView(new ContextThemeWrapper(this, R.style.Theme_TouchTool)).show();
+            } else {
+                FloatWindow.dismiss(KeepAliveFloatView.class.getName());
+            }
+        });
+
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service != null && service.isEnabled()) {
+            View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
+            if (view != null) return;
+            new KeepAliveFloatView(new ContextThemeWrapper(this, R.style.Theme_TouchTool)).show();
+        }
     }
 
     @Override

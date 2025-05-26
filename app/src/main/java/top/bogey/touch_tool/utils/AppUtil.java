@@ -3,16 +3,20 @@ package top.bogey.touch_tool.utils;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.KeyguardManager;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.PowerManager;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.accessibility.AccessibilityManager;
@@ -24,11 +28,8 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,10 +47,15 @@ import java.util.regex.Pattern;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.databinding.DialogInputTextBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.ui.BaseActivity;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.callback.StringResultCallback;
 
 public class AppUtil {
+    public final static String PICTURE_DIR_NAME = "picture";
+    public final static String TASK_DIR_NAME = "task";
+    public final static String TEXT_DIR_NAME = "text";
+
     // 判断当前环境是否为发布环境
     public static boolean isRelease(Context context) {
         ApplicationInfo info = context.getApplicationInfo();
@@ -230,37 +236,35 @@ public class AppUtil {
         }
     }
 
-    @SuppressLint("DefaultLocale")
-    public static String formatDate(long time) {
+    public static String formatDate(Context context, long time, boolean ignoreYear) {
         Calendar current = Calendar.getInstance();
         current.setTimeInMillis(time);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         StringBuilder builder = new StringBuilder();
-        if (current.get(Calendar.YEAR) != calendar.get(Calendar.YEAR)) builder.append(current.get(Calendar.YEAR)).append("-");
-        builder.append(String.format("%02d", current.get(Calendar.MONTH) + 1)).append("-");
-        builder.append(String.format("%02d", current.get(Calendar.DAY_OF_MONTH)));
+        if (current.get(Calendar.YEAR) != calendar.get(Calendar.YEAR) || !ignoreYear) builder.append(context.getString(R.string.year, current.get(Calendar.YEAR)));
+        builder.append(context.getString(R.string.month, current.get(Calendar.MONTH) + 1));
+        builder.append(context.getString(R.string.day, current.get(Calendar.DAY_OF_MONTH)));
         return builder.toString();
     }
 
-    @SuppressLint("DefaultLocale")
-    public static String formatTime(long time) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time);
-        return String.format("%02d:%02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+    public static String formatTime(Context context, long time, boolean ignoreMillisecond) {
+        Calendar current = Calendar.getInstance();
+        current.setTimeInMillis(time);
+        StringBuilder builder = new StringBuilder();
+        builder.append(context.getString(R.string.hour, current.get(Calendar.HOUR_OF_DAY)));
+        builder.append(context.getString(R.string.minute, current.get(Calendar.MINUTE)));
+        builder.append(context.getString(R.string.second, current.get(Calendar.SECOND)));
+        if (!ignoreMillisecond) builder.append(context.getString(R.string.millisecond, current.get(Calendar.MILLISECOND)));
+        return builder.toString();
     }
 
-    @SuppressLint("DefaultLocale")
-    public static String formatTimeMillisecond(long time) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time);
-        return String.format("%02d:%02d:%02d.%03d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), calendar.get(Calendar.MILLISECOND));
+    public static String formatDateTime(Context context, long time, boolean ignoreYear, boolean ignoreMillisecond) {
+        return formatDateTime(context, time, " ", ignoreYear, ignoreMillisecond);
     }
 
-    public static String formatDateTime(long time) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time);
-        return formatDate(time) + " " + formatTime(time);
+    public static String formatDateTime(Context context, long time, String link, boolean ignoreYear, boolean ignoreMillisecond) {
+        return formatDate(context, time, ignoreYear) + link + formatTime(context, time, ignoreMillisecond);
     }
 
     public static String formatDuration(Context context, long duration) {
@@ -281,44 +285,6 @@ public class AppUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.set(dateCalendar.get(Calendar.YEAR), dateCalendar.get(Calendar.MONTH), dateCalendar.get(Calendar.DATE), timeCalendar.get(Calendar.HOUR_OF_DAY), timeCalendar.get(Calendar.MINUTE), 0);
         return calendar.getTimeInMillis();
-    }
-
-    public static void installApk(Context context, Uri uri) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, "application/vnd.android.package-archive");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
-
-    public static void copyFile(String source, String destination) {
-        if (source == null || source.isEmpty() || destination == null || destination.isEmpty()) return;
-
-        File sourceFile = new File(source);
-        String[] files = sourceFile.list();
-        if (files == null) return;
-
-        for (String file : files) {
-            String sourcePath = source + File.separator + file;
-            String destinationPath = destination + File.separator + file;
-            if (new File(sourcePath).isDirectory()) {
-                if (new File(destinationPath).mkdirs()) {
-                    copyFile(sourcePath, destinationPath);
-                }
-            } else {
-                try (InputStream inputStream = new BufferedInputStream(new FileInputStream(sourcePath))) {
-                    OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(destinationPath));
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = inputStream.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, length);
-                    }
-                    outputStream.flush();
-                    outputStream.close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
     }
 
     public static long getFileSize(File file) {
@@ -356,13 +322,17 @@ public class AppUtil {
         return true;
     }
 
-    public static Uri writeToInner(Context context, String path, byte[] content) {
-        File file = new File(path);
+    public static File writeFile(Context context, String parent, String fileName, byte[] content) {
+        File fileParent = context.getCacheDir();
+        if (parent != null) fileParent = new File(fileParent, parent);
+
+        File file = new File(fileParent, fileName);
         if (!file.exists()) {
+            if (!fileParent.mkdirs()) return null;
             try {
                 if (!file.createNewFile()) return null;
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                return null;
             }
         }
 
@@ -370,55 +340,102 @@ public class AppUtil {
             outputStream.write(content);
             outputStream.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return null;
         }
 
-        return FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
+        return file;
     }
 
-    public static String readFile(Context context, Uri uri) {
+    public static void exportFile(BaseActivity activity, String fileName, byte[] content) {
+        activity.launcherCreateDocument(fileName, (code, intent) -> {
+            if (code == Activity.RESULT_OK) {
+                Uri uri = intent.getData();
+                if (uri == null) return;
+                try (OutputStream outputStream = activity.getContentResolver().openOutputStream(uri)) {
+                    if (outputStream == null) return;
+                    outputStream.write(content);
+                    outputStream.flush();
+                } catch (IOException ignored) {
+                }
+            }
+        });
+    }
+
+    public static void shareImage(Context context, Bitmap image) {
+        if (image == null) return;
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setType("image/*");
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        File file = writeFile(context, PICTURE_DIR_NAME, PICTURE_DIR_NAME + "_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg", outputStream.toByteArray());
+        if (file != null) {
+            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            context.startActivity(intent);
+        }
+    }
+
+    public static void shareText(Context context, String text) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setType("text/*");
+        File file = writeFile(context, TEXT_DIR_NAME, TEXT_DIR_NAME + "_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".txt", text.getBytes());
+        if (file != null) {
+            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            context.startActivity(intent);
+        }
+    }
+
+    public static byte[] readFile(Context context, Uri uri) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-            if (inputStream == null) return "";
+            if (inputStream == null) return new byte[0];
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
             int length;
             while ((length = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, length);
             }
-            return outputStream.toString();
+            byte[] byteArray = outputStream.toByteArray();
+            outputStream.close();
+            return byteArray;
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static Bitmap loadImage(Context context, Uri uri) {
-        try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-            return BitmapFactory.decodeStream(inputStream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            return new byte[0];
         }
     }
 
     public static void saveImage(Context context, Bitmap image) {
         if (image == null) return;
-        String fileName = "share_" + System.currentTimeMillis() + ".jpg";
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
-        if (!file.exists()) {
+
+        String fileName = PICTURE_DIR_NAME + "_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, fileName);
+            contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/" + context.getString(R.string.app_name));
+
             try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                if (uri == null) return;
+
+                try (OutputStream outputStream = context.getContentResolver().openOutputStream(uri)) {
+                    if (outputStream == null) return;
+                    image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                }
+            } catch (IOException ignored) {
+
             }
-        }
-
-        try (OutputStream outputStream = new FileOutputStream(file)) {
-            image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-
-            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            intent.setData(Uri.fromFile(file));
-            context.sendBroadcast(intent);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), fileName);
+            try (OutputStream outputStream = new FileOutputStream(file)) {
+                image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                MediaScannerConnection.scanFile(context, new String[]{file.getAbsolutePath()}, new String[]{"image/jpeg"}, null);
+            } catch (IOException ignored) {
+            }
         }
     }
 

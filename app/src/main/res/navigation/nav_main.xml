@@ -16,10 +16,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/shortcut"
-        android:name="top.bogey.touch_tool.ui.shortcut.ShortcutView"
+        android:id="@+id/tool"
+        android:name="top.bogey.touch_tool.ui.tool.ToolView"
         android:label="@string/tool"
-        tools:layout="@layout/view_shortcut" />
+        tools:layout="@layout/view_tool" />
 
     <fragment
         android:id="@+id/setting"

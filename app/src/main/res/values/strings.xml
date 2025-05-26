@@ -6,6 +6,8 @@
     <string name="dialog_title">提示</string>
     <string name="enter">确定</string>
     <string name="cancel">取消</string>
+    <string name="save">保存</string>
+    <string name="close">关闭</string>
 
     <!-- 复制 -->
     <string name="copy_tips">已复制</string>
@@ -14,6 +16,13 @@
     <!-- 时间 -->
     <string name="hours">%d小时</string>
     <string name="minutes">%d分钟</string>
+    <string name="year">%d年</string>
+    <string name="month">%d月</string>
+    <string name="day">%d日</string>
+    <string name="hour">%d时</string>
+    <string name="minute">%d分</string>
+    <string name="second">%d秒</string>
+    <string name="millisecond">%d毫秒</string>
 
     <!-- 任务标签 -->
     <string name="tag_empty">未分类</string>
@@ -62,11 +71,10 @@
     <string name="variable_delete_tips">有%d个任务引用了此变量，分别是：</string>
 
     <!-- 蓝图界面相关 -->
-    <string name="task_running_log">查看任务日志</string>
+    <string name="task_running_log">任务日志</string>
     <string name="task_running_log_clear">清除日志</string>
     <string name="task_running_detail_log">记录日志细节</string>
     <string name="task_capture">任务截图</string>
-    <string name="task_capture_tips">保存任务截图还是分享任务截图？</string>
 
     <string name="select_action_group_global">全局</string>
     <string name="select_action_group_private">自有</string>
@@ -81,14 +89,18 @@
     <string name="select_icon_preset">预设</string>
     <string name="select_icon_app">应用</string>
     <string name="select_icon_system_app">系统应用</string>
+    <string name="select_icon_tips">请选择一个图标</string>
 
     <!-- 错误 -->
+    <string name="execute_with_task_not_found">没找到要执行的任务</string>
+    <string name="execute_with_action_not_found">没找到要执行的动作</string>
     <string name="card_check_error_tips">存在%d个问题卡片</string>
 
     <string name="check_pin_linkable_error">针脚类型不匹配</string>
 
     <!-- 警告 -->
     <string name="check_need_capture_warning">获取截图需要开启录屏</string>
+
 
     <!-- 任务 -->
     <string name="action_add_pin">添加针脚</string>
@@ -208,6 +220,7 @@
     <string name="app_setting_enable">功能启用</string>
     <string name="app_setting_enable_desc">在设置中启用功能后才能使用软件提供的各种能力</string>
     <string name="app_setting_enable_tips">需要开启无障碍服务才能启用功能。请依次点击“已下载的应用”->“%s”，然后开启服务。</string>
+    <string name="app_setting_enable_error">无障碍服务未启用</string>
 
     <string name="app_setting_hide_back">隐藏后台</string>
     <string name="app_setting_hide_back_desc">在最近任务列表里隐藏本应用</string>

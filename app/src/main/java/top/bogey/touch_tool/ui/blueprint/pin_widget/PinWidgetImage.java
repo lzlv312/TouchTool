@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -13,6 +14,9 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -73,7 +77,10 @@ public class PinWidgetImage extends PinWidget<PinImage> {
                         Bitmap bitmap = null;
                         Uri uri = intent.getData();
                         if (uri != null) {
-                            bitmap = AppUtil.loadImage(activity, uri);
+                            try (InputStream inputStream = activity.getContentResolver().openInputStream(uri)) {
+                                bitmap = BitmapFactory.decodeStream(inputStream);
+                            } catch (IOException ignored) {
+                            }
                         }
                         pinBase.setImage(bitmap);
                         pinView.getPin().notifyValueUpdated();

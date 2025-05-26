@@ -12,6 +12,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
+import top.bogey.touch_tool.bean.save.LogInfo;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.custom.ToastFloatView;
@@ -47,7 +48,7 @@ public class LoggerAction extends ExecuteAction {
         }
 
         if (save.getValue()) {
-            Saver.getInstance().addLog(runnable.getStartTask().getId(), logObject.toString());
+            Saver.getInstance().addLog(runnable.getStartTask().getId(), new LogInfo(-1, this));
         }
 
         executeNext(runnable, outPin);

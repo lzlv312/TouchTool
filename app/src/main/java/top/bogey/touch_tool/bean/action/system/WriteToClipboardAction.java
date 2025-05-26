@@ -33,7 +33,7 @@ public class WriteToClipboardAction extends ExecuteAction {
         if (text.getValue() != null && !text.getValue().isEmpty()) {
             MainApplication instance = MainApplication.getInstance();
             ClipboardManager manager = (ClipboardManager) instance.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText(instance.getString(R.string.app_name), text.getValue());
+            ClipData clipData = ClipData.newPlainText(text.getValue(), text.getValue());
             manager.setPrimaryClip(clipData);
         }
         executeNext(runnable, outPin);

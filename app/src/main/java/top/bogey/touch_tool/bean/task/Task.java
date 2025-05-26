@@ -30,6 +30,8 @@ import top.bogey.touch_tool.utils.GsonUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
 public class Task extends Identity implements IActionManager, ITaskManager, IVariableManager, ITagManager {
+    public final static int FLAG_DEBUG = 1;
+
     private final long createTime;
 
     private final ActionManager actionManager;
@@ -39,7 +41,7 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
 
     private final TagManager tagManager;
 
-    private boolean detailLog = false;
+    private int flag = 0;
 
     private transient Task parent;
     private transient ExecuteTaskAction startAction = null;
@@ -70,7 +72,7 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
 
         tagManager = GsonUtil.getAsObject(jsonObject, "tagManager", TagManager.class, new TagManager());
 
-        detailLog = GsonUtil.getAsBoolean(jsonObject, "detailLog", false);
+        flag = GsonUtil.getAsInt(jsonObject, "detailLog", 0);
     }
 
     @Override
@@ -319,12 +321,24 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         this.parent = parent;
     }
 
-    public boolean isDetailLog() {
-        return detailLog;
+    public int getFlag() {
+        return flag;
     }
 
-    public void setDetailLog(boolean detailLog) {
-        this.detailLog = detailLog;
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    public void addFlag(int flag) {
+        this.flag |= flag;
+    }
+
+    public void toggleFlag(int flag) {
+        this.flag ^= flag;
+    }
+
+    public boolean hasFlag(int flag) {
+        return (this.flag & flag) != 0;
     }
 
     public static class TaskDeserialize implements JsonDeserializer<Task> {

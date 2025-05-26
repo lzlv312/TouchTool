@@ -1,6 +1,8 @@
 package top.bogey.touch_tool.ui.custom;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -72,7 +74,6 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
     private void innerShowStick(PinObject object, EAnchor anchor, Point location) {
         if (object instanceof PinImage pinImage) {
             binding.image.setImageBitmap(pinImage.getImage());
-            binding.saveButton.setVisibility(VISIBLE);
             binding.saveButton.setOnClickListener(v -> {
                 AppUtil.saveImage(getContext(), pinImage.getImage());
                 Toast.makeText(getContext(), R.string.save_image_action, Toast.LENGTH_SHORT).show();
@@ -89,6 +90,13 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             int maxWidth = DisplayUtil.getScreenWidth(getContext()) * 2 / 3;
             Bitmap textBitmap = DisplayUtil.createTextBitmap(getContext(), object.toString(), textColor, textSize, maxWidth, 0, (int) DisplayUtil.dp2px(getContext(), 8));
             binding.image.setImageBitmap(textBitmap);
+
+            binding.saveButton.setIconResource(R.drawable.icon_copy);
+            binding.saveButton.setOnClickListener(v -> {
+                ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                manager.setPrimaryClip(ClipData.newPlainText(object.toString(), object.toString()));
+                Toast.makeText(getContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
+            });
         }
         post(() -> {
             if (location.x < 0 || location.y < 0) {

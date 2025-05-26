@@ -182,7 +182,7 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
             this.binding = binding;
             binding.copyButton.setOnClickListener(v -> {
                 ClipboardManager clipboard = (ClipboardManager) itemView.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(itemView.getContext().getString(R.string.copy_ttp_url), content.copyValue);
+                ClipData clip = ClipData.newPlainText(itemView.getContext().getString(R.string.pin_node), content.copyValue);
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(itemView.getContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
             });

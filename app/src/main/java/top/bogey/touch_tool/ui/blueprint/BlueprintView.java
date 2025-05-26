@@ -1,10 +1,7 @@
 package top.bogey.touch_tool.ui.blueprint;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,8 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.imageview.ShapeableImageView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,17 +29,16 @@ import java.util.Stack;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
-import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewBlueprintBinding;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
+import top.bogey.touch_tool.ui.tool.log.LogView;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class BlueprintView extends Fragment {
     private final Stack<Task> taskStack = new Stack<>();
@@ -87,11 +84,8 @@ public class BlueprintView extends Fragment {
         @Override
         public void onPrepareMenu(@NonNull Menu menu) {
             Task task = taskStack.peek();
-            while (task.getParent() != null) {
-                task = task.getParent();
-            }
             MenuItem item = menu.findItem(R.id.taskDetailLog);
-            item.setChecked(task.isDetailLog());
+            item.setChecked(task.hasFlag(Task.FLAG_DEBUG));
         }
 
         @Override
@@ -112,41 +106,49 @@ public class BlueprintView extends Fragment {
                 return true;
             } else if (itemId == R.id.taskRunningLog) {
                 Task task = taskStack.peek();
-                while (task.getParent() != null) {
-                    task = task.getParent();
-                }
-                // todo 显示日志
+                LogView logView = new LogView(requireContext(), task, false);
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.task_running_log)
+                        .setView(logView)
+                        .setPositiveButton(R.string.close, null)
+                        .setNeutralButton(R.string.task_running_log_clear, (dialog, which) -> {
+                            dialog.dismiss();
+                            Saver.getInstance().clearLog(task.getId());
+                        })
+                        .show();
+                DisplayUtil.setViewWidth(logView, ViewGroup.LayoutParams.MATCH_PARENT);
+                DisplayUtil.setViewHeight(logView, ViewGroup.LayoutParams.WRAP_CONTENT);
+                int px = (int) DisplayUtil.dp2px(requireContext(), 16);
+                DisplayUtil.setViewMargin(logView, px, px, px, px);
                 return true;
             } else if (itemId == R.id.taskDetailLog) {
                 Task task = taskStack.peek();
-                while (task.getParent() != null) {
-                    task = task.getParent();
-                }
-                task.setDetailLog(!task.isDetailLog());
+                task.toggleFlag(Task.FLAG_DEBUG);
                 task.save();
-                menuItem.setChecked(task.isDetailLog());
+                menuItem.setChecked(task.hasFlag(Task.FLAG_DEBUG));
                 return true;
             } else if (itemId == R.id.taskCapture) {
                 Bitmap bitmap = binding.cardLayout.takeTaskCapture();
+                ShapeableImageView imageView = new ShapeableImageView(requireContext());
+                imageView.setImageBitmap(bitmap);
 
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setType("image/*");
+                new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.task_capture)
+                        .setView(imageView)
+                        .setPositiveButton(R.string.save, (dialog, which) -> {
+                            dialog.dismiss();
+                            AppUtil.saveImage(requireContext(), bitmap);
+                        })
+                        .setNegativeButton(R.string.share_to_action, (dialog, which) -> {
+                            dialog.dismiss();
+                            AppUtil.shareImage(requireContext(), bitmap);
+                        })
+                        .setNeutralButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
+                        .show();
 
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                byte[] bytes = outputStream.toByteArray();
-                String path = requireActivity().getCacheDir() + File.separator + "share_" + System.currentTimeMillis() + ".jpg";
-
-                Uri uri = AppUtil.writeToInner(requireContext(), path, bytes);
-                if (uri != null) {
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    intent.putExtra(Intent.EXTRA_STREAM, uri);
-                }
-
-                Intent chooser = Intent.createChooser(intent, null);
-                chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                requireActivity().startActivity(chooser);
+                Point size = DisplayUtil.getScreenSize(requireContext());
+                DisplayUtil.setViewWidth(imageView, ViewGroup.LayoutParams.MATCH_PARENT);
+                DisplayUtil.setViewHeight(imageView, size.y / 2);
                 return true;
             }
             return false;

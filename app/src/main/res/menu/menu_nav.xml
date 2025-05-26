@@ -6,7 +6,7 @@
         android:title="@string/task" />
 
     <item
-        android:id="@+id/shortcut"
+        android:id="@+id/tool"
         android:icon="@drawable/icon_widget"
         android:title="@string/tool" />
 

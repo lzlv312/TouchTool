@@ -55,6 +55,7 @@ import top.bogey.touch_tool.ui.blueprint.picker.NodePickerPreview;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionByCustomActionDialog;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_edit_text.SelectEditTextDialog;
+import top.bogey.touch_tool.ui.blueprint.selecter.select_icon.SelectIconDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
@@ -147,28 +148,31 @@ public class PinWidgetString extends PinWidget<PinString> {
                 binding.pickButton.setIconResource(R.drawable.icon_copy);
                 binding.pickButton.setOnClickListener(v -> {
                     ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    manager.setPrimaryClip(ClipData.newPlainText(getContext().getString(R.string.copy_ttp_url), url));
+                    manager.setPrimaryClip(ClipData.newPlainText(url, url));
                     Toast.makeText(getContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
                 });
             }
             case SHORTCUT -> {
-                binding.editText.setVisibility(GONE);
-                binding.pickButton.setIconResource(R.drawable.icon_star);
+                binding.editBox.setVisibility(GONE);
+                binding.pickButton.setIconResource(R.drawable.icon_share);
                 binding.pickButton.setOnClickListener(v -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         ShortcutManager manager = (ShortcutManager) getContext().getSystemService(Context.SHORTCUT_SERVICE);
                         if (manager.isRequestPinShortcutSupported()) {
-                            Intent intent = new Intent(getContext(), InstantActivity.class);
-                            intent.setAction(Intent.ACTION_VIEW);
-                            intent.putExtra(InstantActivity.INTENT_KEY_DO_ACTION, true);
-                            intent.putExtra(InstantActivity.TASK_ID, card.getTask().getId());
-                            intent.putExtra(InstantActivity.ACTION_ID, card.getAction().getId());
-                            ShortcutInfo info = new ShortcutInfo.Builder(getContext(), card.getAction().getId())
-                                    .setShortLabel(card.getTask().getTitle())
-                                    .setIcon(Icon.createWithResource(getContext(), R.drawable.icon_star))
-                                    .setIntent(intent)
-                                    .build();
-                            manager.requestPinShortcut(info, null);
+                            new SelectIconDialog(getContext(), icon -> {
+                                Intent intent = new Intent(getContext(), InstantActivity.class);
+                                intent.setAction(Intent.ACTION_VIEW);
+                                intent.putExtra(InstantActivity.INTENT_KEY_DO_ACTION, true);
+                                intent.putExtra(InstantActivity.TASK_ID, card.getTask().getId());
+                                intent.putExtra(InstantActivity.ACTION_ID, card.getAction().getId());
+                                ShortcutInfo info = new ShortcutInfo.Builder(getContext(), card.getAction().getId())
+                                        .setShortLabel(card.getTask().getTitle())
+                                        .setIcon(Icon.createWithBitmap(icon))
+                                        .setIntent(intent)
+                                        .build();
+                                manager.requestPinShortcut(info, null);
+                            }).show();
+                            Toast.makeText(getContext(), R.string.select_icon_tips, Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
@@ -189,8 +193,8 @@ public class PinWidgetString extends PinWidget<PinString> {
                                 pinBase.setValue(null);
                                 pinView.getPin().notifyValueUpdated();
                             } else {
-                                binding.editText.setText(getRingtoneName(uri.toString()));
-                                pinBase.setValue(uri.toString());
+                                binding.editText.setText(getRingtoneName(uri.getPath()));
+                                pinBase.setValue(uri.getPath());
                                 pinView.getPin().notifyValueUpdated();
                             }
                         }
@@ -270,7 +274,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                             if (uri == null) {
                                 binding.editText.setText("");
                             } else {
-                                String content = AppUtil.readFile(getContext(), uri);
+                                String content = new String(AppUtil.readFile(getContext(), uri));
                                 binding.editText.setText(content);
                                 pinBase.setValue(content);
                                 pinView.getPin().notifyValueUpdated();

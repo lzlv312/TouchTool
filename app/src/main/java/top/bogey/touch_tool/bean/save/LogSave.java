@@ -1,11 +1,15 @@
 package top.bogey.touch_tool.bean.save;
 
+import android.annotation.SuppressLint;
+
 import com.tencent.mmkv.MMKV;
 
 import top.bogey.touch_tool.utils.GsonUtil;
 
+@SuppressLint("DefaultLocale")
 public class LogSave {
-    private static final String INDEX = "index";
+    private static final String DETAIL_LOG = "DETAIL_LOG";
+    private static final String NORMAL_LOG = "NORMAL_LOG";
 
     private final MMKV mmkv;
 
@@ -15,25 +19,35 @@ public class LogSave {
         mmkv = MMKV.mmkvWithID(key, MMKV.MULTI_PROCESS_MODE, null, path);
     }
 
-    public String getLog() {
-        StringBuilder sb = new StringBuilder();
-        int index = mmkv.decodeInt(INDEX, 0);
-        for (int i = index; i > 0; i--) {
-            LogInfo logInfo = GsonUtil.getAsObject(mmkv.decodeString(String.valueOf(i)), LogInfo.class, null);
-            if (logInfo != null) {
-                sb.append(logInfo.getLog()).append("\n\n");
-            }
-        }
-        time = System.currentTimeMillis();
-        return sb.toString().trim();
+    public LogInfo getLog(int index) {
+        return GsonUtil.getAsObject(mmkv.decodeString(String.format("%s_%d", NORMAL_LOG, index)), LogInfo.class, null);
     }
 
-    public void addLog(String log) {
-        int index = mmkv.decodeInt(INDEX, 0);
-        index++;
-        LogInfo logInfo = new LogInfo(index, log);
-        mmkv.encode(INDEX, index);
-        mmkv.encode(String.valueOf(index), GsonUtil.toJson(logInfo));
+    public LogInfo getDetailLog(int index) {
+        return GsonUtil.getAsObject(mmkv.decodeString(String.format("%s_%d", DETAIL_LOG, index)), LogInfo.class, null);
+    }
+
+    public int getLogCount() {
+        return mmkv.decodeInt(NORMAL_LOG, 0);
+    }
+
+    public int getDetailLogCount() {
+        return mmkv.decodeInt(DETAIL_LOG, 0);
+    }
+
+    public void addLog(LogInfo log) {
+        int index;
+        if (log.getIndex() == -1) {
+            index = getLogCount();
+            index++;
+            mmkv.encode(NORMAL_LOG, index);
+            mmkv.encode(String.format("%s_%d", NORMAL_LOG, index), GsonUtil.toJson(log));
+        } else {
+            index = getDetailLogCount();
+            index++;
+            mmkv.encode(DETAIL_LOG, index);
+            mmkv.encode(String.format("%s_%d", DETAIL_LOG, index), GsonUtil.toJson(log));
+        }
         time = System.currentTimeMillis();
     }
 

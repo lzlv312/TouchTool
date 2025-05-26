@@ -40,7 +40,6 @@
                 android:layout_height="24dp"
                 android:layout_gravity="end|top"
                 android:alpha="0.5"
-                android:visibility="gone"
                 app:icon="@drawable/icon_save" />
 
         </com.google.android.material.card.MaterialCardView>

@@ -90,6 +90,7 @@ public class TaskView extends Fragment implements TaskListener, TaskSaveListener
         Saver.getInstance().removeListener(this);
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service != null && service.isEnabled()) service.removeListener(this);
+        binding.tasksBox.setAdapter(null);
         super.onDestroyView();
     }
 

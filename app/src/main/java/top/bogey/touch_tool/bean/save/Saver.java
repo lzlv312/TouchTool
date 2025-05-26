@@ -276,14 +276,13 @@ public class Saver {
     }
 
     // ====================================================================================================================
-    public String getLog(String key) {
-        LogSave logSave = loggers.computeIfAbsent(key, k -> new LogSave(key, LOG_DIR));
-        return logSave.getLog();
+    public LogSave getLog(String key) {
+        return loggers.computeIfAbsent(key, k -> new LogSave(key, LOG_DIR));
     }
 
-    public void addLog(String key, String content) {
-        LogSave logSave = loggers.computeIfAbsent(key, k -> new LogSave(key, LOG_DIR));
-        logSave.addLog(content);
+    public void addLog(String key, LogInfo log) {
+        LogSave logSave = getLog(key);
+        logSave.addLog(log);
     }
 
     public void clearLog(String key) {
