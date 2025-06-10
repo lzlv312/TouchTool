@@ -1,6 +1,5 @@
 package top.bogey.touch_tool.ui.blueprint.picker;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import com.amrdeveloper.treeview.TreeNode;
-import com.amrdeveloper.treeview.TreeNodeManager;
-import com.amrdeveloper.treeview.TreeViewAdapter;
-import com.amrdeveloper.treeview.TreeViewHolder;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.R;
@@ -23,99 +18,70 @@ import top.bogey.touch_tool.databinding.FloatPickerNodeItemBinding;
 import top.bogey.touch_tool.ui.custom.NodeInfoFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.utils.tree.TreeAdapter;
+import top.bogey.touch_tool.utils.tree.TreeNode;
 
-public class NodePickerTreeAdapter extends TreeViewAdapter {
-    private final List<TreeNode> treeNodes = new ArrayList<>();
-    private final TreeNodeManager manager;
+public class NodePickerTreeAdapter extends TreeAdapter {
     private final SelectNode picker;
     private final List<NodeInfo> roots;
     private TreeNode selectedNode;
 
-    public NodePickerTreeAdapter(TreeNodeManager manager, SelectNode picker, List<NodeInfo> roots) {
-        super(null, manager);
-        this.manager = manager;
+    public NodePickerTreeAdapter(SelectNode picker, List<NodeInfo> roots) {
         this.picker = picker;
         this.roots = roots;
-        setTreeNodeLongClickListener((treeNode, view) -> {
-            NodeInfo nodeInfo = (NodeInfo) treeNode.getValue();
-            picker.selectNode(nodeInfo);
-            setSelectedNode(nodeInfo);
-            return true;
-        });
         searchNodes(null);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull TreeViewHolder holder, int position) {
-        super.onBindViewHolder(holder, position);
-        ViewHolder viewHolder = (ViewHolder) holder;
-        viewHolder.refreshNode(manager.get(position), selectedNode);
     }
 
     @NonNull
     @Override
-    public TreeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int layoutId) {
+    public TreeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int layoutId) {
         FloatPickerNodeItemBinding binding = FloatPickerNodeItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
     }
 
     public void setSelectedNode(NodeInfo nodeInfo) {
-        collapseAll();
-        if (nodeInfo == null) selectedNode = null;
-        else {
+        if (selectedNode != null) {
+            int index = treeNodes.indexOf(selectedNode);
+            selectedNode = null;
+            if (index >= 0) notifyItemChanged(index);
+        }
+
+        if (nodeInfo != null) {
             selectedNode = findTreeNode(treeNodes, nodeInfo);
             if (selectedNode != null) {
-                TreeNode parent = selectedNode.getParent();
-                while (parent != null) {
-                    TreeNode p = parent.getParent();
-                    if (p == null) {
-                        parent.setExpanded(false);
-                        expandNode(parent);
-                    } else {
-                        parent.setExpanded(true);
-                    }
-                    parent = p;
-                }
+                expandNode(selectedNode);
             }
         }
     }
 
     public void searchNodes(String search) {
-        treeNodes.clear();
+        List<TreeNode> treeNodes = new ArrayList<>();
         Pattern pattern = AppUtil.getPattern(search);
         for (NodeInfo root : roots) {
             TreeNode tree;
             if (pattern == null) {
-                tree = createTree(root, 0);
+                tree = new TreeNode(root);
             } else {
-                tree = createTree(root, 0, pattern);
+                tree = createTree(root, pattern);
+                if (tree != null) tree.setDepth(0);
             }
             if (tree != null) treeNodes.add(tree);
         }
-        updateTreeNodes(treeNodes);
+        setTreeNodes(treeNodes);
         if (pattern != null) expandAll();
+        else collapseAll();
     }
 
-    private TreeNode createTree(NodeInfo node, int level) {
-        TreeNode treeNode = new TreeNode(node, R.layout.float_picker_node_item);
-        treeNode.setLevel(level);
-        for (NodeInfo child : node.children) {
-            treeNode.addChild(createTree(child, level + 1));
-        }
-        return treeNode;
-    }
-
-    private TreeNode createTree(NodeInfo node, int level, @NonNull Pattern pattern) {
+    private TreeNode createTree(NodeInfo node, @NonNull Pattern pattern) {
         boolean found = false;
         if (node.text != null && pattern.matcher(node.text).find()) found = true;
         else if (node.id != null && pattern.matcher(node.id).find()) found = true;
         else if (node.clazz != null && pattern.matcher(node.clazz).find()) found = true;
 
-        TreeNode treeNode = new TreeNode(node, R.layout.float_picker_node_item);
-        treeNode.setLevel(level);
+        TreeNode treeNode = new TreeNode(node, false);
 
         for (NodeInfo child : node.children) {
-            TreeNode tree = createTree(child, level + 1, pattern);
+            TreeNode tree = createTree(child, pattern);
             if (tree != null) treeNode.addChild(tree);
         }
 
@@ -125,7 +91,7 @@ public class NodePickerTreeAdapter extends TreeViewAdapter {
 
     private static TreeNode findTreeNode(List<TreeNode> treeNodes, Object value) {
         for (TreeNode treeNode : treeNodes) {
-            if (treeNode.getValue().equals(value)) return treeNode;
+            if (Objects.equals(treeNode.getData(), value)) return treeNode;
             TreeNode childNode = findTreeNode(treeNode.getChildren(), value);
             if (childNode != null) return childNode;
         }
@@ -136,45 +102,46 @@ public class NodePickerTreeAdapter extends TreeViewAdapter {
         void selectNode(NodeInfo nodeInfo);
     }
 
-    private class ViewHolder extends TreeViewHolder {
+    private class ViewHolder extends TreeAdapter.ViewHolder {
         private final FloatPickerNodeItemBinding binding;
-        private final Context context;
+
 
         public ViewHolder(@NonNull FloatPickerNodeItemBinding binding) {
-            super(binding.getRoot());
+            super(NodePickerTreeAdapter.this, binding.getRoot());
             this.binding = binding;
-            context = binding.getRoot().getContext();
 
             binding.visibleButton.setOnClickListener(v -> {
-                int index = getBindingAdapterPosition();
-                TreeNode treeNode = manager.get(index);
-                NodeInfo nodeInfo = (NodeInfo) treeNode.getValue();
+                NodeInfo nodeInfo = (NodeInfo) node.getData();
+                if (nodeInfo == null) return;
                 nodeInfo.visible = !nodeInfo.visible;
-                notifyItemChanged(index);
+                notifyItemChanged(getAdapterPosition());
             });
 
             binding.infoButton.setOnClickListener(v -> {
-                int index = getBindingAdapterPosition();
-                TreeNode treeNode = manager.get(index);
-                NodeInfo nodeInfo = (NodeInfo) treeNode.getValue();
+                NodeInfo nodeInfo = (NodeInfo) node.getData();
                 NodeInfoFloatView.showInfo(nodeInfo, picker::selectNode);
             });
         }
 
         @Override
-        public void bindTreeNode(TreeNode node) {
-            int padding = (int) (node.getLevel() * DisplayUtil.dp2px(context, 8));
-            binding.contentBox.setPaddingRelative(padding, 0, 0, 0);
+        public boolean onLongClicked(View view) {
+            NodeInfo nodeInfo = (NodeInfo) node.getData();
+            picker.selectNode(nodeInfo);
+            setSelectedNode(nodeInfo);
+            return true;
         }
 
-        public void refreshNode(TreeNode node, TreeNode selectedNode) {
-            NodeInfo nodeInfo = (NodeInfo) node.getValue();
+        @Override
+        public void refresh(TreeNode node) {
+            super.refresh(node);
+            NodeInfo nodeInfo = (NodeInfo) node.getData();
+            if (nodeInfo == null) return;
 
             binding.titleText.setText(getNodeTitle(nodeInfo));
             int color;
 
             if (node == selectedNode)
-                color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorErrorContainer);
+                color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorError);
             else {
                 if (nodeInfo.usable && nodeInfo.visible) {
                     color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant);
@@ -186,7 +153,7 @@ public class NodePickerTreeAdapter extends TreeViewAdapter {
 
             binding.imageView.setImageTintList(ColorStateList.valueOf(color));
             binding.imageView.setVisibility(nodeInfo.children.isEmpty() ? View.INVISIBLE : View.VISIBLE);
-            binding.imageView.setImageResource(node.isExpanded() ? R.drawable.icon_arrow_up : R.drawable.icon_arrow_down);
+            binding.imageView.setImageResource(node.isExpand() ? R.drawable.icon_arrow_up : R.drawable.icon_arrow_down);
 
             binding.visibleButton.setIconResource(nodeInfo.visible ? R.drawable.icon_visibility : R.drawable.icon_visibility_off);
             binding.visibleButton.setAlpha(nodeInfo.visible ? 0.3f : 1);

@@ -14,8 +14,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.tree.ITreeNodeData;
 
-public class NodeInfo {
+public class NodeInfo implements ITreeNodeData {
     public String clazz;
     public String id;
     public String text;
@@ -167,8 +168,6 @@ public class NodeInfo {
 
     /**
      * 用自身的信息在节点中找到和自身差不多的
-     * @param node
-     * @return
      */
     public NodeInfo findSelfInNode(NodeInfo node) {
         NodeInfo result = null;
@@ -221,5 +220,10 @@ public class NodeInfo {
         if (id != null && !id.isEmpty()) builder.append("[id=").append(id).append("]");
         if (index > 1) builder.append("[").append(index).append("]");
         return builder.toString();
+    }
+
+    @Override
+    public List<? extends ITreeNodeData> getChildren() {
+        return children;
     }
 }

@@ -12,6 +12,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.save.LogInfo;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 
@@ -26,6 +27,8 @@ public class GsonUtil {
             .registerTypeAdapter(PinList.class, new PinList.PinListSerializer())
             .registerTypeAdapter(PinApplications.class, new PinList.PinListSerializer())
             .registerTypeAdapter(PinMap.class, new PinMap.PinMapSerializer())
+
+            .registerTypeAdapter(LogInfo.class, new LogInfo.LogDeserialize())
             .create();
 
     public static <T> T copy(T src, Class<T> clazz) {

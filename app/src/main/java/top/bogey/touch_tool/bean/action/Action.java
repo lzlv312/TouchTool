@@ -213,7 +213,7 @@ public abstract class Action extends Identity implements PinListener {
     public abstract void execute(TaskRunnable runnable, Pin pin);
 
     public void executeNext(TaskRunnable runnable, Pin pin) {
-        runnable.addExecuteProgress(this);
+        onExecuteNext(runnable, pin);
 
         if (runnable.isInterrupt()) return;
         if (!pin.isOut()) return;
@@ -222,17 +222,27 @@ public abstract class Action extends Identity implements PinListener {
         if (linkedPin == null) return;
         Action action = runnable.getTask().getAction(linkedPin.getOwnerId());
         if (action == null) return;
+
+        runnable.addExecuteProgress(this);
+        runnable.addDebugLog(action, 1);
         action.execute(runnable, linkedPin);
+    }
+
+    public void onExecuteNext(TaskRunnable runnable, Pin pin) {
+        runnable.addDebugLog(this, -1);
     }
 
     public abstract void calculate(TaskRunnable runnable, Pin pin);
 
-    public abstract void resetReturnValue(TaskRunnable runnable);
+    public void resetReturnValue(TaskRunnable runnable) {
+
+    }
 
     public <T extends PinObject> T getPinValue(TaskRunnable runnable, Pin pin) {
         if (pin.isOut()) {
             resetReturnValue(runnable);
             calculate(runnable, pin);
+            runnable.addDebugLog(this, 0);
             runnable.addCalculateProgress(this);
             return returnValue(pin.getValue());
         }

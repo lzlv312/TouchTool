@@ -189,7 +189,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                         .setPositiveButton(R.string.enter, (view, which) -> {
                             PinInfo pinInfo = dialog.getSelected();
                             binding.keySlot.setText(pinInfo.getTitle());
-                            int index = getBindingAdapterPosition();
+                            int index = getAdapterPosition();
                             Variable var = (Variable) data.get(index);
                             var.setKeyPinInfo(pinInfo);
                             var.save();
@@ -202,7 +202,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             binding.typeSpinner.setOnItemSelectedListener(new SpinnerSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    int index = getBindingAdapterPosition();
+                    int index = getAdapterPosition();
                     Variable var = (Variable) data.get(index);
                     if (var.setType(Variable.VariableType.values()[position])) {
                         var.save();
@@ -218,7 +218,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                         .setPositiveButton(R.string.enter, (view, which) -> {
                             PinInfo pinInfo = dialog.getSelected();
                             binding.keySlot.setText(pinInfo.getTitle());
-                            int index = getBindingAdapterPosition();
+                            int index = getAdapterPosition();
                             Variable var = (Variable) data.get(index);
                             var.setValuePinInfo(pinInfo);
                             var.save();
@@ -229,7 +229,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             });
 
             binding.editButton.setOnClickListener(v -> {
-                int index = getBindingAdapterPosition();
+                int index = getAdapterPosition();
                 Object object = data.get(index);
 
                 if (object instanceof Task editTask) {
@@ -256,7 +256,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             });
 
             binding.copyButton.setOnClickListener(v -> {
-                int index = getBindingAdapterPosition();
+                int index = getAdapterPosition();
                 Object object = data.get(index);
                 if (object instanceof Task task) {
                     Task copy = task.newCopy();
@@ -278,7 +278,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             });
 
             binding.settingButton.setOnClickListener(v -> {
-                int index = getBindingAdapterPosition();
+                int index = getAdapterPosition();
                 Object object = data.get(index);
 
                 if (object instanceof Task task) {
@@ -289,7 +289,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
 
             binding.deleteButton.setOnClickListener(v -> {
                 if (needDelete) {
-                    int index = getBindingAdapterPosition();
+                    int index = getAdapterPosition();
                     Object object = data.get(index);
 
                     if (object instanceof Task task) {
@@ -332,7 +332,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             });
 
             binding.helpButton.setOnClickListener(v -> {
-                int index = getBindingAdapterPosition();
+                int index = getAdapterPosition();
                 Object object = data.get(index);
 
                 if (object instanceof Variable var) {
@@ -342,7 +342,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             });
 
             binding.getRoot().setOnClickListener(v -> {
-                int index = getBindingAdapterPosition();
+                int index = getAdapterPosition();
                 Object object = data.get(index);
                 Action action = null;
                 if (object instanceof ActionType actionType) {

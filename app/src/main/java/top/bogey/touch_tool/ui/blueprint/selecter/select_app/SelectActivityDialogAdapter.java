@@ -124,7 +124,7 @@ public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActi
                 button.setText(info.name());
             }
             button.setChecked(isSelectedActivity(info.name()));
-            button.setTextColor(DisplayUtil.getAttrColor(button.getContext(), info.isLauncher() ? com.google.android.material.R.attr.colorPrimaryContainer : com.google.android.material.R.attr.colorOnSurface));
+            button.setTextColor(DisplayUtil.getAttrColor(button.getContext(), info.isLauncher() ? com.google.android.material.R.attr.colorError : com.google.android.material.R.attr.colorOnSurface));
         }
 
         private void selectActivity() {

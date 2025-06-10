@@ -296,17 +296,17 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         return null;
     }
 
-    public ActionCard focusCard(String actionId) {
-        return focusCard(cards.get(actionId));
+    public void focusCard(String actionId) {
+        focusCard(cards.get(actionId));
     }
 
-    public ActionCard focusCard(ActionCard card) {
-        if (card == null) return null;
+    public void focusCard(ActionCard card) {
+        if (card == null) return;
 
         Action action = card.getAction();
         Point pos = action.getPos();
         float x = -pos.x * getScaleGridSize() + (getWidth() - card.getWidth() * scale) / 2f;
-        float y = -pos.y * getScaleGridSize() + (getHeight() - card.getHeight() * scale) / 2f;
+        float y = -pos.y * getScaleGridSize() + (getHeight() - card.getHeight() * scale) / 3f;
         ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
         animator.addUpdateListener(animation -> {
             float value = (float) animation.getAnimatedValue();
@@ -321,8 +321,6 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
             }
         });
         animator.start();
-
-        return card;
     }
 
     private void addSelectedCard(ActionCard card) {

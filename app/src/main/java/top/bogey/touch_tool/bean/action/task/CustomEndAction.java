@@ -56,10 +56,6 @@ public class CustomEndAction extends Action implements DynamicPinsAction, SyncAc
 
     }
 
-    @Override
-    public void resetReturnValue(TaskRunnable runnable) {
-
-    }
 
     @Override
     public List<Pin> getDynamicPins() {

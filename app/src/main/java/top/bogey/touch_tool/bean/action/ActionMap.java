@@ -97,6 +97,7 @@ public class ActionMap {
                     ActionType.NUMBER_GREATER,
                     ActionType.NUMBER_RANDOM,
                     ActionType.NUMBER_TO_INT,
+                    ActionType.NUMBER_ABS,
 
                     ActionType.CHECK_NUMBER_IN_VALUE_AREA,
                     ActionType.NUMBER_TO_VALUE_AREA,

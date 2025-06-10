@@ -1,9 +1,11 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_action;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -33,6 +35,7 @@ import top.bogey.touch_tool.databinding.WidgetSettingSelectButtonBinding;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.ui.custom.EditVariableDialog;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
@@ -41,7 +44,6 @@ public class SelectActionDialog extends BottomSheetDialog {
     protected final String PRIVATE = getContext().getString(R.string.select_action_group_private);
     protected final static String PARENT_PREFIX = "👨";
     protected final static String TAG_PREFIX = "🔗";
-    public final static String NEED_SAVE_FLAG = " 💾";
     public final static String GLOBAL_FLAG = "🌍 ";
 
     protected final DialogSelectActionBinding binding;
@@ -118,6 +120,10 @@ public class SelectActionDialog extends BottomSheetDialog {
                 case VARIABLE -> showNewVariableDialog();
             }
         });
+
+        Point size = DisplayUtil.getScreenSize(context);
+        DisplayUtil.setViewHeight(binding.getRoot(), (int) (size.y * 0.7f));
+        DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
     private void showNewVariableDialog() {

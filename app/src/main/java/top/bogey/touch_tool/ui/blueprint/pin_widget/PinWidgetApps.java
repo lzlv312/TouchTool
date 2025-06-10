@@ -8,7 +8,6 @@ import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
@@ -36,10 +35,10 @@ public class PinWidgetApps extends PinWidget<PinApplications> {
 
     @Override
     protected void initBase() {
-        binding.selectAppButton.setOnClickListener(v -> new SelectAppDialog(pinBase, result -> {
+        binding.selectAppButton.setOnClickListener(v -> new SelectAppDialog(getContext(), pinBase, result -> {
             refreshApps();
             pinView.getPin().notifyValueUpdated();
-        }).show(((AppCompatActivity) getContext()).getSupportFragmentManager(), null));
+        }).show());
         refreshApps();
     }
 

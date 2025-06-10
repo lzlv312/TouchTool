@@ -62,10 +62,6 @@ public class ParseJsonAction extends CalculateAction implements SyncAction {
     }
 
     @Override
-    public void resetReturnValue(TaskRunnable runnable) {
-    }
-
-    @Override
     public void sync(Task context) {
         if (jsonPin.isLinked()) return;
         resultPin.setValue(new PinMap());

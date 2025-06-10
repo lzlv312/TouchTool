@@ -3,7 +3,9 @@ package top.bogey.touch_tool.ui.blueprint.selecter.select_icon;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.graphics.Point;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +21,7 @@ import java.util.Map;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.databinding.DialogSelectIconBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.BitmapResultCallback;
 
 public class SelectIconDialog extends BottomSheetDialog {
@@ -43,6 +46,10 @@ public class SelectIconDialog extends BottomSheetDialog {
 
         calculateShowData();
         adapter.setData(icons);
+
+        Point size = DisplayUtil.getScreenSize(context);
+        DisplayUtil.setViewHeight(binding.getRoot(), (int) (size.y * 0.7f));
+        DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
     public void calculateShowData() {
@@ -91,6 +98,7 @@ public class SelectIconDialog extends BottomSheetDialog {
         List<PackageInfo> systemApps = new ArrayList<>();
         List<PackageInfo> apps = TaskInfoSummary.getInstance().findApps(null, true);
         for (PackageInfo app : apps) {
+            if (app.applicationInfo == null) continue;
             if ((app.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM) {
                 systemApps.add(app);
             }

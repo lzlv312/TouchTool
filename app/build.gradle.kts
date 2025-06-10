@@ -39,16 +39,14 @@ android {
     buildTypes {
 
         debug {
-            isMinifyEnabled = true
             applicationIdSuffix = ".debug"
             resValue("string", "app_name", "点击助手Debug")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-
         }
 
         release {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             resValue("string", "app_name", "点击助手")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -89,7 +87,6 @@ dependencies {
     implementation(libs.nav.fragment)
     implementation(libs.nav.ui)
 
-    implementation(libs.treeview)
     implementation(libs.flexbox)
 
     implementation(libs.mmkv)

@@ -1,8 +1,10 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_edit_text;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.text.Editable;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
@@ -10,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 
 import top.bogey.touch_tool.databinding.DialogFullScreenEditBinding;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.StringResultCallback;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
@@ -34,5 +37,9 @@ public class SelectEditTextDialog extends BottomSheetDialog {
         });
 
         binding.editText.requestFocus();
+
+        Point size = DisplayUtil.getScreenSize(context);
+        DisplayUtil.setViewHeight(binding.getRoot(), (int) (size.y * 0.7f));
+        DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
     }
 }

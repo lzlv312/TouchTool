@@ -40,11 +40,6 @@ public class CustomStartAction extends Action implements DynamicPinsAction {
 
     }
 
-    @Override
-    public void resetReturnValue(TaskRunnable runnable) {
-
-    }
-
     public void setParams(Map<String, PinObject> params) {
         if (params == null) return;
         params.forEach((key, value) -> {

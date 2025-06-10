@@ -34,10 +34,12 @@ public class NotificationStartAction extends StartAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
+        super.execute(runnable, pin);
         TaskInfoSummary.Notification notification = TaskInfoSummary.getInstance().getNotification();
         PinApplication application = new PinApplication(notification.packageName());
         notifyAppPin.setValue(application);
         notifyTextPin.getValue(PinString.class).setValue(notification.content());
+        executeNext(runnable, executePin);
     }
 
     @Override

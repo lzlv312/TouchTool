@@ -63,7 +63,7 @@ public abstract class StartAction extends Action {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
-        executeNext(runnable, executePin);
+        runnable.addDebugLog(this, 1);
     }
 
     @Override
@@ -71,10 +71,6 @@ public abstract class StartAction extends Action {
 
     }
 
-    @Override
-    public void resetReturnValue(TaskRunnable runnable) {
-
-    }
 
     public enum RestartType {
         RESTART, CANCEL, NEW

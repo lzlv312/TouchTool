@@ -9,6 +9,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDate;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinPeriodic;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinTime;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class TimeStartAction extends StartAction {
@@ -24,6 +25,12 @@ public class TimeStartAction extends StartAction {
     public TimeStartAction(JsonObject jsonObject) {
         super(jsonObject);
         reAddPins(datePin, timePin, periodic);
+    }
+
+    @Override
+    public void execute(TaskRunnable runnable, Pin pin) {
+        super.execute(runnable, pin);
+        executeNext(runnable, executePin);
     }
 
     public long getStartTime() {

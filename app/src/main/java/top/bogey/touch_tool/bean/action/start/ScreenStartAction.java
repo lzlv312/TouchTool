@@ -25,8 +25,9 @@ public class ScreenStartAction extends StartAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
+        super.execute(runnable, pin);
         TaskInfoSummary.PhoneState phoneState = TaskInfoSummary.getInstance().getPhoneState();
         statePin.getValue(PinSingleSelect.class).setValue(phoneState.name());
-        super.execute(runnable, pin);
+        executeNext(runnable, executePin);
     }
 }

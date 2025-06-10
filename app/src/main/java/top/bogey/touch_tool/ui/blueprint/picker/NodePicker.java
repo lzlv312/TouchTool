@@ -16,7 +16,6 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.NonNull;
 
-import com.amrdeveloper.treeview.TreeNodeManager;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
@@ -71,7 +70,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         bitmapPaint.setFilterBitmap(true);
         bitmapPaint.setDither(true);
 
-        adapter = new NodePickerTreeAdapter(new TreeNodeManager(), this, roots);
+        adapter = new NodePickerTreeAdapter(this, roots);
         binding.widgetRecyclerView.setAdapter(adapter);
 
         binding.saveButton.setOnClickListener(v -> {
@@ -79,10 +78,9 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
             dismiss();
         });
 
-        binding.detailButton.setOnClickListener(v -> {
-            BottomSheetBehavior<?> sheetBehavior = BottomSheetBehavior.from(binding.bottomSheet);
-            sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        });
+        BottomSheetBehavior<?> sheetBehavior = BottomSheetBehavior.from(binding.bottomSheet);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        binding.detailButton.setOnClickListener(v -> sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
         binding.backButton.setOnClickListener(v -> dismiss());
 
@@ -111,6 +109,14 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         nodeInfo = nodePathString.findNode(roots);
         selectNode(nodeInfo);
         adapter.setSelectedNode(nodeInfo);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (changed) {
+            DisplayUtil.setViewHeight(binding.bottomSheet, (int) (getHeight() * 0.7f));
+        }
     }
 
     @Override
@@ -157,10 +163,20 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
 
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
-        super.dispatchDraw(canvas);
-
         Bitmap screenShot = screenInfo.getScreenShot();
         if (screenShot != null) canvas.drawBitmap(screenShot, 0, 0, bitmapPaint);
+
+        canvas.saveLayer(getLeft(), getTop(), getRight(), getBottom(), bitmapPaint);
+        super.dispatchDraw(canvas);
+        if (nodeInfo != null) {
+            Rect area = new Rect(nodeInfo.area);
+            area.offset(-location[0], -location[1]);
+            canvas.drawRect(area, markPaint);
+
+            drawChild(canvas, binding.markBox, getDrawingTime());
+            drawChild(canvas, binding.idTitle, getDrawingTime());
+        }
+        canvas.restore();
 
         for (int i = roots.size() - 1; i >= 0; i--) {
             NodeInfo root = roots.get(i);
@@ -170,17 +186,6 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
                 canvas.drawRect(area, gridPaint);
             }
             drawNode(canvas, root);
-        }
-
-        if (nodeInfo != null) {
-            canvas.saveLayer(getLeft(), getTop(), getRight(), getBottom(), bitmapPaint);
-            Rect area = new Rect(nodeInfo.area);
-            area.offset(-location[0], -location[1]);
-            canvas.drawRect(area, markPaint);
-            canvas.restore();
-
-            drawChild(canvas, binding.markBox, getDrawingTime());
-            drawChild(canvas, binding.idTitle, getDrawingTime());
         }
 
         drawChild(canvas, binding.buttonBox, getDrawingTime());

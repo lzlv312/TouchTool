@@ -1,16 +1,13 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_app;
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
-import android.os.Bundle;
+import android.graphics.Point;
 import android.text.Editable;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
 
@@ -18,27 +15,25 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
 import top.bogey.touch_tool.databinding.DialogSelectAppBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
-public class SelectAppDialog extends BottomSheetDialogFragment {
+public class SelectAppDialog extends BottomSheetDialog {
     private final PinApplications applications;
     private final SelectAppDialogAdapter adapter;
 
-    private DialogSelectAppBinding binding;
+    private final DialogSelectAppBinding binding;
     private String searchString;
     private boolean includeSystemApp;
 
-    public SelectAppDialog(PinApplications applications, BooleanResultCallback callback) {
-        super();
+    public SelectAppDialog(Context context, PinApplications applications, BooleanResultCallback callback) {
+        super(context);
         this.applications = applications;
         adapter = new SelectAppDialogAdapter(applications, callback);
-    }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DialogSelectAppBinding.inflate(inflater, container, false);
+        binding = DialogSelectAppBinding.inflate(LayoutInflater.from(context));
+        setContentView(binding.getRoot());
 
         binding.appIconBox.setAdapter(adapter);
         adapter.refreshApps(searchApps());
@@ -56,7 +51,9 @@ public class SelectAppDialog extends BottomSheetDialogFragment {
             adapter.refreshApps(searchApps());
         });
 
-        return binding.getRoot();
+        Point size = DisplayUtil.getScreenSize(context);
+        DisplayUtil.setViewHeight(binding.getRoot(), (int) (size.y * 0.7f));
+        DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
     private List<PackageInfo> searchApps() {
@@ -66,10 +63,10 @@ public class SelectAppDialog extends BottomSheetDialogFragment {
         } else {
             apps = TaskInfoSummary.getInstance().findApps(searchString, includeSystemApp);
         }
-        binding.editBox.setHint(getString(includeSystemApp ? R.string.select_app_search_all : R.string.select_app_search_third, apps.size()));
+        binding.editBox.setHint(getContext().getString(includeSystemApp ? R.string.select_app_search_all : R.string.select_app_search_third, apps.size()));
         if (!applications.isSingle() && (searchString == null || searchString.isEmpty())) {
             PackageInfo info = new PackageInfo();
-            info.packageName = getString(R.string.common_package);
+            info.packageName = getContext().getString(R.string.common_package);
             apps.add(0, info);
         }
 

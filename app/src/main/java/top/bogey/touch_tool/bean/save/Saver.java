@@ -56,8 +56,9 @@ public class Saver {
 
     private final MMKV tagMMKV = MMKV.mmkvWithID("TAG_DB", MMKV.SINGLE_PROCESS_MODE);
 
-    private static final String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/log";
+    private final static String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/log";
     private final Map<String, LogSave> loggers = new HashMap<>();
+    private final Set<LogSaveListener> logListeners = new HashSet<>();
 
 
     private Saver() {
@@ -276,19 +277,28 @@ public class Saver {
     }
 
     // ====================================================================================================================
-    public LogSave getLog(String key) {
+    public LogSave getLogSave(String key) {
         return loggers.computeIfAbsent(key, k -> new LogSave(key, LOG_DIR));
     }
 
     public void addLog(String key, LogInfo log) {
-        LogSave logSave = getLog(key);
+        LogSave logSave = getLogSave(key);
         logSave.addLog(log);
+        logListeners.stream().filter(Objects::nonNull).forEach(v -> v.onNewLog(logSave, log));
     }
 
     public void clearLog(String key) {
         LogSave logSave = loggers.get(key);
         if (logSave == null) return;
         logSave.clearLog();
+    }
+
+    public void addListener(LogSaveListener listener) {
+        logListeners.add(listener);
+    }
+
+    public void removeListener(LogSaveListener listener) {
+        logListeners.remove(listener);
     }
 
     // ====================================================================================================================

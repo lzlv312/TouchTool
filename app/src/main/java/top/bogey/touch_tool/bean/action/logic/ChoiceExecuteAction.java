@@ -82,11 +82,6 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
 
     }
 
-    @Override
-    public void resetReturnValue(TaskRunnable runnable) {
-
-    }
-
     private Action getNextAction(TaskRunnable runnable, Pin pin) {
         Task task = runnable.getTask();
         Pin linkedPin = pin.getLinkedPin(runnable.getTask());

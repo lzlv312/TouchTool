@@ -48,9 +48,13 @@ public class LoggerAction extends ExecuteAction {
         }
 
         if (save.getValue()) {
-            Saver.getInstance().addLog(runnable.getStartTask().getId(), new LogInfo(-1, this));
+            Saver.getInstance().addLog(runnable.getStartTask().getId(), new LogInfo(-1, this, true));
         }
 
         executeNext(runnable, outPin);
+    }
+
+    public Pin getLogPin() {
+        return logPin;
     }
 }

@@ -57,6 +57,13 @@ public class MapForeachAction extends MapExecuteAction {
         }
     }
 
+    @Override
+    public void onExecuteNext(TaskRunnable runnable, Pin pin) {
+        if (pin == completePin) {
+            super.onExecuteNext(runnable, pin);
+        }
+    }
+
     @NonNull
     @Override
     public List<Pin> getDynamicTypePins() {

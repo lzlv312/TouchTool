@@ -27,9 +27,10 @@ public class BatteryStartAction extends StartAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
+        super.execute(runnable, pin);
         TaskInfoSummary.BatteryInfo batteryInfo = TaskInfoSummary.getInstance().getBatteryInfo();
         statePin.getValue(PinSingleSelect.class).setValue(batteryInfo.status().name());
         valuePin.getValue(PinInteger.class).setValue(batteryInfo.percent());
-        super.execute(runnable, pin);
+        executeNext(runnable, executePin);
     }
 }

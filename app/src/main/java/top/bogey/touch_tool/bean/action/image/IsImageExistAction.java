@@ -29,7 +29,7 @@ public class IsImageExistAction extends CalculateAction {
     private final transient Pin firstAreaPin = new Pin(new PinArea(), R.string.pin_area_first, true);
 
     public IsImageExistAction() {
-        super(ActionType.FIND_IMAGES);
+        super(ActionType.IS_IMAGE_EXIST);
         addPins(sourcePin, templatePin, similarityPin, fastPin, resultPin, areasPin, firstAreaPin);
     }
 

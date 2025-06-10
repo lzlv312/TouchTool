@@ -14,6 +14,7 @@ public class InnerStartAction extends StartAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
+        super.execute(runnable, pin);
         executeNext(runnable, startPin);
     }
 

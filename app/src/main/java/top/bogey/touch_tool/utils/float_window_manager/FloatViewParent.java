@@ -54,6 +54,13 @@ public class FloatViewParent extends FrameLayout {
         float y = event.getRawY();
 
         switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN -> {
+                config.dragging = false;
+                showArea = helper.getShowArea();
+                lastX = x;
+                lastY = y;
+            }
+
             case MotionEvent.ACTION_MOVE -> {
                 float dx = x - lastX;
                 float dy = y - lastY;
@@ -69,6 +76,7 @@ public class FloatViewParent extends FrameLayout {
                 lastX = x;
                 lastY = y;
             }
+
             case MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (!config.dragging) return false;
                 config.dragging = false;
@@ -99,6 +107,8 @@ public class FloatViewParent extends FrameLayout {
                 float dx = x - lastX;
                 float dy = y - lastY;
                 if (dx * dx + dy * dy < 81) return false;
+                lastX = x;
+                lastY = y;
                 config.dragging = true;
             }
         }

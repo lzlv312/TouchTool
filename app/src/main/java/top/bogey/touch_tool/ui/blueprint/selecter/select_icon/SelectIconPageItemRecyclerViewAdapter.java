@@ -60,7 +60,7 @@ public class SelectIconPageItemRecyclerViewAdapter extends RecyclerView.Adapter<
             context = binding.getRoot().getContext();
 
             binding.getRoot().setOnClickListener(v -> {
-                int index = getBindingAdapterPosition();
+                int index = getAdapterPosition();
                 Object object = data.get(index);
                 Drawable drawable = binding.icon.getDrawable();
                 Bitmap bitmap;
@@ -89,7 +89,9 @@ public class SelectIconPageItemRecyclerViewAdapter extends RecyclerView.Adapter<
             }
 
             if (object instanceof PackageInfo packageInfo) {
-                binding.icon.setImageDrawable(packageInfo.applicationInfo.loadIcon(context.getPackageManager()));
+                if (packageInfo.applicationInfo != null) {
+                    binding.icon.setImageDrawable(packageInfo.applicationInfo.loadIcon(context.getPackageManager()));
+                }
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.icon.getLayoutParams();
                 params.leftMargin = params.rightMargin = params.topMargin = params.bottomMargin = 0;
                 binding.icon.setLayoutParams(params);

@@ -8,6 +8,7 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinShortcutString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinUrlString;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
+import top.bogey.touch_tool.service.TaskRunnable;
 
 public class OutCallStartAction extends StartAction {
     private final transient Pin urlPin = new NotLinkAblePin(new PinUrlString(), R.string.out_call_start_action_url);
@@ -23,6 +24,12 @@ public class OutCallStartAction extends StartAction {
         super(jsonObject);
         reAddPins(urlPin, shortcutPin);
         setId(getId());
+    }
+
+    @Override
+    public void execute(TaskRunnable runnable, Pin pin) {
+        super.execute(runnable, pin);
+        executeNext(runnable, executePin);
     }
 
     @Override

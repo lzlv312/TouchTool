@@ -72,7 +72,7 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
 
         tagManager = GsonUtil.getAsObject(jsonObject, "tagManager", TagManager.class, new TagManager());
 
-        flag = GsonUtil.getAsInt(jsonObject, "detailLog", 0);
+        flag = GsonUtil.getAsInt(jsonObject, "flag", 0);
     }
 
     @Override

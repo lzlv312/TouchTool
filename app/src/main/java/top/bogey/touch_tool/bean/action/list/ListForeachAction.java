@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.R;
@@ -53,6 +52,13 @@ public class ListForeachAction extends ListExecuteAction {
             executeNext(runnable, completePin);
         } else {
             isBreak = true;
+        }
+    }
+
+    @Override
+    public void onExecuteNext(TaskRunnable runnable, Pin pin) {
+        if (pin == completePin) {
+            super.onExecuteNext(runnable, pin);
         }
     }
 

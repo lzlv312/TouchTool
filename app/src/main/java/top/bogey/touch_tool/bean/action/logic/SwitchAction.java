@@ -58,11 +58,6 @@ public class SwitchAction extends Action implements DynamicPinsAction {
     }
 
     @Override
-    public void resetReturnValue(TaskRunnable runnable) {
-
-    }
-
-    @Override
     public List<Pin> getDynamicPins() {
         List<Pin> pins = new ArrayList<>();
         boolean start = false;

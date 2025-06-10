@@ -8,7 +8,6 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -28,12 +27,13 @@ public class NetworkStartAction extends StartAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
+        super.execute(runnable, pin);
         PinList states = statePin.getValue();
         List<TaskInfoSummary.NotworkState> networkState = TaskInfoSummary.getInstance().getNetworkState();
         states.clear();
         for (TaskInfoSummary.NotworkState state : networkState) {
             states.add(new PinString(state.name()));
         }
-        super.execute(runnable, pin);
+        executeNext(runnable, executePin);
     }
 }

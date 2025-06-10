@@ -128,7 +128,7 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
                 if (applications.isJustActivity()) return;
                 selectApp();
                 callback.onResult(true);
-                notifyItemChanged(getBindingAdapterPosition());
+                notifyItemChanged(getAdapterPosition());
             });
 
             binding.activityButton.setOnClickListener(v -> {
@@ -142,7 +142,7 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
                         .setPositiveButton(R.string.enter, (dialog, which) -> {
                             selectApp(finalApp);
                             callback.onResult(true);
-                            notifyItemChanged(getBindingAdapterPosition());
+                            notifyItemChanged(getAdapterPosition());
                         })
                         .setView(view)
                         .show();
@@ -159,8 +159,10 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
                 binding.activityButton.setVisibility(ViewGroup.GONE);
                 binding.getRoot().setCheckedIconResource(R.drawable.icon_radio_selected);
             } else {
-                binding.appName.setText(info.applicationInfo.loadLabel(manager));
-                binding.icon.setImageDrawable(info.applicationInfo.loadIcon(manager));
+                if (info.applicationInfo != null) {
+                    binding.appName.setText(info.applicationInfo.loadLabel(manager));
+                    binding.icon.setImageDrawable(info.applicationInfo.loadIcon(manager));
+                }
                 binding.activityButton.setVisibility(applications.isJustApp() || info.activities == null || info.activities.length == 0 ? ViewGroup.GONE : ViewGroup.VISIBLE);
 
                 PinApplication commonApp = getSelectedApp(context.getString(R.string.common_package));

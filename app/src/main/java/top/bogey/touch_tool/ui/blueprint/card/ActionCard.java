@@ -6,8 +6,8 @@ import android.content.res.ColorStateList;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -187,9 +187,9 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     public void startFocusAnim() {
-        ScaleAnimation animation = new ScaleAnimation(1, 1.2f, 1, 1.2f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        AlphaAnimation animation = new AlphaAnimation(1f, 0.5f);
         animation.setDuration(200);
-        animation.setRepeatCount(1);
+        animation.setRepeatCount(3);
         animation.setRepeatMode(Animation.REVERSE);
         startAnimation(animation);
     }

@@ -56,4 +56,11 @@ public class ForLoopAction extends ExecuteAction {
             isBreak = true;
         }
     }
+
+    @Override
+    public void onExecuteNext(TaskRunnable runnable, Pin pin) {
+        if (pin == completePin) {
+            super.onExecuteNext(runnable, pin);
+        }
+    }
 }

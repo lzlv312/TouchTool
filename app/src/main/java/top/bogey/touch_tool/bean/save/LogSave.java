@@ -1,53 +1,37 @@
 package top.bogey.touch_tool.bean.save;
 
-import android.annotation.SuppressLint;
-
 import com.tencent.mmkv.MMKV;
 
 import top.bogey.touch_tool.utils.GsonUtil;
+import top.bogey.touch_tool.utils.tree.ITreeNodeData;
+import top.bogey.touch_tool.utils.tree.ITreeNodeDataLoader;
 
-@SuppressLint("DefaultLocale")
-public class LogSave {
-    private static final String DETAIL_LOG = "DETAIL_LOG";
-    private static final String NORMAL_LOG = "NORMAL_LOG";
+public class LogSave implements ITreeNodeDataLoader {
+    private final static String COUNT = "count";
 
     private final MMKV mmkv;
+    private final String key;
 
     private long time = System.currentTimeMillis();
 
     public LogSave(String key, String path) {
+        this.key = key;
         mmkv = MMKV.mmkvWithID(key, MMKV.MULTI_PROCESS_MODE, null, path);
     }
 
     public LogInfo getLog(int index) {
-        return GsonUtil.getAsObject(mmkv.decodeString(String.format("%s_%d", NORMAL_LOG, index)), LogInfo.class, null);
-    }
-
-    public LogInfo getDetailLog(int index) {
-        return GsonUtil.getAsObject(mmkv.decodeString(String.format("%s_%d", DETAIL_LOG, index)), LogInfo.class, null);
+        return GsonUtil.getAsObject(mmkv.decodeString(String.valueOf(index)), LogInfo.class, null);
     }
 
     public int getLogCount() {
-        return mmkv.decodeInt(NORMAL_LOG, 0);
-    }
-
-    public int getDetailLogCount() {
-        return mmkv.decodeInt(DETAIL_LOG, 0);
+        return mmkv.decodeInt(COUNT, 0);
     }
 
     public void addLog(LogInfo log) {
-        int index;
-        if (log.getIndex() == -1) {
-            index = getLogCount();
-            index++;
-            mmkv.encode(NORMAL_LOG, index);
-            mmkv.encode(String.format("%s_%d", NORMAL_LOG, index), GsonUtil.toJson(log));
-        } else {
-            index = getDetailLogCount();
-            index++;
-            mmkv.encode(DETAIL_LOG, index);
-            mmkv.encode(String.format("%s_%d", DETAIL_LOG, index), GsonUtil.toJson(log));
-        }
+        int index = getLogCount();
+        index++;
+        mmkv.encode(COUNT, index);
+        mmkv.encode(String.valueOf(index), GsonUtil.toJson(log));
         time = System.currentTimeMillis();
     }
 
@@ -67,5 +51,27 @@ public class LogSave {
             return true;
         }
         return false;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LogSave logSave = (LogSave) o;
+        return getKey().equals(logSave.getKey());
+    }
+
+    @Override
+    public int hashCode() {
+        return getKey().hashCode();
+    }
+
+    @Override
+    public ITreeNodeData loadData(Object flag) {
+        return getLog((int) flag);
     }
 }

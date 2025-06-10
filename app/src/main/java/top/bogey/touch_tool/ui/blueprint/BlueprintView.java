@@ -55,6 +55,13 @@ public class BlueprintView extends Fragment {
         }
     }
 
+    public static void tryFocusAction(Action action) {
+        Fragment fragment = MainActivity.getCurrentFragment();
+        if (fragment instanceof BlueprintView blueprintView) {
+            blueprintView.binding.cardLayout.focusCard(action.getId());
+        }
+    }
+
     public static void tryShowFloatingToolBar(boolean show) {
         Fragment fragment = MainActivity.getCurrentFragment();
         if (fragment instanceof BlueprintView blueprintView) {
@@ -86,6 +93,7 @@ public class BlueprintView extends Fragment {
             Task task = taskStack.peek();
             MenuItem item = menu.findItem(R.id.taskDetailLog);
             item.setChecked(task.hasFlag(Task.FLAG_DEBUG));
+            item.setVisible(task.getParent() == null);
         }
 
         @Override
@@ -106,20 +114,7 @@ public class BlueprintView extends Fragment {
                 return true;
             } else if (itemId == R.id.taskRunningLog) {
                 Task task = taskStack.peek();
-                LogView logView = new LogView(requireContext(), task, false);
-                new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.task_running_log)
-                        .setView(logView)
-                        .setPositiveButton(R.string.close, null)
-                        .setNeutralButton(R.string.task_running_log_clear, (dialog, which) -> {
-                            dialog.dismiss();
-                            Saver.getInstance().clearLog(task.getId());
-                        })
-                        .show();
-                DisplayUtil.setViewWidth(logView, ViewGroup.LayoutParams.MATCH_PARENT);
-                DisplayUtil.setViewHeight(logView, ViewGroup.LayoutParams.WRAP_CONTENT);
-                int px = (int) DisplayUtil.dp2px(requireContext(), 16);
-                DisplayUtil.setViewMargin(logView, px, px, px, px);
+                new LogView(requireContext(), task).show();
                 return true;
             } else if (itemId == R.id.taskDetailLog) {
                 Task task = taskStack.peek();

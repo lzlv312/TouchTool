@@ -50,10 +50,6 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
         varPin.setValue(var.getValue());
     }
 
-    @Override
-    public void resetReturnValue(TaskRunnable runnable) {
-
-    }
 
     public String getVarId() {
         return varId;

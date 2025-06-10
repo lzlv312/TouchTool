@@ -40,6 +40,7 @@ public class ManualStartAction extends StartAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
+        super.execute(runnable, pin);
         TaskInfoSummary handler = TaskInfoSummary.getInstance();
         TaskInfoSummary.PackageActivity packageActivity = handler.getPackageActivity();
 
@@ -47,7 +48,7 @@ public class ManualStartAction extends StartAction {
         application.setActivityClasses(Collections.singletonList(packageActivity.activityName()));
         appPin.setValue(application);
 
-        super.execute(runnable, pin);
+        executeNext(runnable, executePin);
     }
 
     @Override

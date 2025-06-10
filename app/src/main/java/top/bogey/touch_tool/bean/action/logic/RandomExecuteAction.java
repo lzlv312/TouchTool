@@ -58,6 +58,13 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
     }
 
     @Override
+    public void onExecuteNext(TaskRunnable runnable, Pin pin) {
+        if (pin == completePin) {
+            super.onExecuteNext(runnable, pin);
+        }
+    }
+
+    @Override
     public List<Pin> getDynamicPins() {
         List<Pin> pins = new ArrayList<>();
         pins.add(outPin);

@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="2dp">
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|end"
+        android:layout_marginEnd="40dp"
+        android:alpha="0.5" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
+        android:layout_marginHorizontal="4dp"
         android:layout_marginVertical="4dp"
         android:gravity="center_vertical">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             app:srcCompat="@drawable/icon_arrow_down"
             app:tint="?attr/colorPrimary" />
 
@@ -30,22 +39,26 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+                android:textSize="11sp" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/log"
-                android:layout_width="match_parent"
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
-                android:visibility="gone" />
+                android:alpha="0.75"
+                android:textSize="9sp"
+                tools:ignore="SmallSp" />
 
         </LinearLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.Material3.LabelSmall" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/gotoButton"
+            style="@style/Theme.TouchTool.IconButton"
+            android:layout_width="32dp"
+            android:layout_height="24dp"
+            app:icon="@drawable/icon_arrow_right"
+            app:iconGravity="end"
+            app:iconSize="28dp" />
 
     </LinearLayout>
 

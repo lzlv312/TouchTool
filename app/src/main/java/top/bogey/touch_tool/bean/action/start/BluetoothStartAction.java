@@ -26,9 +26,10 @@ public class BluetoothStartAction extends StartAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
+        super.execute(runnable, pin);
         TaskInfoSummary.BluetoothInfo bluetoothInfo = TaskInfoSummary.getInstance().getBluetoothInfo();
         devicePin.getValue(PinString.class).setValue(bluetoothInfo.bluetoothName());
         statePin.getValue(PinBoolean.class).setValue(bluetoothInfo.active());
-        super.execute(runnable, pin);
+        executeNext(runnable, executePin);
     }
 }

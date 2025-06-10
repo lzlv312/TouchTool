@@ -29,10 +29,12 @@ public class TaskRunnable implements Runnable {
     private boolean paused;
     private long pauseTime = -1;
 
+    private final Stack<LogInfo> logStack = new Stack<>();
+
     public TaskRunnable(Task task, StartAction startAction) {
         this.task = task;
         this.startAction = startAction;
-        this.debug = task.isFlag();
+        this.debug = task.hasFlag(Task.FLAG_DEBUG);
     }
 
     @Override
@@ -64,13 +66,13 @@ public class TaskRunnable implements Runnable {
     public void pushStack(Task task, Action action) {
         taskStack.push(task);
         actionStack.push(action);
-        debug = task.isFlag();
+        debug = task.hasFlag(Task.FLAG_DEBUG);
     }
 
     public void popStack() {
         taskStack.pop();
         actionStack.pop();
-        debug = taskStack.peek().isFlag();
+        debug = taskStack.peek().hasFlag(Task.FLAG_DEBUG);
         if (taskStack.isEmpty() || actionStack.isEmpty()) stop();
     }
 
@@ -97,7 +99,6 @@ public class TaskRunnable implements Runnable {
     public void addExecuteProgress(Action action) {
         progress++;
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onExecute(this, action, progress));
-        if (debug) Saver.getInstance().addLog(getTask().getId(), new LogInfo(progress, action));
 
         StartAction startAction = getStartAction();
         if (startAction == null || startAction.stop(this)) stop();
@@ -106,8 +107,25 @@ public class TaskRunnable implements Runnable {
 
     public void addCalculateProgress(Action action) {
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onCalculate(this, action));
-        if (debug) Saver.getInstance().addLog(getTask().getId(), new LogInfo(progress, action));
         checkStatus();
+    }
+
+    public void addDebugLog(Action action, int stackOption) {
+        if (debug) addDebugLog(new LogInfo(progress + 1, action, stackOption != 0),  stackOption);
+    }
+
+    private void addDebugLog(LogInfo logInfo, int stackOption) {
+        switch (stackOption) {
+            case -1 -> {
+                LogInfo lastLogInfo = logStack.pop();
+                addDebugLog(lastLogInfo, 0);
+            }
+            case 0 -> {
+                if (logStack.isEmpty()) Saver.getInstance().addLog(task.getId(), logInfo);
+                else logStack.peek().addChild(logInfo);
+            }
+            case 1 -> logStack.push(logInfo);
+        }
     }
 
     public void stop() {
@@ -159,10 +177,6 @@ public class TaskRunnable implements Runnable {
         } else {
             pauseTime = -1;
         }
-    }
-
-    public boolean isPaused() {
-        return paused;
     }
 
     public boolean isInterrupt() {

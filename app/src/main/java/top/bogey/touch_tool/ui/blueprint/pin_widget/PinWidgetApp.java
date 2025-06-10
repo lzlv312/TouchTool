@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +40,10 @@ public class PinWidgetApp extends PinWidget<PinApplication> {
 
     @Override
     protected void initBase() {
-        binding.selectAppButton.setOnClickListener(v -> new SelectAppDialog(applications, result -> {
+        binding.selectAppButton.setOnClickListener(v -> new SelectAppDialog(getContext(), applications, result -> {
             refreshApps();
             pinView.getPin().notifyValueUpdated();
-        }).show(((AppCompatActivity) getContext()).getSupportFragmentManager(), null));
+        }).show());
         refreshApps();
     }
 
@@ -75,7 +74,7 @@ public class PinWidgetApp extends PinWidget<PinApplication> {
         itemBinding.exclude.setVisibility(GONE);
 
         PackageInfo info = TaskInfoSummary.getInstance().getAppInfo(pinBase.getPackageName());
-        if (info == null) {
+        if (info == null || info.applicationInfo == null) {
             itemBinding.icon.setImageResource(R.drawable.icon_help);
         } else {
             itemBinding.icon.setImageDrawable(info.applicationInfo.loadIcon(manager));

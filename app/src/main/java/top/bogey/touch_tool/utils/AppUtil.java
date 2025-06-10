@@ -260,11 +260,7 @@ public class AppUtil {
     }
 
     public static String formatDateTime(Context context, long time, boolean ignoreYear, boolean ignoreMillisecond) {
-        return formatDateTime(context, time, " ", ignoreYear, ignoreMillisecond);
-    }
-
-    public static String formatDateTime(Context context, long time, String link, boolean ignoreYear, boolean ignoreMillisecond) {
-        return formatDate(context, time, ignoreYear) + link + formatTime(context, time, ignoreMillisecond);
+        return formatDate(context, time, ignoreYear) + " " + formatTime(context, time, ignoreMillisecond);
     }
 
     public static String formatDuration(Context context, long duration) {
