@@ -44,6 +44,11 @@ public class SettingView extends Fragment {
         @Override
         public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
             menuInflater.inflate(R.menu.menu_setting, menu);
+
+            boolean valid = SuperUser.getInstance().isValid();
+            menu.findItem(R.id.reloadService).setVisible(valid);
+            menu.findItem(R.id.writeSecureSetting).setVisible(valid);
+            menu.findItem(R.id.autoGiveCapturePermission).setVisible(valid);
         }
 
         @Override

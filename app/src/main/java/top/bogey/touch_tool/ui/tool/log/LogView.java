@@ -23,7 +23,7 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 public class LogView extends FrameLayout implements FloatInterface, LogSaveListener {
     private final FloatLogBinding binding;
     private final LogViewAdapter adapter;
-    private Task task;
+    private final Task task;
 
     @SuppressLint("ClickableViewAccessibility")
     public LogView(@NonNull Context context, Task task) {
@@ -65,6 +65,7 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
                 .setTag(LogView.class.getName())
                 .setDragAble(false)
                 .setSpecial(true)
+                .setExistEditText(true)
                 .show();
         Saver.getInstance().addListener(this);
     }
