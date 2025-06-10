@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
@@ -21,11 +22,14 @@ import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatLogItemBinding;
 import top.bogey.touch_tool.ui.blueprint.BlueprintView;
+import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.tree.TreeAdapter;
 import top.bogey.touch_tool.utils.tree.TreeNode;
 
 public class LogViewAdapter extends TreeAdapter {
     private Task task;
+    private int searchIndex = -1;
 
     @NonNull
     @Override
@@ -42,6 +46,85 @@ public class LogViewAdapter extends TreeAdapter {
             nodeList.add(node);
         }
         setTreeNodes(nodeList);
+    }
+
+    public int searchLog(String text, Boolean isNext) {
+        if (text.isEmpty()) {
+            searchIndex = -1;
+            return searchIndex;
+        }
+        if (isNext == null) {
+            searchIndex = -1;
+            isNext = false;
+        }
+        List<TreeNode> subList;
+        if (searchIndex < 1 || searchIndex >= treeNodes.size()) {
+            subList = treeNodes;
+        } else {
+            if (Boolean.TRUE.equals(isNext)) {
+                subList = treeNodes.subList(searchIndex + 1, treeNodes.size());
+            } else {
+                subList = treeNodes.subList(0, searchIndex - 1);
+            }
+        }
+
+        if (searchIndex >= 0 && searchIndex < treeNodes.size() - 1) {
+            int index = searchIndex;
+            searchIndex = -1;
+            notifyItemChanged(index);
+        }
+
+        TreeNode treeNode = findTreeNode(subList, text, AppUtil.getPattern(text), isNext);
+        if (treeNode != null) {
+            expandNode(treeNode);
+            searchIndex = treeNodes.indexOf(treeNode);
+            notifyItemChanged(searchIndex);
+        }
+        return searchIndex;
+    }
+
+    private TreeNode findTreeNode(List<TreeNode> treeNodes, String text, Pattern pattern, boolean isNext) {
+        if (isNext) {
+            for (int i = 0; i < treeNodes.size(); i++) {
+                TreeNode treeNode = treeNodes.get(i);
+
+                LogInfo logInfo = (LogInfo) treeNode.getData();
+                if (logInfo == null) continue;
+                Action action = logInfo.getAction(task);
+                if (action == null) continue;
+                if (pattern == null) {
+                    if (action.getFullDescription().contains(text)) return treeNode;
+                } else {
+                    if (pattern.matcher(action.getFullDescription()).find()) return treeNode;
+                }
+
+                if (!treeNode.isExpand()) {
+                    TreeNode tree = findTreeNode(treeNode.getChildren(), text, pattern, true);
+                    if (tree != null) return tree;
+                }
+            }
+        } else {
+            for (int i = treeNodes.size() - 1; i >= 0; i--) {
+                TreeNode treeNode = treeNodes.get(i);
+
+                if (!treeNode.isExpand()) {
+                    TreeNode tree = findTreeNode(treeNode.getChildren(), text, pattern, false);
+                    if (tree != null) return tree;
+                }
+
+                LogInfo logInfo = (LogInfo) treeNode.getData();
+                if (logInfo == null) continue;
+                Action action = logInfo.getAction(task);
+                if (action == null) continue;
+                if (pattern == null) {
+                    if (action.getFullDescription().contains(text)) return treeNode;
+                } else {
+                    if (pattern.matcher(action.getFullDescription()).find()) return treeNode;
+                }
+            }
+        }
+
+        return null;
     }
 
     public void addLog(LogInfo log) {
@@ -102,6 +185,12 @@ public class LogViewAdapter extends TreeAdapter {
             binding.title.setText(builder.toString());
             binding.time.setText(logInfo.getTime(context));
             binding.icon.setImageResource(logInfo.isExecute() ? R.drawable.icon_shuffle : R.drawable.icon_equal);
+
+            if (searchIndex == getAdapterPosition()) {
+                binding.getRoot().setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorTertiaryContainer));
+            } else {
+                binding.getRoot().setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceContainerHighest));
+            }
         }
     }
 }

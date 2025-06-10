@@ -130,10 +130,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
                     float dx = x - lastX;
                     float dy = y - lastY;
                     float ds = (dx + dy) / (originWidth + originHeight);
-                    Log.d("TAG", "onTouchEvent: " + originWidth + ", " + originHeight);
-                    Log.d("TAG", "onTouchEvent: " + ds);
                     scale = Math.max(0.75f, Math.min(2, scale + ds));
-                    Log.d("TAG", "onTouchEvent: " + scale);
                     binding.scaleBox.setScaleX(scale);
                     binding.scaleBox.setScaleY(scale);
                     ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();

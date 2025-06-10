@@ -19,10 +19,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:minWidth="48dp"
-            android:minHeight="24dp"
+            android:minWidth="96dp"
+            android:minHeight="48dp"
             app:cardElevation="0dp"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
             app:strokeColor="?attr/colorOutlineVariant"
             app:strokeWidth="1px"
             tools:targetApi="p">
@@ -40,18 +40,21 @@
                 android:layout_height="24dp"
                 android:layout_gravity="end|top"
                 android:alpha="0.5"
+                android:translationX="-4dp"
+                android:translationY="4dp"
                 app:icon="@drawable/icon_save" />
 
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/dragImage"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="end|bottom"
-            android:src="@drawable/icon_drag_right_bottom"
-            android:tint="?attr/colorPrimaryLight"
-            android:visibility="visible" />
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_line_curve"
+            android:translationX="8dp"
+            android:translationY="8dp" />
 
     </FrameLayout>
 
