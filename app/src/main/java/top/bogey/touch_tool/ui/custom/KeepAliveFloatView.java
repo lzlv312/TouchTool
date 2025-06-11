@@ -5,10 +5,12 @@ import android.os.Handler;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ContextThemeWrapper;
 
 import com.google.android.material.card.MaterialCardView;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.service.MainAccessibilityService;
@@ -37,7 +39,7 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, T
         cardView.setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceVariant));
         addView(cardView);
 
-        setAlpha(0);
+//        setAlpha(0);
     }
 
     private void showMe() {

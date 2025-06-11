@@ -14,7 +14,10 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.SyncAction;
 import top.bogey.touch_tool.bean.action.logic.FindExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleLineString;
@@ -32,18 +35,19 @@ import top.bogey.touch_tool.utils.AppUtil;
 public class FindOcrTextAction extends FindExecuteAction implements SyncAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image);
     private final transient Pin textPin = new Pin(new PinSingleLineString(), R.string.pin_string);
+    private final transient Pin similarPin = new Pin(new PinInteger(60), R.string.find_ocr_text_action_similar);
     private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(), R.string.find_ocr_text_action_type, false, false, true);
     private final transient Pin resultAreaPin = new Pin(new PinArea(), R.string.pin_area, true);
     private final transient Pin resultTextPin = new Pin(new PinString(), R.string.pin_string, true);
 
     public FindOcrTextAction() {
         super(ActionType.FIND_OCR_TEXT);
-        addPins(sourcePin, textPin, typePin, resultAreaPin, resultTextPin);
+        addPins(sourcePin, textPin, similarPin, typePin, resultAreaPin, resultTextPin);
     }
 
     public FindOcrTextAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(sourcePin, textPin, typePin, resultAreaPin, resultTextPin);
+        reAddPins(sourcePin, textPin, similarPin, typePin, resultAreaPin, resultTextPin);
     }
 
     @Override
@@ -51,6 +55,7 @@ public class FindOcrTextAction extends FindExecuteAction implements SyncAction {
         sync(runnable.getTask());
         PinImage source = getPinValue(runnable, sourcePin);
         PinObject text = getPinValue(runnable, textPin);
+        PinNumber<?> similar = getPinValue(runnable, similarPin);
         PinSingleSelect type = getPinValue(runnable, typePin);
 
         String value = text.toString();
@@ -77,6 +82,7 @@ public class FindOcrTextAction extends FindExecuteAction implements SyncAction {
         if (ocrResults == null) return false;
 
         for (OcrResult ocrResult : ocrResults) {
+            if (ocrResult.getSimilar() < similar.intValue()) continue;
             if (AppUtil.isStringContains(ocrResult.getText(), value)) {
                 resultAreaPin.getValue(PinArea.class).setValue(ocrResult.getArea());
                 resultTextPin.getValue(PinString.class).setValue(ocrResult.getText());

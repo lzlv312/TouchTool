@@ -77,7 +77,7 @@ public class GetOcrTextAction extends ExecuteAction implements SyncAction {
         if (ocrResults != null) {
             StringBuilder builder = new StringBuilder();
             for (OcrResult ocrResult : ocrResults) {
-                if (ocrResult.getSimilar() <= similar.intValue()) continue;
+                if (ocrResult.getSimilar() < similar.intValue()) continue;
                 builder.append(ocrResult.getText()).append("\n");
                 textArray.add(new PinString(ocrResult.getText()));
                 areaArray.add(new PinArea(ocrResult.getArea()));

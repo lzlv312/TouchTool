@@ -510,7 +510,7 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public synchronized void runOcr(String packageName, Bitmap bitmap, ResultCallback<List<OcrResult>> callback) {
         IOcr iOcr = ocrBinderMap.get(packageName);
-        if (iOcr == null) {
+        if (iOcr == null || !iOcr.asBinder().isBinderAlive()) {
             ServiceConnection connection = new ServiceConnection() {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {

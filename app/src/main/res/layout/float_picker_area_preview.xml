@@ -176,26 +176,60 @@
 
             </LinearLayout>
 
-            <FrameLayout
+            <LinearLayout
                 android:id="@+id/testBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:visibility="gone">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/testButton"
-                    style="@style/Theme.TouchTool.IconButton.Filled"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="end"
-                    app:icon="@drawable/icon_text" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/ocrResult"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content">
 
-            </FrameLayout>
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_spinner"
+                        android:dropDownWidth="wrap_content"
+                        android:gravity="center"
+                        android:minWidth="48dp"
+                        android:popupBackground="@drawable/shape_spinner_background"
+                        android:spinnerMode="dropdown" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/testButton"
+                        style="@style/Theme.TouchTool.IconButton.Filled"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="4dp"
+                        app:icon="@drawable/icon_text" />
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="128dp"
+                    android:layout_height="24dp"
+                    android:layout_marginVertical="4dp">
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/timeSlider"
+                        android:layout_width="156dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:stepSize="1"
+                        android:value="60"
+                        android:valueFrom="1"
+                        android:valueTo="100"
+                        app:thumbHeight="24dp"
+                        app:trackColorInactive="?attr/colorSurface" />
+
+                </FrameLayout>
+
+            </LinearLayout>
 
         </FrameLayout>
 

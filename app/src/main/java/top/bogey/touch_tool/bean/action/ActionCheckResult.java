@@ -2,13 +2,14 @@ package top.bogey.touch_tool.bean.action;
 
 import androidx.annotation.StringRes;
 
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActionCheckResult {
-    private final Stack<Result> results = new Stack<>();
+    private final List<Result> results = new ArrayList<>();
 
     public void addResult(ResultType type, @StringRes int msg) {
-        results.push(new Result(type, msg));
+        results.add(new Result(type, msg));
     }
 
     public void merge(ActionCheckResult result) {

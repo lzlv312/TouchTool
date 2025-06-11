@@ -313,16 +313,19 @@
 
     <string name="get_ocr_text_action">OCR识别文本</string>
     <string name="get_ocr_text_action_desc">识别图片中指定区域文字</string>
-    <string name="get_ocr_text_action_similar">相似度</string>
+    <string name="get_ocr_text_action_similar">置信度</string>
     <string name="get_ocr_text_action_type">模型</string>
     <string name="get_ocr_text_action_text">所有文字</string>
 
     <string name="find_ocr_text_action">OCR查找文本</string>
     <string name="find_ocr_text_action_desc">在图片中查找指定文字</string>
+    <string name="find_ocr_text_action_similar">置信度</string>
     <string name="find_ocr_text_action_type">模型</string>
 
     <string name="is_ocr_text_exist_action">OCR文本是否存在</string>
     <string name="is_ocr_text_exist_action_desc">判断图片中是否存在指定文字</string>
+    <string name="is_ocr_text_exist_action_similar">置信度</string>
+    <string name="is_ocr_text_exist_action_type">模型</string>
 
     <string name="parse_json_action">JSON解析</string>
     <string name="parse_json_action_desc">解析JSON字符串</string>

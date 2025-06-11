@@ -58,7 +58,7 @@ public class TouchPathFloatView extends AppCompatImageView implements FloatInter
         boolean showTouch = SettingSaver.getInstance().isShowTouch();
         if (!showTouch) return;
 
-        View keepView = FloatWindow.getView(KeepAliveFloatView.class.getName());
+        KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
             TouchPathFloatView floatView = new TouchPathFloatView(keepView.getContext());

@@ -1,18 +1,24 @@
 package top.bogey.touch_tool.bean.action.system;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
@@ -38,10 +44,18 @@ public class SendToastAction extends ExecuteAction {
 
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
-        new Handler(Looper.getMainLooper()).post(() -> {
-            Toast.makeText(keepView.getContext(), content.toString(), length.getIndex()).show();
-        });
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(keepView.getContext(), content.toString(), length.getIndex()).show());
 
         executeNext(runnable, outPin);
+    }
+
+    @Override
+    public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (MainApplication.getInstance().checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                result.addResult(ActionCheckResult.ResultType.WARNING, R.string.check_need_notification_warning);
+            }
+        }
     }
 }

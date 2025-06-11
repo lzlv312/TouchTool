@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 
-import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.databinding.PinWidgetAreaBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
@@ -66,8 +65,11 @@ public class PinWidgetArea extends PinWidget<PinArea> {
 
         binding.pickButton.setOnClickListener(v -> new AreaPickerPreview(getContext(), result -> {
             area.set(result);
-            pinView.getPin().notifyValueUpdated();
-        }, area, pinBase.getSubType() == PinSubType.FOR_OCR).show());
+            binding.leftEdit.setText(String.valueOf(area.left));
+            binding.topEdit.setText(String.valueOf(area.top));
+            binding.rightEdit.setText(String.valueOf(area.right));
+            binding.bottomEdit.setText(String.valueOf(area.bottom));
+        }, area).show());
     }
 
     @Override

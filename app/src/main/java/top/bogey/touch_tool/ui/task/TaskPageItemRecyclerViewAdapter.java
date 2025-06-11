@@ -178,7 +178,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
             for (Action action : task.getActions(StartAction.class)) {
                 StartAction startAction = (StartAction) action;
                 ViewTaskPageItemActionBinding actionBinding = ViewTaskPageItemActionBinding.inflate(LayoutInflater.from(context), binding.actionsBox, true);
-                actionBinding.taskDesc.setText(startAction.getValidDescription());
+                actionBinding.taskDesc.setText(startAction.getFullDescription());
                 actionBinding.enableSwitch.setChecked(startAction.isEnable());
                 actionBinding.enableSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked == startAction.isEnable()) return;

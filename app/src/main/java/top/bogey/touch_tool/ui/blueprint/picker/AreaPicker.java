@@ -198,10 +198,13 @@ public class AreaPicker extends FullScreenPicker<Rect> {
             binding.buttonBox.setX(x);
 
             if (getHeight() < area.height() + binding.buttonBox.getHeight() + doubleOffset) {
+                // 内部
                 binding.buttonBox.setY(area.bottom - binding.buttonBox.getHeight() - doubleOffset);
-            } else if (getHeight() < area.bottom - binding.buttonBox.getHeight() - doubleOffset) {
+            } else if (getHeight() < area.bottom + binding.buttonBox.getHeight() + doubleOffset) {
+                // 外部 顶上
                 binding.buttonBox.setY(area.top - binding.buttonBox.getHeight() - doubleOffset);
             } else {
+                // 外部 底下
                 binding.buttonBox.setY(area.bottom + doubleOffset);
             }
         }

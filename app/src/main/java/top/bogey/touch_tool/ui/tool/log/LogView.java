@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -82,7 +81,6 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
         int index = adapter.searchLog(s, isNext);
         if (index > 0) binding.recyclerView.scrollToPosition(index);
         else binding.recyclerView.scrollToPosition(adapter.getItemCount() - 1);
-
     }
 
     @Override

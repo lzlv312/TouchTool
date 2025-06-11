@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -15,6 +16,8 @@ import com.tencent.mmkv.MMKV;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import top.bogey.touch_tool.service.KeepAliveService;
 
 public class SettingSaver {
     private static SettingSaver instance;
@@ -173,6 +176,9 @@ public class SettingSaver {
 
     public void setForgeServiceEnabled(Context context, boolean enable) {
         mmkv.encode(FORGE_SERVICE, enable);
+        Intent intent = new Intent(context, KeepAliveService.class);
+        if (enable) context.startService(intent);
+        else context.stopService(intent);
     }
 
     public boolean isAutoStart() {

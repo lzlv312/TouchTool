@@ -201,7 +201,7 @@ public class TaskInfoSummary {
             singleShowActionTasks.clear();
         }
 
-        View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
+        KeepAliveFloatView view = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (view != null) {
             new Handler(Looper.getMainLooper()).post(() -> {
                 View playFloatView = FloatWindow.getView(PlayFloatView.class.getName());
@@ -300,6 +300,7 @@ public class TaskInfoSummary {
 
     public void onPhoneStateChanged() {
         tryStartActions(ScreenStartAction.class);
+        if (packageActivity == null) return;
         tryShowManualPlayView(!packageActivity.activityName.equals(MainActivity.class.getName()));
     }
 

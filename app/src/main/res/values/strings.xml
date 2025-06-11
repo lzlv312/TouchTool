@@ -8,6 +8,7 @@
     <string name="cancel">取消</string>
     <string name="save">保存</string>
     <string name="close">关闭</string>
+    <string name="copy">复制</string>
 
     <!-- 复制 -->
     <string name="copy_tips">已复制</string>
@@ -43,7 +44,6 @@
     <string name="export_task">导出</string>
     <string name="export_task_tips">导出并发送</string>
     <string name="move_task">标签</string>
-    <string name="copy_task">复制</string>
 
     <!-- 任务界面相关 -->
     <string name="title">标题</string>
@@ -100,6 +100,7 @@
 
     <!-- 警告 -->
     <string name="check_need_capture_warning">获取截图需要开启录屏</string>
+    <string name="check_need_notification_warning">需要开启通知权限</string>
 
 
     <!-- 任务 -->
@@ -163,6 +164,7 @@
     <!-- 采集器 -->
     <string name="picker_test_title">测试</string>
     <string name="picker_area_title">选择区域</string>
+    <string name="picker_area_offset">置信度：%d</string>
     <string name="picker_color_title">选择颜色</string>
     <string name="picker_color_offset">偏移：%d</string>
     <string name="picker_image_title">选择图片</string>
@@ -202,6 +204,9 @@
     <string name="setting_need_notification_desc">前台服务和录屏服务需要发送通知，请授予应用发送通知的权限</string>
 
     <string name="setting_reload_accessibility_service">重启无障碍服务</string>
+    <string name="setting_reload_accessibility_service_error">重启无障碍失败</string>
+    <string name="setting_reload_accessibility_service_success">重启无障碍成功</string>
+
     <string name="setting_write_secure_setting">设置自动重启无障碍</string>
     <string name="setting_write_secure_setting_des">授予 写入安全设置 权限能够使应用自动重启无障碍服务</string>
 

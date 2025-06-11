@@ -1,8 +1,11 @@
 package top.bogey.touch_tool.ui.setting;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -23,6 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -45,25 +50,92 @@ public class SettingView extends Fragment {
         public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
             menuInflater.inflate(R.menu.menu_setting, menu);
 
-            boolean valid = SuperUser.getInstance().isValid();
-            menu.findItem(R.id.reloadService).setVisible(valid);
-            menu.findItem(R.id.writeSecureSetting).setVisible(valid);
-            menu.findItem(R.id.autoGiveCapturePermission).setVisible(valid);
+            MainActivity activity = (MainActivity) requireActivity();
+            if (activity.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
+                menu.findItem(R.id.reloadService).setVisible(true);
+            } else {
+                menu.findItem(R.id.reloadService).setVisible(false);
+            }
+        }
+
+        @Override
+        public void onPrepareMenu(@NonNull Menu menu) {
+            MainActivity activity = (MainActivity) requireActivity();
+            if (activity.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
+                menu.findItem(R.id.reloadService).setVisible(true);
+            } else {
+                menu.findItem(R.id.reloadService).setVisible(false);
+            }
         }
 
         @Override
         public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
             if (menuItem.getItemId() == R.id.reloadService) {
                 MainActivity activity = (MainActivity) requireActivity();
+                boolean result = activity.stopAccessibilityServiceBySecurePermission();
+                if (result) {
+                    binding.getRoot().postDelayed(() -> {
+                        SettingSaver.getInstance().setEnabled(true);
+                        binding.enableSwitch.setChecked(true);
+                        activity.restartAccessibilityServiceBySecurePermission();
+                        Toast.makeText(activity, getString(R.string.setting_reload_accessibility_service_success), Toast.LENGTH_SHORT).show();
+                    }, 1000);
+                } else {
+                    Toast.makeText(activity, getString(R.string.setting_reload_accessibility_service_error), Toast.LENGTH_SHORT).show();
+                }
 
                 return true;
             } else if (menuItem.getItemId() == R.id.writeSecureSetting) {
-                MainActivity activity = (MainActivity) requireActivity();
-
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.setting_write_secure_setting)
+                        .setMessage(R.string.setting_write_secure_setting_des);
+                String cmd = String.format("pm grant %s %s", requireActivity().getPackageName(), Manifest.permission.WRITE_SECURE_SETTINGS);
+                if (SuperUser.getInstance().isValid()) {
+                    builder.setPositiveButton(R.string.setting_rin_code, (dialog, which) -> SuperUser.getInstance().runCommand(cmd))
+                            .setNegativeButton(R.string.setting_copy_code, (dialog, which) -> {
+                                ClipboardManager manager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clipData = ClipData.newPlainText(getString(R.string.app_name), cmd);
+                                manager.setPrimaryClip(clipData);
+                                Toast.makeText(requireContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
+                            })
+                            .setNeutralButton(R.string.cancel, null)
+                            .show();
+                } else {
+                    builder.setPositiveButton(R.string.setting_copy_code, (dialog, which) -> {
+                                ClipboardManager manager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clipData = ClipData.newPlainText(getString(R.string.app_name), cmd);
+                                manager.setPrimaryClip(clipData);
+                                Toast.makeText(requireContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                }
                 return true;
             } else if (menuItem.getItemId() == R.id.autoGiveCapturePermission) {
-                MainActivity activity = (MainActivity) requireActivity();
-
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.setting_auto_give_capture_permission)
+                        .setMessage(R.string.setting_auto_give_capture_permission_des);
+                String cmd = String.format("appops set %s PROJECT_MEDIA allow", requireActivity().getPackageName());
+                if (SuperUser.getInstance().isValid()) {
+                    builder.setPositiveButton(R.string.setting_rin_code, (dialog, which) -> SuperUser.getInstance().runCommand(cmd))
+                            .setNegativeButton(R.string.setting_copy_code, (dialog, which) -> {
+                                ClipboardManager manager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clipData = ClipData.newPlainText(getString(R.string.app_name), cmd);
+                                manager.setPrimaryClip(clipData);
+                                Toast.makeText(requireContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
+                            })
+                            .setNeutralButton(R.string.cancel, null)
+                            .show();
+                } else {
+                    builder.setPositiveButton(R.string.setting_copy_code, (dialog, which) -> {
+                                ClipboardManager manager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clipData = ClipData.newPlainText(getString(R.string.app_name), cmd);
+                                manager.setPrimaryClip(clipData);
+                                Toast.makeText(requireContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                }
                 return true;
             }
             return false;

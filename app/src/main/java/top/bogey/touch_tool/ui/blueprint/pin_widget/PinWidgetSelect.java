@@ -34,8 +34,7 @@ public class PinWidgetSelect extends PinWidget<PinSingleSelect> {
 
     @Override
     protected void initBase() {
-        adapter = new ArrayAdapter<>(getContext(), R.layout.pin_widget_select_item);
-        adapter.addAll(pinBase.getOptions());
+        adapter = new ArrayAdapter<>(getContext(), R.layout.pin_widget_select_item, pinBase.getOptions());
         binding.spinner.setAdapter(adapter);
         binding.spinner.setSelection(pinBase.getIndex());
         binding.spinner.setOnItemSelectedListener(new SpinnerSelectedListener() {

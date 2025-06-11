@@ -16,6 +16,8 @@ import top.bogey.touch_tool.bean.action.SyncAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleLineString;
@@ -32,19 +34,20 @@ import top.bogey.touch_tool.utils.AppUtil;
 public class IsOcrTextExistAction extends CalculateAction implements SyncAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image);
     private final transient Pin textPin = new Pin(new PinSingleLineString(), R.string.pin_string);
-    private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(), R.string.find_ocr_text_action_type, false, false, true);
+    private final transient Pin similarPin = new Pin(new PinInteger(60), R.string.is_ocr_text_exist_action_similar);
+    private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(), R.string.is_ocr_text_exist_action_type, false, false, true);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
     private final transient Pin resultAreaPin = new Pin(new PinArea(), R.string.pin_area, true);
     private final transient Pin resultTextPin = new Pin(new PinString(), R.string.pin_string, true);
 
     public IsOcrTextExistAction() {
         super(ActionType.IS_OCR_TEXT_EXIST);
-        addPins(sourcePin, textPin, typePin, resultPin, resultAreaPin, resultTextPin);
+        addPins(sourcePin, textPin, similarPin, typePin, resultPin, resultAreaPin, resultTextPin);
     }
 
     public IsOcrTextExistAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(sourcePin, textPin, typePin, resultPin, resultAreaPin, resultTextPin);
+        reAddPins(sourcePin, textPin, similarPin, typePin, resultPin, resultAreaPin, resultTextPin);
     }
 
     @Override
@@ -52,6 +55,7 @@ public class IsOcrTextExistAction extends CalculateAction implements SyncAction 
         sync(runnable.getTask());
         PinImage source = getPinValue(runnable, sourcePin);
         PinObject text = getPinValue(runnable, textPin);
+        PinNumber<?> similar = getPinValue(runnable, similarPin);
         PinSingleSelect type = getPinValue(runnable, typePin);
 
         String value = text.toString();
@@ -78,6 +82,7 @@ public class IsOcrTextExistAction extends CalculateAction implements SyncAction 
         if (ocrResults == null) return;
 
         for (OcrResult ocrResult : ocrResults) {
+            if (ocrResult.getSimilar() < similar.intValue()) continue;
             if (AppUtil.isStringContains(ocrResult.getText(), value)) {
                 resultPin.getValue(PinBoolean.class).setValue(true);
                 resultAreaPin.getValue(PinArea.class).setValue(ocrResult.getArea());

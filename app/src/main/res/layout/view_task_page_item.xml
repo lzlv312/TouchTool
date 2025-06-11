@@ -23,12 +23,12 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:orientation="vertical"
-            android:paddingHorizontal="8dp"
             android:paddingVertical="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
                 android:gravity="center_vertical">
 
                 <com.google.android.material.button.MaterialButton
@@ -77,19 +77,22 @@
                 android:id="@+id/taskDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="11sp" />
+                android:background="?attr/colorTertiaryContainer"
+                android:paddingHorizontal="8dp"
+                android:textSize="11sp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/actionsBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-            </LinearLayout>
+                android:layout_marginHorizontal="8dp"
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/taskTag"
@@ -119,7 +122,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorError"
             android:gravity="center"
-            android:paddingHorizontal="4dp"
+            android:paddingHorizontal="8dp"
             android:textColor="?attr/colorOnError"
             android:textSize="11sp"
             android:visibility="gone" />

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +26,18 @@ public class NodePickerTreeAdapter extends TreeAdapter {
     private final SelectNode picker;
     private final List<NodeInfo> roots;
     private TreeNode selectedNode;
+    private RecyclerView recyclerView;
 
     public NodePickerTreeAdapter(SelectNode picker, List<NodeInfo> roots) {
         this.picker = picker;
         this.roots = roots;
         searchNodes(null);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
     }
 
     @NonNull
@@ -50,6 +58,8 @@ public class NodePickerTreeAdapter extends TreeAdapter {
             selectedNode = findTreeNode(treeNodes, nodeInfo);
             if (selectedNode != null) {
                 expandNode(selectedNode);
+                int index = treeNodes.indexOf(selectedNode);
+                recyclerView.scrollToPosition(index);
             }
         }
     }
@@ -119,7 +129,10 @@ public class NodePickerTreeAdapter extends TreeAdapter {
 
             binding.infoButton.setOnClickListener(v -> {
                 NodeInfo nodeInfo = (NodeInfo) node.getData();
-                NodeInfoFloatView.showInfo(nodeInfo, picker::selectNode);
+                NodeInfoFloatView.showInfo(nodeInfo, info -> {
+                    picker.selectNode(info);
+                    setSelectedNode(info);
+                });
             });
         }
 
@@ -138,16 +151,19 @@ public class NodePickerTreeAdapter extends TreeAdapter {
             if (nodeInfo == null) return;
 
             binding.titleText.setText(getNodeTitle(nodeInfo));
-            int color;
 
+            int color;
             if (node == selectedNode)
-                color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorError);
+                color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorTertiaryContainer);
             else {
-                if (nodeInfo.usable && nodeInfo.visible) {
-                    color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant);
-                } else {
-                    color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorOnSurface);
-                }
+                color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceContainerHighest);
+            }
+            binding.getRoot().setCardBackgroundColor(color);
+
+            if (nodeInfo.usable && nodeInfo.visible) {
+                color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant);
+            } else {
+                color = DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorOnSurface);
             }
             binding.titleText.setTextColor(color);
 
