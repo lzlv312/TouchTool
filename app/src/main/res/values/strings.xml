@@ -98,8 +98,10 @@
 
     <string name="check_pin_linkable_error">针脚类型不匹配</string>
 
+    <string name="check_need_super_user_error">需要超级用户权限</string>
+
     <!-- 警告 -->
-    <string name="check_need_capture_warning">获取截图需要开启录屏</string>
+    <string name="check_need_capture_warning">需要开启录屏动作</string>
     <string name="check_need_notification_warning">需要开启通知权限</string>
 
 

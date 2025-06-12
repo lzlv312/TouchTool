@@ -16,20 +16,23 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
-import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
+import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 
 public class ManualStartAction extends StartAction {
     private final transient Pin appsPin = new NotLinkAblePin(new PinApplications(PinSubType.MULTI_APP_WITH_ACTIVITY, MainApplication.getInstance().getString(R.string.common_package)), R.string.pin_app);
     private final transient Pin showTypePin = new NotLinkAblePin(new PinSingleSelect(R.array.manual_action_show_type), R.string.manual_start_action_type, false, false, true);
-    private final transient Pin showPosPin = new NotLinkAblePin(new PinPoint(), R.string.manual_start_action_pos, false, false, true);
-    private final transient Pin anchorPin = new NotLinkAblePin(new PinSingleSelect(R.array.anchor, 0), R.string.manual_start_action_anchor, false, false, true);
+    private final transient Pin anchorPin = new ShowAblePin(new PinSingleSelect(R.array.anchor, 0), R.string.manual_start_action_anchor, false, false, true);
+    private final transient Pin showPosPin = new ShowAblePin(new PinPoint(), R.string.manual_start_action_pos, false, false, true);
     private final transient Pin appPin = new Pin(new PinApplication(), R.string.manual_start_action_app, true);
 
     public ManualStartAction() {
         super(ActionType.MANUAL_START);
+        Point size = DisplayUtil.getScreenSize(MainApplication.getInstance());
+        showPosPin.getValue(PinPoint.class).setValue(new Point(size.x / 2, size.y / 2));
         addPins(appsPin, showTypePin, showPosPin, anchorPin, appPin);
     }
 

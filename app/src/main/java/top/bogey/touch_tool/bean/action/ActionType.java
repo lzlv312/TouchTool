@@ -43,6 +43,7 @@ public enum ActionType {
     // 系统动作
     OPEN_APP,
     OPEN_URI_SCHEME,
+    SHELL,
     SHARE_TO,
 
     PLAY_RINGTONE,
@@ -69,8 +70,6 @@ public enum ActionType {
 
     GET_CURRENT_DATE,
     GET_CURRENT_TIME,
-
-    SHELL,
 
     // 数值
     NUMBER_ADD,

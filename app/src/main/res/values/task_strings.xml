@@ -151,6 +151,12 @@
     <string name="open_uri_scheme_action_desc">打开Uri Scheme链接</string>
     <string name="open_uri_scheme_action_uri">链接</string>
 
+    <string name="execute_shell_action">执行Shell命令</string>
+    <string name="execute_shell_action_desc">执行Shell命令</string>
+    <string name="execute_shell_action_cmd">命令</string>
+    <string name="execute_shell_action_output">输出</string>
+    <string name="execute_shell_action_else">未达成</string>
+
     <string name="play_ringtone_action">播放铃声</string>
     <string name="play_ringtone_action_desc">播放选定的铃声</string>
     <string name="play_ringtone_action_ringtone">铃声</string>

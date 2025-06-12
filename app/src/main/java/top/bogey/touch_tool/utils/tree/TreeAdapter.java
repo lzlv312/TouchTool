@@ -113,6 +113,14 @@ public abstract class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.ViewH
         }
     }
 
+    public void switchNodeExpand(TreeNode node) {
+        if (node.isExpand()) {
+            collapseNode(node);
+        } else {
+            expandNode(node);
+        }
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         protected final TreeAdapter adapter;
         protected final Context context;

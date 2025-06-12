@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.service;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -45,6 +47,16 @@ public class TaskRunnable implements Runnable {
             });
         } catch (Exception e) {
             e.printStackTrace();
+
+            String errorInfo = e.toString();
+            try {
+                StringWriter stringWriter = new StringWriter();
+                PrintWriter printWriter = new PrintWriter(stringWriter);
+                e.printStackTrace(printWriter);
+                errorInfo = stringWriter.toString();
+            } catch (Exception ignored) {
+            }
+            Saver.getInstance().addLog(task.getId(), new LogInfo(errorInfo));
         }
 
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onFinish(this));

@@ -3,6 +3,7 @@ package top.bogey.touch_tool.bean.pin.special_pin;
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
@@ -43,6 +44,8 @@ public class ShowAblePin extends Pin {
         Action action = context.getAction(getOwnerId());
         if (action instanceof ExecuteTaskAction executeTaskAction) {
             return !executeTaskAction.isJustCall(context);
+        } else if (action instanceof ManualStartAction manualStartAction) {
+            return manualStartAction.isSingleShow();
         }
         return super.showAble(context);
     }

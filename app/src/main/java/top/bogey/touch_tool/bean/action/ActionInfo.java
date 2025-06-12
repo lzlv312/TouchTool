@@ -126,6 +126,7 @@ import top.bogey.touch_tool.bean.action.string.StringSplitAction;
 import top.bogey.touch_tool.bean.action.string.StringToNumberAction;
 import top.bogey.touch_tool.bean.action.system.CheckCaptureReadyAction;
 import top.bogey.touch_tool.bean.action.system.CheckInAppAction;
+import top.bogey.touch_tool.bean.action.system.ExecuteShellAction;
 import top.bogey.touch_tool.bean.action.system.GetBatteryStatusAction;
 import top.bogey.touch_tool.bean.action.system.GetCurrentAppAction;
 import top.bogey.touch_tool.bean.action.system.GetDateAction;
@@ -198,6 +199,7 @@ public class ActionInfo {
     // 系统动作
     private final static ActionInfo OPEN_APP_INFO = new ActionInfo(ActionType.OPEN_APP, OpenAppAction.class, R.drawable.icon_apps, R.string.open_app_action, R.string.open_app_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo OPEN_URI_SCHEME_INFO = new ActionInfo(ActionType.OPEN_URI_SCHEME, OpenUriSchemeAction.class, R.drawable.icon_link, R.string.open_uri_scheme_action, R.string.open_uri_scheme_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SHELL_INFO = new ActionInfo(ActionType.SHELL, ExecuteShellAction.class, R.drawable.icon_terminal, R.string.execute_shell_action, R.string.execute_shell_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SHARE_TO_INFO = new ActionInfo(ActionType.SHARE_TO, ShareToAction.class, R.drawable.icon_share, R.string.share_to_action, R.string.share_to_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo PLAY_RINGTONE_INFO = new ActionInfo(ActionType.PLAY_RINGTONE, PlayRingtoneAction.class, R.drawable.icon_notification_active, R.string.play_ringtone_action, R.string.play_ringtone_action_desc, 0, NormalActionCard.class);
@@ -386,6 +388,7 @@ public class ActionInfo {
 
             case OPEN_APP -> OPEN_APP_INFO;
             case OPEN_URI_SCHEME -> OPEN_URI_SCHEME_INFO;
+            case SHELL -> SHELL_INFO;
             case SHARE_TO -> SHARE_TO_INFO;
 
             case PLAY_RINGTONE -> PLAY_RINGTONE_INFO;

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import top.bogey.touch_tool.R;
@@ -53,6 +54,12 @@ public abstract class PinCustomView extends PinView {
             }
         });
 
+        MaterialButton visibleButton = getVisibleButton();
+        visibleButton.setOnClickListener(v -> {
+            pin.setHide(!pin.isHide());
+            visibleButton.setIconResource(pin.isHide() ? R.drawable.icon_visibility_off : R.drawable.icon_visibility);
+        });
+
         // 抑制一下recycleView的滚动，让针脚连线能够生效
         ViewGroup slotBox = getSlotBox();
         CustomActionCard card = (CustomActionCard) getCard();
@@ -73,10 +80,15 @@ public abstract class PinCustomView extends PinView {
         PinInfo pinInfo = PinInfo.getPinInfo(pin.getValue());
         typeView.setText(pinInfo.getTitle());
 
+        MaterialButton visibleButton = getVisibleButton();
+        visibleButton.setIconResource(pin.isHide() ? R.drawable.icon_visibility_off : R.drawable.icon_visibility);
+
         super.refreshPin();
     }
 
     public abstract TextView getTypeView();
 
     public abstract EditText getTitleEdit();
+
+    public abstract MaterialButton getVisibleButton();
 }

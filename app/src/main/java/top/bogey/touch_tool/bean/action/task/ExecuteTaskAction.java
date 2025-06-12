@@ -188,6 +188,7 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
                     dynamicPin.clearLinks(context);
                     dynamicPin.setValue(syncPin.getValue().copy());
                 }
+                dynamicPin.setHide(syncPin.isHide());
                 dynamicPin.setTitle(syncPin.getTitle());
             }
 

@@ -1,7 +1,10 @@
 package top.bogey.touch_tool.bean.action.normal;
 
+import android.graphics.Point;
+
 import com.google.gson.JsonObject;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
@@ -16,17 +19,20 @@ import top.bogey.touch_tool.bean.save.LogInfo;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.custom.ToastFloatView;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 
 public class LoggerAction extends ExecuteAction {
     private final transient Pin logPin = new Pin(new PinString(), R.string.log_action_text);
     private final transient Pin showPin = new Pin(new PinBoolean(true), R.string.log_action_show, false, false, true);
-    private final transient Pin anchorPin = new SingleSelectPin(new PinSingleSelect(R.array.anchor, 4), R.string.log_action_show_anchor, false, false, true);
-    private final transient Pin showPosPin = new Pin(new PinPoint(-1, -1), R.string.log_action_show_pos, false, false, true);
+    private final transient Pin anchorPin = new SingleSelectPin(new PinSingleSelect(R.array.anchor, 7), R.string.log_action_show_anchor, false, false, true);
+    private final transient Pin showPosPin = new Pin(new PinPoint(), R.string.log_action_show_pos, false, false, true);
     private final transient Pin savePin = new Pin(new PinBoolean(true), R.string.log_action_save, false, false, true);
 
     public LoggerAction() {
         super(ActionType.LOG);
+        Point size = DisplayUtil.getScreenSize(MainApplication.getInstance());
+        showPosPin.getValue(PinPoint.class).setValue(new Point(0, -size.y / 5));
         addPins(logPin, showPin, anchorPin, showPosPin, savePin);
     }
 

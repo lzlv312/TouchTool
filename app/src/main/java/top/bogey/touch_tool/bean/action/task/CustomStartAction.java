@@ -20,6 +20,7 @@ public class CustomStartAction extends Action implements DynamicPinsAction {
 
     public CustomStartAction() {
         super(ActionType.CUSTOM_START);
+        setExpandType(ExpandType.FULL);
         addPin(executePin);
     }
 

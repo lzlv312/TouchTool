@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.button.MaterialButton;
+
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.databinding.PinRightCustomBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
@@ -32,6 +34,11 @@ public class PinRightCustomView extends PinCustomView {
     @Override
     public EditText getTitleEdit() {
         return binding.title;
+    }
+
+    @Override
+    public MaterialButton getVisibleButton() {
+        return binding.visibleButton;
     }
 
     @Override

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.normal.LoggerAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
@@ -27,6 +28,7 @@ import top.bogey.touch_tool.utils.tree.ITreeNodeData;
 public class LogInfo implements ITreeNodeData {
     private final long time;
     private final int index;
+    private final String log;
 
     private final String actionId;
     private final boolean execute;
@@ -46,11 +48,29 @@ public class LogInfo implements ITreeNodeData {
                 values.put(pin.getId(), (PinObject) pinObject.copy());
             }
         }
+        StringBuilder builder = new StringBuilder();
+        if (index == -1 && action instanceof LoggerAction loggerAction) {
+            builder.append(loggerAction.getLogPin().getValue().toString());
+        } else {
+            builder.append("[").append(index).append("] ");
+            builder.append(action.getTitle());
+            if (!children.isEmpty()) builder.append("(").append(children.size()).append(")");
+        }
+        log = builder.toString();
+    }
+
+    public LogInfo(String log) {
+        this.time = System.currentTimeMillis();
+        index = -1;
+        this.log = log;
+        actionId = "";
+        execute = false;
     }
 
     public LogInfo(JsonObject jsonObject) {
         time = GsonUtil.getAsLong(jsonObject, "time", System.currentTimeMillis());
         index = GsonUtil.getAsInt(jsonObject, "index", -1);
+        log = GsonUtil.getAsString(jsonObject, "log", "");
         actionId = GsonUtil.getAsString(jsonObject, "actionId", "");
         execute = GsonUtil.getAsBoolean(jsonObject, "execute", true);
         values.putAll(GsonUtil.getAsObject(jsonObject, "values", TypeToken.getParameterized(HashMap.class, String.class, PinBase.class).getType(), new HashMap<>()));
@@ -67,6 +87,10 @@ public class LogInfo implements ITreeNodeData {
 
     public int getIndex() {
         return index;
+    }
+
+    public String getLog() {
+        return log;
     }
 
     public Action getAction(Task task) {

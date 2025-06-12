@@ -52,6 +52,15 @@
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/visibleButton"
+        style="@style/Theme.TouchTool.IconButton"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginHorizontal="4dp"
+        app:icon="@drawable/icon_visibility"
+        app:iconTint="?attr/colorOutline" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/keySlot"
         android:layout_width="wrap_content"
@@ -77,7 +86,7 @@
         android:layout_height="20dp"
         android:layout_marginHorizontal="4dp"
         android:alpha="0.5"
-        android:src="@drawable/icon_swap"
+        android:src="@drawable/icon_drag"
         app:tint="?attr/colorOutline" />
 
 </LinearLayout>

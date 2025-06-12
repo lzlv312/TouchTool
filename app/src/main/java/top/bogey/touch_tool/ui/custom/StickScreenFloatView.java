@@ -9,7 +9,6 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -36,9 +35,11 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 public class StickScreenFloatView extends FrameLayout implements FloatInterface {
     private final FloatStickScreenBinding binding;
     private final String tag;
+    private final int minWidth, minHeight;
+    private final int maxWidth, maxHeight;
 
     private boolean needDelete = false;
-    private float lastX = 0, lastY = 0, scale = 1;
+    private float lastX = 0, lastY = 0;
     private int originWidth = 0, originHeight = 0;
     private boolean dragging = false;
 
@@ -58,6 +59,12 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         super(context);
         binding = FloatStickScreenBinding.inflate(LayoutInflater.from(context), this, true);
         this.tag = tag;
+
+        minWidth = (int) DisplayUtil.dp2px(context, 96);
+        minHeight = (int) DisplayUtil.dp2px(context, 48);
+        Point size = DisplayUtil.getScreenSize(context);
+        maxWidth = size.x;
+        maxHeight = (int) (size.y * 0.8f);
     }
 
     @Override
@@ -98,13 +105,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
                 Toast.makeText(getContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
             });
         }
-        post(() -> {
-            if (location.x < 0 || location.y < 0) {
-                FloatWindow.setLocation(StickScreenFloatView.class.getName(), EAnchor.CENTER, new Point(0, 0));
-            } else {
-                FloatWindow.setLocation(StickScreenFloatView.class.getName(), anchor, location);
-            }
-        });
+        post(() -> FloatWindow.setLocation(StickScreenFloatView.class.getName(), anchor, location));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -114,34 +115,42 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         float y = event.getRawY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN -> {
+                lastX = 0;
+                lastY = 0;
                 int[] location = new int[2];
                 binding.dragImage.getLocationOnScreen(location);
-                if (new RectF(location[0], location[1], location[0] + binding.dragImage.getWidth(), location[1] + binding.dragImage.getHeight()).contains(x, y)) {
-                    dragging = true;
+                if (new RectF(location[0], location[1], location[0] + binding.dragImage.getWidth() * binding.scaleBox.getScaleX(), location[1] + binding.dragImage.getHeight() * binding.scaleBox.getScaleY()).contains(x, y)) {
                     FloatWindow.setDragAble(tag, false);
-                    lastX = x;
-                    lastY = y;
                 }
                 return true;
             }
 
             case MotionEvent.ACTION_MOVE -> {
-                if (dragging) {
-                    float dx = x - lastX;
-                    float dy = y - lastY;
-                    float ds = (dx + dy) / (originWidth + originHeight);
-                    scale = Math.max(0.75f, Math.min(2, scale + ds));
-                    binding.scaleBox.setScaleX(scale);
-                    binding.scaleBox.setScaleY(scale);
-                    ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
-                    params.width = (int) (originWidth * scale);
-                    params.height = (int) (originHeight * scale);
-                    binding.getRoot().setLayoutParams(params);
-                    FloatWindow.updateLayoutParam(tag);
+                if (lastX == 0 && lastY == 0) {
                     lastX = x;
                     lastY = y;
                     return true;
                 }
+                dragging = true;
+                float dx = x - lastX;
+                float dy = y - lastY;
+                ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
+                params.width += (int) dx;
+                params.height += (int) dy;
+                params.width = Math.min(maxWidth, Math.max(minWidth, params.width));
+                params.height = Math.min(maxHeight, Math.max(minHeight, params.height));
+                float xScale = (float) params.width / originWidth;
+                float yScale = (float) params.height / originHeight;
+                float scale = Math.min(xScale, yScale);
+                binding.scaleBox.setScaleX(scale);
+                binding.scaleBox.setScaleY(scale);
+                params.width = (int) (originWidth * scale);
+                params.height = (int) (originHeight * scale);
+                binding.getRoot().setLayoutParams(params);
+                FloatWindow.updateLayoutParam(tag);
+                lastX = x;
+                lastY = y;
+                return true;
             }
 
             case MotionEvent.ACTION_UP -> {

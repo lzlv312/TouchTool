@@ -146,6 +146,13 @@ public class LogViewAdapter extends TreeAdapter {
                 if (logInfo == null) return;
                 BlueprintView.tryFocusAction(logInfo.getAction(task));
             });
+
+            binding.copyButton.setOnClickListener(v -> {
+                LogInfo logInfo = (LogInfo) node.getData();
+                if (logInfo == null) return;
+                if (logInfo.getIndex() == -1) AppUtil.copyToClipboard(context, logInfo.getLog());
+                else switchNodeExpand(node);
+            });
         }
 
         @SuppressLint("SetTextI18n")
@@ -155,34 +162,29 @@ public class LogViewAdapter extends TreeAdapter {
             binding.title.setText(null);
             binding.time.setText(null);
             binding.icon.setVisibility(View.GONE);
-            binding.imageView.setVisibility(View.INVISIBLE);
+            binding.copyButton.setVisibility(View.INVISIBLE);
             binding.gotoButton.setVisibility(View.GONE);
 
             LogInfo logInfo = (LogInfo) node.getData();
             if (logInfo == null) return;
             Action action = logInfo.getAction(task);
-            if (action == null) return;
             this.node = node;
 
             binding.icon.setVisibility(View.VISIBLE);
             binding.gotoButton.setVisibility(View.VISIBLE);
 
-            StringBuilder builder = new StringBuilder();
-            int size = node.getChildren().size();
-            if (logInfo.getIndex() == -1 && action instanceof LoggerAction loggerAction) {
-                Pin logPin = loggerAction.getLogPin();
-                PinObject pinObject = logInfo.getValues().get(logPin.getId());
-                if (pinObject != null) builder.append(": ").append(pinObject);
-                binding.imageView.setVisibility(View.INVISIBLE);
+            if (logInfo.getIndex() == -1) {
+                binding.copyButton.setIconResource(R.drawable.icon_copy);
+                binding.copyButton.setVisibility(View.VISIBLE);
+                binding.title.setText(":" + logInfo.getLog());
             } else {
-                builder.append("[").append(logInfo.getIndex()).append("] ");
-                builder.append(action.getTitle());
-                if (size > 0) builder.append("(").append(size).append(")");
-                binding.imageView.setImageResource(node.isExpand() ? R.drawable.icon_arrow_up : R.drawable.icon_arrow_down);
-                binding.imageView.setVisibility(size == 0 ? View.INVISIBLE : View.VISIBLE);
+                binding.copyButton.setIconResource(node.isExpand() ? R.drawable.icon_arrow_up : R.drawable.icon_arrow_down);
+                int size = node.getChildren().size();
+                binding.copyButton.setVisibility(size == 0 ? View.INVISIBLE : View.VISIBLE);
+                binding.title.setText(logInfo.getLog());
             }
 
-            binding.title.setText(builder.toString());
+            binding.gotoButton.setVisibility(action == null ? View.GONE : View.VISIBLE);
             binding.time.setText(logInfo.getTime(context));
             binding.icon.setImageResource(logInfo.isExecute() ? R.drawable.icon_shuffle : R.drawable.icon_equal);
 

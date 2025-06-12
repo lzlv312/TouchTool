@@ -5,6 +5,8 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.KeyguardManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
@@ -22,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityWindowInfo;
+import android.widget.Toast;
 
 import androidx.annotation.StringRes;
 import androidx.core.content.FileProvider;
@@ -201,6 +204,13 @@ public class AppUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void copyToClipboard(Context context, String text) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(text, text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(context, R.string.copy_tips, Toast.LENGTH_SHORT).show();
     }
 
     public static boolean isAccessibilityServiceEnabled(Context context) {

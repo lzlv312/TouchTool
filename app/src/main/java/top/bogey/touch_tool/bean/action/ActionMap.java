@@ -59,6 +59,7 @@ public class ActionMap {
             case SYSTEM -> list.addAll(Arrays.asList(
                     ActionType.OPEN_APP,
                     ActionType.OPEN_URI_SCHEME,
+                    ActionType.SHELL,
                     ActionType.SHARE_TO,
 
                     ActionType.PLAY_RINGTONE,
