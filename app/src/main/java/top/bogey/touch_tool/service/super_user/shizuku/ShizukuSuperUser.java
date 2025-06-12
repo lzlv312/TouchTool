@@ -10,22 +10,19 @@ import android.os.RemoteException;
 
 import androidx.annotation.Keep;
 
-import com.google.gson.Gson;
-
 import java.util.concurrent.atomic.AtomicReference;
 
 import rikka.shizuku.Shizuku;
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.service.super_user.CmdResult;
 import top.bogey.touch_tool.service.super_user.ISuperUser;
-import top.bogey.touch_tool.service.super_user.SuperUser;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class ShizukuSuperUser implements ISuperUser {
     private final static int SHIZUKU_CODE = 16777114;
     private final static String SHIZUKU_SUFFIX = "UserService";
-    private IShizukuService shizukuService = null;
-    private static ShizukuSuperUser superUser;
 
+    private IShizukuService shizukuService = null;
     private Shizuku.UserServiceArgs ARGS;
 
     private final ServiceConnection USER_SERVICE_CONNECTION = new ServiceConnection() {
@@ -57,24 +54,20 @@ public class ShizukuSuperUser implements ISuperUser {
 
     @Override
     public boolean init() {
-        if (existShizuku()) {
-            if (isValid()) {
-                bindShizukuService();
-                return true;
-            } else {
-                requestShizukuPermission();
-            }
+        if (isValid()) {
+            bindShizukuService();
+            return true;
+        } else {
+            requestShizukuPermission();
+            return false;
         }
-        return false;
     }
 
     @Override
     public boolean tryInit() {
-        if (existShizuku()) {
-            if (isValid()) {
-                bindShizukuService();
-                return true;
-            }
+        if (isValid()) {
+            bindShizukuService();
+            return true;
         }
         return false;
     }
@@ -99,11 +92,10 @@ public class ShizukuSuperUser implements ISuperUser {
     }
 
     @Override
-    public SuperUser.CmdResult runCommand(String cmd) {
+    public CmdResult runCommand(String cmd) {
         if (shizukuService != null) {
             try {
-                String string = shizukuService.runCommond(cmd);
-                return new Gson().fromJson(string, SuperUser.CmdResult.class);
+                return shizukuService.runCommand(cmd);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }

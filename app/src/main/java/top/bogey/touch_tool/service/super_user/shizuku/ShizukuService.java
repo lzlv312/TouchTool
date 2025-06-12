@@ -4,56 +4,79 @@ import android.content.Context;
 
 import androidx.annotation.Keep;
 
-import com.google.gson.Gson;
-
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
-import top.bogey.touch_tool.service.super_user.SuperUser;
+import top.bogey.touch_tool.service.super_user.CmdResult;
 
 public class ShizukuService extends IShizukuService.Stub {
+    private Process process = null;
+    private BufferedWriter cmdWriter = null;
+    private BufferedReader outputReader = null;
+    private BufferedReader errorReader = null;
 
     public ShizukuService() {
-
+        try {
+            process = Runtime.getRuntime().exec("su");
+            cmdWriter = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
+            outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Keep
     public ShizukuService(Context context) {
-
+        this();
     }
 
     @Override
     public void destory() {
+        try {
+            if (cmdWriter != null) {
+                cmdWriter.write("exit\n");
+                cmdWriter.flush();
+                cmdWriter.close();
+            }
+            if (outputReader != null) outputReader.close();
+            if (errorReader != null) errorReader.close();
+            if (process != null) process.destroy();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.exit(0);
     }
 
     @Override
-    public String runCommond(String cmd) {
-        Process process = null;
-        boolean result = false;
-        String info;
+    public CmdResult runCommand(String cmd) {
+        if (process == null) return new CmdResult(false, "");
 
         try {
-            process = Runtime.getRuntime().exec(new String[]{"sh", "-c", cmd});
+            cmdWriter.write(cmd + "\n");
+            cmdWriter.write("echo $?\n");
+            cmdWriter.flush();
 
+            StringBuilder output = new StringBuilder();
             String line;
-            StringBuilder infoBuilder = new StringBuilder();
-            BufferedReader infoReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            while ((line = infoReader.readLine()) != null) {
-                infoBuilder.append(line).append("\n");
+            while ((line = outputReader.readLine()) != null) {
+                if (line.matches("^[0-9]+$")) {
+                    int exitCode = Integer.parseInt(line);
+                    return new CmdResult(exitCode == 0, output.toString().trim());
+                }
+                output.append(line).append("\n");
             }
-            infoReader.close();
-            info = infoBuilder.toString().trim();
 
-            process.waitFor();
-            result = true;
+            StringBuilder error = new StringBuilder();
+            while ((line = errorReader.readLine()) != null) {
+                error.append(line).append("\n");
+            }
+            return new CmdResult(false, error.toString().trim());
         } catch (Exception e) {
             e.printStackTrace();
-            info = e.getMessage();
-        } finally {
-            if (process != null) process.destroy();
+            return new CmdResult(false, e.getMessage());
         }
-        SuperUser.CmdResult cmdResult = new SuperUser.CmdResult(result, info);
-        return new Gson().toJson(cmdResult);
     }
 }

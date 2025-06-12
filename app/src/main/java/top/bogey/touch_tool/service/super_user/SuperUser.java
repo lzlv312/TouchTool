@@ -15,6 +15,7 @@ public class SuperUser implements ISuperUser {
         synchronized (SuperUser.class) {
             if (instance != null) {
                 if (!clazz.equals(instance.getClass())) {
+                    instance.exit();
                     instance = null;
                 }
             }
@@ -69,8 +70,5 @@ public class SuperUser implements ISuperUser {
     @Override
     public CmdResult runCommand(String cmd) {
         return null;
-    }
-
-    public record CmdResult(boolean result, String info) {
     }
 }

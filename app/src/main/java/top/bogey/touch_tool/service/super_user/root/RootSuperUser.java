@@ -3,15 +3,19 @@ package top.bogey.touch_tool.service.super_user.root;
 import androidx.annotation.Keep;
 
 import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import top.bogey.touch_tool.service.super_user.CmdResult;
 import top.bogey.touch_tool.service.super_user.ISuperUser;
-import top.bogey.touch_tool.service.super_user.SuperUser;
 
 public class RootSuperUser implements ISuperUser {
-    private static boolean existRoot = false;
+    private boolean existRoot = false;
+    private Process rootProcess = null;
+    private BufferedWriter cmdWriter = null;
+    private BufferedReader outputReader = null;
+    private BufferedReader errorReader = null;
 
     @Keep
     public RootSuperUser() {
@@ -20,82 +24,85 @@ public class RootSuperUser implements ISuperUser {
 
     @Override
     public boolean init() {
-        return existRoot();
+        return openRootSession();
     }
 
     @Override
     public boolean tryInit() {
-        return existRoot();
+        return openRootSession();
     }
 
     @Override
     public void exit() {
-
+        try {
+            if (cmdWriter != null) {
+                cmdWriter.write("exit\n");
+                cmdWriter.flush();
+                cmdWriter.close();
+            }
+            if (outputReader != null) outputReader.close();
+            if (errorReader != null) errorReader.close();
+            if (rootProcess != null) rootProcess.destroy();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            existRoot = false;
+        }
     }
 
     @Override
     public boolean isValid() {
-        return existRoot();
+        return openRootSession();
     }
 
     @Override
-    public SuperUser.CmdResult runCommand(String cmd) {
-        if (existRoot()) {
-            Process process = null;
-            boolean result = false;
-            String info;
+    public CmdResult runCommand(String cmd) {
+        if (!existRoot) return null;
 
-            try {
-                process = Runtime.getRuntime().exec(new String[]{"su", "-c", cmd});
+        try {
+            cmdWriter.write(cmd + "\n");
+            cmdWriter.write("echo $?\n");
+            cmdWriter.flush();
 
-                String line;
-                StringBuilder infoBuilder = new StringBuilder();
-                BufferedReader infoReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                while ((line = infoReader.readLine()) != null) {
-                    infoBuilder.append(line).append("\n");
+            StringBuilder output = new StringBuilder();
+            String line;
+            while ((line = outputReader.readLine()) != null) {
+                if (line.matches("^[0-9]+$")) {
+                    int exitCode = Integer.parseInt(line);
+                    return new CmdResult(exitCode == 0, output.toString().trim());
                 }
-                infoReader.close();
-                info = infoBuilder.toString().trim();
-
-                process.waitFor();
-                result = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                info = e.getMessage();
-            } finally {
-                if (process != null) process.destroy();
+                output.append(line).append("\n");
             }
-            return new SuperUser.CmdResult(result, info);
-        }
 
-        return null;
+            StringBuilder error = new StringBuilder();
+            while ((line = errorReader.readLine()) != null) {
+                error.append(line).append("\n");
+            }
+            return new CmdResult(false, error.toString().trim());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            exit();
+            return new CmdResult(false, e.getMessage());
+        }
     }
 
-    public static boolean existRoot() {
+    public boolean openRootSession() {
         if (existRoot) return true;
-
-        Process process = null;
-        OutputStreamWriter writer = null;
         try {
-            process = Runtime.getRuntime().exec("su");
-            writer = new OutputStreamWriter(process.getOutputStream());
-            writer.write("exit\n");
-            writer.flush();
-            int value = process.waitFor();
-            existRoot = value == 0;
+            rootProcess = Runtime.getRuntime().exec("su");
+            cmdWriter = new BufferedWriter(new OutputStreamWriter(rootProcess.getOutputStream()));
+            outputReader = new BufferedReader(new InputStreamReader(rootProcess.getInputStream()));
+            errorReader = new BufferedReader(new InputStreamReader(rootProcess.getErrorStream()));
+
+            existRoot = true;
+            CmdResult result = runCommand("echo root");
+            existRoot = result.getResult();
             return existRoot;
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (process != null) process.destroy();
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            exit();
+            return false;
         }
-        return false;
     }
 }

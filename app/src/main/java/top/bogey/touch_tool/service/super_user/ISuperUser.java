@@ -9,5 +9,5 @@ public interface ISuperUser {
 
     boolean isValid();
 
-    SuperUser.CmdResult runCommand(String cmd);
+    CmdResult runCommand(String cmd);
 }
