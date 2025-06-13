@@ -387,7 +387,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         detector.onTouchEvent(event);
-        if (touchState == TOUCH_SCALE) return true;
+        if (touchState == TOUCH_SCALE) {
+            longTouchHandler.removeCallbacksAndMessages(null);
+            return true;
+        }
 
         float gridSize = getScaleGridSize();
         float x = event.getX();

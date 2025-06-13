@@ -3,7 +3,7 @@ package top.bogey.touch_tool.service.super_user;
 public interface ISuperUser {
     boolean init();
 
-    boolean tryInit();
+    void tryInit();
 
     void exit();
 

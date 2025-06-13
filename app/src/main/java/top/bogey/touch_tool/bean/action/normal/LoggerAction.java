@@ -54,7 +54,7 @@ public class LoggerAction extends ExecuteAction {
         }
 
         if (save.getValue()) {
-            Saver.getInstance().addLog(runnable.getStartTask().getId(), new LogInfo(-1, this, true));
+            runnable.addLog(this);
         }
 
         executeNext(runnable, outPin);

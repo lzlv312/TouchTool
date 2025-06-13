@@ -53,8 +53,7 @@ public class SuperUser implements ISuperUser {
     }
 
     @Override
-    public boolean tryInit() {
-        return false;
+    public void tryInit() {
     }
 
     @Override

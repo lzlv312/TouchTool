@@ -2,13 +2,17 @@ package top.bogey.touch_tool.service;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.Future;
 
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.normal.LoggerAction;
+import top.bogey.touch_tool.bean.action.start.InnerStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.save.LogInfo;
 import top.bogey.touch_tool.bean.save.Saver;
@@ -18,11 +22,12 @@ public class TaskRunnable implements Runnable {
     private final Stack<Task> taskStack = new Stack<>();
     private final Stack<Action> actionStack = new Stack<>();
 
-    private final Set<TaskListener> listeners = new HashSet<>();
+    private final Set<ITaskListener> listeners = new HashSet<>();
 
     private final Task task;
     private final StartAction startAction;
     private boolean debug;
+    private boolean skipLog = false;
 
     private int progress = 0;
 
@@ -32,6 +37,7 @@ public class TaskRunnable implements Runnable {
     private long pauseTime = -1;
 
     private final Stack<LogInfo> logStack = new Stack<>();
+    private final List<LogInfo> logList = new ArrayList<>();
 
     public TaskRunnable(Task task, StartAction startAction) {
         this.task = task;
@@ -41,6 +47,9 @@ public class TaskRunnable implements Runnable {
 
     @Override
     public void run() {
+        if (startAction instanceof InnerStartAction) {
+            skipLog = true;
+        }
         try {
             task.execute(this, startAction, result -> {
                 if (result) listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onStart(this));
@@ -104,7 +113,7 @@ public class TaskRunnable implements Runnable {
         return startAction;
     }
 
-    public void addListener(TaskListener listener) {
+    public void addListener(ITaskListener listener) {
         listeners.add(listener);
     }
 
@@ -122,22 +131,38 @@ public class TaskRunnable implements Runnable {
         checkStatus();
     }
 
-    public void addDebugLog(Action action, int stackOption) {
-        if (debug) addDebugLog(new LogInfo(progress + 1, action, stackOption != 0),  stackOption);
+    public void addLog(LoggerAction action) {
+        addDebugLog(new LogInfo(-1, action, true), 0);
     }
 
-    private void addDebugLog(LogInfo logInfo, int stackOption) {
+    public void addDebugLog(Action action, int stackOption) {
+        if (action instanceof InnerStartAction) return;
+        if (debug) addDebugLog(new LogInfo(progress + 1, action, stackOption != 0), stackOption);
+    }
+
+    public void addDebugLog(LogInfo logInfo, int stackOption) {
         switch (stackOption) {
             case -1 -> {
                 LogInfo lastLogInfo = logStack.pop();
                 addDebugLog(lastLogInfo, 0);
             }
             case 0 -> {
-                if (logStack.isEmpty()) Saver.getInstance().addLog(task.getId(), logInfo);
+                if (logStack.isEmpty()) {
+                    if (!skipLog) Saver.getInstance().addLog(task.getId(), logInfo);
+                    logList.add(logInfo);
+                }
                 else logStack.peek().addChild(logInfo);
             }
             case 1 -> logStack.push(logInfo);
         }
+    }
+
+    public List<LogInfo> getLogList() {
+        return logList;
+    }
+
+    public int getProgress() {
+        return progress;
     }
 
     public void stop() {

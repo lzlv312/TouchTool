@@ -15,14 +15,15 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
+import top.bogey.touch_tool.bean.save.LogInfo;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatPlayItemBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.service.TaskListener;
+import top.bogey.touch_tool.service.ITaskListener;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 @SuppressLint("ViewConstructor")
-public class PlayFloatItemView extends FrameLayout implements TaskListener {
+public class PlayFloatItemView extends FrameLayout implements ITaskListener {
     protected final FloatPlayItemBinding binding;
 
     protected Task task;

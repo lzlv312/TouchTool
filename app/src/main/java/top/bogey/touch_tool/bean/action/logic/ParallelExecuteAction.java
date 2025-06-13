@@ -21,6 +21,8 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
+import top.bogey.touch_tool.bean.save.LogInfo;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskListener;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -61,22 +63,18 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
             if (!dynamicPin.isLinked()) continue;
             TaskRunnable taskRunnable = service.runTask(runnable.getTask(), new InnerStartAction(dynamicPin), new TaskListener() {
                 @Override
-                public void onStart(TaskRunnable runnable) {
-
-                }
-
-                @Override
                 public void onExecute(TaskRunnable run, Action action, int progress) {
                     if (runnable.isInterrupt()) run.stop();
                 }
 
                 @Override
-                public void onCalculate(TaskRunnable runnable, Action action) {
-
-                }
-
-                @Override
-                public void onFinish(TaskRunnable runnable) {
+                public void onFinish(TaskRunnable run) {
+                    if (runnable.getStartTask().hasFlag(Task.FLAG_DEBUG)) {
+                        List<LogInfo> logList = run.getLogList();
+                        LogInfo logInfo = new LogInfo(runnable.getProgress() + 1, ParallelExecuteAction.this, true);
+                        logInfo.setChildren(logList);
+                        runnable.addDebugLog(logInfo, 0);
+                    }
                     latch.countDown();
                 }
             });

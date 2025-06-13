@@ -13,7 +13,7 @@ public class TreeNode {
     private ITreeNodeDataLoader loader;
     private Object flag;
 
-    private ITreeNodeData treeNode;
+    private ITreeNodeData nodeData;
 
     private boolean expand = false;
     private int depth = 0;
@@ -23,21 +23,22 @@ public class TreeNode {
         this.flag = flag;
     }
 
-    public TreeNode(ITreeNodeData treeNode) {
-        this(treeNode, true);
+    public TreeNode(ITreeNodeData nodeData) {
+        this(nodeData, true);
     }
 
-    public TreeNode(ITreeNodeData treeNode, boolean originChildren) {
-        this.treeNode = treeNode;
+    public TreeNode(ITreeNodeData nodeData, boolean originChildren) {
+        this.nodeData = nodeData;
         initChildren = !originChildren;
     }
 
     @Nullable
     public ITreeNodeData getData() {
+        if (nodeData != null) return nodeData;
         if (loader != null && flag != null) {
-            treeNode = loader.loadData(flag);
+            nodeData = loader.loadData(flag);
         }
-        return treeNode;
+        return nodeData;
     }
 
     public boolean isExpand() {
@@ -60,8 +61,8 @@ public class TreeNode {
     public List<TreeNode> getChildren() {
         if (initChildren) return children;
         getData();
-        if (treeNode == null) return children;
-        for (ITreeNodeData data : treeNode.getChildren()) {
+        if (nodeData == null) return children;
+        for (ITreeNodeData data : nodeData.getChildren()) {
             addChild(new TreeNode(data));
         }
         initChildren = true;

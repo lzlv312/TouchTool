@@ -105,7 +105,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
                 Toast.makeText(getContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
             });
         }
-        post(() -> FloatWindow.setLocation(StickScreenFloatView.class.getName(), anchor, location));
+        post(() -> FloatWindow.setLocation(tag, anchor, location));
     }
 
     @SuppressLint("ClickableViewAccessibility")

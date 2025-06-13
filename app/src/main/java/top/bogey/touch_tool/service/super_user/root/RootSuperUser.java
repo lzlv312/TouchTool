@@ -28,8 +28,8 @@ public class RootSuperUser implements ISuperUser {
     }
 
     @Override
-    public boolean tryInit() {
-        return openRootSession();
+    public void tryInit() {
+        openRootSession();
     }
 
     @Override

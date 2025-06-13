@@ -33,7 +33,8 @@ public class SelectActionVariableTypeDialog extends FlexboxLayout {
         setJustifyContent(JustifyContent.CENTER);
 
         PIN_INFO_MAP.forEach((type, infoList) -> {
-            for (PinInfo info : infoList) {
+            for (int i = 0; i < infoList.size(); i++) {
+                PinInfo info = infoList.get(i);
                 DialogSelectActionVariableItemBinding itemBinding = DialogSelectActionVariableItemBinding.inflate(LayoutInflater.from(context), this, true);
                 itemBinding.getRoot().setTag(info);
                 itemBinding.getRoot().setText(info.getTitle());
@@ -42,6 +43,10 @@ public class SelectActionVariableTypeDialog extends FlexboxLayout {
                     button = (MaterialButton) v;
                     button.setChecked(true);
                 });
+                if (i == 0) {
+                    button = itemBinding.getRoot();
+                    button.setChecked(true);
+                }
             }
         });
     }

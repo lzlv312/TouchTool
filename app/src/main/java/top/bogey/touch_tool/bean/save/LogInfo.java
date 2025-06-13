@@ -54,7 +54,6 @@ public class LogInfo implements ITreeNodeData {
         } else {
             builder.append("[").append(index).append("] ");
             builder.append(action.getTitle());
-            if (!children.isEmpty()) builder.append("(").append(children.size()).append(")");
         }
         log = builder.toString();
     }
@@ -90,7 +89,8 @@ public class LogInfo implements ITreeNodeData {
     }
 
     public String getLog() {
-        return log;
+        if (children.isEmpty()) return log;
+        return log + " (" + children.size() + ")";
     }
 
     public Action getAction(Task task) {
@@ -108,6 +108,11 @@ public class LogInfo implements ITreeNodeData {
     @Override
     public List<LogInfo> getChildren() {
         return children;
+    }
+
+    public void setChildren(List<LogInfo> children) {
+        this.children.clear();
+        this.children.addAll(children);
     }
 
     public void addChild(LogInfo logInfo) {

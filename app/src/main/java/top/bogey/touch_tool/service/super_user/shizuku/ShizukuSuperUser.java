@@ -64,12 +64,10 @@ public class ShizukuSuperUser implements ISuperUser {
     }
 
     @Override
-    public boolean tryInit() {
+    public void tryInit() {
         if (isValid()) {
             bindShizukuService();
-            return true;
         }
-        return false;
     }
 
     @Override

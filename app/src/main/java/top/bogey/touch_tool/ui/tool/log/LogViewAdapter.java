@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.ui.tool.log;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,6 +168,7 @@ public class LogViewAdapter extends TreeAdapter {
 
             LogInfo logInfo = (LogInfo) node.getData();
             if (logInfo == null) return;
+            Log.d("TAG", "refresh: " + logInfo.getLog());
             Action action = logInfo.getAction(task);
             this.node = node;
 
@@ -179,7 +181,7 @@ public class LogViewAdapter extends TreeAdapter {
                 binding.title.setText(":" + logInfo.getLog());
             } else {
                 binding.copyButton.setIconResource(node.isExpand() ? R.drawable.icon_arrow_up : R.drawable.icon_arrow_down);
-                int size = node.getChildren().size();
+                int size = logInfo.getChildren().size();
                 binding.copyButton.setVisibility(size == 0 ? View.INVISIBLE : View.VISIBLE);
                 binding.title.setText(logInfo.getLog());
             }

@@ -12,14 +12,13 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.service.TaskListener;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 @SuppressLint("ViewConstructor")
-public class SinglePlayView extends PlayFloatItemView implements TaskListener, FloatInterface {
+public class SinglePlayView extends PlayFloatItemView implements FloatInterface {
     private final String tag = UUID.randomUUID().toString();
 
     public SinglePlayView(@NonNull Context context, Task task, StartAction action) {

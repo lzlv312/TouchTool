@@ -367,29 +367,30 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
         public void refresh(Object object) {
             binding.taskName.setText(getObjectTitle(object));
             binding.icon.setImageResource(getObjectIcon(object));
+            binding.helpButton.setVisibility(View.GONE);
 
             String desc = getObjectDesc(object);
             if (desc != null && !desc.isEmpty()) {
-                binding.taskDesc.setVisibility(ViewGroup.VISIBLE);
+                binding.taskDesc.setVisibility(View.VISIBLE);
                 binding.taskDesc.setText(desc);
             } else {
-                binding.taskDesc.setVisibility(ViewGroup.GONE);
+                binding.taskDesc.setVisibility(View.GONE);
             }
 
-            binding.editButton.setVisibility(ViewGroup.GONE);
-            binding.copyButton.setVisibility(ViewGroup.GONE);
-            binding.deleteButton.setVisibility(ViewGroup.GONE);
+            binding.editButton.setVisibility(View.GONE);
+            binding.copyButton.setVisibility(View.GONE);
+            binding.deleteButton.setVisibility(View.GONE);
 
             binding.getRoot().setAlpha(1f);
             binding.getRoot().setEnabled(true);
-            binding.settingButton.setVisibility(ViewGroup.GONE);
+            binding.settingButton.setVisibility(View.GONE);
             if (object instanceof Task task) {
-                binding.copyButton.setVisibility(ViewGroup.VISIBLE);
-                binding.editButton.setVisibility(ViewGroup.VISIBLE);
+                binding.copyButton.setVisibility(View.VISIBLE);
+                binding.editButton.setVisibility(View.VISIBLE);
                 Task taskParent = task.getParentTask(dialog.task.getId());
-                binding.deleteButton.setVisibility(taskParent == null && !task.equals(dialog.task) ? ViewGroup.VISIBLE : ViewGroup.GONE);
+                binding.deleteButton.setVisibility(taskParent == null && !task.equals(dialog.task) ? View.VISIBLE : View.GONE);
 
-                binding.settingButton.setVisibility(ViewGroup.VISIBLE);
+                binding.settingButton.setVisibility(View.VISIBLE);
 
 
                 if (task.getActions(CustomStartAction.class).isEmpty()) {
@@ -399,21 +400,22 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             }
 
             binding.helpButton.setIconResource(R.drawable.icon_help);
-            binding.varBox.setVisibility(ViewGroup.GONE);
+            binding.varBox.setVisibility(View.GONE);
             if (object instanceof Variable var) {
-                binding.copyButton.setVisibility(ViewGroup.VISIBLE);
-                binding.editButton.setVisibility(ViewGroup.VISIBLE);
-                binding.deleteButton.setVisibility(ViewGroup.VISIBLE);
+                binding.copyButton.setVisibility(View.VISIBLE);
+                binding.editButton.setVisibility(View.VISIBLE);
+                binding.deleteButton.setVisibility(View.VISIBLE);
+                binding.helpButton.setVisibility(View.VISIBLE);
 
                 binding.helpButton.setIconResource(R.drawable.icon_download);
 
-                binding.varBox.setVisibility(ViewGroup.VISIBLE);
+                binding.varBox.setVisibility(View.VISIBLE);
                 PinInfo pinInfo = var.getKeyPinInfo();
                 if (pinInfo != null) {
                     binding.keySlot.setText(pinInfo.getTitle());
                 }
                 binding.typeSpinner.setSelection(var.getType().ordinal());
-                binding.valueSlot.setVisibility(var.getType() == Variable.VariableType.MAP ? ViewGroup.VISIBLE : ViewGroup.GONE);
+                binding.valueSlot.setVisibility(var.getType() == Variable.VariableType.MAP ? View.VISIBLE : View.GONE);
                 pinInfo = var.getValuePinInfo();
                 if (pinInfo != null) {
                     binding.valueSlot.setText(pinInfo.getTitle());

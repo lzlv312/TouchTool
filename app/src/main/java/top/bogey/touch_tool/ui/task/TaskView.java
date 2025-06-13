@@ -31,12 +31,13 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.other.Usage;
+import top.bogey.touch_tool.bean.save.LogInfo;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.TaskSaveListener;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewTaskBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.service.TaskListener;
+import top.bogey.touch_tool.service.ITaskListener;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
@@ -44,7 +45,7 @@ import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
-public class TaskView extends Fragment implements TaskListener, TaskSaveListener {
+public class TaskView extends Fragment implements ITaskListener, TaskSaveListener {
     private ViewTaskBinding binding;
 
     boolean selecting = false;

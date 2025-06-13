@@ -54,6 +54,7 @@ import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.capture.CaptureService;
 import top.bogey.touch_tool.service.receiver.SystemEventReceiver;
+import top.bogey.touch_tool.service.super_user.SuperUser;
 import top.bogey.touch_tool.ui.PermissionActivity;
 import top.bogey.touch_tool.utils.callback.BitmapResultCallback;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
@@ -155,6 +156,7 @@ public class MainAccessibilityService extends AccessibilityService {
             }
 
             resetAllAlarm();
+            SuperUser.getInstance().tryInit();
         } else {
             if (receiver != null) unregisterReceiver(receiver);
             receiver = null;
@@ -165,6 +167,7 @@ public class MainAccessibilityService extends AccessibilityService {
             stopCapture();
             stopSound(null);
             cancelAllAlarm();
+            SuperUser.getInstance().exit();
         }
     }
 
@@ -172,13 +175,13 @@ public class MainAccessibilityService extends AccessibilityService {
     private final ExecutorService taskService = new TaskThreadPoolExecutor(5, 30, 30, TimeUnit.SECONDS, new TaskQueue<>(20));
 
     private final Set<TaskRunnable> tasks = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    private final Set<TaskListener> listeners = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Set<ITaskListener> listeners = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
-    public void addListener(TaskListener listener) {
+    public void addListener(ITaskListener listener) {
         listeners.add(listener);
     }
 
-    public void removeListener(TaskListener listener) {
+    public void removeListener(ITaskListener listener) {
         listeners.remove(listener);
     }
 
@@ -186,7 +189,7 @@ public class MainAccessibilityService extends AccessibilityService {
         return runTask(task, startAction, null);
     }
 
-    public TaskRunnable runTask(Task task, StartAction startAction, TaskListener listener) {
+    public TaskRunnable runTask(Task task, StartAction startAction, ITaskListener listener) {
         if (task == null || startAction == null) return null;
         if (!isEnabled()) return null;
 
@@ -205,16 +208,6 @@ public class MainAccessibilityService extends AccessibilityService {
                     stopTask(runnable.getStartTask());
                 }
                 tasks.add(runnable);
-            }
-
-            @Override
-            public void onExecute(TaskRunnable runnable, Action action, int progress) {
-
-            }
-
-            @Override
-            public void onCalculate(TaskRunnable runnable, Action action) {
-
             }
 
             @Override
