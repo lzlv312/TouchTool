@@ -17,6 +17,13 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.other.Usage;
+import top.bogey.touch_tool.bean.save.log.LogInfo;
+import top.bogey.touch_tool.bean.save.log.LogSave;
+import top.bogey.touch_tool.bean.save.log.LogSaveListener;
+import top.bogey.touch_tool.bean.save.task.TaskSave;
+import top.bogey.touch_tool.bean.save.task.TaskSaveListener;
+import top.bogey.touch_tool.bean.save.variable.VariableSave;
+import top.bogey.touch_tool.bean.save.variable.VariableSaveListener;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.utils.AppUtil;
@@ -281,10 +288,10 @@ public class Saver {
         return loggers.computeIfAbsent(key, k -> new LogSave(key, LOG_DIR));
     }
 
-    public void addLog(String key, LogInfo log) {
+    public void addLog(String key, LogInfo log, boolean autoUid) {
         LogSave logSave = getLogSave(key);
-        logSave.addLog(log);
-        logListeners.stream().filter(Objects::nonNull).forEach(v -> v.onNewLog(logSave, log));
+        logSave.addLog(log, autoUid);
+        if (autoUid) logListeners.stream().filter(Objects::nonNull).forEach(v -> v.onNewLog(logSave, log));
     }
 
     public void clearLog(String key) {

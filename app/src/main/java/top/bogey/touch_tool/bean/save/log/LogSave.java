@@ -1,9 +1,11 @@
-package top.bogey.touch_tool.bean.save;
+package top.bogey.touch_tool.bean.save.log;
+
+import android.util.Log;
 
 import com.tencent.mmkv.MMKV;
 
 import top.bogey.touch_tool.utils.GsonUtil;
-import top.bogey.touch_tool.utils.tree.ITreeNodeData;
+import top.bogey.touch_tool.utils.tree.ILazyTreeNodeData;
 import top.bogey.touch_tool.utils.tree.ITreeNodeDataLoader;
 
 public class LogSave implements ITreeNodeDataLoader {
@@ -19,19 +21,26 @@ public class LogSave implements ITreeNodeDataLoader {
         mmkv = MMKV.mmkvWithID(key, MMKV.MULTI_PROCESS_MODE, null, path);
     }
 
-    public LogInfo getLog(int index) {
-        return GsonUtil.getAsObject(mmkv.decodeString(String.valueOf(index)), LogInfo.class, null);
+    public LogInfo getLog(String key) {
+        try {
+            return GsonUtil.getAsObject(mmkv.decodeString(key), LogInfo.class, null);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public int getLogCount() {
         return mmkv.decodeInt(COUNT, 0);
     }
 
-    public void addLog(LogInfo log) {
-        int index = getLogCount();
-        index++;
-        mmkv.encode(COUNT, index);
-        mmkv.encode(String.valueOf(index), GsonUtil.toJson(log));
+    public void addLog(LogInfo log, boolean autoUid) {
+        if (autoUid) {
+            int index = getLogCount();
+            index++;
+            mmkv.encode(COUNT, index);
+            log.setUid(String.valueOf(index));
+        }
+        mmkv.encode(log.getUid(), GsonUtil.toJson(log));
         time = System.currentTimeMillis();
     }
 
@@ -71,7 +80,8 @@ public class LogSave implements ITreeNodeDataLoader {
     }
 
     @Override
-    public ITreeNodeData loadData(Object flag) {
-        return getLog((int) flag);
+    public ILazyTreeNodeData loadData(Object flag) {
+        Log.d("TAG", "loadData: " + flag);
+        return getLog(String.valueOf(flag));
     }
 }

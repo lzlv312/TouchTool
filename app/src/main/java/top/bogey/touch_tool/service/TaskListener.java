@@ -1,9 +1,8 @@
 package top.bogey.touch_tool.service;
 
 import top.bogey.touch_tool.bean.action.Action;
-import top.bogey.touch_tool.bean.save.LogInfo;
 
-public class TaskListener implements ITaskListener{
+public class TaskListener implements ITaskListener {
     @Override
     public void onStart(TaskRunnable runnable) {
 

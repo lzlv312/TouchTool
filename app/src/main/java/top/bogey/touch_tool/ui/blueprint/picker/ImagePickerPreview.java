@@ -19,6 +19,7 @@ import top.bogey.touch_tool.databinding.FloatPickerImagePreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
+import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 @SuppressLint("ViewConstructor")
 public class ImagePickerPreview extends BasePicker<Bitmap> {
@@ -56,31 +57,31 @@ public class ImagePickerPreview extends BasePicker<Bitmap> {
         binding.matchButton.setOnClickListener(v -> {
             MainAccessibilityService service = MainApplication.getInstance().getService();
             if (service != null && service.isEnabled()) {
-                service.tryGetScreenShot(result -> {
+                FloatWindow.hide(tag);
+                postDelayed(() -> service.tryGetScreenShot(result -> post(() -> {
+                    FloatWindow.show(tag);
                     if (result != null) {
-                        post(() -> {
-                            int similar = (int) binding.timeSlider.getValue();
-                            List<Rect> rectList = DisplayUtil.matchTemplate(result, bitmap, null, similar, true);
-                            if (rectList == null || rectList.isEmpty()) binding.matchedImage.setImageDrawable(null);
-                            else {
-                                Rect rect = rectList.get(0);
-                                int px = (int) DisplayUtil.dp2px(getContext(), 16);
-                                Rect area = DisplayUtil.safeClipBitmapArea(result, rect.left - px, rect.top - px, rect.width() + px * 2, rect.height() + px * 2);
-                                if (area == null) return;
-                                Bitmap bitmap = DisplayUtil.safeClipBitmap(result, area.left, area.top, area.width(), area.height());
-                                if (bitmap == null) return;
-                                Paint paint = new Paint();
-                                paint.setColor(Color.RED);
-                                paint.setStrokeWidth(2);
-                                paint.setStyle(Paint.Style.STROKE);
-                                Canvas canvas = new Canvas(bitmap);
-                                canvas.translate(rect.left - area.left, rect.top - area.top);
-                                canvas.drawRect(new Rect(0, 0, rect.width(), rect.height()), paint);
-                                binding.matchedImage.setImageBitmap(bitmap);
-                            }
-                        });
+                        int similar = (int) binding.timeSlider.getValue();
+                        List<Rect> rectList = DisplayUtil.matchTemplate(result, bitmap, null, similar, true);
+                        if (rectList == null || rectList.isEmpty()) binding.matchedImage.setImageDrawable(null);
+                        else {
+                            Rect rect = rectList.get(0);
+                            int px = (int) DisplayUtil.dp2px(getContext(), 16);
+                            Rect area = DisplayUtil.safeClipBitmapArea(result, rect.left - px, rect.top - px, rect.width() + px * 2, rect.height() + px * 2);
+                            if (area == null) return;
+                            Bitmap bitmap = DisplayUtil.safeClipBitmap(result, area.left, area.top, area.width(), area.height());
+                            if (bitmap == null) return;
+                            Paint paint = new Paint();
+                            paint.setColor(Color.RED);
+                            paint.setStrokeWidth(2);
+                            paint.setStyle(Paint.Style.STROKE);
+                            Canvas canvas = new Canvas(bitmap);
+                            canvas.translate(rect.left - area.left, rect.top - area.top);
+                            canvas.drawRect(new Rect(0, 0, rect.width(), rect.height()), paint);
+                            binding.matchedImage.setImageBitmap(bitmap);
+                        }
                     }
-                });
+                })), 100);
             }
         });
     }

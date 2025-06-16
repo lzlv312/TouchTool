@@ -10,7 +10,6 @@ import com.google.android.material.card.MaterialCardView;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
-import top.bogey.touch_tool.bean.save.LogInfo;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.ITaskListener;

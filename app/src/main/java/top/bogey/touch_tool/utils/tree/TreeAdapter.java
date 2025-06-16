@@ -40,8 +40,8 @@ public abstract class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.ViewH
         notifyItemRangeInserted(0, this.treeNodes.size());
     }
 
-    public void addTreeNode(TreeNode node) {
-        treeNodes.add(node);
+    public void addTreeNode(TreeNode treeNode) {
+        treeNodes.add(treeNode);
         notifyItemInserted(treeNodes.size() - 1);
     }
 
@@ -49,7 +49,7 @@ public abstract class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.ViewH
         for (int i = treeNodes.size() - 1; i >= 0; i--) {
             TreeNode treeNode = treeNodes.get(i);
             if (treeNode.getDepth() == 0) {
-                treeNode.setExpand(false, true);
+                treeNode.setExpanded(false, true);
                 notifyItemChanged(i);
             } else {
                 treeNodes.remove(i);
@@ -59,13 +59,13 @@ public abstract class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.ViewH
     }
 
     public void collapseNode(TreeNode node) {
-        if (!node.isExpand()) return;
-        node.setExpand(false);
+        if (!node.isExpanded()) return;
+        node.setExpanded(false);
         int index = treeNodes.indexOf(node);
         notifyItemChanged(index);
 
         int nextIndex = index + 1;
-        List<TreeNode> nodes = node.getExpandChildren();
+        List<TreeNode> nodes = node.getExpandedChildren();
         treeNodes.subList(nextIndex, nextIndex + nodes.size()).clear();
         notifyItemRangeRemoved(nextIndex, nodes.size());
     }
@@ -75,8 +75,8 @@ public abstract class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.ViewH
         int index = 0;
         while (index < treeNodes.size()) {
             TreeNode node = treeNodes.get(index);
-            if (!node.isExpand()) {
-                node.setExpand(true);
+            if (!node.isExpanded()) {
+                node.setExpanded(true);
                 notifyItemChanged(index);
 
                 List<TreeNode> children = node.getChildren();
@@ -95,11 +95,11 @@ public abstract class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.ViewH
         if (index >= 0) {
             notifyItemChanged(index);
 
-            if (node.isExpand()) return;
-            node.setExpand(true);
+            if (node.isExpanded()) return;
+            node.setExpanded(true);
 
             int nextIndex = index + 1;
-            List<TreeNode> children = node.getExpandChildren();
+            List<TreeNode> children = node.getExpandedChildren();
             for (int i = 0; i < children.size(); i++) {
                 TreeNode child = children.get(i);
                 treeNodes.add(nextIndex + i, child);
@@ -108,13 +108,13 @@ public abstract class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.ViewH
         } else {
             TreeNode parent = node.getParent();
             if (parent == null) return;
-            node.setExpand(true);
+            node.setExpanded(true);
             expandNode(parent);
         }
     }
 
     public void switchNodeExpand(TreeNode node) {
-        if (node.isExpand()) {
+        if (node.isExpanded()) {
             collapseNode(node);
         } else {
             expandNode(node);
@@ -135,7 +135,7 @@ public abstract class TreeAdapter extends RecyclerView.Adapter<TreeAdapter.ViewH
             padding = (int) DisplayUtil.dp2px(context, 8);
 
             itemView.setOnClickListener(v -> {
-                if (node.isExpand()) {
+                if (node.isExpanded()) {
                     adapter.collapseNode(node);
                 } else {
                     adapter.expandNode(node);

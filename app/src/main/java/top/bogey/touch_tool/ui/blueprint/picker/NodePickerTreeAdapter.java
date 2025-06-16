@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -19,8 +20,9 @@ import top.bogey.touch_tool.databinding.FloatPickerNodeItemBinding;
 import top.bogey.touch_tool.ui.custom.NodeInfoFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
-import top.bogey.touch_tool.utils.tree.TreeAdapter;
 import top.bogey.touch_tool.utils.tree.TreeNode;
+import top.bogey.touch_tool.utils.tree.TreeAdapter;
+import top.bogey.touch_tool.utils.tree.NormalTreeNode;
 
 public class NodePickerTreeAdapter extends TreeAdapter {
     private final SelectNode picker;
@@ -70,7 +72,7 @@ public class NodePickerTreeAdapter extends TreeAdapter {
         for (NodeInfo root : roots) {
             TreeNode tree;
             if (pattern == null) {
-                tree = new TreeNode(root);
+                tree = new NormalTreeNode(root);
             } else {
                 tree = createTree(root, pattern);
                 if (tree != null) tree.setDepth(0);
@@ -88,7 +90,7 @@ public class NodePickerTreeAdapter extends TreeAdapter {
         else if (node.id != null && pattern.matcher(node.id).find()) found = true;
         else if (node.clazz != null && pattern.matcher(node.clazz).find()) found = true;
 
-        TreeNode treeNode = new TreeNode(node, false);
+        TreeNode treeNode = new NormalTreeNode(node, Collections.emptyList());
 
         for (NodeInfo child : node.children) {
             TreeNode tree = createTree(child, pattern);
@@ -169,7 +171,7 @@ public class NodePickerTreeAdapter extends TreeAdapter {
 
             binding.imageView.setImageTintList(ColorStateList.valueOf(color));
             binding.imageView.setVisibility(nodeInfo.children.isEmpty() ? View.INVISIBLE : View.VISIBLE);
-            binding.imageView.setImageResource(node.isExpand() ? R.drawable.icon_arrow_up : R.drawable.icon_arrow_down);
+            binding.imageView.setImageResource(node.isExpanded() ? R.drawable.icon_arrow_up : R.drawable.icon_arrow_down);
 
             binding.visibleButton.setIconResource(nodeInfo.visible ? R.drawable.icon_visibility : R.drawable.icon_visibility_off);
             binding.visibleButton.setAlpha(nodeInfo.visible ? 0.3f : 1);

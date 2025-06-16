@@ -5,85 +5,64 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreeNode {
-    private final List<TreeNode> children = new ArrayList<>();
-    private boolean initChildren = false;
-    private TreeNode parent;
+public abstract class TreeNode {
+    protected final List<TreeNode> children = new ArrayList<>();
+    protected TreeNode parent;
 
-    private ITreeNodeDataLoader loader;
-    private Object flag;
+    protected ITreeNodeData nodeData;
 
-    private ITreeNodeData nodeData;
-
-    private boolean expand = false;
-    private int depth = 0;
-
-    public TreeNode(ITreeNodeDataLoader loader, Object flag) {
-        this.loader = loader;
-        this.flag = flag;
-    }
-
-    public TreeNode(ITreeNodeData nodeData) {
-        this(nodeData, true);
-    }
-
-    public TreeNode(ITreeNodeData nodeData, boolean originChildren) {
-        this.nodeData = nodeData;
-        initChildren = !originChildren;
-    }
+    protected boolean expanded = false;
+    protected int depth = 0;
 
     @Nullable
     public ITreeNodeData getData() {
-        if (nodeData != null) return nodeData;
-        if (loader != null && flag != null) {
-            nodeData = loader.loadData(flag);
-        }
         return nodeData;
     }
 
-    public boolean isExpand() {
-        return expand;
+    public boolean isExpanded() {
+        return expanded;
     }
 
-    public void setExpand(boolean expand) {
-        setExpand(expand, false);
+    public void setExpanded(boolean expanded) {
+        setExpanded(expanded, false);
     }
 
-    public void setExpand(boolean expand, boolean children) {
-        this.expand = expand;
+    public void setExpanded(boolean expanded, boolean children) {
+        this.expanded = expanded;
         if (children) {
-            for (TreeNode child : this.children) {
-                child.setExpand(expand, true);
+            for (TreeNode child : getChildren()) {
+                child.setExpanded(expanded, true);
             }
         }
     }
 
     public List<TreeNode> getChildren() {
-        if (initChildren) return children;
-        getData();
-        if (nodeData == null) return children;
-        for (ITreeNodeData data : nodeData.getChildren()) {
-            addChild(new TreeNode(data));
-        }
-        initChildren = true;
         return children;
     }
 
     public void addChild(TreeNode node) {
-        children.add(node);
-        node.parent = this;
-        node.depth = depth + 1;
+        getChildren().add(node);
+        node.setParent(this);
+        node.setDepth(getDepth() + 1);
+    }
+
+    public void addChildren(List<TreeNode> nodes) {
+        nodes.forEach(this::addChild);
     }
 
     public TreeNode getParent() {
         return parent;
     }
 
-    public List<TreeNode> getExpandChildren() {
+    public void setParent(TreeNode parent) {
+        this.parent = parent;
+    }
+
+    public List<TreeNode> getExpandedChildren() {
         List<TreeNode> list = new ArrayList<>();
         for (TreeNode child : getChildren()) {
             list.add(child);
-            if (child.isExpand()) list.addAll(child.getExpandChildren());
+            if (child.isExpanded()) list.addAll(child.getExpandedChildren());
         }
         return list;
     }

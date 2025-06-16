@@ -13,9 +13,9 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.MainApplication;
-import top.bogey.touch_tool.bean.save.LogInfo;
-import top.bogey.touch_tool.bean.save.LogSave;
-import top.bogey.touch_tool.bean.save.LogSaveListener;
+import top.bogey.touch_tool.bean.save.log.LogInfo;
+import top.bogey.touch_tool.bean.save.log.LogSave;
+import top.bogey.touch_tool.bean.save.log.LogSaveListener;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatLogBinding;
@@ -179,7 +179,7 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
     public void onNewLog(LogSave logSave, LogInfo log) {
         post(() -> {
             if (logSave.getKey().equals(task.getId())) {
-                adapter.addLog(log);
+                adapter.addLog(logSave, log);
                 binding.recyclerView.scrollToPosition(adapter.getItemCount() - 1);
             }
         });

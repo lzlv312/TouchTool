@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.save;
+package top.bogey.touch_tool.bean.save.task;
 
 import com.tencent.mmkv.MMKV;
 

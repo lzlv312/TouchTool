@@ -21,11 +21,14 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
-import top.bogey.touch_tool.bean.save.LogInfo;
+import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.save.log.ActionLog;
+import top.bogey.touch_tool.bean.save.log.LogInfo;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskListener;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.utils.tree.ITreeNodeData;
 
 public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinExecute(), R.string.pin_execute, true);
@@ -71,9 +74,10 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
                 public void onFinish(TaskRunnable run) {
                     if (runnable.getStartTask().hasFlag(Task.FLAG_DEBUG)) {
                         List<LogInfo> logList = run.getLogList();
-                        LogInfo logInfo = new LogInfo(runnable.getProgress() + 1, ParallelExecuteAction.this, true);
-                        logInfo.setChildren(logList);
-                        runnable.addDebugLog(logInfo, 0);
+                        List<String> logs = saveLogs(runnable, logList);
+                        LogInfo logInfo = new LogInfo(new ActionLog(runnable.getProgress() + 1, ParallelExecuteAction.this, true));
+                        logInfo.setChildren(logs);
+                        runnable.addLog(logInfo, 0);
                     }
                     latch.countDown();
                 }
@@ -89,6 +93,21 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
             resultPin.getValue(PinBoolean.class).setValue(false);
         }
         executeNext(runnable, completePin);
+    }
+
+    private List<String> saveLogs(TaskRunnable runnable, List<LogInfo> logList) {
+        List<String> logs = new ArrayList<>();
+        for (LogInfo logInfo : logList) {
+            logs.add(logInfo.getUid());
+            Saver.getInstance().addLog(runnable.getStartTask().getId(), logInfo, false);
+            List<LogInfo> children = new ArrayList<>();
+            for (ITreeNodeData child : logInfo.getChildren()) {
+                LogInfo childLogInfo = (LogInfo) child;
+                children.add(childLogInfo);
+            }
+            saveLogs(runnable, children);
+        }
+        return logs;
     }
 
     @Override

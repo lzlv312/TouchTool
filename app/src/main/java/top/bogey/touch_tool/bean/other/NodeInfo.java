@@ -223,7 +223,7 @@ public class NodeInfo implements ITreeNodeData {
     }
 
     @Override
-    public List<? extends ITreeNodeData> getChildren() {
-        return children;
+    public List<ITreeNodeData> getChildren() {
+        return new ArrayList<>(children);
     }
 }

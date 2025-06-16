@@ -11,11 +11,12 @@ import java.util.Stack;
 import java.util.concurrent.Future;
 
 import top.bogey.touch_tool.bean.action.Action;
-import top.bogey.touch_tool.bean.action.normal.LoggerAction;
 import top.bogey.touch_tool.bean.action.start.InnerStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
-import top.bogey.touch_tool.bean.save.LogInfo;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.save.log.ActionLog;
+import top.bogey.touch_tool.bean.save.log.LogInfo;
+import top.bogey.touch_tool.bean.save.log.NormalLog;
 import top.bogey.touch_tool.bean.task.Task;
 
 public class TaskRunnable implements Runnable {
@@ -65,7 +66,11 @@ public class TaskRunnable implements Runnable {
                 errorInfo = stringWriter.toString();
             } catch (Exception ignored) {
             }
-            Saver.getInstance().addLog(task.getId(), new LogInfo(errorInfo));
+            addLog(errorInfo);
+
+            while (!logStack.isEmpty()) {
+                addLog(logStack.pop(), 0);
+            }
         }
 
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onFinish(this));
@@ -131,30 +136,29 @@ public class TaskRunnable implements Runnable {
         checkStatus();
     }
 
-    public void addLog(LoggerAction action) {
-        addDebugLog(new LogInfo(-1, action, true), 0);
+    public void addLog(String log) {
+        addLog(new LogInfo(new NormalLog(log)), 0);
+    }
+
+    public void addLog(LogInfo logInfo, int stackOption) {
+        switch (stackOption) {
+            case -1 -> addLog(logStack.pop(), 0);
+            case 0 -> {
+                if (logStack.isEmpty()) {
+                    if (!skipLog) Saver.getInstance().addLog(task.getId(), logInfo, true);
+                    logList.add(logInfo);
+                } else {
+                    logStack.peek().addChild(logInfo);
+                    if (!skipLog) Saver.getInstance().addLog(task.getId(), logInfo, false);
+                }
+            }
+            case 1 -> logStack.push(logInfo);
+        }
     }
 
     public void addDebugLog(Action action, int stackOption) {
         if (action instanceof InnerStartAction) return;
-        if (debug) addDebugLog(new LogInfo(progress + 1, action, stackOption != 0), stackOption);
-    }
-
-    public void addDebugLog(LogInfo logInfo, int stackOption) {
-        switch (stackOption) {
-            case -1 -> {
-                LogInfo lastLogInfo = logStack.pop();
-                addDebugLog(lastLogInfo, 0);
-            }
-            case 0 -> {
-                if (logStack.isEmpty()) {
-                    if (!skipLog) Saver.getInstance().addLog(task.getId(), logInfo);
-                    logList.add(logInfo);
-                }
-                else logStack.peek().addChild(logInfo);
-            }
-            case 1 -> logStack.push(logInfo);
-        }
+        if (debug) addLog(new LogInfo(new ActionLog(progress + 1, action, stackOption != 0)), stackOption);
     }
 
     public List<LogInfo> getLogList() {

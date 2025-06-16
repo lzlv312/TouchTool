@@ -118,6 +118,7 @@ public class AreaPicker extends FullScreenPicker<Rect> {
         if (action == MotionEvent.ACTION_MOVE) {
             float dx = x - lastX;
             float dy = y - lastY;
+            boolean flag = true;
             if (mode == MODE_NONE) {
                 mode = MODE_BR;
             }
@@ -132,16 +133,27 @@ public class AreaPicker extends FullScreenPicker<Rect> {
             if (mode == MODE_MOVE) {
                 area.offset((int) dx, (int) dy);
             }
+
+            int xOffset = (int) dx / 5;
+            int yOffset = (int) dy / 5;
             if (mode == MODE_LOW_BR) {
-                area.right += (int) dx / 5;
-                area.bottom += (int) dy / 5;
+                flag = xOffset + yOffset != 0;
+                if (flag) {
+                    area.right += xOffset;
+                    area.bottom += yOffset;
+                }
             }
             if (mode == MODE_LOW_TL) {
-                area.offset((int) dx / 5, (int) dy / 5);
+                flag = xOffset + yOffset != 0;
+                if (flag) {
+                    area.offset(xOffset, yOffset);
+                }
             }
-            area.sort();
-            lastX = x;
-            lastY = y;
+            if (flag) {
+                area.sort();
+                lastX = x;
+                lastY = y;
+            }
         }
 
         if (action == MotionEvent.ACTION_UP) {
