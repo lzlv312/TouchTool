@@ -20,9 +20,9 @@ import top.bogey.touch_tool.databinding.FloatPickerNodeItemBinding;
 import top.bogey.touch_tool.ui.custom.NodeInfoFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
-import top.bogey.touch_tool.utils.tree.TreeNode;
-import top.bogey.touch_tool.utils.tree.TreeAdapter;
 import top.bogey.touch_tool.utils.tree.NormalTreeNode;
+import top.bogey.touch_tool.utils.tree.TreeAdapter;
+import top.bogey.touch_tool.utils.tree.TreeNode;
 
 public class NodePickerTreeAdapter extends TreeAdapter {
     private final SelectNode picker;

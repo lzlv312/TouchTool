@@ -35,8 +35,8 @@ import top.bogey.touch_tool.databinding.ViewBlueprintBinding;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
-import top.bogey.touch_tool.ui.tool.log.LogView;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
+import top.bogey.touch_tool.ui.tool.log.LogView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 

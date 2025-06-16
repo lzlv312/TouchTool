@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.R;

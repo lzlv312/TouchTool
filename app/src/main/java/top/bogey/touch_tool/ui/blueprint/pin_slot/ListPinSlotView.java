@@ -2,16 +2,11 @@ package top.bogey.touch_tool.ui.blueprint.pin_slot;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.PinInfo;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.databinding.PinSlotListBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 

@@ -11,7 +11,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.View;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;

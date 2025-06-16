@@ -2,7 +2,6 @@ package top.bogey.touch_tool.ui.blueprint.pin_widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Point;
 import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
@@ -16,7 +15,6 @@ import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.picker.TouchPickerPreview;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.ui.custom.TouchPathView;
-import top.bogey.touch_tool.utils.DisplayUtil;
 
 @SuppressLint("ViewConstructor")
 public class PinWidgetTouch extends PinWidget<PinTouchPath> {

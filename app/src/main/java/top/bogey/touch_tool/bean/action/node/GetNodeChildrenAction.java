@@ -9,7 +9,6 @@ import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class GetNodeChildrenAction extends CalculateAction {
