@@ -29,7 +29,7 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
         new Handler(Looper.getMainLooper()).post(() -> {
             ToastFloatView toastView = (ToastFloatView) FloatWindow.getView(ToastFloatView.class.getName());
             if (toastView == null) {
-                toastView = new ToastFloatView(keepView.getContext());
+                toastView = new ToastFloatView(keepView.getThemeContext());
                 toastView.show();
             }
             toastView.innerShowToast(msg, anchor, pos);

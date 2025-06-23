@@ -27,7 +27,7 @@ public class ActionFloatViewCallback extends FloatBaseCallback {
         FloatWindowHelper helper = FloatWindow.getHelper(tag);
         if (helper != null && remember) {
             Point point = helper.getRelativePoint();
-            SettingSaver.getInstance().setChoiceViewPos(point);
+            SettingSaver.getInstance().setManualChoiceViewPos(point);
         }
     }
 

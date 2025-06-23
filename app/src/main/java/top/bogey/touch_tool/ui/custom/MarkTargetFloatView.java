@@ -34,13 +34,13 @@ public class MarkTargetFloatView extends AppCompatImageView implements FloatInte
     private Rect targetArea;
 
     public static void showTargetArea(Rect targetArea) {
-        boolean showTargetArea = SettingSaver.getInstance().isShowTargetArea();
+        boolean showTargetArea = SettingSaver.getInstance().isShowNodeArea();
         if (!showTargetArea) return;
 
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
-            MarkTargetFloatView floatView = new MarkTargetFloatView(keepView.getContext());
+            MarkTargetFloatView floatView = new MarkTargetFloatView(keepView.getThemeContext());
             floatView.innerShowTargetArea(targetArea);
             floatView.show();
         });

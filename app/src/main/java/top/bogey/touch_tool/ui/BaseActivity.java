@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -104,7 +103,7 @@ public class BaseActivity extends AppCompatActivity {
             if (enabled) {
                 View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
                 if (view != null) return;
-                new KeepAliveFloatView(new ContextThemeWrapper(this, R.style.Theme_TouchTool)).show();
+                new KeepAliveFloatView(this).show();
             } else {
                 FloatWindow.dismiss(KeepAliveFloatView.class.getName());
             }
@@ -114,11 +113,7 @@ public class BaseActivity extends AppCompatActivity {
         if (service != null && service.isEnabled()) {
             View view = FloatWindow.getView(KeepAliveFloatView.class.getName());
             if (view != null) return;
-            if (MainActivity.class.equals(getClass())) {
-                new KeepAliveFloatView(this).show();
-            } else {
-                new KeepAliveFloatView(new ContextThemeWrapper(this, R.style.Theme_TouchTool)).show();
-            }
+            new KeepAliveFloatView(this).show();
         }
     }
 
@@ -288,7 +283,7 @@ public class BaseActivity extends AppCompatActivity {
     public void restartAccessibilityServiceBySecurePermission() {
         // 界面打开时尝试恢复无障碍服务
         // 如果应用服务设置关闭了，就啥都不管
-        if (!SettingSaver.getInstance().isEnabled()) return;
+        if (!SettingSaver.getInstance().isServiceEnabled()) return;
 
         // 是否有权限去重启无障碍服务
         if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) return;

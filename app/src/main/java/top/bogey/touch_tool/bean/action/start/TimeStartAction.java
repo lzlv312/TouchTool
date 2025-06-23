@@ -35,7 +35,7 @@ public class TimeStartAction extends StartAction {
 
     public long getStartTime() {
         long date = datePin.getValue(PinDate.class).getValue();
-        long time = datePin.getValue(PinTime.class).getValue();
+        long time = timePin.getValue(PinTime.class).getValue();
         return AppUtil.mergeDateTime(date, time);
     }
 

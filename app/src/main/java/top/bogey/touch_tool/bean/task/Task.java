@@ -251,7 +251,6 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         for (Action action : getActions(StartAction.class)) {
             ((StartAction) action).setEnable(enable);
         }
-        save();
     }
 
     public void check(ActionCheckResult result) {

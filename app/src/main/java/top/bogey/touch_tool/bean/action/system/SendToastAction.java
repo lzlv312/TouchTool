@@ -44,7 +44,7 @@ public class SendToastAction extends ExecuteAction {
 
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
-        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(keepView.getContext(), content.toString(), length.getIndex()).show());
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(keepView.getThemeContext(), content.toString(), length.getIndex()).show());
 
         executeNext(runnable, outPin);
     }

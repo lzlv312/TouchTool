@@ -111,6 +111,7 @@ public class AreaPickerPreview extends BasePicker<Rect> {
         });
 
         binding.pickerButton.setOnClickListener(v -> new AreaPicker(context, result -> {
+            if (result == null) return;
             binding.leftEdit.setText(String.valueOf(result.left));
             binding.topEdit.setText(String.valueOf(result.top));
             binding.rightEdit.setText(String.valueOf(result.right));

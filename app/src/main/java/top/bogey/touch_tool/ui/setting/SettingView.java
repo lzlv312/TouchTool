@@ -4,8 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -28,6 +26,8 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import java.io.File;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -75,7 +75,7 @@ public class SettingView extends Fragment {
                 boolean result = activity.stopAccessibilityServiceBySecurePermission();
                 if (result) {
                     binding.getRoot().postDelayed(() -> {
-                        SettingSaver.getInstance().setEnabled(true);
+                        SettingSaver.getInstance().setServiceEnabled(true);
                         binding.enableSwitch.setChecked(true);
                         activity.restartAccessibilityServiceBySecurePermission();
                         Toast.makeText(activity, getString(R.string.setting_reload_accessibility_service_success), Toast.LENGTH_SHORT).show();
@@ -92,21 +92,11 @@ public class SettingView extends Fragment {
                 String cmd = String.format("pm grant %s %s", requireActivity().getPackageName(), Manifest.permission.WRITE_SECURE_SETTINGS);
                 if (SuperUser.getInstance().isValid()) {
                     builder.setPositiveButton(R.string.setting_rin_code, (dialog, which) -> SuperUser.getInstance().runCommand(cmd))
-                            .setNegativeButton(R.string.setting_copy_code, (dialog, which) -> {
-                                ClipboardManager manager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                                ClipData clipData = ClipData.newPlainText(getString(R.string.app_name), cmd);
-                                manager.setPrimaryClip(clipData);
-                                Toast.makeText(requireContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
-                            })
+                            .setNegativeButton(R.string.setting_copy_code, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
                             .setNeutralButton(R.string.cancel, null)
                             .show();
                 } else {
-                    builder.setPositiveButton(R.string.setting_copy_code, (dialog, which) -> {
-                                ClipboardManager manager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                                ClipData clipData = ClipData.newPlainText(getString(R.string.app_name), cmd);
-                                manager.setPrimaryClip(clipData);
-                                Toast.makeText(requireContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
-                            })
+                    builder.setPositiveButton(R.string.setting_copy_code, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
                             .setNegativeButton(R.string.cancel, null)
                             .show();
                 }
@@ -118,21 +108,11 @@ public class SettingView extends Fragment {
                 String cmd = String.format("appops set %s PROJECT_MEDIA allow", requireActivity().getPackageName());
                 if (SuperUser.getInstance().isValid()) {
                     builder.setPositiveButton(R.string.setting_rin_code, (dialog, which) -> SuperUser.getInstance().runCommand(cmd))
-                            .setNegativeButton(R.string.setting_copy_code, (dialog, which) -> {
-                                ClipboardManager manager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                                ClipData clipData = ClipData.newPlainText(getString(R.string.app_name), cmd);
-                                manager.setPrimaryClip(clipData);
-                                Toast.makeText(requireContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
-                            })
+                            .setNegativeButton(R.string.setting_copy_code, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
                             .setNeutralButton(R.string.cancel, null)
                             .show();
                 } else {
-                    builder.setPositiveButton(R.string.setting_copy_code, (dialog, which) -> {
-                                ClipboardManager manager = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                                ClipData clipData = ClipData.newPlainText(getString(R.string.app_name), cmd);
-                                manager.setPrimaryClip(clipData);
-                                Toast.makeText(requireContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
-                            })
+                    builder.setPositiveButton(R.string.setting_copy_code, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
                             .setNegativeButton(R.string.cancel, null)
                             .show();
                 }
@@ -178,15 +158,15 @@ public class SettingView extends Fragment {
                 }
             }
 
-            SettingSaver.getInstance().setEnabled(enable);
+            SettingSaver.getInstance().setServiceEnabled(enable);
         });
 
         MainAccessibilityService serv = MainApplication.getInstance().getService();
         binding.enableSwitch.setChecked(serv != null && serv.isEnabled());
 
         // 隐藏后台
-        binding.hideBackSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setHideBack(activity, binding.hideBackSwitch.isChecked()));
-        binding.hideBackSwitch.setChecked(SettingSaver.getInstance().isHideBack());
+        binding.hideBackSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setHideAppBackground(activity, binding.hideBackSwitch.isChecked()));
+        binding.hideBackSwitch.setChecked(SettingSaver.getInstance().isHideAppBackground());
 
         // 忽略电量限制
         binding.ignoreBatterySwitch.setOnSwitchClickListener(v -> {
@@ -197,7 +177,7 @@ public class SettingView extends Fragment {
                 }
             } else {
                 if (AppUtil.isIgnoredBattery(activity)) {
-                    AppUtil.gotoIgnoreBattery(activity);
+                    AppUtil.gotoAppDetailView(activity);
                     binding.ignoreBatterySwitch.setChecked(true);
                 }
             }
@@ -205,17 +185,42 @@ public class SettingView extends Fragment {
         binding.ignoreBatterySwitch.setChecked(AppUtil.isIgnoredBattery(activity));
 
         // 前台服务
-        binding.forgeServiceSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setForgeServiceEnabled(activity, binding.forgeServiceSwitch.isChecked()));
-        binding.forgeServiceSwitch.setChecked(SettingSaver.getInstance().isForgeServiceEnabled());
+        binding.forgeServiceSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setKeepAliveForegroundServiceEnabled(activity, binding.forgeServiceSwitch.isChecked()));
+        binding.forgeServiceSwitch.setChecked(SettingSaver.getInstance().isKeepAliveForegroundServiceEnabled());
 
         // 开机自启
-        binding.autoStartSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setAutoStart(binding.autoStartSwitch.isChecked()));
-        binding.autoStartSwitch.setChecked(SettingSaver.getInstance().isAutoStart());
+        binding.autoStartSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setBootCompletedAutoStart(binding.autoStartSwitch.isChecked()));
+        binding.autoStartSwitch.setChecked(SettingSaver.getInstance().isBootCompletedAutoStart());
 
         // 清理缓存
         binding.cleanCacheButton.setOnClickListener(v -> {
-            AppUtil.deleteFile(activity.getCacheDir());
-            binding.cleanCacheButton.setDescription(getString(R.string.app_setting_clean_cache_desc, AppUtil.getFileSizeString(activity.getCacheDir())));
+            String[] dirs = new String[]{AppUtil.LOG_DIR_NAME, AppUtil.TASK_DIR_NAME, AppUtil.DOCUMENT_DIR_NAME};
+            String[] dirNames = getResources().getStringArray(R.array.cache_dir_name);
+
+            File[] files = new File[dirs.length];
+            boolean[] isChecked = new boolean[dirs.length];
+            for (int i = 0; i < dirs.length; i++) {
+                String dir = dirs[i];
+                File file = new File(activity.getCacheDir(), dir);
+                files[i] = file;
+                String sizeString = AppUtil.getFileSizeString(file);
+                dirNames[i] += " (" + sizeString + ")";
+                isChecked[i] = file.exists();
+            }
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.app_setting_clean_cache)
+                    .setPositiveButton(R.string.enter, (dialog, which) -> {
+                        for (int i = 0; i < isChecked.length; i++) {
+                            boolean checked = isChecked[i];
+                            if (checked) {
+                                AppUtil.deleteFile(files[i]);
+                            }
+                        }
+                        binding.cleanCacheButton.setDescription(getString(R.string.app_setting_clean_cache_desc, AppUtil.getFileSizeString(activity.getCacheDir())));
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .setMultiChoiceItems(dirNames, isChecked, (dialog, which, checked) -> isChecked[which] = checked)
+                    .show();
         });
         binding.cleanCacheButton.setDescription(getString(R.string.app_setting_clean_cache_desc, AppUtil.getFileSizeString(activity.getCacheDir())));
 
@@ -225,12 +230,12 @@ public class SettingView extends Fragment {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setSuperUser(index);
+                SettingSaver.getInstance().setSuperUserType(index);
 
                 // 尝试超级用户
                 ISuperUser instance = SuperUser.getInstance();
                 if (instance == null || !instance.init()) {
-                    SettingSaver.getInstance().setSuperUser(0);
+                    SettingSaver.getInstance().setSuperUserType(0);
                     binding.superUserSelect.checkIndex(0);
 
                     if (instance instanceof ShizukuSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_shizuku, Toast.LENGTH_SHORT).show();
@@ -238,21 +243,8 @@ public class SettingView extends Fragment {
                 }
             }
         });
-        binding.superUserSelect.checkIndex(SettingSaver.getInstance().getSuperUser());
+        binding.superUserSelect.checkIndex(SettingSaver.getInstance().getSuperUserType());
 
-        // 手动执行
-        binding.manualPlaySelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (isChecked) {
-                View view = group.findViewById(checkedId);
-                int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setManualPlayType(index);
-            }
-        });
-        binding.manualPlaySelect.checkIndex(SettingSaver.getInstance().getManualPlayType());
-        binding.manualPlaySelect.setOnClickListener(v -> {
-            SettingSaver.getInstance().setPlayViewPos(new Point());
-            SettingSaver.getInstance().setPlayViewExpand(true);
-        });
 
         // 精确定时
         AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
@@ -261,7 +253,7 @@ public class SettingView extends Fragment {
             if (binding.alarmSwitch.isChecked()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     if (canScheduleExactAlarms) {
-                        SettingSaver.getInstance().setAlarmEnabled(true);
+                        SettingSaver.getInstance().setExactAlarmEnabled(true);
                     } else {
                         Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
                         startActivity(intent);
@@ -271,7 +263,7 @@ public class SettingView extends Fragment {
                     binding.alarmSwitch.setChecked(true);
                 }
             } else {
-                SettingSaver.getInstance().setAlarmEnabled(false);
+                SettingSaver.getInstance().setExactAlarmEnabled(false);
             }
             if (binding.alarmSwitch.isChecked()) {
                 MainAccessibilityService service = MainApplication.getInstance().getService();
@@ -280,7 +272,7 @@ public class SettingView extends Fragment {
                 }
             }
         });
-        binding.alarmSwitch.setChecked(canScheduleExactAlarms && SettingSaver.getInstance().isAlarmEnabled());
+        binding.alarmSwitch.setChecked(canScheduleExactAlarms && SettingSaver.getInstance().isExactAlarmEnabled());
 
         // 蓝牙监听
         binding.bluetoothSwitch.setOnSwitchClickListener(v -> {
@@ -298,16 +290,16 @@ public class SettingView extends Fragment {
 
 
         // 手势轨迹
-        binding.showTouchSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowTouch(binding.showTouchSwitch.isChecked()));
-        binding.showTouchSwitch.setChecked(SettingSaver.getInstance().isShowTouch());
+        binding.showTouchSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowGestureTrack(binding.showTouchSwitch.isChecked()));
+        binding.showTouchSwitch.setChecked(SettingSaver.getInstance().isShowGestureTrack());
 
         // 标记目标区域
-        binding.showTargetAreaSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowTargetArea(binding.showTouchSwitch.isChecked()));
-        binding.showTargetAreaSwitch.setChecked(SettingSaver.getInstance().isShowTargetArea());
+        binding.showTargetAreaSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowNodeArea(binding.showTouchSwitch.isChecked()));
+        binding.showTargetAreaSwitch.setChecked(SettingSaver.getInstance().isShowNodeArea());
 
         // 任务提示
-        binding.taskTipsSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowStartTips(binding.taskTipsSwitch.isChecked()));
-        binding.taskTipsSwitch.setChecked(SettingSaver.getInstance().isShowStartTips());
+        binding.taskTipsSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowTaskStartTips(binding.taskTipsSwitch.isChecked()));
+        binding.taskTipsSwitch.setChecked(SettingSaver.getInstance().isShowTaskStartTips());
 
 
         // 小窗优化
@@ -319,18 +311,33 @@ public class SettingView extends Fragment {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setTheme(index);
+                SettingSaver.getInstance().setNightModeType(index);
             }
         });
-        binding.themeSelect.checkIndex(SettingSaver.getInstance().getTheme());
+        binding.themeSelect.checkIndex(SettingSaver.getInstance().getNightModeType());
 
         // 动态颜色
         binding.dynamicColorSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setDynamicColorTheme(activity, binding.dynamicColorSwitch.isChecked()));
         binding.dynamicColorSwitch.setChecked(SettingSaver.getInstance().isDynamicColorTheme());
 
+        // 手动执行
+        binding.manualPlaySelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                View view = group.findViewById(checkedId);
+                int index = group.indexOfChild(view);
+                SettingSaver.getInstance().setManualPlayShowType(index);
+            }
+        });
+        binding.manualPlaySelect.checkIndex(SettingSaver.getInstance().getManualPlayShowType());
+        binding.manualPlaySelect.setOnClickListener(v -> {
+            SettingSaver.getInstance().setManualPlayViewPos(new Point());
+            SettingSaver.getInstance().setManualPlayViewState(true);
+            Toast.makeText(activity, R.string.permission_setting_manual_play_reset, Toast.LENGTH_SHORT).show();
+        });
+
         // 手动执行悬浮窗偏移
-        binding.manualPlayPadding.setSliderOnChangeListener((slider, value, fromUser) -> SettingSaver.getInstance().setPlayViewPadding((int) value));
-        binding.manualPlayPadding.setValue(SettingSaver.getInstance().getPlayViewPadding());
+        binding.manualPlayPadding.setSliderOnChangeListener((slider, value, fromUser) -> SettingSaver.getInstance().setManualPlayViewPadding((int) value));
+        binding.manualPlayPadding.setValue(SettingSaver.getInstance().getManualPlayViewPadding());
 
         PackageManager packageManager = activity.getPackageManager();
         try {

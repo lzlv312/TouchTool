@@ -33,9 +33,9 @@ public class SuperUser implements ISuperUser {
     }
 
     public static ISuperUser getInstance() {
-        if (SettingSaver.getInstance().getSuperUser() == 1) {
+        if (SettingSaver.getInstance().getSuperUserType() == 1) {
             return getInstance(ShizukuSuperUser.class);
-        } else if (SettingSaver.getInstance().getSuperUser() == 2) {
+        } else if (SettingSaver.getInstance().getSuperUserType() == 2) {
             return getInstance(RootSuperUser.class);
         } else {
             return getInstance(SuperUser.class);

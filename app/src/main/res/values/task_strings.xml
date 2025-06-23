@@ -20,6 +20,7 @@
     <string name="time_start_action_time">时间</string>
     <string name="time_start_action_periodic">间隔</string>
     <string name="time_start_action_tips">未设置间隔时设置00:00为间隔24小时\n有间隔时设置00:00为移除间隔</string>
+    <string name="time_start_action_set_tips">已设置定时任务，下次开始时间为: %s</string>
 
     <string name="notification_start_action">收到新通知时执行</string>
     <string name="notification_start_action_match">匹配文本</string>

@@ -92,8 +92,6 @@
     <string name="select_icon_tips">请选择一个图标</string>
 
     <!-- 错误 -->
-    <string name="execute_with_task_not_found">没找到要执行的任务</string>
-    <string name="execute_with_action_not_found">没找到要执行的动作</string>
     <string name="card_check_error_tips">存在%d个问题卡片</string>
 
     <string name="check_pin_linkable_error">针脚类型不匹配</string>
@@ -244,7 +242,7 @@
     <string name="app_setting_auto_start_desc">手机开机后就能立即使用点击助手，无需打开软件</string>
 
     <string name="app_setting_clean_cache">清理缓存</string>
-    <string name="app_setting_clean_cache_desc">点击清理任务日志、分享图片、分享任务产生的缓存。\n当前: %s</string>
+    <string name="app_setting_clean_cache_desc">点击清理任务日志、分享任务、分享文件产生的缓存。\n当前: %s</string>
 
 
     <!-- 设置-权限设置 -->
@@ -256,7 +254,8 @@
     <string name="permission_setting_super_user_no_root">没有Root权限</string>
 
     <string name="permission_setting_manual_play">手动执行</string>
-    <string name="permission_setting_manual_play_desc">启用手动执行决定手动执行悬浮窗是否或何时显示，手动执行悬浮窗只在关联应用或界面打开时才显示</string>
+    <string name="permission_setting_manual_play_desc">启用手动执行决定手动执行悬浮窗是否或何时显示，手动执行悬浮窗只在关联应用或界面打开时才显示。\n(点击重置手动执行悬浮窗位置)</string>
+    <string name="permission_setting_manual_play_reset">重置位置</string>
 
     <string name="permission_setting_capture_channel_name">录屏服务快捷关闭通知</string>
     <string name="permission_setting_capture_channel_tips">能在通知栏快速关闭录屏服务</string>

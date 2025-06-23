@@ -2,12 +2,10 @@ package top.bogey.touch_tool.ui;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.widget.Toast;
 
 import java.util.HashMap;
 
 import top.bogey.touch_tool.MainApplication;
-import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.InnerStartAction;
 import top.bogey.touch_tool.bean.action.start.OutCallStartAction;
@@ -88,7 +86,8 @@ public class InstantActivity extends BaseActivity {
                         if (service != null && service.isEnabled()) {
                             if (action instanceof TimeStartAction timeStartAction) {
                                 service.addAlarm(task, timeStartAction);
-                            } else if (action instanceof StartAction startAction) {
+                            }
+                            if (action instanceof StartAction startAction) {
                                 service.runTask(task, startAction);
                             } else {
                                 String pinId = intent.getStringExtra(PIN_ID);
@@ -98,14 +97,8 @@ public class InstantActivity extends BaseActivity {
                                     service.runTask(task.copy(), innerStartAction);
                                 }
                             }
-                        } else {
-                            Toast.makeText(this, R.string.app_setting_enable_error, Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        Toast.makeText(this, R.string.execute_with_action_not_found, Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(this, R.string.execute_with_task_not_found, Toast.LENGTH_SHORT).show();
                 }
             }
         }

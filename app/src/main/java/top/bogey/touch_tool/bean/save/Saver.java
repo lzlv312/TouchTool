@@ -26,6 +26,7 @@ import top.bogey.touch_tool.bean.save.variable.VariableSave;
 import top.bogey.touch_tool.bean.save.variable.VariableSaveListener;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
+import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class Saver {
@@ -63,7 +64,7 @@ public class Saver {
 
     private final MMKV tagMMKV = MMKV.mmkvWithID("TAG_DB", MMKV.SINGLE_PROCESS_MODE);
 
-    private final static String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/log";
+    private final static String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/" + AppUtil.LOG_DIR_NAME;
     private final Map<String, LogSave> loggers = new HashMap<>();
     private final Set<LogSaveListener> logListeners = new HashSet<>();
 
@@ -197,14 +198,26 @@ public class Saver {
             taskSave.setTask(task);
             taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onUpdate(task));
         }
+
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service != null) {
+            service.replaceAlarm(task);
+        }
     }
 
     public void removeTask(String id) {
         TaskSave taskSave = taskSaves.remove(id);
         if (taskSave == null) return;
         Task task = taskSave.getTask();
+        task.setEnable(false);
         taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onRemove(task));
         taskSave.remove();
+
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service != null) {
+            service.replaceAlarm(task);
+        }
+
         LogSave logSave = loggers.get(id);
         if (logSave == null) return;
         logSave.destroy();

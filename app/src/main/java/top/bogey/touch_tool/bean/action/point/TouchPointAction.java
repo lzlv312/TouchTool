@@ -70,7 +70,7 @@ public class TouchPointAction extends ExecuteAction implements SyncAction {
     @Override
     public void sync(Task context) {
         String[] types = MainApplication.getInstance().getResources().getStringArray(R.array.touch_point_type);
-        if (SettingSaver.getInstance().getSuperUser() == 0) {
+        if (SettingSaver.getInstance().getSuperUserType() == 0) {
             typePin.getValue(PinSingleSelect.class).setOptions(Collections.singletonList(types[0]));
         } else {
             typePin.getValue(PinSingleSelect.class).setOptions(List.of(types));

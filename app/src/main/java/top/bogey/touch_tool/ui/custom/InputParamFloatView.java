@@ -39,7 +39,7 @@ public class InputParamFloatView extends FrameLayout implements FloatInterface {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
-            InputParamFloatView inputParamView = new InputParamFloatView(keepView.getContext());
+            InputParamFloatView inputParamView = new InputParamFloatView(keepView.getThemeContext());
             inputParamView.remember = location.x == -1 && location.y == -1;
             inputParamView.show();
             inputParamView.innerShowToast(object, callback, anchor, location);
@@ -62,7 +62,7 @@ public class InputParamFloatView extends FrameLayout implements FloatInterface {
 
     private void innerShowToast(PinObject object, BooleanResultCallback callback, EAnchor anchor, Point location) {
         if (remember) {
-            Point point = SettingSaver.getInstance().getChoiceViewPos();
+            Point point = SettingSaver.getInstance().getManualChoiceViewPos();
             FloatWindow.setLocation(InputParamFloatView.class.getName(), EAnchor.CENTER, point);
         } else {
             FloatWindow.setLocation(InputParamFloatView.class.getName(), anchor, location);
@@ -76,7 +76,7 @@ public class InputParamFloatView extends FrameLayout implements FloatInterface {
 
     @Override
     public void show() {
-        Point point = SettingSaver.getInstance().getChoiceViewPos();
+        Point point = SettingSaver.getInstance().getManualChoiceViewPos();
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setLayout(this)
                 .setTag(InputParamFloatView.class.getName())

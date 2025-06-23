@@ -192,4 +192,10 @@
         <item>长</item>
     </string-array>
 
+    <string-array name="cache_dir_name">
+        <item>日志</item>
+        <item>任务</item>
+        <item>文件</item>
+    </string-array>
+
 </resources>

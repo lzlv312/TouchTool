@@ -32,7 +32,7 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
-            ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getContext());
+            ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getThemeContext());
             choiceView.remember = location.x == -1 && location.y == -1;
             choiceView.show();
             choiceView.innerShowChoice(choices, callback, anchor, location);
@@ -51,7 +51,7 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
 
     public void innerShowChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, Point location) {
         if (remember) {
-            Point point = SettingSaver.getInstance().getChoiceViewPos();
+            Point point = SettingSaver.getInstance().getManualChoiceViewPos();
             FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), EAnchor.CENTER, point);
         } else {
             FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), anchor, location);
@@ -70,7 +70,7 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
 
     @Override
     public void show() {
-        Point point = SettingSaver.getInstance().getChoiceViewPos();
+        Point point = SettingSaver.getInstance().getManualChoiceViewPos();
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setLayout(this)
                 .setTag(ChoiceExecuteFloatView.class.getName())

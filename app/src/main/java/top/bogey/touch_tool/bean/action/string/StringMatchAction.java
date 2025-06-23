@@ -13,7 +13,6 @@ import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleLineString;
@@ -53,7 +52,6 @@ public class StringMatchAction extends ExecuteAction implements DynamicPinsActio
         } else {
             Matcher matcher = pattern.matcher(text.toString());
             if (matcher.find()) {
-                elsePin.getValue(PinBoolean.class).setValue(true);
                 List<Pin> pins = getDynamicPins();
                 for (int i = 0; i < matcher.groupCount(); i++) {
                     if (i >= pins.size()) break;

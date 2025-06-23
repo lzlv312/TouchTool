@@ -2,8 +2,6 @@ package top.bogey.touch_tool.ui.blueprint.pin_widget;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ShortcutInfo;
@@ -146,11 +144,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                 String url = "ttp://do_action?" + InstantActivity.TASK_ID + "=" + card.getTask().getId() + "&" + InstantActivity.ACTION_ID + "=" + card.getAction().getId();
                 binding.editText.setText(url);
                 binding.pickButton.setIconResource(R.drawable.icon_copy);
-                binding.pickButton.setOnClickListener(v -> {
-                    ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    manager.setPrimaryClip(ClipData.newPlainText(url, url));
-                    Toast.makeText(getContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
-                });
+                binding.pickButton.setOnClickListener(v -> AppUtil.copyToClipboard(getContext(), url));
             }
             case SHORTCUT -> {
                 binding.editBox.setVisibility(GONE);

@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -32,48 +33,48 @@ public class SettingSaver {
     }
 
     // 记录
-    private static final String RUN_TIMES = "RUN_TIMES";                                // 运行次数
-    private static final String RUNNING_ERROR = "RUNNING_ERROR";                        // 运行错误
+    private static final String RUN_TIMES = "RUN_TIMES";                                                // 运行次数
+    private static final String RUNNING_ERROR = "RUNNING_ERROR";                                        // 运行错误
 
-    private static final String ENABLE_TIPS = "ENABLE_TIPS";                            // 功能启用提示
-    private static final String PLAY_VIEW_STATE = "PLAY_VIEW_STATE";                    // 手动执行悬浮窗状态
-    private static final String PLAY_VIEW_POS = "PLAY_VIEW_POS";                        // 手动执行悬浮窗位置
-    private static final String CHOICE_VIEW_POS = "CHOICE_VIEW_POS";                    // 选择执行悬浮窗位置
-    private static final String SELECT_NODE_TYPE = "SELECT_NODE_TYPE";                  // 选择控件方式
+    private static final String SHOW_SERVICE_ENABLE_TIPS = "SERVICE_ENABLE_TIPS";                       // 功能启用提示
+    private static final String MANUAL_PLAY_VIEW_STATE = "MANUAL_PLAY_VIEW_STATE";                      // 手动执行悬浮窗状态
+    private static final String MANUAL_PLAY_VIEW_POS = "MANUAL_PLAY_VIEW_POS";                          // 手动执行悬浮窗位置
+    private static final String MANUAL_CHOICE_VIEW_POS = "MANUAL_CHOICE_VIEW_POS";                      // 选择执行悬浮窗位置
+    private static final String PICK_NODE_TYPE = "PICK_NODE_TYPE";                                      // 选择控件方式
 
-    private static final String FAV_TAGS = "FAV_TAGS";                                  // 收藏的标签
+    private static final String FAV_TAGS = "FAV_TAGS";                                                  // 收藏的标签
 
     // 设置
-    private static final String ENABLED = "ENABLED";                                    // 功能是否开启
-    private static final String HIDE_BACK = "HIDE_BACK";                                // 隐藏后台
-    private static final String FORGE_SERVICE = "FORGE_SERVICE";                        // 前台服务
-    private static final String AUTO_START = "AUTO_START";                              // 自启动
+    private static final String SERVICE_ENABLED = "SERVICE_ENABLED";                                    // 功能是否开启
+    private static final String HIDE_APP_BACKGROUND = "HIDE_APP_BACKGROUND";                            // 隐藏后台
+    private static final String KEEP_ALIVE_FOREGROUND_SERVICE = "KEEP_ALIVE_FOREGROUND_SERVICE";        // 前台保活服务
+    private static final String BOOT_COMPLETED_AUTO_START = "BOOT_COMPLETED_AUTO_START";                // 开机自启动
 
-    private static final String SUPER_USER = "SUPER_USER";                              // 超级用户
-    private static final String MANUAL_PLAY = "MANUAL_PLAY";                            // 手动执行
-    private static final String OCR = "OCR";                                            // 文字识别
-    private static final String ALARM = "ALARM";                                        // 精确定时
-    private static final String BLUETOOTH = "BLUETOOTH";                                // 蓝牙监听
+    private static final String SUPER_USER_TYPE = "SUPER_USER_TYPE";                                    // 超级用户
+    private static final String EXACT_ALARM = "EXACT_ALARM";                                            // 精确定时
+    private static final String BLUETOOTH = "BLUETOOTH";                                                // 蓝牙监听
 
-    private static final String SHOW_TOUCH = "SHOW_TOUCH";                              // 手势轨迹
-    private static final String SHOW_TARGET_AREA = "SHOW_TARGET_AREA";                  // 标记目标区域
-    private static final String START_TIPS = "START_TIPS";                              // 任务运行提示
+    private static final String SHOW_GESTURE_TRACK = "SHOW_GESTURE_TRACK";                              // 显示手势轨迹
+    private static final String SHOW_NODE_AREA = "SHOW_NODE_AREA";                                      // 标记目标控件区域
+    private static final String SHOW_TASK_START_TIPS = "SHOW_TASK_START_TIPS";                          // 任务开始运行提示
 
-    private static final String SUPPORT_FREE_FORM = "SUPPORT_FREE_FORM";                // 小窗支持
-    private static final String THEME = "THEME";                                        // 深色模式
-    private static final String COLOR = "COLOR";                                        // 动态颜色
-    private static final String PLAY_VIEW_PADDING = "PLAY_VIEW_PADDING";                // 手动执行悬浮窗偏移
+    private static final String SUPPORT_FREE_FORM = "SUPPORT_FREE_FORM";                                // 小窗支持
+    private static final String NIGHT_MODE_TYPE = "NIGHT_MODE_TYPE";                                    // 深色模式
+    private static final String DYNAMIC_COLOR = "DYNAMIC_COLOR";                                        // 动态颜色
+    private static final String MANUAL_PLAY_SHOW_TYPE = "MANUAL_PLAY_SHOW_TYPE";                        // 手动执行什么时候显示
+    private static final String MANUAL_PLAY_VIEW_PADDING = "MANUAL_PLAY_VIEW_PADDING";                  // 手动执行悬浮窗偏移
 
     private static final MMKV mmkv = MMKV.defaultMMKV();
 
     public void init(Activity activity) {
-        setHideBack(activity, isHideBack());
-        setTheme(getTheme());
-        setForgeServiceEnabled(activity, isForgeServiceEnabled());
+        setHideAppBackground(activity, isHideAppBackground());
+        setNightModeType(getNightModeType());
+        setKeepAliveForegroundServiceEnabled(activity, isKeepAliveForegroundServiceEnabled());
     }
 
     public void initColor(Application application) {
         DynamicColors.applyToActivitiesIfAvailable(application, new DynamicColorsOptions.Builder().setPrecondition((act, theme) -> isDynamicColorTheme()).build());
+        Log.d("TAG", "initColor: ");
     }
 
     // 记录
@@ -94,44 +95,44 @@ public class SettingSaver {
         mmkv.encode(RUNNING_ERROR, error);
     }
 
-    public boolean isEnableTips() {
-        return mmkv.decodeBool(ENABLE_TIPS, false);
+    public boolean isShowServiceEnableTips() {
+        return mmkv.decodeBool(SHOW_SERVICE_ENABLE_TIPS, false);
     }
 
-    public void setEnableTips(boolean enable) {
-        mmkv.encode(ENABLE_TIPS, enable);
+    public void setShowServiceEnableTips(boolean enable) {
+        mmkv.encode(SHOW_SERVICE_ENABLE_TIPS, enable);
     }
 
-    public boolean isPlayViewExpand() {
-        return mmkv.decodeBool(PLAY_VIEW_STATE, false);
+    public boolean getManualPlayViewState() {
+        return mmkv.decodeBool(MANUAL_PLAY_VIEW_STATE, false);
     }
 
-    public void setPlayViewExpand(boolean enable) {
-        mmkv.encode(PLAY_VIEW_STATE, enable);
+    public void setManualPlayViewState(boolean enable) {
+        mmkv.encode(MANUAL_PLAY_VIEW_STATE, enable);
     }
 
-    public Point getPlayViewPos() {
-        return mmkv.decodeParcelable(PLAY_VIEW_POS, Point.class, new Point(0, 0));
+    public Point getManualPlayViewPos() {
+        return mmkv.decodeParcelable(MANUAL_PLAY_VIEW_POS, Point.class, new Point(0, 0));
     }
 
-    public void setPlayViewPos(Point pos) {
-        mmkv.encode(PLAY_VIEW_POS, pos);
+    public void setManualPlayViewPos(Point pos) {
+        mmkv.encode(MANUAL_PLAY_VIEW_POS, pos);
     }
 
-    public Point getChoiceViewPos() {
-        return mmkv.decodeParcelable(CHOICE_VIEW_POS, Point.class, new Point(0, 0));
+    public Point getManualChoiceViewPos() {
+        return mmkv.decodeParcelable(MANUAL_CHOICE_VIEW_POS, Point.class, new Point(0, 0));
     }
 
-    public void setChoiceViewPos(Point pos) {
-        mmkv.encode(CHOICE_VIEW_POS, pos);
+    public void setManualChoiceViewPos(Point pos) {
+        mmkv.encode(MANUAL_CHOICE_VIEW_POS, pos);
     }
 
-    public int getSelectNodeType() {
-        return mmkv.decodeInt(SELECT_NODE_TYPE, 0);
+    public int getPickNodeType() {
+        return mmkv.decodeInt(PICK_NODE_TYPE, 0);
     }
 
-    public void setSelectNodeType(int type) {
-        mmkv.encode(SELECT_NODE_TYPE, type);
+    public void setPickNodeType(int type) {
+        mmkv.encode(PICK_NODE_TYPE, type);
     }
 
     public Set<String> getFavTags() {
@@ -144,20 +145,20 @@ public class SettingSaver {
 
     // 设置
 
-    public boolean isEnabled() {
-        return mmkv.decodeBool(ENABLED, false);
+    public boolean isServiceEnabled() {
+        return mmkv.decodeBool(SERVICE_ENABLED, false);
     }
 
-    public void setEnabled(boolean enable) {
-        mmkv.encode(ENABLED, enable);
+    public void setServiceEnabled(boolean enable) {
+        mmkv.encode(SERVICE_ENABLED, enable);
     }
 
-    public boolean isHideBack() {
-        return mmkv.decodeBool(HIDE_BACK, false);
+    public boolean isHideAppBackground() {
+        return mmkv.decodeBool(HIDE_APP_BACKGROUND, false);
     }
 
-    public void setHideBack(Activity activity, boolean enable) {
-        mmkv.encode(HIDE_BACK, enable);
+    public void setHideAppBackground(Activity activity, boolean enable) {
+        mmkv.encode(HIDE_APP_BACKGROUND, enable);
         int taskId = activity.getTaskId();
         ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         if (manager != null) {
@@ -170,56 +171,40 @@ public class SettingSaver {
         }
     }
 
-    public boolean isForgeServiceEnabled() {
-        return mmkv.decodeBool(FORGE_SERVICE, false);
+    public boolean isKeepAliveForegroundServiceEnabled() {
+        return mmkv.decodeBool(KEEP_ALIVE_FOREGROUND_SERVICE, false);
     }
 
-    public void setForgeServiceEnabled(Context context, boolean enable) {
-        mmkv.encode(FORGE_SERVICE, enable);
+    public void setKeepAliveForegroundServiceEnabled(Context context, boolean enable) {
+        mmkv.encode(KEEP_ALIVE_FOREGROUND_SERVICE, enable);
         Intent intent = new Intent(context, KeepAliveService.class);
         if (enable) context.startService(intent);
         else context.stopService(intent);
     }
 
-    public boolean isAutoStart() {
-        return mmkv.decodeBool(AUTO_START, false);
+    public boolean isBootCompletedAutoStart() {
+        return mmkv.decodeBool(BOOT_COMPLETED_AUTO_START, false);
     }
 
-    public void setAutoStart(boolean enable) {
-        mmkv.encode(AUTO_START, enable);
+    public void setBootCompletedAutoStart(boolean enable) {
+        mmkv.encode(BOOT_COMPLETED_AUTO_START, enable);
     }
 
 
-    public int getSuperUser() {
-        return mmkv.decodeInt(SUPER_USER, 0);
+    public int getSuperUserType() {
+        return mmkv.decodeInt(SUPER_USER_TYPE, 0);
     }
 
-    public void setSuperUser(int type) {
-        mmkv.encode(SUPER_USER, type);
+    public void setSuperUserType(int type) {
+        mmkv.encode(SUPER_USER_TYPE, type);
     }
 
-    public int getManualPlayType() {
-        return mmkv.decodeInt(MANUAL_PLAY, 1);
+    public boolean isExactAlarmEnabled() {
+        return mmkv.decodeBool(EXACT_ALARM, false);
     }
 
-    public void setManualPlayType(int type) {
-        mmkv.encode(MANUAL_PLAY, type);
-    }
-
-    public boolean isOcrEnabled() {
-        return mmkv.decodeBool(OCR, false);
-    }
-
-    public void setOcrEnabled(boolean enable) {
-        mmkv.encode(OCR, enable);
-    }
-
-    public boolean isAlarmEnabled() {
-        return mmkv.decodeBool(ALARM, false);
-    }
-
-    public void setAlarmEnabled(boolean enable) {
-        mmkv.encode(ALARM, enable);
+    public void setExactAlarmEnabled(boolean enable) {
+        mmkv.encode(EXACT_ALARM, enable);
     }
 
     public boolean isBluetoothEnabled() {
@@ -231,28 +216,28 @@ public class SettingSaver {
     }
 
 
-    public boolean isShowTouch() {
-        return mmkv.decodeBool(SHOW_TOUCH, false);
+    public boolean isShowGestureTrack() {
+        return mmkv.decodeBool(SHOW_GESTURE_TRACK, false);
     }
 
-    public void setShowTouch(boolean enable) {
-        mmkv.encode(SHOW_TOUCH, enable);
+    public void setShowGestureTrack(boolean enable) {
+        mmkv.encode(SHOW_GESTURE_TRACK, enable);
     }
 
-    public boolean isShowTargetArea() {
-        return mmkv.decodeBool(SHOW_TARGET_AREA, false);
+    public boolean isShowNodeArea() {
+        return mmkv.decodeBool(SHOW_NODE_AREA, false);
     }
 
-    public void setShowTargetArea(boolean enable) {
-        mmkv.encode(SHOW_TARGET_AREA, enable);
+    public void setShowNodeArea(boolean enable) {
+        mmkv.encode(SHOW_NODE_AREA, enable);
     }
 
-    public boolean isShowStartTips() {
-        return mmkv.decodeBool(START_TIPS, true);
+    public boolean isShowTaskStartTips() {
+        return mmkv.decodeBool(SHOW_TASK_START_TIPS, true);
     }
 
-    public void setShowStartTips(boolean enable) {
-        mmkv.encode(START_TIPS, enable);
+    public void setShowTaskStartTips(boolean enable) {
+        mmkv.encode(SHOW_TASK_START_TIPS, enable);
     }
 
 
@@ -264,30 +249,38 @@ public class SettingSaver {
         mmkv.encode(SUPPORT_FREE_FORM, enable);
     }
 
-    public int getTheme() {
-        return mmkv.decodeInt(THEME, 0);
+    public int getNightModeType() {
+        return mmkv.decodeInt(NIGHT_MODE_TYPE, 0);
     }
 
-    public void setTheme(int theme) {
-        mmkv.encode(THEME, theme);
-        AppCompatDelegate.setDefaultNightMode(theme - 1);
+    public void setNightModeType(int type) {
+        mmkv.encode(NIGHT_MODE_TYPE, type);
+        AppCompatDelegate.setDefaultNightMode(type - 1);
     }
 
     public boolean isDynamicColorTheme() {
-        return mmkv.decodeBool(COLOR, true);
+        return mmkv.decodeBool(DYNAMIC_COLOR, true);
     }
 
     public void setDynamicColorTheme(Activity activity, boolean enable) {
-        mmkv.encode(COLOR, enable);
+        mmkv.encode(DYNAMIC_COLOR, enable);
         activity.recreate();
     }
 
-    public int getPlayViewPadding() {
-        return mmkv.decodeInt(PLAY_VIEW_PADDING, 0);
+    public int getManualPlayShowType() {
+        return mmkv.decodeInt(MANUAL_PLAY_SHOW_TYPE, 1);
     }
 
-    public void setPlayViewPadding(int padding) {
-        mmkv.encode(PLAY_VIEW_PADDING, padding);
+    public void setManualPlayShowType(int type) {
+        mmkv.encode(MANUAL_PLAY_SHOW_TYPE, type);
+    }
+
+    public int getManualPlayViewPadding() {
+        return mmkv.decodeInt(MANUAL_PLAY_VIEW_PADDING, 0);
+    }
+
+    public void setManualPlayViewPadding(int padding) {
+        mmkv.encode(MANUAL_PLAY_VIEW_PADDING, padding);
     }
 
 }

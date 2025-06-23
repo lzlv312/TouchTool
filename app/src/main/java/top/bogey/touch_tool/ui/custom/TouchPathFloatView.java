@@ -54,13 +54,13 @@ public class TouchPathFloatView extends AppCompatImageView implements FloatInter
     }
 
     public static void showGesture(List<PathPart> pathParts, float timeScale) {
-        boolean showTouch = SettingSaver.getInstance().isShowTouch();
+        boolean showTouch = SettingSaver.getInstance().isShowGestureTrack();
         if (!showTouch) return;
 
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
-            TouchPathFloatView floatView = new TouchPathFloatView(keepView.getContext());
+            TouchPathFloatView floatView = new TouchPathFloatView(keepView.getThemeContext());
             floatView.innerShowGesture(pathParts, timeScale);
             floatView.show();
         });

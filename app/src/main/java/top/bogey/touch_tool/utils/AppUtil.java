@@ -55,9 +55,9 @@ import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.callback.StringResultCallback;
 
 public class AppUtil {
-    public final static String PICTURE_DIR_NAME = "picture";
+    public static final String LOG_DIR_NAME = "log";
     public final static String TASK_DIR_NAME = "task";
-    public final static String TEXT_DIR_NAME = "text";
+    public final static String DOCUMENT_DIR_NAME = "document";
 
     // 判断当前环境是否为发布环境
     public static boolean isRelease(Context context) {
@@ -207,10 +207,14 @@ public class AppUtil {
     }
 
     public static void copyToClipboard(Context context, String text) {
+        AppUtil.copyToClipboard(context, text, true);
+    }
+
+    public static void copyToClipboard(Context context, String text, boolean showToast) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(text, text);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(context, R.string.copy_tips, Toast.LENGTH_SHORT).show();
+        if (showToast) Toast.makeText(context, R.string.copy_tips, Toast.LENGTH_SHORT).show();
     }
 
     public static boolean isAccessibilityServiceEnabled(Context context) {
@@ -374,7 +378,7 @@ public class AppUtil {
         intent.setType("image/*");
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        File file = writeFile(context, PICTURE_DIR_NAME, PICTURE_DIR_NAME + "_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg", outputStream.toByteArray());
+        File file = writeFile(context, DOCUMENT_DIR_NAME, "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg", outputStream.toByteArray());
         if (file != null) {
             Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -387,7 +391,7 @@ public class AppUtil {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setType("text/*");
-        File file = writeFile(context, TEXT_DIR_NAME, TEXT_DIR_NAME + "_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".txt", text.getBytes());
+        File file = writeFile(context, DOCUMENT_DIR_NAME, "Txt_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".txt", text.getBytes());
         if (file != null) {
             Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -416,7 +420,7 @@ public class AppUtil {
     public static void saveImage(Context context, Bitmap image) {
         if (image == null) return;
 
-        String fileName = PICTURE_DIR_NAME + "_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg";
+        String fileName = "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ContentValues contentValues = new ContentValues();

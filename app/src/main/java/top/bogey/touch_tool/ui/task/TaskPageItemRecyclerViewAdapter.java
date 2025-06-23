@@ -156,6 +156,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
 
                 if (binding.enableSwitch.isChecked() == task.isEnable()) return;
                 task.setEnable(binding.enableSwitch.isChecked());
+                task.save();
             });
 
             binding.stopButton.setOnClickListener(v -> {

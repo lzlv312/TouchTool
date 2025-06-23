@@ -1,8 +1,6 @@
 package top.bogey.touch_tool.ui.custom;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -48,7 +46,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         if (keepView == null) return null;
         String tag = UUID.randomUUID().toString();
         new Handler(Looper.getMainLooper()).post(() -> {
-            StickScreenFloatView stickView = new StickScreenFloatView(keepView.getContext(), tag);
+            StickScreenFloatView stickView = new StickScreenFloatView(keepView.getThemeContext(), tag);
             stickView.show();
             stickView.innerShowStick(object, anchor, location);
         });
@@ -99,11 +97,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             binding.image.setImageBitmap(textBitmap);
 
             binding.saveButton.setIconResource(R.drawable.icon_copy);
-            binding.saveButton.setOnClickListener(v -> {
-                ClipboardManager manager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                manager.setPrimaryClip(ClipData.newPlainText(object.toString(), object.toString()));
-                Toast.makeText(getContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
-            });
+            binding.saveButton.setOnClickListener(v -> AppUtil.copyToClipboard(getContext(), object.toString()));
         }
         post(() -> FloatWindow.setLocation(tag, anchor, location));
     }

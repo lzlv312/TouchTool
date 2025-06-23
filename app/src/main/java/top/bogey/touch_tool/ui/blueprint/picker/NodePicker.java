@@ -95,11 +95,11 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
             if (isChecked) {
                 View view = group.findViewById(checkedId);
                 int type = group.indexOfChild(view);
-                SettingSaver.getInstance().setSelectNodeType(type);
+                SettingSaver.getInstance().setPickNodeType(type);
                 invalidate();
             }
         });
-        binding.typeGroup.check(binding.typeGroup.getChildAt(SettingSaver.getInstance().getSelectNodeType()).getId());
+        binding.typeGroup.check(binding.typeGroup.getChildAt(SettingSaver.getInstance().getPickNodeType()).getId());
     }
 
     @Override
@@ -199,7 +199,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         Rect area = new Rect(node.area);
         area.offset(-location[0], -location[1]);
 
-        int type = SettingSaver.getInstance().getSelectNodeType();
+        int type = SettingSaver.getInstance().getPickNodeType();
         if (type != 0 && !node.usable) {
             gridPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSecondary));
             gridPaint.setStrokeWidth(1);
@@ -227,7 +227,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         float y = event.getY();
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            int type = SettingSaver.getInstance().getSelectNodeType();
+            int type = SettingSaver.getInstance().getPickNodeType();
             NodeInfo node = null;
             switch (type) {
                 case 0 -> node = findNodeByTop(Math.round(x), Math.round(y), true);

@@ -146,15 +146,6 @@
                         app:options="@array/super_user_type"
                         app:title="@string/permission_setting_super_user" />
 
-                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
-                        android:id="@+id/manualPlaySelect"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:description="@string/permission_setting_manual_play_desc"
-                        app:icon="@drawable/icon_touch"
-                        app:options="@array/manual_play_type"
-                        app:title="@string/permission_setting_manual_play" />
-
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/alarmSwitch"
                         android:layout_width="match_parent"
@@ -277,6 +268,15 @@
                         app:description="@string/preference_setting_color_desc"
                         app:icon="@drawable/icon_palette"
                         app:title="@string/preference_setting_color" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
+                        android:id="@+id/manualPlaySelect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/permission_setting_manual_play_desc"
+                        app:icon="@drawable/icon_touch"
+                        app:options="@array/manual_play_type"
+                        app:title="@string/permission_setting_manual_play" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSlider
                         android:id="@+id/manualPlayPadding"

@@ -61,8 +61,8 @@ public class ShareToAction extends ExecuteAction {
                 String parent;
                 String fileName;
                 byte[] bytes = new byte[0];
+                parent = AppUtil.DOCUMENT_DIR_NAME;
                 if (value instanceof PinImage image) {
-                    parent = AppUtil.PICTURE_DIR_NAME;
                     fileName = parent + "_" + AppUtil.formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg";
                     intent.setType("image/*");
                     Bitmap bitmap = image.getImage();
@@ -72,7 +72,6 @@ public class ShareToAction extends ExecuteAction {
                         bytes = outputStream.toByteArray();
                     }
                 } else {
-                    parent = AppUtil.TEXT_DIR_NAME;
                     fileName = parent + "_" + AppUtil.formatDateTime(context, System.currentTimeMillis(), false, true) + ".txt";
                     intent.setType("text/*");
                     bytes = value.toString().getBytes();

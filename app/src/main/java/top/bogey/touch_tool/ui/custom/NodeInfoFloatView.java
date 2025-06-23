@@ -1,15 +1,12 @@
 package top.bogey.touch_tool.ui.custom;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +20,7 @@ import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.databinding.FloatNodeInfoBinding;
 import top.bogey.touch_tool.databinding.FloatNodeInfoItemBinding;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
@@ -42,7 +40,7 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
         new Handler(Looper.getMainLooper()).post(() -> {
             NodeInfoFloatView nodeInfoView = (NodeInfoFloatView) FloatWindow.getView(NodeInfoFloatView.class.getName());
             if (nodeInfoView == null) {
-                nodeInfoView = new NodeInfoFloatView(keepView.getContext(), callback);
+                nodeInfoView = new NodeInfoFloatView(keepView.getThemeContext(), callback);
                 nodeInfoView.show();
             }
             nodeInfoView.innerShowToast(nodeInfo);
@@ -180,12 +178,7 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
         public NodeInfoFloatViewViewHolder(@NonNull FloatNodeInfoItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            binding.copyButton.setOnClickListener(v -> {
-                ClipboardManager clipboard = (ClipboardManager) itemView.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(itemView.getContext().getString(R.string.pin_node), content.copyValue);
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(itemView.getContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
-            });
+            binding.copyButton.setOnClickListener(v -> AppUtil.copyToClipboard(itemView.getContext(), content.copyValue));
         }
 
         public void refresh(NodeInfoContent content) {

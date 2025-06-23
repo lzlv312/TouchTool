@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.color.DynamicColors;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
@@ -41,7 +42,7 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, I
     }
 
     private void showMe() {
-        boolean startTips = SettingSaver.getInstance().isShowStartTips();
+        boolean startTips = SettingSaver.getInstance().isShowTaskStartTips();
         if (startTips) {
             post(() -> {
                 animate().alpha(0.5f);
@@ -93,5 +94,9 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, I
     @Override
     public void dismiss() {
         FloatWindow.dismiss(KeepAliveFloatView.class.getName());
+    }
+
+    public Context getThemeContext() {
+        return DynamicColors.wrapContextIfAvailable(getContext());
     }
 }

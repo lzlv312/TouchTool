@@ -1,9 +1,5 @@
 package top.bogey.touch_tool.bean.action.system;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.MainApplication;
@@ -13,6 +9,7 @@ import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class WriteToClipboardAction extends ExecuteAction {
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
@@ -32,9 +29,7 @@ public class WriteToClipboardAction extends ExecuteAction {
         PinString text = getPinValue(runnable, textPin);
         if (text.getValue() != null && !text.getValue().isEmpty()) {
             MainApplication instance = MainApplication.getInstance();
-            ClipboardManager manager = (ClipboardManager) instance.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText(text.getValue(), text.getValue());
-            manager.setPrimaryClip(clipData);
+            AppUtil.copyToClipboard(instance, text.getValue(), false);
         }
         executeNext(runnable, outPin);
     }

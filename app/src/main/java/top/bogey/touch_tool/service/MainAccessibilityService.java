@@ -5,6 +5,7 @@ import static top.bogey.touch_tool.service.TaskInfoSummary.OCR_SERVICE_ACTION;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -46,16 +47,21 @@ import java.util.concurrent.TimeUnit;
 import top.bogey.ocr.IOcr;
 import top.bogey.ocr.IOcrCallback;
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.SettingSaver;
+import top.bogey.touch_tool.bean.save.log.LogInfo;
+import top.bogey.touch_tool.bean.save.log.NormalLog;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.capture.CaptureService;
 import top.bogey.touch_tool.service.receiver.SystemEventReceiver;
 import top.bogey.touch_tool.service.super_user.SuperUser;
+import top.bogey.touch_tool.ui.InstantActivity;
 import top.bogey.touch_tool.ui.PermissionActivity;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.BitmapResultCallback;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
@@ -112,7 +118,7 @@ public class MainAccessibilityService extends AccessibilityService {
     protected void onServiceConnected() {
         super.onServiceConnected();
         connected.setValue(true);
-        setEnabled(SettingSaver.getInstance().isEnabled());
+        setEnabled(SettingSaver.getInstance().isServiceEnabled());
     }
 
     @Override
@@ -271,7 +277,25 @@ public class MainAccessibilityService extends AccessibilityService {
 
     // 定时 ----------------------------------------------------------------------------- start
     private PendingIntent getAlarmPendingIntent(String taskId, String actionId) {
-        return null;
+
+        Intent intent = new Intent(this, InstantActivity.class);
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(InstantActivity.INTENT_KEY_DO_ACTION, true);
+        intent.putExtra(InstantActivity.TASK_ID, taskId);
+        intent.putExtra(InstantActivity.ACTION_ID, actionId);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            ActivityOptions options = ActivityOptions.makeBasic();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+                options.setPendingIntentCreatorBackgroundActivityStartMode(ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOW_ALWAYS);
+            } else {
+                options.setPendingIntentCreatorBackgroundActivityStartMode(ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED);
+            }
+            return PendingIntent.getActivity(this, taskId.hashCode() + actionId.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT, options.toBundle());
+        } else {
+            return PendingIntent.getActivity(this, taskId.hashCode() + actionId.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+        }
     }
 
     public void resetAllAlarm() {
@@ -300,22 +324,18 @@ public class MainAccessibilityService extends AccessibilityService {
     public void cancelAlarm(Task task, TimeStartAction timeStartAction) {
         if (task == null || timeStartAction == null) return;
         PendingIntent intent = getAlarmPendingIntent(task.getId(), timeStartAction.getId());
-        if (intent != null) {
-            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            manager.cancel(intent);
-        }
+        if (intent == null) return;
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        manager.cancel(intent);
     }
 
-    @SuppressLint("MissingPermission")
     public void addAlarm(Task task, TimeStartAction timeStartAction) {
         if (task == null || timeStartAction == null) return;
         if (!timeStartAction.isEnable()) return;
         if (!isEnabled()) return;
-        if (!SettingSaver.getInstance().isAlarmEnabled()) return;
+        if (!SettingSaver.getInstance().isExactAlarmEnabled()) return;
 
         PendingIntent pendingIntent = getAlarmPendingIntent(task.getId(), timeStartAction.getId());
-        if (pendingIntent == null) return;
-
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         long timeMillis = System.currentTimeMillis();
@@ -347,6 +367,7 @@ public class MainAccessibilityService extends AccessibilityService {
         } else {
             manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextStartTime, pendingIntent);
         }
+        Saver.getInstance().addLog(task.getId(), new LogInfo(new NormalLog(getString(R.string.time_start_action_set_tips, AppUtil.formatDateTime(this, nextStartTime, false, false)))), true);
     }
 
     public void replaceAlarm(Task task) {

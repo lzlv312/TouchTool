@@ -170,10 +170,10 @@ public class LogViewAdapter extends TreeAdapter {
                 LogInfo logInfo = (LogInfo) node.getData();
                 if (logInfo == null) return;
                 Log log = logInfo.getLogObject();
-                if (!(log instanceof ActionLog actionLog) || actionLog.getIndex() != -1) {
-                    switchNodeExpand(node);
-                } else {
+                if (!(log instanceof ActionLog actionLog) || actionLog.getIndex() == -1) {
                     AppUtil.copyToClipboard(context, logInfo.getLog());
+                } else {
+                    switchNodeExpand(node);
                 }
             });
         }
@@ -202,7 +202,7 @@ public class LogViewAdapter extends TreeAdapter {
             binding.icon.setVisibility(View.VISIBLE);
             binding.gotoButton.setVisibility(View.VISIBLE);
 
-            if (actionLog != null && actionLog.getIndex() == -1) {
+            if (actionLog == null || actionLog.getIndex() == -1) {
                 binding.copyButton.setIconResource(R.drawable.icon_copy);
                 binding.copyButton.setVisibility(View.VISIBLE);
                 binding.title.setText(":" + logInfo.getLog());

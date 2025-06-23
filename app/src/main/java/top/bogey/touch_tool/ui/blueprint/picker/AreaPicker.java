@@ -48,7 +48,7 @@ public class AreaPicker extends FullScreenPicker<Rect> {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
-            AreaPicker areaPicker = new AreaPicker(keepView.getContext(), callback, DisplayUtil.getScreenArea(keepView.getContext()));
+            AreaPicker areaPicker = new AreaPicker(keepView.getThemeContext(), callback, DisplayUtil.getScreenArea(keepView.getContext()));
             areaPicker.setFloatCallback(new AreaPickerCallback(areaPicker));
             areaPicker.show();
         });
