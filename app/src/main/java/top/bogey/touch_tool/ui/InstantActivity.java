@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.net.Uri;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.InnerStartAction;
-import top.bogey.touch_tool.bean.action.start.OutCallStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
 import top.bogey.touch_tool.bean.pin.Pin;
@@ -42,33 +42,18 @@ public class InstantActivity extends BaseActivity {
 
     private void handleIntent(Intent intent) {
         if (intent == null) return;
+        setIntent(null);
 
         Uri uri = intent.getData();
         if (uri != null) {
             if ("ttp".equals(uri.getScheme()) && "do_action".equals(uri.getHost()) && uri.getQuery() != null) {
-                MainAccessibilityService service = MainApplication.getInstance().getService();
-                if (service != null && service.isEnabled()) {
-                    HashMap<String, String> params = new HashMap<>();
-                    for (String name : uri.getQueryParameterNames()) {
-                        params.put(name, uri.getQueryParameter(name));
-                    }
-                    String taskId = params.remove(TASK_ID);
-                    String actionId = params.remove(ACTION_ID);
-                    if (taskId != null && actionId != null) {
-                        Task task = Saver.getInstance().getTask(taskId);
-                        if (task != null) {
-                            Action action = task.getAction(actionId);
-                            if (action instanceof OutCallStartAction) {
-                                Task copy = task.copy();
-                                params.forEach((key, value) -> {
-                                    Variable var = copy.getVariable(key);
-                                    if (var != null) var.getValue().cast(value);
-                                });
-                                service.runTask(copy, (StartAction) action);
-                            }
-                        }
-                    }
+                HashMap<String, String> params = new HashMap<>();
+                for (String name : uri.getQueryParameterNames()) {
+                    params.put(name, uri.getQueryParameter(name));
                 }
+                String taskId = params.remove(TASK_ID);
+                String actionId = params.remove(ACTION_ID);
+                doAction(taskId, actionId, null, params);
             }
         }
 
@@ -76,33 +61,43 @@ public class InstantActivity extends BaseActivity {
         if (doAction) {
             String taskId = intent.getStringExtra(TASK_ID);
             String actionId = intent.getStringExtra(ACTION_ID);
+            String pinId = intent.getStringExtra(PIN_ID);
+            doAction(taskId, actionId, pinId, null);
+        }
+    }
 
-            if (taskId != null && actionId != null) {
-                Task task = Saver.getInstance().getTask(taskId);
-                if (task != null) {
-                    Action action = task.getAction(actionId);
-                    if (action != null) {
-                        MainAccessibilityService service = MainApplication.getInstance().getService();
-                        if (service != null && service.isEnabled()) {
-                            if (action instanceof TimeStartAction timeStartAction) {
-                                service.addAlarm(task, timeStartAction);
-                            }
-                            if (action instanceof StartAction startAction) {
-                                service.runTask(task, startAction);
-                            } else {
-                                String pinId = intent.getStringExtra(PIN_ID);
-                                Pin pin = action.getPinById(pinId);
-                                if (pin != null) {
-                                    InnerStartAction innerStartAction = new InnerStartAction(pin);
-                                    service.runTask(task.copy(), innerStartAction);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+    public static void doAction(String taskId, String actionId, String pinId, Map<String, String> params) {
+        if (taskId == null || actionId == null) return;
+
+        Task task = Saver.getInstance().getTask(taskId);
+        if (task == null) return;
+
+        Action action = task.getAction(actionId);
+        if (action == null || (action instanceof StartAction startAction && !startAction.isEnable())) return;
+
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service == null || !service.isEnabled()) return;
+
+        if (action instanceof TimeStartAction timeStartAction) {
+            service.addAlarm(task, timeStartAction);
         }
 
-        setIntent(null);
+        if (action instanceof StartAction startAction) {
+            Task copy = task.copy();
+            if (params != null) {
+                params.forEach((key, value) -> {
+                    Variable var = copy.findVariableByName(key);
+                    if (var != null) var.getValue().cast(value);
+                });
+            }
+            service.runTask(copy, startAction);
+        } else {
+            if (pinId == null) return;
+            Pin pin = action.getPinById(pinId);
+            if (pin == null) return;
+
+            InnerStartAction innerStartAction = new InnerStartAction(pin);
+            service.runTask(task, innerStartAction);
+        }
     }
 }

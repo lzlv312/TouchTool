@@ -10,15 +10,16 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.BatteryManager;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.ui.InstantActivity;
 
 public class SystemEventReceiver extends BroadcastReceiver {
     private final Context context;
@@ -26,7 +27,6 @@ public class SystemEventReceiver extends BroadcastReceiver {
 
     public SystemEventReceiver(Context context) {
         this.context = context;
-        registerNetworkReceiver();
     }
 
     @SuppressLint("MissingPermission")
@@ -55,10 +55,17 @@ public class SystemEventReceiver extends BroadcastReceiver {
                 if (device == null) return;
                 TaskInfoSummary.getInstance().setBluetoothInfo(device.getAddress(), device.getName(), action.equals(BluetoothDevice.ACTION_ACL_CONNECTED));
             }
+
+            case InstantActivity.INTENT_KEY_DO_ACTION -> {
+                String taskId = intent.getStringExtra(InstantActivity.TASK_ID);
+                String actionId = intent.getStringExtra(InstantActivity.ACTION_ID);
+                String pinId = intent.getStringExtra(InstantActivity.PIN_ID);
+                InstantActivity.doAction(taskId, actionId, pinId, null);
+            }
         }
     }
 
-    public IntentFilter getFilter() {
+    private IntentFilter getFilter() {
         IntentFilter filter = new IntentFilter();
 //        filter.addAction(Intent.ACTION_TIME_TICK);
         // 电量变动
@@ -74,17 +81,15 @@ public class SystemEventReceiver extends BroadcastReceiver {
         // 蓝牙连接或断开
         filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        // 动作执行
+        filter.addAction(InstantActivity.INTENT_KEY_DO_ACTION);
 
         return filter;
     }
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     public void register() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            context.registerReceiver(this, getFilter(), Context.RECEIVER_EXPORTED);
-        } else {
-            context.registerReceiver(this, getFilter());
-        }
+        ContextCompat.registerReceiver(context, this, getFilter(), ContextCompat.RECEIVER_EXPORTED);
         registerNetworkReceiver();
     }
 
@@ -109,9 +114,11 @@ public class SystemEventReceiver extends BroadcastReceiver {
                     List<TaskInfoSummary.NotworkState> state = new ArrayList<>();
                     if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                         state.add(TaskInfoSummary.NotworkState.WIFI);
-                    } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    }
+                    if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                         state.add(TaskInfoSummary.NotworkState.MOBILE);
-                    } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
+                    }
+                    if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
                         state.add(TaskInfoSummary.NotworkState.VPN);
                     }
                     TaskInfoSummary.getInstance().setNetworkState(state);

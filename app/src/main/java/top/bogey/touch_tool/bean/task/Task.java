@@ -181,6 +181,11 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         return variableManager.findVariable(id);
     }
 
+    @Override
+    public Variable findVariableByName(String name) {
+        return variableManager.findVariableByName(name);
+    }
+
     public List<Usage> getVariableUses(String id) {
         List<Usage> usages = new ArrayList<>();
         boolean flag = true;

@@ -5,7 +5,6 @@ import static top.bogey.touch_tool.service.TaskInfoSummary.OCR_SERVICE_ACTION;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.GestureDescription;
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -76,7 +75,7 @@ public class MainAccessibilityService extends AccessibilityService {
     public static final MutableLiveData<Boolean> enabled = new MutableLiveData<>(false);
     public static final MutableLiveData<Boolean> connected = new MutableLiveData<>(false);
 
-    private SystemEventReceiver receiver;
+    private SystemEventReceiver systemEventReceiver;
     private final TaskInfoSummary taskInfoSummary = TaskInfoSummary.getInstance();
 
     @Override
@@ -154,18 +153,15 @@ public class MainAccessibilityService extends AccessibilityService {
         enabled.setValue(bool);
 
         if (isEnabled()) {
-            receiver = new SystemEventReceiver(this);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                registerReceiver(receiver, receiver.getFilter(), RECEIVER_EXPORTED);
-            } else {
-                registerReceiver(receiver, receiver.getFilter());
-            }
+            systemEventReceiver = new SystemEventReceiver(this);
+            systemEventReceiver.register();
 
             resetAllAlarm();
             SuperUser.getInstance().tryInit();
         } else {
-            if (receiver != null) unregisterReceiver(receiver);
-            receiver = null;
+            if (systemEventReceiver != null) systemEventReceiver.unregister();
+            systemEventReceiver = null;
+
             if (tts != null) tts.shutdown();
             tts = null;
 
@@ -191,8 +187,8 @@ public class MainAccessibilityService extends AccessibilityService {
         listeners.remove(listener);
     }
 
-    public TaskRunnable runTask(Task task, StartAction startAction) {
-        return runTask(task, startAction, null);
+    public void runTask(Task task, StartAction startAction) {
+        runTask(task, startAction, null);
     }
 
     public TaskRunnable runTask(Task task, StartAction startAction, ITaskListener listener) {
@@ -277,25 +273,11 @@ public class MainAccessibilityService extends AccessibilityService {
 
     // 定时 ----------------------------------------------------------------------------- start
     private PendingIntent getAlarmPendingIntent(String taskId, String actionId) {
-
-        Intent intent = new Intent(this, InstantActivity.class);
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(InstantActivity.INTENT_KEY_DO_ACTION, true);
+        Intent intent = new Intent(InstantActivity.INTENT_KEY_DO_ACTION);
         intent.putExtra(InstantActivity.TASK_ID, taskId);
         intent.putExtra(InstantActivity.ACTION_ID, actionId);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            ActivityOptions options = ActivityOptions.makeBasic();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
-                options.setPendingIntentCreatorBackgroundActivityStartMode(ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOW_ALWAYS);
-            } else {
-                options.setPendingIntentCreatorBackgroundActivityStartMode(ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED);
-            }
-            return PendingIntent.getActivity(this, taskId.hashCode() + actionId.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT, options.toBundle());
-        } else {
-            return PendingIntent.getActivity(this, taskId.hashCode() + actionId.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-        }
+        return PendingIntent.getBroadcast(this, taskId.hashCode() + actionId.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void resetAllAlarm() {
@@ -350,8 +332,8 @@ public class MainAccessibilityService extends AccessibilityService {
                 // 当前时间大于开始时间，需要计算下次开始的时间，防止定时任务刚设定就执行了
                 int loop = (int) Math.ceil(l * 1f / periodic);
                 nextStartTime = startTime + loop * periodic;
-                // 如果算出的下个开始时间没有大于现在时间10s，应该是算错了，下个开始时间再加个间隔
-                if (nextStartTime - timeMillis < 10 * 1000) {
+                // 如果算出的下个开始时间没有大于现在时间30s，应该是算错了，下个开始时间再加个间隔
+                if (nextStartTime - timeMillis < 30 * 1000) {
                     nextStartTime += periodic;
                 }
             }
@@ -367,7 +349,7 @@ public class MainAccessibilityService extends AccessibilityService {
         } else {
             manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextStartTime, pendingIntent);
         }
-        Saver.getInstance().addLog(task.getId(), new LogInfo(new NormalLog(getString(R.string.time_start_action_set_tips, AppUtil.formatDateTime(this, nextStartTime, false, false)))), true);
+        Saver.getInstance().addLog(task.getId(), new LogInfo(new NormalLog(getString(R.string.time_start_action_set_tips, AppUtil.formatDateTime(this, nextStartTime, false, true)))), true);
     }
 
     public void replaceAlarm(Task task) {

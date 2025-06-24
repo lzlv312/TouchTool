@@ -58,4 +58,14 @@ public class VariableManager implements IVariableManager {
         if (task != null) return task.findVariable(id);
         return null;
     }
+
+    @Override
+    public Variable findVariableByName(String name) {
+        for (Variable var : vars) {
+            if (Objects.equals(var.getTitle(), name)) {
+                return var;
+            }
+        }
+        return null;
+    }
 }
