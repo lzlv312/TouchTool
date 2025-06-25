@@ -26,7 +26,7 @@ public class PinIconExecute extends PinStringExecute {
 
     public PinIconExecute(JsonObject jsonObject) {
         super(jsonObject);
-        image = GsonUtil.getAsString(jsonObject, "value", null);
+        image = GsonUtil.getAsString(jsonObject, "image", null);
     }
 
     public Bitmap getImage() {

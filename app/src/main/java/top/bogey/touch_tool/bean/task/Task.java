@@ -297,10 +297,11 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
     }
 
     public void execute(TaskRunnable runnable, ExecuteTaskAction startAction, Map<String, PinObject> params) {
+        Task copy = copy();
         this.startAction = startAction;
         for (Action action : getActions(CustomStartAction.class)) {
             ((CustomStartAction) action).setParams(params);
-            runnable.pushStack(this, action);
+            runnable.pushStack(copy, action);
             action.execute(runnable, null);
             break;
         }

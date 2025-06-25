@@ -128,15 +128,19 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     protected void initExpand(MaterialButton button) {
-        ColorStateList expandColor = ColorStateList.valueOf(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryVariant));
-        ColorStateList unExpandColor = ColorStateList.valueOf(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorTertiary));
-        button.setIconResource(action.getExpandType() == Action.ExpandType.FULL ? R.drawable.icon_zoom_in : R.drawable.icon_zoom_out);
-        button.setIconTint(action.getExpandType() == Action.ExpandType.FULL ? expandColor : unExpandColor);
+        button.setIconResource(switch (action.getExpandType()) {
+            case NONE -> R.drawable.icon_visibility_off;
+            case HALF -> R.drawable.icon_visibility_half;
+            case FULL -> R.drawable.icon_visibility;
+        });
         setExpandType(action.getExpandType());
         button.setOnClickListener(v -> {
             expand();
-            button.setIconResource(action.getExpandType() == Action.ExpandType.FULL ? R.drawable.icon_zoom_in : R.drawable.icon_zoom_out);
-            button.setIconTint(action.getExpandType() == Action.ExpandType.FULL ? expandColor : unExpandColor);
+            button.setIconResource(switch (action.getExpandType()) {
+                case NONE -> R.drawable.icon_visibility_off;
+                case HALF -> R.drawable.icon_visibility_half;
+                case FULL -> R.drawable.icon_visibility;
+            });
         });
     }
 

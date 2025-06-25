@@ -120,6 +120,23 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
                 })), 100);
             }
         });
+
+        binding.touchButton.setOnClickListener(v -> {
+            MainAccessibilityService service = MainApplication.getInstance().getService();
+            if (service != null && service.isEnabled()) {
+                FloatWindow.hide(tag);
+                postDelayed(() -> service.tryGetScreenShot(result -> post(() -> {
+                    FloatWindow.show(tag);
+                    if (result != null) {
+                        int offset = (int) binding.timeSlider.getValue();
+                        List<Rect> rectList = DisplayUtil.matchColor(result, colorInfo.getColor(), null, offset);
+                        if (rectList == null || rectList.isEmpty()) return;
+                        Rect rect = rectList.get(0);
+                        service.runGesture(rect.left + rect.width() / 2, rect.top + rect.height() / 2, 50, null);
+                    }
+                })), 100);
+            }
+        });
     }
 
     private int toColorInt(Editable s) {

@@ -17,7 +17,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleLineString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
@@ -27,7 +26,7 @@ public class StringMatchAction extends ExecuteAction implements DynamicPinsActio
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin matchPin = new Pin(new PinSingleLineString(), R.string.string_match_action_match);
     private final transient Pin elsePin = new Pin(new PinExecute(), R.string.if_action_else, true);
-    private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_pin, true);
+    private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin, true);
 
     public StringMatchAction() {
         super(ActionType.STRING_REGEX);

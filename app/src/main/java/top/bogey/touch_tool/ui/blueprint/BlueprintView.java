@@ -110,7 +110,8 @@ public class BlueprintView extends Fragment {
                 menu.findItem(R.id.forward).setEnabled(history.canForward());
                 return true;
             } else if (itemId == R.id.save) {
-                binding.cardLayout.getTask().save();
+                Task task = taskStack.peek();
+                task.save();
                 return true;
             } else if (itemId == R.id.taskRunningLog) {
                 Task task = taskStack.peek();

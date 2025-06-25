@@ -74,7 +74,7 @@ public class DisplayUtil {
 
         View decorView = activity.getWindow().getDecorView();
         Rect rect = new Rect();
-        decorView.getWindowVisibleDisplayFrame(rect);
+        decorView.getDrawingRect(rect);
         return screenSize.x != rect.width() || screenSize.y != rect.height();
     }
 

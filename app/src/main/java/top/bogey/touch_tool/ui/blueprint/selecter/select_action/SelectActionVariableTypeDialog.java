@@ -43,7 +43,7 @@ public class SelectActionVariableTypeDialog extends FlexboxLayout {
                     button = (MaterialButton) v;
                     button.setChecked(true);
                 });
-                if (i == 0) {
+                if (button == null) {
                     button = itemBinding.getRoot();
                     button.setChecked(true);
                 }

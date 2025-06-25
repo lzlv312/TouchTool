@@ -107,13 +107,29 @@
 
                     </FrameLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/matchButton"
-                        style="@style/Theme.TouchTool.IconButton.Filled"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="4dp"
-                        app:icon="@drawable/icon_play" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/matchButton"
+                            style="@style/Theme.TouchTool.IconButton.Filled"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="end"
+                            app:icon="@drawable/icon_image" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/touchButton"
+                            style="@style/Theme.TouchTool.IconButton.Filled"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="end"
+                            android:layout_marginStart="8dp"
+                            app:icon="@drawable/icon_touch" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

@@ -97,7 +97,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="4dp"
-                app:icon="@drawable/icon_zoom_in"
+                app:icon="@drawable/icon_visibility_half"
                 app:iconSize="16dp" />
 
             <com.google.android.material.button.MaterialButton

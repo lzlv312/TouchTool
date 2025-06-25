@@ -65,8 +65,8 @@ public class PinWidgetExecute extends PinWidget<PinExecute> {
                 binding.pickButton.setImageBitmap(iconExecute.getImage());
                 binding.pickButton.setOnClickListener(v -> new SelectIconDialog(getContext(), result -> {
                     binding.pickButton.setImageBitmap(result);
-                    pinView.getPin().notifyValueUpdated();
                     iconExecute.setImage(result);
+                    pinView.getPin().notifyValueUpdated();
                 }).show());
                 binding.editText.setText(iconExecute.getValue());
                 binding.editText.addTextChangedListener(new TextChangedListener() {

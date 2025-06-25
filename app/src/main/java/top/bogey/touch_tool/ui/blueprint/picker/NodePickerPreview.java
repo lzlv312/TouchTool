@@ -73,7 +73,7 @@ public class NodePickerPreview extends BasePicker<NodeInfo> {
                         PinNodePathString pinNodePathString = new PinNodePathString();
                         pinNodePathString.setValue(nodeInfo);
                         NodeInfo info = pinNodePathString.findNode(roots);
-                        if (info ==  null) return;
+                        if (info == null) return;
 
                         Rect rect = info.area;
                         int px = (int) DisplayUtil.dp2px(getContext(), 16);
@@ -89,6 +89,27 @@ public class NodePickerPreview extends BasePicker<NodeInfo> {
                         canvas.translate(rect.left - area.left, rect.top - area.top);
                         canvas.drawRect(new Rect(0, 0, rect.width(), rect.height()), paint);
                         binding.matchedImage.setImageBitmap(bitmap);
+                    }
+                }));
+            }
+        });
+
+        binding.touchButton.setOnClickListener(v -> {
+            MainAccessibilityService service = MainApplication.getInstance().getService();
+            if (service != null && service.isEnabled()) {
+                service.tryGetScreenShot(result -> post(() -> {
+                    if (result != null) {
+                        List<NodeInfo> roots = new ArrayList<>();
+                        for (AccessibilityNodeInfo window : AppUtil.getWindows(service)) {
+                            NodeInfo root = new NodeInfo(window);
+                            roots.add(root);
+                        }
+
+                        PinNodePathString pinNodePathString = new PinNodePathString();
+                        pinNodePathString.setValue(nodeInfo);
+                        NodeInfo info = pinNodePathString.findNode(roots);
+                        if (info == null || info.nodeInfo == null) return;
+                        info.nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     }
                 }));
             }

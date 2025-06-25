@@ -13,7 +13,6 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
-import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class StringAppendAction extends CalculateAction implements DynamicPinsAction {
@@ -22,7 +21,7 @@ public class StringAppendAction extends CalculateAction implements DynamicPinsAc
     private final transient Pin firstPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin secondPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin resultPin = new Pin(new PinString(), R.string.pin_string, true);
-    private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_pin);
+    private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin);
 
     public StringAppendAction() {
         super(ActionType.STRING_APPEND);

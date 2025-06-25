@@ -10,6 +10,7 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
 
@@ -20,6 +21,7 @@ public class GetNodeInfoAction extends CalculateAction {
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string, true);
     private final transient Pin descPin = new Pin(new PinString(), R.string.get_node_info_action_node_desc, true, false, true);
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area, true);
+    private final transient Pin pathPin = new Pin(new PinNodePathString(), R.string.pin_string_node_path, true, false, true);
     private final transient Pin usablePin = new Pin(new PinBoolean(), R.string.get_node_info_action_usable, true, false, true);
     private final transient Pin visiblePin = new Pin(new PinBoolean(), R.string.get_node_info_action_visible, true, false, true);
 
@@ -42,6 +44,7 @@ public class GetNodeInfoAction extends CalculateAction {
         textPin.getValue(PinString.class).setValue(nodeInfo.text);
         descPin.getValue(PinString.class).setValue(nodeInfo.desc);
         areaPin.getValue(PinArea.class).setValue(nodeInfo.area);
+        pathPin.getValue(PinNodePathString.class).setValue(nodeInfo);
         usablePin.getValue(PinBoolean.class).setValue(nodeInfo.usable);
         visiblePin.getValue(PinBoolean.class).setValue(nodeInfo.visible);
     }

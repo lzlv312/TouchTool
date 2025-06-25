@@ -53,7 +53,7 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
         for (Pin dynamicPin : getDynamicPins()) {
             Action nextAction = getNextAction(runnable, dynamicPin);
             if (nextAction == null) continue;
-            choices.add(new ChoiceExecuteFloatView.Choice(dynamicPin.getId(), nextAction.getValidDescription(), dynamicPin.getValue(PinIconExecute.class).getImage()));
+            choices.add(new ChoiceExecuteFloatView.Choice(dynamicPin.getId(), dynamicPin.getValue(PinIconExecute.class).getValue(), dynamicPin.getValue(PinIconExecute.class).getImage()));
         }
 
         AtomicReference<String> nextPinId = new AtomicReference<>();
