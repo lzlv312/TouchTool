@@ -46,12 +46,16 @@ public class SelectActionDialog extends BottomSheetDialog {
     protected final static String TAG_PREFIX = "🔗";
     public final static String GLOBAL_FLAG = "🌍 ";
 
+    public static Object copyObject;
+
     protected final DialogSelectActionBinding binding;
     protected final Task task;
     protected final SelectActionItemRecyclerViewAdapter adapter;
 
     protected GroupType groupType = GroupType.PRESET;
     protected Map<String, List<Object>> dataMap = new HashMap<>();
+    protected String subGroupTag;
+    protected Map<String, Object> subGroupMap = new HashMap<>();
     protected List<Object> dataList = new ArrayList<>();
 
     public SelectActionDialog(@NonNull Context context, Task task, ResultCallback<Action> callback) {
@@ -74,16 +78,17 @@ public class SelectActionDialog extends BottomSheetDialog {
                 binding.addButton.setTag(groupType);
                 dataMap = getGroupData(groupType);
                 refreshSubGroup(dataMap);
+                setCopyObject(copyObject);
             }
         });
 
         binding.subGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
-                String tag = (String) view.getTag();
-                dataList = dataMap.get(tag);
+                subGroupTag = (String) view.getTag();
+                dataList = dataMap.get(subGroupTag);
                 adapter.setData(dataList, groupType != GroupType.PRESET);
-                binding.addButton.setVisibility(Objects.equals(tag, GLOBAL) || Objects.equals(tag, PRIVATE) ? View.VISIBLE : View.GONE);
+                binding.addButton.setVisibility(Objects.equals(subGroupTag, GLOBAL) || Objects.equals(subGroupTag, PRIVATE) ? View.VISIBLE : View.GONE);
             }
         });
 
@@ -101,6 +106,31 @@ public class SelectActionDialog extends BottomSheetDialog {
             public void afterTextChanged(Editable s) {
                 search();
             }
+        });
+
+        binding.pasteButton.setOnClickListener(v -> {
+            if (copyObject == null) return;
+            if (groupType == GroupType.TASK && copyObject instanceof Task copy) {
+                Object o = subGroupMap.get(subGroupTag);
+                if (o instanceof Task parent) {
+                    parent.addTask(copy);
+                } else if (o instanceof String tag) {
+                    if (GLOBAL.equals(tag)) {
+                        Saver.getInstance().saveTask(copy);
+                    }
+                }
+            } else if (groupType == GroupType.VARIABLE && copyObject instanceof Variable copy) {
+                Object o = subGroupMap.get(subGroupTag);
+                if (o instanceof Task parent) {
+                    parent.addVariable(copy);
+                } else if (o instanceof String tag) {
+                    if (GLOBAL.equals(tag)) {
+                        Saver.getInstance().saveVar(copy);
+                    }
+                }
+            }
+            adapter.addData(copyObject);
+            setCopyObject(null);
         });
 
         binding.searchButton.setOnClickListener(v -> {
@@ -222,41 +252,53 @@ public class SelectActionDialog extends BottomSheetDialog {
 
     protected Map<String, List<Object>> getGroupData(GroupType groupType) {
         Map<String, List<Object>> map = new LinkedHashMap<>();
+        subGroupMap.clear();
         switch (groupType) {
             case PRESET -> {
                 for (ActionMap.ActionGroupType actionGroupType : ActionMap.ActionGroupType.values()) {
                     List<Object> types = new ArrayList<>(ActionMap.getTypes(actionGroupType));
                     map.put(actionGroupType.getName(), types);
+                    subGroupMap.put(actionGroupType.getName(), actionGroupType.getName());
                 }
             }
             case TASK -> {
                 // 私有任务
                 List<Object> privateTasks = new ArrayList<>(task.getTasks());
                 map.put(PRIVATE, privateTasks);
+                subGroupMap.put(PRIVATE, task);
 
                 // 公共任务
                 List<Object> publicTasks = new ArrayList<>(Saver.getInstance().getTasks());
                 map.put(GLOBAL, publicTasks);
+                subGroupMap.put(GLOBAL, GLOBAL);
 
                 // 父任务
                 Task parent = task.getParent();
                 while (parent != null) {
                     List<Object> list = new ArrayList<>(parent.getTasks());
-                    if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
+                    if (!list.isEmpty()) {
+                        map.put(PARENT_PREFIX + parent.getTitle(), list);
+                        subGroupMap.put(PARENT_PREFIX + parent.getTitle(), parent);
+                    }
                     parent = parent.getParent();
                 }
             }
             case VARIABLE -> {
                 List<Object> privateVars = new ArrayList<>(task.getVariables());
                 map.put(PRIVATE, privateVars);
+                subGroupMap.put(PRIVATE, task);
 
                 List<Object> publicVars = new ArrayList<>(Saver.getInstance().getVars());
                 map.put(GLOBAL, publicVars);
+                subGroupMap.put(GLOBAL, GLOBAL);
 
                 Task parent = task.getParent();
                 while (parent != null) {
                     List<Object> list = new ArrayList<>(parent.getVariables());
-                    if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
+                    if (!list.isEmpty()) {
+                        map.put(PARENT_PREFIX + parent.getTitle(), list);
+                        subGroupMap.put(PARENT_PREFIX + parent.getTitle(), parent);
+                    }
                     parent = parent.getParent();
                 }
             }
@@ -284,6 +326,18 @@ public class SelectActionDialog extends BottomSheetDialog {
             dataMap = new HashMap<>();
             dataMap.put(text.toString(), data);
             refreshSubGroup(dataMap);
+        }
+    }
+
+    public void setCopyObject(Object object) {
+        copyObject = object;
+
+        binding.pasteButton.setVisibility(View.GONE);
+        if (groupType == GroupType.TASK && object instanceof Task) {
+            binding.pasteButton.setVisibility(View.VISIBLE);
+        }
+        if (groupType == GroupType.VARIABLE && object instanceof Variable) {
+            binding.pasteButton.setVisibility(View.VISIBLE);
         }
     }
 

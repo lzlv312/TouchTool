@@ -60,4 +60,9 @@ public class PinRightCustomView extends PinCustomView {
     public ViewGroup getWidgetBox() {
         return binding.pinBox;
     }
+
+    @Override
+    public Button getCopyAndPasteButton() {
+        return null;
+    }
 }

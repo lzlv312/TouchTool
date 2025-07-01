@@ -142,6 +142,7 @@ import top.bogey.touch_tool.bean.action.system.ShareToAction;
 import top.bogey.touch_tool.bean.action.system.StopRingtoneAction;
 import top.bogey.touch_tool.bean.action.system.SwitchCaptureAction;
 import top.bogey.touch_tool.bean.action.system.SwitchScreenAction;
+import top.bogey.touch_tool.bean.action.system.SystemKeyAction;
 import top.bogey.touch_tool.bean.action.system.TextToSpeechAction;
 import top.bogey.touch_tool.bean.action.system.WriteToClipboardAction;
 import top.bogey.touch_tool.bean.action.task.CustomEndAction;
@@ -201,6 +202,7 @@ public class ActionInfo {
     private final static ActionInfo OPEN_URI_SCHEME_INFO = new ActionInfo(ActionType.OPEN_URI_SCHEME, OpenUriSchemeAction.class, R.drawable.icon_link, R.string.open_uri_scheme_action, R.string.open_uri_scheme_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SHELL_INFO = new ActionInfo(ActionType.SHELL, ExecuteShellAction.class, R.drawable.icon_terminal, R.string.execute_shell_action, R.string.execute_shell_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SHARE_TO_INFO = new ActionInfo(ActionType.SHARE_TO, ShareToAction.class, R.drawable.icon_share, R.string.share_to_action, R.string.share_to_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SYSTEM_KEY_INFO = new ActionInfo(ActionType.SYSTEM_KEY, SystemKeyAction.class, R.drawable.icon_keyboard, R.string.system_key_action, R.string.system_key_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo PLAY_RINGTONE_INFO = new ActionInfo(ActionType.PLAY_RINGTONE, PlayRingtoneAction.class, R.drawable.icon_notification_active, R.string.play_ringtone_action, R.string.play_ringtone_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STOP_RINGTONE_INFO = new ActionInfo(ActionType.STOP_RINGTONE, StopRingtoneAction.class, R.drawable.icon_notification_off, R.string.stop_ringtone_action, R.string.stop_ringtone_action_desc, 0, NormalActionCard.class);
@@ -390,6 +392,7 @@ public class ActionInfo {
             case OPEN_URI_SCHEME -> OPEN_URI_SCHEME_INFO;
             case SHELL -> SHELL_INFO;
             case SHARE_TO -> SHARE_TO_INFO;
+            case SYSTEM_KEY -> SYSTEM_KEY_INFO;
 
             case PLAY_RINGTONE -> PLAY_RINGTONE_INFO;
             case STOP_RINGTONE -> STOP_RINGTONE_INFO;

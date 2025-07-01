@@ -61,6 +61,7 @@ public class MarkTargetFloatView extends AppCompatImageView implements FloatInte
         this.targetArea = targetArea;
         int width = targetArea.width() + PADDING * 2;
         int height = targetArea.height() + PADDING * 2;
+        if (width <= 0 || height <= 0) return;
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.translate(PADDING - targetArea.left, PADDING - targetArea.top);

@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_action;
 
-import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog.GLOBAL_FLAG;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,12 +74,10 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
 
     public static String getObjectTitle(Object object) {
         if (object instanceof Task task) {
-            String globalFlag = task.getParent() == null ? GLOBAL_FLAG : "";
-            return globalFlag + task.getTitle();
+            return task.getTitle();
         }
         if (object instanceof Variable var) {
-            String globalFlag = var.getParent() == null ? GLOBAL_FLAG : "";
-            return globalFlag + var.getTitle();
+            return var.getTitle();
         }
         if (object instanceof ActionType actionType) {
             ActionInfo info = ActionInfo.getActionInfo(actionType);
@@ -109,7 +105,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
     @DrawableRes
     public static int getObjectIcon(Object object) {
         if (object instanceof Task) return R.drawable.icon_assignment;
-        if (object instanceof Variable) return R.drawable.icon_upload;
+        if (object instanceof Variable) return R.drawable.icon_note_stack;
         if (object instanceof ActionType actionType) {
             ActionInfo info = ActionInfo.getActionInfo(actionType);
             if (info != null) {
@@ -165,6 +161,11 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
         this.data = data;
         if (sort) AppUtil.chineseSort(data, SelectActionItemRecyclerViewAdapter::getObjectTitle);
         notifyDataSetChanged();
+    }
+
+    public void addData(Object object) {
+        data.add(object);
+        notifyItemInserted(data.size() - 1);
     }
 
     private void deleteSameObject(Object object) {
@@ -261,19 +262,13 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 if (object instanceof Task task) {
                     Task copy = task.newCopy();
                     copy.setTitle(context.getString(R.string.copy_title, task.getTitle()));
-                    if (task.getParent() != null) task.getParent().addTask(copy);
-                    copy.save();
-                    data.add(index + 1, copy);
-                    notifyItemInserted(index + 1);
+                    dialog.setCopyObject(copy);
                 }
 
                 if (object instanceof Variable var) {
                     Variable copy = var.newCopy();
                     copy.setTitle(context.getString(R.string.copy_title, var.getTitle()));
-                    if (var.getParent() != null) var.getParent().addVariable(copy);
-                    copy.save();
-                    data.add(index + 1, copy);
-                    notifyItemInserted(index + 1);
+                    dialog.setCopyObject(copy);
                 }
             });
 
@@ -385,6 +380,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             binding.getRoot().setEnabled(true);
             binding.settingButton.setVisibility(View.GONE);
             if (object instanceof Task task) {
+
                 binding.copyButton.setVisibility(View.VISIBLE);
                 binding.editButton.setVisibility(View.VISIBLE);
                 Task taskParent = task.getParentTask(dialog.task.getId());
@@ -392,6 +388,9 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
 
                 binding.settingButton.setVisibility(View.VISIBLE);
 
+                if (task.getParent() == null) {
+                    binding.icon.setImageResource(R.drawable.icon_network);
+                }
 
                 if (task.getActions(CustomStartAction.class).isEmpty()) {
                     binding.getRoot().setEnabled(false);
@@ -408,6 +407,10 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 binding.helpButton.setVisibility(View.VISIBLE);
 
                 binding.helpButton.setIconResource(R.drawable.icon_download);
+
+                if (var.getParent() == null) {
+                    binding.icon.setImageResource(R.drawable.icon_network);
+                }
 
                 binding.varBox.setVisibility(View.VISIBLE);
                 PinInfo pinInfo = var.getKeyPinInfo();

@@ -159,6 +159,10 @@
     <string name="execute_shell_action_output">输出</string>
     <string name="execute_shell_action_else">未达成</string>
 
+    <string name="system_key_action">模拟按键</string>
+    <string name="system_key_action_desc">模拟系统按键功能</string>
+    <string name="system_key_action_key">按键</string>
+
     <string name="play_ringtone_action">播放铃声</string>
     <string name="play_ringtone_action_desc">播放选定的铃声</string>
     <string name="play_ringtone_action_ringtone">铃声</string>

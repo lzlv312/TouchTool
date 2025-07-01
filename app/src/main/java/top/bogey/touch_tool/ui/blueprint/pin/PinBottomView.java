@@ -43,4 +43,9 @@ public class PinBottomView extends PinView {
     public ViewGroup getWidgetBox() {
         return binding.pinBox;
     }
+
+    @Override
+    public Button getCopyAndPasteButton() {
+        return null;
+    }
 }

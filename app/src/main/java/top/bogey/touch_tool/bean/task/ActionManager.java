@@ -18,7 +18,7 @@ public class ActionManager implements IActionManager {
         List<Action> list = new ArrayList<>(actions);
         actions.clear();
         for (Action action : list) {
-            Action copy = action.newCopy();
+            Action copy = action.copy();
             actions.add(copy);
         }
     }

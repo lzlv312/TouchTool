@@ -20,10 +20,11 @@ public class VariableManager implements IVariableManager {
     }
 
     public void setNewParent(Task parent) {
+        this.parent = parent;
         List<Variable> list = new ArrayList<>(vars);
         vars.clear();
         for (Variable variable : list) {
-            Variable copy = variable.newCopy();
+            Variable copy = variable.copy();
             copy.setParent(parent);
             vars.add(copy);
         }

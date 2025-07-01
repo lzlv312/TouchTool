@@ -108,21 +108,21 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
+            <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                app:flexWrap="wrap">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/editButton"
                     style="@style/Theme.TouchTool.IconButton"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:icon="@drawable/icon_edit" />
 
                 <com.google.android.material.button.MaterialButton
@@ -130,7 +130,7 @@
                     style="@style/Theme.TouchTool.IconButton"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:icon="@drawable/icon_copy" />
 
                 <com.google.android.material.button.MaterialButton
@@ -138,10 +138,10 @@
                     style="@style/Theme.TouchTool.IconButton"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:icon="@drawable/icon_setting" />
 
-            </LinearLayout>
+            </com.google.android.flexbox.FlexboxLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteButton"
@@ -150,7 +150,7 @@
                 android:layout_height="32dp"
                 android:backgroundTint="@color/fill_button_background_error_check"
                 android:checkable="true"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:icon="@drawable/icon_delete"
                 app:iconTint="@color/button_container_check" />
         </LinearLayout>

@@ -272,8 +272,8 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
     public Task copy() {
         Task copy = GsonUtil.copy(this, Task.class);
         copy.parent = parent;
-        taskManager.setParent(copy);
-        variableManager.setParent(copy);
+        copy.taskManager.setParent(copy);
+        copy.variableManager.setParent(copy);
         return copy;
     }
 
@@ -282,9 +282,9 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         Task copy = copy();
         copy.setId(UUID.randomUUID().toString());
         copy.parent = null;
-        actionManager.newCopy();
-        taskManager.setNewParent(copy);
-        variableManager.setNewParent(copy);
+        copy.actionManager.newCopy();
+        copy.taskManager.setNewParent(copy);
+        copy.variableManager.setNewParent(copy);
         return copy;
     }
 

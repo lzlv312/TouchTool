@@ -46,6 +46,8 @@ public enum ActionType {
     SHELL,
     SHARE_TO,
 
+    SYSTEM_KEY,
+
     PLAY_RINGTONE,
     STOP_RINGTONE,
     TEXT_TO_SPEECH,

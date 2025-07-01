@@ -62,6 +62,11 @@ public class PinLeftCustomView extends PinCustomView {
     }
 
     @Override
+    public Button getCopyAndPasteButton() {
+        return null;
+    }
+
+    @Override
     public void refreshPin() {
         super.refreshPin();
         binding.pinBox.setVisibility(pin.isLinked() ? GONE : VISIBLE);

@@ -20,10 +20,11 @@ public class TaskManager implements ITaskManager {
     }
 
     public void setNewParent(Task parent) {
+        this.parent = parent;
         List<Task> list = new ArrayList<>(tasks);
         tasks.clear();
         for (Task task : list) {
-            Task copy = task.newCopy();
+            Task copy = task.copy();
             copy.setParent(parent);
             tasks.add(copy);
         }

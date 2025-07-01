@@ -10,7 +10,7 @@
         style="@style/Theme.TouchTool.IconButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        app:icon="@drawable/icon_refresh"
+        app:icon="@drawable/icon_shuffle"
         app:iconSize="16dp" />
 
     <com.google.android.material.button.MaterialButton

@@ -61,6 +61,7 @@ public class ActionMap {
                     ActionType.OPEN_URI_SCHEME,
                     ActionType.SHELL,
                     ActionType.SHARE_TO,
+                    ActionType.SYSTEM_KEY,
 
                     ActionType.PLAY_RINGTONE,
                     ActionType.STOP_RINGTONE,
