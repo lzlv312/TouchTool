@@ -32,4 +32,14 @@ public enum PinType {
     APP,
     APPS,
     ;
+
+    public int getGroup() {
+        return switch (this) {
+            case NONE, EXECUTE, ADD -> -1;
+            case PARAM -> 0;
+            case LIST, APPS -> 2;
+            case MAP -> 3;
+            default -> 1;
+        };
+    }
 }

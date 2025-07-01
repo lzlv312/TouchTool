@@ -76,11 +76,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/addButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 app:icon="@drawable/icon_add"
-                app:iconSize="16dp" />
+                app:iconSize="20dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"

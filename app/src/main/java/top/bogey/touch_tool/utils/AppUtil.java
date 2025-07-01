@@ -339,7 +339,7 @@ public class AppUtil {
 
         File file = new File(fileParent, fileName);
         if (!file.exists()) {
-            if (!fileParent.mkdirs()) return null;
+            if (!fileParent.exists() && !fileParent.mkdirs()) return null;
             try {
                 if (!file.createNewFile()) return null;
             } catch (IOException e) {

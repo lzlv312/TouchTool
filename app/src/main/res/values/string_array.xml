@@ -115,10 +115,27 @@
         <item>Root模式</item>
     </string-array>
 
+    <string-array name="notification_type">
+        <item>无障碍</item>
+        <item>通知服务</item>
+    </string-array>
+
     <string-array name="manual_play_type">
         <item>不启用</item>
         <item>解锁后</item>
         <item>全场景</item>
+    </string-array>
+
+    <string-array name="manual_play_pause_type">
+        <item>暂停/停止</item>
+        <item>停止/暂停</item>
+    </string-array>
+
+    <string-array name="manual_play_hide_type">
+        <item>隐藏一次</item>
+        <item>当前应用</item>
+        <item>隐藏三分钟</item>
+        <item>手动选择</item>
     </string-array>
 
     <string-array name="capture_type">

@@ -3,6 +3,7 @@ package top.bogey.touch_tool.service.receiver;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -24,6 +25,7 @@ import top.bogey.touch_tool.ui.InstantActivity;
 public class SystemEventReceiver extends BroadcastReceiver {
     private final Context context;
     private ConnectivityManager.NetworkCallback networkCallback;
+    private ClipboardManager.OnPrimaryClipChangedListener clipboardListener;
 
     public SystemEventReceiver(Context context) {
         this.context = context;

@@ -63,7 +63,7 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         createTime = GsonUtil.getAsLong(jsonObject, "createTime", System.currentTimeMillis());
 
         actionManager = GsonUtil.getAsObject(jsonObject, "actionManager", ActionManager.class, new ActionManager());
-        actionManager.filteNullAction();
+        actionManager.filterNullAction();
 
         taskManager = GsonUtil.getAsObject(jsonObject, "taskManager", TaskManager.class, new TaskManager(this));
         taskManager.setParent(this);
@@ -282,6 +282,9 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         Task copy = copy();
         copy.setId(UUID.randomUUID().toString());
         copy.parent = null;
+        actionManager.newCopy();
+        taskManager.setNewParent(copy);
+        variableManager.setNewParent(copy);
         return copy;
     }
 
@@ -296,10 +299,10 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         action.execute(runnable, null);
     }
 
-    public void execute(TaskRunnable runnable, ExecuteTaskAction startAction, Map<String, PinObject> params) {
+    public void execute(TaskRunnable runnable, ExecuteTaskAction startAction, Map<String, PinObject> params, boolean justCall) {
         Task copy = copy();
         this.startAction = startAction;
-        for (Action action : getActions(CustomStartAction.class)) {
+        for (Action action : copy.getActions(CustomStartAction.class)) {
             ((CustomStartAction) action).setParams(params);
             runnable.pushStack(copy, action);
             action.execute(runnable, null);

@@ -49,12 +49,12 @@ public class ParseJsonAction extends CalculateAction implements SyncAction {
             if (jsonString.startsWith("{")) {
                 Map<String, Object> map = gson.fromJson(jsonString, new TypeToken<Map<String, Object>>() {
                 }.getType());
-                PinBase pinBase = parseValue(map);
+                PinBase pinBase = PinBase.parseValue(map);
                 resultPin.setValue(pinBase);
             } else if (jsonString.startsWith("[")) {
                 List<Object> list = gson.fromJson(jsonString, new TypeToken<List<Object>>() {
                 }.getType());
-                PinBase pinBase = parseValue(list);
+                PinBase pinBase = PinBase.parseValue(list);
                 resultPin.setValue(pinBase);
             }
         } catch (Exception ignored) {
@@ -72,72 +72,15 @@ public class ParseJsonAction extends CalculateAction implements SyncAction {
             if (json.startsWith("{")) {
                 Map<String, Object> map = gson.fromJson(json, new TypeToken<Map<String, Object>>() {
                 }.getType());
-                PinBase pinBase = parseValue(map);
+                PinBase pinBase = PinBase.parseValue(map);
                 resultPin.setValue(pinBase);
             } else if (json.startsWith("[")) {
                 List<Object> list = gson.fromJson(json, new TypeToken<List<Object>>() {
                 }.getType());
-                PinBase pinBase = parseValue(list);
+                PinBase pinBase = PinBase.parseValue(list);
                 resultPin.setValue(pinBase);
             }
         } catch (Exception ignored) {
-        }
-    }
-
-    private static PinBase parseValue(Object value) {
-        if (value instanceof Map) {
-            Map<String, Object> map = (Map<String, Object>) value;
-            PinMap pinMap = new PinMap();
-            map.forEach((key, v) -> {
-                PinBase pinKey = parseValue(key);
-                PinBase pinValue = parseValue(v);
-                if (pinMap.isDynamic()) {
-                    pinMap.setKeyType(getTypeValue((PinObject) pinKey));
-                    pinMap.setValueType(getTypeValue((PinObject) pinValue));
-                }
-                pinMap.put(new PinString(key), (PinObject) parseValue(v));
-            });
-            return pinMap;
-        } else if (value instanceof List<?> list) {
-            PinList pinList = new PinList();
-            for (Object v : list) {
-                PinBase pinValue = parseValue(v);
-                if (pinList.isDynamic()) {
-                    pinList.setValueType(getTypeValue((PinObject) pinValue));
-                }
-                pinList.add((PinObject) pinValue);
-            }
-            return pinList;
-        } else if (value instanceof String str) {
-            return new PinString(str);
-        } else if (value instanceof Number num) {
-            return new PinDouble(num.doubleValue());
-        } else if (value instanceof Boolean bool) {
-            return new PinBoolean(bool);
-        } else {
-            return new PinString(value.toString());
-        }
-    }
-
-    private static PinObject getTypeValue(PinObject pinObject) {
-        if (pinObject instanceof PinMap pinMap) {
-            for (Map.Entry<PinObject, PinObject> entry : pinMap.entrySet()) {
-                PinObject key = entry.getKey();
-                PinObject value = entry.getValue();
-                PinObject keyType = getTypeValue(key);
-                PinObject valueType = getTypeValue(value);
-                return new PinMap(keyType, valueType);
-            }
-            return new PinMap();
-        } else if (pinObject instanceof PinList pinList) {
-            for (PinObject value : pinList) {
-                PinObject valueType = getTypeValue(value);
-                return new PinList(valueType);
-            }
-            return new PinList();
-        } else {
-            PinInfo pinInfo = PinInfo.getPinInfo(pinObject);
-            return (PinObject) pinInfo.newInstance();
         }
     }
 

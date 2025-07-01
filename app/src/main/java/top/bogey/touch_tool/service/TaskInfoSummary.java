@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import top.bogey.touch_tool.MainApplication;
@@ -241,8 +242,8 @@ public class TaskInfoSummary {
         return notification;
     }
 
-    public void setNotification(String packageName, String title, String content) {
-        notification = new Notification(packageName, title, content);
+    public void setNotification(String packageName, Map<String, String> content) {
+        notification = new Notification(packageName, content);
         tryStartActions(NotificationStartAction.class);
     }
 
@@ -286,7 +287,7 @@ public class TaskInfoSummary {
     public record PackageActivity(String packageName, String activityName) {
     }
 
-    public record Notification(String packageName, String title, String content) {
+    public record Notification(String packageName, Map<String, String> content) {
     }
 
     public record BatteryInfo(int percent, BatteryState status) {

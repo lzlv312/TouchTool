@@ -12,6 +12,8 @@ import java.io.OutputStreamWriter;
 import top.bogey.touch_tool.service.super_user.CmdResult;
 
 public class ShizukuService extends IShizukuService.Stub {
+    private final static String EXIT_MARKER = "EXIT_MARKER";
+
     private Process process = null;
     private BufferedWriter cmdWriter = null;
     private BufferedReader outputReader = null;
@@ -19,7 +21,7 @@ public class ShizukuService extends IShizukuService.Stub {
 
     public ShizukuService() {
         try {
-            process = Runtime.getRuntime().exec("su");
+            process = Runtime.getRuntime().exec("sh");
             cmdWriter = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
             outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
@@ -56,14 +58,14 @@ public class ShizukuService extends IShizukuService.Stub {
 
         try {
             cmdWriter.write(cmd + "\n");
-            cmdWriter.write("echo $?\n");
+            cmdWriter.write("echo " + EXIT_MARKER + ":$?\n");
             cmdWriter.flush();
 
             StringBuilder output = new StringBuilder();
             String line;
             while ((line = outputReader.readLine()) != null) {
-                if (line.matches("^[0-9]+$")) {
-                    int exitCode = Integer.parseInt(line);
+                if (line.startsWith(EXIT_MARKER)) {
+                    int exitCode = Integer.parseInt(line.substring(EXIT_MARKER.length() + 1));
                     return new CmdResult(exitCode == 0, output.toString().trim());
                 }
                 output.append(line).append("\n");

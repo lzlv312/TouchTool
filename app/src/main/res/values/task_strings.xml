@@ -26,6 +26,7 @@
     <string name="notification_start_action_match">匹配文本</string>
     <string name="notification_start_action_notify_app">通知应用</string>
     <string name="notification_start_action_notify_text">通知文本</string>
+    <string name="notification_start_action_notify_value">通知详情</string>
 
     <string name="network_start_action">网络状态变更时执行</string>
     <string name="network_start_action_state">网络</string>

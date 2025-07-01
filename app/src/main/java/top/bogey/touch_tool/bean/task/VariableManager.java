@@ -19,6 +19,16 @@ public class VariableManager implements IVariableManager {
         }
     }
 
+    public void setNewParent(Task parent) {
+        List<Variable> list = new ArrayList<>(vars);
+        vars.clear();
+        for (Variable variable : list) {
+            Variable copy = variable.newCopy();
+            copy.setParent(parent);
+            vars.add(copy);
+        }
+    }
+
     @Override
     public boolean addVariable(Variable variable) {
         Variable var = getVariable(variable.getId());

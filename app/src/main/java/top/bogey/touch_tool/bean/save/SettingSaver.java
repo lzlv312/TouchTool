@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import top.bogey.touch_tool.service.KeepAliveService;
+import top.bogey.touch_tool.service.notification.NotificationService;
 
 public class SettingSaver {
     private static SettingSaver instance;
@@ -51,6 +52,7 @@ public class SettingSaver {
     private static final String BOOT_COMPLETED_AUTO_START = "BOOT_COMPLETED_AUTO_START";                // 开机自启动
 
     private static final String SUPER_USER_TYPE = "SUPER_USER_TYPE";                                    // 超级用户
+    private static final String NOTIFICATION_TYPE = "NOTIFICATION_TYPE";                                // 通知来源
     private static final String EXACT_ALARM = "EXACT_ALARM";                                            // 精确定时
     private static final String BLUETOOTH = "BLUETOOTH";                                                // 蓝牙监听
 
@@ -61,8 +63,14 @@ public class SettingSaver {
     private static final String SUPPORT_FREE_FORM = "SUPPORT_FREE_FORM";                                // 小窗支持
     private static final String NIGHT_MODE_TYPE = "NIGHT_MODE_TYPE";                                    // 深色模式
     private static final String DYNAMIC_COLOR = "DYNAMIC_COLOR";                                        // 动态颜色
+
     private static final String MANUAL_PLAY_SHOW_TYPE = "MANUAL_PLAY_SHOW_TYPE";                        // 手动执行什么时候显示
+    private static final String MANUAL_PLAY_PAUSE_TYPE = "MANUAL_PLAY_PAUSE_TYPE";                      // 手动执行暂停模式
+    private static final String MANUAL_PLAY_HIDE_TYPE = "MANUAL_PLAY_HIDE_TYPE";                        // 手动执行什么时候隐藏
     private static final String MANUAL_PLAY_VIEW_PADDING = "MANUAL_PLAY_VIEW_PADDING";                  // 手动执行悬浮窗偏移
+    private static final String MANUAL_PLAY_VIEW_EXPAND_SIZE = "MANUAL_PLAY_VIEW_EXPAND_SIZE";          // 手动执行悬浮窗按钮容纳文本数量
+    private static final String MANUAL_PLAY_VIEW_CLOSE_SIZE = "MANUAL_PLAY_VIEW_CLOSE_SIZE";            // 手动执行悬浮窗按钮收起时宽度
+    private static final String MANUAL_PLAY_VIEW_SINGLE_SIZE = "MANUAL_PLAY_VIEW_SINGLE_SIZE";          // 手动执行悬浮窗独立按钮宽度
 
     private static final MMKV mmkv = MMKV.defaultMMKV();
 
@@ -199,6 +207,16 @@ public class SettingSaver {
         mmkv.encode(SUPER_USER_TYPE, type);
     }
 
+    public int getNotificationType() {
+        int type = mmkv.decodeInt(NOTIFICATION_TYPE, 0);
+        if (type == 1) type = NotificationService.isEnabled() ? 1 : 0;
+        return type;
+    }
+
+    public void setNotificationType(int type) {
+        mmkv.encode(NOTIFICATION_TYPE, type);
+    }
+
     public boolean isExactAlarmEnabled() {
         return mmkv.decodeBool(EXACT_ALARM, false);
     }
@@ -275,6 +293,22 @@ public class SettingSaver {
         mmkv.encode(MANUAL_PLAY_SHOW_TYPE, type);
     }
 
+    public int getManualPlayPauseType() {
+        return mmkv.decodeInt(MANUAL_PLAY_PAUSE_TYPE, 0);
+    }
+
+    public void setManualPlayPauseType(int type) {
+        mmkv.encode(MANUAL_PLAY_PAUSE_TYPE, type);
+    }
+
+    public int getManualPlayHideType() {
+        return mmkv.decodeInt(MANUAL_PLAY_HIDE_TYPE, 0);
+    }
+
+    public void setManualPlayHideType(int type) {
+        mmkv.encode(MANUAL_PLAY_HIDE_TYPE, type);
+    }
+
     public int getManualPlayViewPadding() {
         return mmkv.decodeInt(MANUAL_PLAY_VIEW_PADDING, 0);
     }
@@ -283,4 +317,27 @@ public class SettingSaver {
         mmkv.encode(MANUAL_PLAY_VIEW_PADDING, padding);
     }
 
+    public int getManualPlayViewExpandSize() {
+        return mmkv.decodeInt(MANUAL_PLAY_VIEW_EXPAND_SIZE, 1);
+    }
+
+    public void setManualPlayViewExpandSize(int size) {
+        mmkv.encode(MANUAL_PLAY_VIEW_EXPAND_SIZE, size);
+    }
+
+    public int getManualPlayViewCloseSize() {
+        return mmkv.decodeInt(MANUAL_PLAY_VIEW_CLOSE_SIZE, 1);
+    }
+
+    public void setManualPlayViewCloseSize(int size) {
+        mmkv.encode(MANUAL_PLAY_VIEW_CLOSE_SIZE, size);
+    }
+
+    public int getManualPlayViewSingleSize() {
+        return mmkv.decodeInt(MANUAL_PLAY_VIEW_SINGLE_SIZE, 1);
+    }
+
+    public void setManualPlayViewSingleSize(int size) {
+        mmkv.encode(MANUAL_PLAY_VIEW_SINGLE_SIZE, size);
+    }
 }

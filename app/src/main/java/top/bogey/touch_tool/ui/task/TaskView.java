@@ -170,6 +170,7 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         binding.copyButton.setOnClickListener(v -> {
             selected.forEach(id -> {
                 Task task = Saver.getInstance().getTask(id);
+                if (task == null) return;
                 Task copy = task.newCopy();
                 copy.setTitle(getString(R.string.copy_title, task.getTitle()));
                 copy.save();
@@ -217,6 +218,7 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         binding.bottomBar.setVisibility(View.VISIBLE);
 
         selecting = true;
+        selected.clear();
         callback.setEnabled(true);
     }
 
@@ -227,6 +229,7 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         binding.bottomBar.setVisibility(View.GONE);
 
         selecting = false;
+        selected.clear();
         callback.setEnabled(false);
     }
 

@@ -63,9 +63,13 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
         });
 
         binding.saveButton.setOnClickListener(v -> {
-            area.offset(location[0], location[1]);
-            Bitmap bitmap = DisplayUtil.safeClipBitmap(screenInfo.getScreenShot(), area.left, area.top, area.width(), area.height());
-            callback.onResult(bitmap);
+            if (area.isEmpty()) {
+                callback.onResult(null);
+            } else {
+                area.offset(location[0], location[1]);
+                Bitmap bitmap = DisplayUtil.safeClipBitmap(screenInfo.getScreenShot(), area.left, area.top, area.width(), area.height());
+                callback.onResult(bitmap);
+            }
             dismiss();
         });
 

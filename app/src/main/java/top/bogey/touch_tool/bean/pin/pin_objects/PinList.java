@@ -73,20 +73,22 @@ public class PinList extends PinObject implements List<PinObject> {
 
     @Override
     public boolean linkFromAble(PinBase pin) {
-        if (pin.isDynamic()) return true;
-        if (pin instanceof PinList pinList) {
-            if (isDynamic()) return true;
-            return getValueType().linkFromAble(pinList.getValueType());
+        if (getType().getGroup() == pin.getType().getGroup()) {
+            if (isDynamic() || pin.isDynamic()) return true;
+            if (pin instanceof PinList pinList) {
+                return getValueType().linkFromAble(pinList.getValueType());
+            }
         }
         return false;
     }
 
     @Override
     public boolean linkToAble(PinBase pin) {
-        if (pin.isDynamic()) return true;
-        if (pin instanceof PinList pinList) {
-            if (isDynamic()) return true;
-            return getValueType().linkToAble(pinList.getValueType());
+        if (getType().getGroup() == pin.getType().getGroup()) {
+            if (isDynamic() || pin.isDynamic()) return true;
+            if (pin instanceof PinList pinList) {
+                return getValueType().linkFromAble(pinList.getValueType());
+            }
         }
         return false;
     }

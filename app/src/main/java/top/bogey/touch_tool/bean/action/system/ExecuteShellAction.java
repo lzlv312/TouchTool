@@ -42,7 +42,7 @@ public class ExecuteShellAction extends ExecuteAction {
                 outputPin.getValue(PinString.class).setValue(cmdResult.getOutput());
             }
             if (cmdResult != null && cmdResult.getResult()) {
-                executeNext(runnable, outputPin);
+                executeNext(runnable, outPin);
                 return;
             }
         }

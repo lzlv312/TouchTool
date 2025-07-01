@@ -3,6 +3,7 @@ package top.bogey.touch_tool.ui.play;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -15,15 +16,18 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatPlayItemBinding;
 import top.bogey.touch_tool.service.ITaskListener;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.utils.DisplayUtil;
 
 @SuppressLint("ViewConstructor")
 public class PlayFloatItemView extends FrameLayout implements ITaskListener {
     protected final FloatPlayItemBinding binding;
+    protected int size;
 
     protected Task task;
     protected StartAction startAction;
@@ -35,14 +39,18 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
     public PlayFloatItemView(@NonNull Context context, Task task, StartAction action) {
         super(context);
         binding = FloatPlayItemBinding.inflate(LayoutInflater.from(context), this, true);
+        size = SettingSaver.getInstance().getManualPlayViewExpandSize();
+        int pauseType = SettingSaver.getInstance().getManualPlayPauseType();
+
         this.task = task;
         this.startAction = action;
 
         binding.title.setText(getTitle(task, action));
 
-        binding.playButton.setOnClickListener(v -> {
+        binding.getRoot().setOnClickListener(v -> {
             if (playing) {
-                pause();
+                if (pauseType == 0) pause();
+                else stop();
             } else {
                 if (!resume()) {
                     MainAccessibilityService service = MainApplication.getInstance().getService();
@@ -52,10 +60,16 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
             }
         });
 
-        binding.playButton.setOnLongClickListener(v -> {
-            stop();
+        binding.getRoot().setOnLongClickListener(v -> {
+            if (pauseType == 0) stop();
+            else pause();
             return true;
         });
+
+        binding.circleProgress.setVisibility(View.GONE);
+        binding.lineProgress.setVisibility(View.GONE);
+        DisplayUtil.setViewWidth(binding.lineProgress, (int) DisplayUtil.dp2px(context, 8 + 8 * size));
+        DisplayUtil.setViewWidth(binding.cardLayout, (int) DisplayUtil.dp2px(context, 20 + 8 * size));
     }
 
     public boolean check(Task task, StartAction startAction) {
@@ -74,14 +88,20 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         runnable.pause();
         playing = false;
 
-        binding.playButton.setIndeterminate(false);
+        binding.circleProgress.setIndeterminate(false);
+        binding.lineProgress.setIndeterminate(false);
+        binding.circleProgress.setVisibility(View.GONE);
+        binding.lineProgress.setVisibility(View.GONE);
         binding.icon.setIconResource(R.drawable.icon_play);
     }
 
     private void setPlaying() {
         playing = true;
 
-        binding.playButton.setIndeterminate(true);
+        binding.circleProgress.setIndeterminate(true);
+        binding.lineProgress.setIndeterminate(true);
+        binding.circleProgress.setVisibility(size == 1 ? View.VISIBLE : View.GONE);
+        binding.lineProgress.setVisibility(size == 1 ? View.GONE : View.VISIBLE);
         binding.icon.setIconResource(R.drawable.icon_pause);
     }
 
@@ -98,7 +118,10 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         runnable = null;
         playing = false;
 
-        binding.playButton.setIndeterminate(false);
+        binding.circleProgress.setIndeterminate(false);
+        binding.lineProgress.setIndeterminate(false);
+        binding.circleProgress.setVisibility(View.GONE);
+        binding.lineProgress.setVisibility(View.GONE);
         binding.icon.setIconResource(0);
         binding.title.setText(getTitle(task, startAction));
     }
@@ -107,12 +130,12 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         String description = action.getDescription();
         if (description == null || description.isEmpty()) description = task.getTitle();
         if (description == null || description.isEmpty()) return "?";
-        Pattern pattern = Pattern.compile("[\"|“](.*)[\"|”]");
+        Pattern pattern = Pattern.compile("[\"|“](.+)[\"|”]");
         Matcher matcher = pattern.matcher(description);
-        if (matcher.find()) {
-            return matcher.group(1);
-        }
-        return description.substring(0, 1);
+        if (matcher.find()) description = matcher.group(1);
+        if (description == null || description.isEmpty()) return "?";
+        description = description.substring(0, Math.min(size, description.length()));
+        return description;
     }
 
     @Override

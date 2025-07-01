@@ -10,8 +10,17 @@ import top.bogey.touch_tool.bean.action.Action;
 public class ActionManager implements IActionManager {
     private final List<Action> actions = new ArrayList<>();
 
-    public void filteNullAction() {
+    public void filterNullAction() {
         actions.removeIf(Objects::isNull);
+    }
+
+    public void newCopy() {
+        List<Action> list = new ArrayList<>(actions);
+        actions.clear();
+        for (Action action : list) {
+            Action copy = action.newCopy();
+            actions.add(copy);
+        }
     }
 
     @Override

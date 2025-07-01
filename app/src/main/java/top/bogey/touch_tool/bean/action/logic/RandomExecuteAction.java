@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
@@ -28,6 +29,8 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
     private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_execute, true);
     private final transient Pin completePin = new Pin(new PinExecute(), R.string.random_action_complete, true);
 
+    private final Random random = new Random();
+
     public RandomExecuteAction() {
         super(ActionType.RANDOM_LOGIC);
         addPins(timesPin, allowRepeatPin, secondPin, addPin, completePin);
@@ -47,7 +50,7 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
         List<Pin> dynamicPins = getDynamicPins();
         for (int i = 0; i < times.intValue(); i++) {
             if (runnable.isInterrupt()) break;
-            int index = (int) Math.round(Math.random() * (dynamicPins.size() - 1));
+            int index = random.nextInt(dynamicPins.size());
             if (allowRepeat.getValue()) {
                 executeNext(runnable, dynamicPins.get(index));
             } else {

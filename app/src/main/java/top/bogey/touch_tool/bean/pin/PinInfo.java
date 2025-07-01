@@ -78,59 +78,49 @@ import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidgetValueArea;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class PinInfo {
-    private final static PinInfo EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.NORMAL, PinExecute.class, ExecutePinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryVariant), 0, null, false, false);
-    private final static PinInfo ICON_EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.WITH_ICON, PinIconExecute.class, ExecutePinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryVariant), 0, PinWidgetExecute.class, false, false);
-    private final static PinInfo STRING_EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.WITH_STRING, PinStringExecute.class, ExecutePinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryVariant), 0, PinWidgetExecute.class, false, false);
+    private final static PinInfo EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.NORMAL, PinExecute.class, ExecutePinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryVariant, 0, null, false, false);
+    private final static PinInfo ICON_EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.WITH_ICON, PinIconExecute.class, ExecutePinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryVariant, 0, PinWidgetExecute.class, false, false);
+    private final static PinInfo STRING_EXECUTE_INFO = new PinInfo(PinType.EXECUTE, PinSubType.WITH_STRING, PinStringExecute.class, ExecutePinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryVariant, 0, PinWidgetExecute.class, false, false);
 
-    private final static PinInfo ADD_INFO = new PinInfo(PinType.ADD, PinSubType.NORMAL, PinAdd.class, NormalPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorSurfaceVariant), 0, PinWidgetAdd.class, false, false);
-    private final static PinInfo PARAM_INFO = new PinInfo(PinType.PARAM, PinSubType.NORMAL, PinParam.class, NormalPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), 0, null, false, false);
+    private final static PinInfo ADD_INFO = new PinInfo(PinType.ADD, PinSubType.NORMAL, PinAdd.class, NormalPinSlotView.class, 0, com.google.android.material.R.attr.colorSurfaceVariant, 0, PinWidgetAdd.class, false, false);
+    private final static PinInfo PARAM_INFO = new PinInfo(PinType.PARAM, PinSubType.NORMAL, PinParam.class, NormalPinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryInverse, 0, null, false, false);
 
-    private final static PinInfo OBJECT_INFO = new PinInfo(PinType.OBJECT, PinSubType.NORMAL, PinObject.class, NormalPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_object, null, false, false);
-    private final static PinInfo DYNAMIC_OBJECT_INFO = new PinInfo(PinType.OBJECT, PinSubType.DYNAMIC, PinObject.class, NormalPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_object, null, false, false);
+    private final static PinInfo OBJECT_INFO = new PinInfo(PinType.OBJECT, PinSubType.NORMAL, PinObject.class, NormalPinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryInverse, R.string.pin_object, null, false, false);
+    private final static PinInfo DYNAMIC_OBJECT_INFO = new PinInfo(PinType.OBJECT, PinSubType.DYNAMIC, PinObject.class, NormalPinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryInverse, R.string.pin_object, null, false, false);
 
-    private final static PinInfo LIST_INFO = new PinInfo(PinType.LIST, PinSubType.NORMAL, PinList.class, ListPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_list, null, false, false);
+    private final static PinInfo LIST_INFO = new PinInfo(PinType.LIST, PinSubType.NORMAL, PinList.class, ListPinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryInverse, R.string.pin_list, null, false, false);
 
-    private final static PinInfo MAP_INFO = new PinInfo(PinType.MAP, PinSubType.NORMAL, PinMap.class, MapPinSlotView.class, getAttrColor(com.google.android.material.R.attr.colorPrimaryInverse), R.string.pin_map, null, false, false);
+    private final static PinInfo MAP_INFO = new PinInfo(PinType.MAP, PinSubType.NORMAL, PinMap.class, MapPinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryInverse, R.string.pin_map, null, false, false);
 
-    private final static PinInfo STRING_INFO = new PinInfo(PinType.STRING, PinSubType.NORMAL, PinString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), R.string.pin_string, PinWidgetString.class, true, true);
-    private final static PinInfo URL_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.URL, PinUrlString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), R.string.pin_string_url, PinWidgetString.class, false, false);
-    private final static PinInfo SHORTCUT_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.SHORTCUT, PinShortcutString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), R.string.pin_string_shortcut, PinWidgetString.class, false, false);
-    private final static PinInfo RINGTONE_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.RINGTONE, PinRingtoneString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), R.string.pin_string_ringtone, PinWidgetString.class, true, false);
-    private final static PinInfo AUTO_PIN_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.AUTO_PIN, PinAutoPinString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), 0, PinWidgetString.class, false, false);
-    private final static PinInfo FILE_CONTENT_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.FILE_CONTENT, PinFileContentString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), R.string.pin_string_file_content, PinWidgetString.class, true, true);
-    private final static PinInfo SINGLE_LINE_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.SINGLE_LINE, PinSingleLineString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), R.string.pin_string_single_line, PinWidgetString.class, true, true);
-    private final static PinInfo NODE_PATH_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.NODE_PATH, PinNodePathString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), R.string.pin_string_node_path, PinWidgetString.class, true, true);
-    private final static PinInfo TASK_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.TASK_ID, PinTaskString.class, NormalPinSlotView.class, getColor(R.color.StringPinColor), R.string.pin_string_task, PinWidgetString.class, false, false);
-    private final static PinInfo SELECT_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.SINGLE_SELECT, PinSingleSelect.class, NormalPinSlotView.class, getColor(R.color.SelectPinColor), R.string.pin_string_select, PinWidgetSelect.class, true, true);
+    private final static PinInfo STRING_INFO = new PinInfo(PinType.STRING, PinSubType.NORMAL, PinString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string, PinWidgetString.class, true, true);
+    private final static PinInfo URL_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.URL, PinUrlString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_url, PinWidgetString.class, false, false);
+    private final static PinInfo SHORTCUT_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.SHORTCUT, PinShortcutString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_shortcut, PinWidgetString.class, false, false);
+    private final static PinInfo RINGTONE_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.RINGTONE, PinRingtoneString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_ringtone, PinWidgetString.class, true, false);
+    private final static PinInfo AUTO_PIN_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.AUTO_PIN, PinAutoPinString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, 0, PinWidgetString.class, false, false);
+    private final static PinInfo FILE_CONTENT_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.FILE_CONTENT, PinFileContentString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_file_content, PinWidgetString.class, true, true);
+    private final static PinInfo SINGLE_LINE_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.SINGLE_LINE, PinSingleLineString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_single_line, PinWidgetString.class, true, true);
+    private final static PinInfo NODE_PATH_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.NODE_PATH, PinNodePathString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_node_path, PinWidgetString.class, true, true);
+    private final static PinInfo TASK_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.TASK_ID, PinTaskString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_task, PinWidgetString.class, false, false);
+    private final static PinInfo SELECT_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.SINGLE_SELECT, PinSingleSelect.class, NormalPinSlotView.class, R.color.SelectPinColor, 0, R.string.pin_string_select, PinWidgetSelect.class, true, true);
 
-    private final static PinInfo INTEGER_INFO = new PinInfo(PinType.NUMBER, PinSubType.INTEGER, PinInteger.class, NormalPinSlotView.class, getColor(R.color.IntegerPinColor), R.string.pin_number_integer, PinWidgetNumber.class, false, true);
-    private final static PinInfo FLOAT_INFO = new PinInfo(PinType.NUMBER, PinSubType.FLOAT, PinFloat.class, NormalPinSlotView.class, getColor(R.color.FloatPinColor), R.string.pin_number_float, PinWidgetNumber.class, false, true);
-    private final static PinInfo LONG_INFO = new PinInfo(PinType.NUMBER, PinSubType.LONG, PinLong.class, NormalPinSlotView.class, getColor(R.color.LongPinColor), R.string.pin_number_long, PinWidgetNumber.class, false, true);
-    private final static PinInfo DOUBLE_INFO = new PinInfo(PinType.NUMBER, PinSubType.DOUBLE, PinDouble.class, NormalPinSlotView.class, getColor(R.color.IntegerPinColor), R.string.pin_number_double, PinWidgetNumber.class, true, true);
-    private final static PinInfo DATE_INFO = new PinInfo(PinType.NUMBER, PinSubType.DATE, PinDate.class, NormalPinSlotView.class, getColor(R.color.LongPinColor), R.string.pin_number_date, PinWidgetNumber.class, true, false);
-    private final static PinInfo TIME_INFO = new PinInfo(PinType.NUMBER, PinSubType.TIME, PinTime.class, NormalPinSlotView.class, getColor(R.color.LongPinColor), R.string.pin_number_time, PinWidgetNumber.class, true, false);
-    private final static PinInfo PERIODIC_INFO = new PinInfo(PinType.NUMBER, PinSubType.PERIODIC, PinPeriodic.class, NormalPinSlotView.class, getColor(R.color.LongPinColor), R.string.pin_number_periodic, PinWidgetNumber.class, false, false);
+    private final static PinInfo INTEGER_INFO = new PinInfo(PinType.NUMBER, PinSubType.INTEGER, PinInteger.class, NormalPinSlotView.class, R.color.IntegerPinColor, 0, R.string.pin_number_integer, PinWidgetNumber.class, false, true);
+    private final static PinInfo FLOAT_INFO = new PinInfo(PinType.NUMBER, PinSubType.FLOAT, PinFloat.class, NormalPinSlotView.class, R.color.FloatPinColor, 0, R.string.pin_number_float, PinWidgetNumber.class, false, true);
+    private final static PinInfo LONG_INFO = new PinInfo(PinType.NUMBER, PinSubType.LONG, PinLong.class, NormalPinSlotView.class, R.color.LongPinColor, 0, R.string.pin_number_long, PinWidgetNumber.class, false, true);
+    private final static PinInfo DOUBLE_INFO = new PinInfo(PinType.NUMBER, PinSubType.DOUBLE, PinDouble.class, NormalPinSlotView.class, R.color.IntegerPinColor, 0, R.string.pin_number_double, PinWidgetNumber.class, true, true);
+    private final static PinInfo DATE_INFO = new PinInfo(PinType.NUMBER, PinSubType.DATE, PinDate.class, NormalPinSlotView.class, R.color.LongPinColor, 0, R.string.pin_number_date, PinWidgetNumber.class, true, false);
+    private final static PinInfo TIME_INFO = new PinInfo(PinType.NUMBER, PinSubType.TIME, PinTime.class, NormalPinSlotView.class, R.color.LongPinColor, 0, R.string.pin_number_time, PinWidgetNumber.class, true, false);
+    private final static PinInfo PERIODIC_INFO = new PinInfo(PinType.NUMBER, PinSubType.PERIODIC, PinPeriodic.class, NormalPinSlotView.class, R.color.LongPinColor, 0, R.string.pin_number_periodic, PinWidgetNumber.class, false, false);
 
-    private final static PinInfo BOOLEAN_INFO = new PinInfo(PinType.BOOLEAN, PinSubType.NORMAL, PinBoolean.class, NormalPinSlotView.class, getColor(R.color.BooleanPinColor), R.string.pin_boolean_condition, PinWidgetBoolean.class, true, true);
-    private final static PinInfo VALUE_AREA_INFO = new PinInfo(PinType.VALUE_AREA, PinSubType.NORMAL, PinValueArea.class, NormalPinSlotView.class, getColor(R.color.ValueAreaPinColor), R.string.pin_value_area, PinWidgetValueArea.class, true, true);
-    private final static PinInfo POINT_INFO = new PinInfo(PinType.POINT, PinSubType.NORMAL, PinPoint.class, NormalPinSlotView.class, getColor(R.color.PointPinColor), R.string.pin_point, PinWidgetPoint.class, true, true);
-    private final static PinInfo AREA_INFO = new PinInfo(PinType.AREA, PinSubType.NORMAL, PinArea.class, NormalPinSlotView.class, getColor(R.color.AreaPinColor), R.string.pin_area, PinWidgetArea.class, true, true);
-    private final static PinInfo TOUCH_INFO = new PinInfo(PinType.TOUCH, PinSubType.NORMAL, PinTouchPath.class, NormalPinSlotView.class, getColor(R.color.TouchPinColor), R.string.pin_touch, PinWidgetTouch.class, true, true);
-    private final static PinInfo NODE_INFO = new PinInfo(PinType.NODE, PinSubType.NORMAL, PinNode.class, NormalPinSlotView.class, getColor(R.color.NodePinColor), R.string.pin_node, null, true, false);
-    private final static PinInfo IMAGE_INFO = new PinInfo(PinType.IMAGE, PinSubType.NORMAL, PinImage.class, NormalPinSlotView.class, getColor(R.color.ImagePinColor), R.string.pin_image, PinWidgetImage.class, true, true);
-    private final static PinInfo COLOR_INFO = new PinInfo(PinType.COLOR, PinSubType.NORMAL, PinColor.class, NormalPinSlotView.class, getColor(R.color.ColorPinColor), R.string.pin_color, PinWidgetColor.class, true, true);
-    private final static PinInfo APP_INFO = new PinInfo(PinType.APP, PinSubType.NORMAL, PinApplication.class, NormalPinSlotView.class, getColor(R.color.AppPinColor), R.string.pin_app, PinWidgetApp.class, true, false);
-    private final static PinInfo APPS_INFO = new PinInfo(PinType.APPS, PinSubType.MULTI_APP, PinApplications.class, ListPinSlotView.class, getColor(R.color.AppPinColor), R.string.pin_list_app, PinWidgetApps.class, true, false);
-
-    private static @ColorInt int getColor(@ColorRes int color) {
-        return MainApplication.getInstance().getColor(color);
-    }
-
-    private static @ColorInt int getAttrColor(@AttrRes int attr) {
-        MainActivity activity = MainApplication.getInstance().getActivity();
-        if (activity == null) return 0;
-        return DisplayUtil.getAttrColor(activity, attr);
-    }
+    private final static PinInfo BOOLEAN_INFO = new PinInfo(PinType.BOOLEAN, PinSubType.NORMAL, PinBoolean.class, NormalPinSlotView.class, R.color.BooleanPinColor, 0, R.string.pin_boolean_condition, PinWidgetBoolean.class, true, true);
+    private final static PinInfo VALUE_AREA_INFO = new PinInfo(PinType.VALUE_AREA, PinSubType.NORMAL, PinValueArea.class, NormalPinSlotView.class, R.color.ValueAreaPinColor, 0, R.string.pin_value_area, PinWidgetValueArea.class, true, true);
+    private final static PinInfo POINT_INFO = new PinInfo(PinType.POINT, PinSubType.NORMAL, PinPoint.class, NormalPinSlotView.class, R.color.PointPinColor, 0, R.string.pin_point, PinWidgetPoint.class, true, true);
+    private final static PinInfo AREA_INFO = new PinInfo(PinType.AREA, PinSubType.NORMAL, PinArea.class, NormalPinSlotView.class, R.color.AreaPinColor, 0, R.string.pin_area, PinWidgetArea.class, true, true);
+    private final static PinInfo TOUCH_INFO = new PinInfo(PinType.TOUCH, PinSubType.NORMAL, PinTouchPath.class, NormalPinSlotView.class, R.color.TouchPinColor, 0, R.string.pin_touch, PinWidgetTouch.class, true, true);
+    private final static PinInfo NODE_INFO = new PinInfo(PinType.NODE, PinSubType.NORMAL, PinNode.class, NormalPinSlotView.class, R.color.NodePinColor, 0, R.string.pin_node, null, true, false);
+    private final static PinInfo IMAGE_INFO = new PinInfo(PinType.IMAGE, PinSubType.NORMAL, PinImage.class, NormalPinSlotView.class, R.color.ImagePinColor, 0, R.string.pin_image, PinWidgetImage.class, true, true);
+    private final static PinInfo COLOR_INFO = new PinInfo(PinType.COLOR, PinSubType.NORMAL, PinColor.class, NormalPinSlotView.class, R.color.ColorPinColor, 0, R.string.pin_color, PinWidgetColor.class, true, true);
+    private final static PinInfo APP_INFO = new PinInfo(PinType.APP, PinSubType.NORMAL, PinApplication.class, NormalPinSlotView.class, R.color.AppPinColor, 0, R.string.pin_app, PinWidgetApp.class, true, false);
+    private final static PinInfo APPS_INFO = new PinInfo(PinType.APPS, PinSubType.MULTI_APP, PinApplications.class, ListPinSlotView.class, R.color.AppPinColor, 0, R.string.pin_list_app, PinWidgetApps.class, true, false);
 
     public static PinInfo getPinInfo(PinBase pin) {
         return getPinInfo(pin.getType(), pin.getSubType());
@@ -240,8 +230,11 @@ public class PinInfo {
     private final Class<? extends PinBase> clazz;
 
     private final Class<? extends PinSlotView> slot;
-    @ColorInt
+
+    @ColorRes
     private final int color;
+    @AttrRes
+    private final int attr;
 
     @StringRes
     private final int title;
@@ -252,12 +245,13 @@ public class PinInfo {
 
     private final boolean caseAble;
 
-    public PinInfo(PinType type, PinSubType subType, Class<? extends PinBase> clazz, Class<? extends PinSlotView> slot, @ColorInt int color, @StringRes int title, Class<? extends PinWidget<? extends PinBase>> widget, boolean customAble, boolean caseAble) {
+    public PinInfo(PinType type, PinSubType subType, Class<? extends PinBase> clazz, Class<? extends PinSlotView> slot, @ColorRes int color, @AttrRes int attr, @StringRes int title, Class<? extends PinWidget<? extends PinBase>> widget, boolean customAble, boolean caseAble) {
         this.type = type;
         this.subType = subType;
         this.clazz = clazz;
         this.slot = slot;
         this.color = color;
+        this.attr = attr;
         this.title = title;
         this.widget = widget;
         this.customAble = customAble;
@@ -302,8 +296,11 @@ public class PinInfo {
     }
 
     public @ColorInt int getColor() {
-        if (color == 0) return DisplayUtil.getAttrColor(MainApplication.getInstance(), com.google.android.material.R.attr.colorPrimaryInverse);
-        return color;
+        MainActivity activity = MainApplication.getInstance().getActivity();
+        if (activity == null) return 0;
+        if (color != 0) return activity.getColor(color);
+        if (attr != 0) return DisplayUtil.getAttrColor(activity, attr);
+        return 0;
     }
 
     public String getTitle() {

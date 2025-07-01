@@ -19,6 +19,16 @@ public class TaskManager implements ITaskManager {
         }
     }
 
+    public void setNewParent(Task parent) {
+        List<Task> list = new ArrayList<>(tasks);
+        tasks.clear();
+        for (Task task : list) {
+            Task copy = task.newCopy();
+            copy.setParent(parent);
+            tasks.add(copy);
+        }
+    }
+
     @Override
     public void addTask(Task task) {
         tasks.add(task);

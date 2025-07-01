@@ -24,7 +24,7 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
         super(ActionType.GET_VARIABLE);
         varId = variable.getId();
         varPin = new Pin(variable.getValue(), true);
-        varPin.setId(varId);
+        varPin.setUid(varId);
         addPin(varPin);
     }
 
@@ -32,7 +32,7 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
         super(jsonObject);
         varId = GsonUtil.getAsString(jsonObject, "varId", "");
         reAddPins(null, true);
-        varPin = getPinById(varId);
+        varPin = getPinByUid(varId);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
         Task task = runnable.getTask();
         Variable var = task.findVariable(varId);
         if (var == null) var = Saver.getInstance().getVar(varId);
-        if (var == null) return;
+        if (var == null || varPin == null) return;
         varPin.setValue(var.getValue());
     }
 

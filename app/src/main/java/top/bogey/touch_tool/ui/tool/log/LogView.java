@@ -14,11 +14,13 @@ import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.save.log.ActionLog;
 import top.bogey.touch_tool.bean.save.log.LogInfo;
 import top.bogey.touch_tool.bean.save.log.LogSave;
 import top.bogey.touch_tool.bean.save.log.LogSaveListener;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatLogBinding;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
@@ -52,6 +54,18 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
         adapter = new LogViewAdapter();
 
         binding.closeButton.setOnClickListener(v -> dismiss());
+
+        binding.exportButton.setOnClickListener(v -> {
+            StringBuilder builder = new StringBuilder();
+            for (LogInfo log : adapter.getLogs()) {
+                builder.append("[").append(AppUtil.formatDateTime(context, log.getTime(), false, false)).append("] ");
+                if (log.getLogObject() instanceof ActionLog actionLog) {
+                    builder.append("[").append(actionLog.isExecute() ? "->" : "<-").append("] ");
+                }
+                builder.append(log.getLog()).append("\n");
+            }
+            AppUtil.shareText(context, builder.toString());
+        });
 
         binding.recyclerView.setAdapter(adapter);
 

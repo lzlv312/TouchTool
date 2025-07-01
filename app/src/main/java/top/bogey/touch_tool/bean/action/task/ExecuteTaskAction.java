@@ -61,8 +61,7 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
             }
         }
 
-        if (!isJustCall(runnable.getTask())) runnable.addDebugLog(this, 1);
-        task.execute(runnable, this, params);
+        task.execute(runnable, this, params, isJustCall(runnable.getTask()));
 
         if (!isJustCall(runnable.getTask())) executeNext(runnable, outPin);
     }

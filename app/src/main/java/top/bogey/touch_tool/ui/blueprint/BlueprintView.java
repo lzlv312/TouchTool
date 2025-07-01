@@ -29,6 +29,7 @@ import java.util.Stack;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
+import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewBlueprintBinding;
@@ -93,6 +94,9 @@ public class BlueprintView extends Fragment {
             Task task = taskStack.peek();
             MenuItem item = menu.findItem(R.id.taskDetailLog);
             item.setChecked(task.hasFlag(Task.FLAG_DEBUG));
+            item.setVisible(task.getParent() == null);
+
+            item = menu.findItem(R.id.taskRunningLog);
             item.setVisible(task.getParent() == null);
         }
 
@@ -201,6 +205,8 @@ public class BlueprintView extends Fragment {
         binding.sortButton.setOnClickListener(v -> {
             Task currTask = taskStack.peek();
             List<Action> startActions = currTask.getActions(StartAction.class);
+            List<Action> actions = currTask.getActions(CustomStartAction.class);
+            startActions.addAll(actions);
             CardLayoutHelper.ActionArea actionArea = new CardLayoutHelper.ActionArea(binding.cardLayout, new ArrayList<>(), startActions);
             actionArea.arrange(binding.cardLayout, new Point(), null);
             binding.cardLayout.updateCardsPos();

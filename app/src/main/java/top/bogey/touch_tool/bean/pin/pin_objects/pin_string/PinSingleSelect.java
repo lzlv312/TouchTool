@@ -12,6 +12,7 @@ import java.util.List;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.utils.GsonUtil;
 
 public class PinSingleSelect extends PinString {
@@ -58,16 +59,24 @@ public class PinSingleSelect extends PinString {
 
     @Override
     public boolean linkFromAble(PinBase pin) {
-        if (isDynamic() || pin.isDynamic()) return true;
-        if (pin instanceof PinSingleSelect pinSingleSelect) {
-            return getOptions().equals(pinSingleSelect.getOptions());
+        if (getType().getGroup() == pin.getType().getGroup()) {
+            if (isDynamic() || pin.isDynamic()) return true;
+            if (pin instanceof PinSingleSelect pinSingleSelect) {
+                return getOptions().equals(pinSingleSelect.getOptions());
+            }
         }
         return false;
     }
 
     @Override
     public boolean linkToAble(PinBase pin) {
-        return pin.linkFromAble(this);
+        if (getType().getGroup() == pin.getType().getGroup()) {
+            if (isDynamic() || pin.isDynamic()) return true;
+            if (pin instanceof PinSingleSelect pinSingleSelect) {
+                return getOptions().equals(pinSingleSelect.getOptions());
+            }
+        }
+        return false;
     }
 
     public String getOptionsString() {

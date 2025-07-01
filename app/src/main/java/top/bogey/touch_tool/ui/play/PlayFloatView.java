@@ -23,6 +23,7 @@ import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatPlayBinding;
+import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.blueprint.picker.FloatBaseCallback;
 import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
@@ -33,11 +34,21 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindowHelper;
 
 public class PlayFloatView extends FrameLayout implements FloatInterface {
+    public static final int UNIT_PIXEL = 5;
+
+    private static String HIDE_PACKAGE = null;
+    private static long HIDE_TIME = 0;
 
     private final FloatPlayBinding binding;
-    private final int padding = SettingSaver.getInstance().getManualPlayViewPadding() * 5;
+    private final int padding = SettingSaver.getInstance().getManualPlayViewPadding() * UNIT_PIXEL;
 
     public static void showActions(Map<ManualStartAction, Task> actions) {
+        TaskInfoSummary.PackageActivity packageActivity = TaskInfoSummary.getInstance().getPackageActivity();
+        if (packageActivity != null && packageActivity.packageName().equals(HIDE_PACKAGE)) return;
+        if (System.currentTimeMillis() < HIDE_TIME) return;
+        HIDE_PACKAGE = null;
+        HIDE_TIME = 0;
+
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
@@ -54,16 +65,29 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
         super(context);
         binding = FloatPlayBinding.inflate(LayoutInflater.from(context), this, true);
         DisplayUtil.setViewMargin(binding.playButtonBox, padding, 0, padding, 0);
+        int size = SettingSaver.getInstance().getManualPlayViewCloseSize();
+        DisplayUtil.setViewWidth(binding.dragSpaceButton, (int) DisplayUtil.dp2px(context, 8 + 8 * size));
 
         binding.dragSpaceButton.setOnClickListener(v -> {
             refreshExpand(true);
             refreshCorner(false);
             toDockSide();
         });
+
+        binding.dragSpaceButton.setOnLongClickListener(v -> {
+            hide(SettingSaver.getInstance().getManualPlayHideType());
+            return true;
+        });
+
         binding.closeButton.setOnClickListener(v -> {
             refreshExpand(false);
             refreshCorner(false);
             toDockSide();
+        });
+
+        binding.closeButton.setOnLongClickListener(v -> {
+            hide(SettingSaver.getInstance().getManualPlayHideType());
+            return true;
         });
 
         binding.buttonBox.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
@@ -198,10 +222,33 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
         FloatWindow.dismiss(PlayFloatView.class.getName());
     }
 
+    public void hide(int hideType) {
+        switch (hideType) {
+            case 1 -> {
+                TaskInfoSummary.PackageActivity packageActivity = TaskInfoSummary.getInstance().getPackageActivity();
+                if (packageActivity != null) HIDE_PACKAGE = packageActivity.packageName();
+                dismiss();
+            }
+            case 2 -> {
+                HIDE_TIME = System.currentTimeMillis() + 3 * 50 * 1000;
+                dismiss();
+            }
+
+            case 3 -> new PlayFloatHideChoiceView(getContext(), this::hide).show();
+
+            default -> dismiss();
+        }
+    }
+
     private static class PlayFloatCallback extends FloatBaseCallback {
 
         @Override
         public void onShow(String tag) {
+
+        }
+
+        @Override
+        public void onDismiss() {
 
         }
 

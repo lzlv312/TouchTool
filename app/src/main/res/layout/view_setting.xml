@@ -68,6 +68,25 @@
                         app:icon="@drawable/icon_app"
                         app:title="@string/app_setting_enable" />
 
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal
+                        android:id="@+id/reloadService"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:buttonText="@string/app_setting_reload_button_text"
+                        app:buttonVisible="right"
+                        app:icon="@drawable/icon_refresh"
+                        app:title="@string/app_setting_reload" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal
+                        android:id="@+id/autoReloadService"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:buttonText="@string/setting_copy_shell"
+                        app:buttonVisible="right"
+                        app:description="@string/app_setting_auto_reload_desc"
+                        app:icon="@drawable/icon_refresh"
+                        app:title="@string/app_setting_auto_reload" />
+
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/hideBackSwitch"
                         android:layout_width="match_parent"
@@ -104,6 +123,8 @@
                         android:id="@+id/cleanCacheButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:buttonText="@string/app_setting_clean_cache_button_text"
+                        app:buttonVisible="right"
                         app:description="@string/app_setting_clean_cache_desc"
                         app:icon="@drawable/icon_delete"
                         app:title="@string/app_setting_clean_cache" />
@@ -145,6 +166,25 @@
                         app:icon="@drawable/icon_adb"
                         app:options="@array/super_user_type"
                         app:title="@string/permission_setting_super_user" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
+                        android:id="@+id/notificationTypeSelect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/permission_setting_notification_type_desc"
+                        app:icon="@drawable/icon_notification_active"
+                        app:options="@array/notification_type"
+                        app:title="@string/permission_setting_notification_type" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal
+                        android:id="@+id/notificationTypeCmd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:buttonText="@string/setting_copy_shell"
+                        app:buttonVisible="right"
+                        app:description="@string/permission_setting_notification_type_sensitive_desc"
+                        app:icon="@drawable/icon_visibility"
+                        app:title="@string/permission_setting_notification_type_sensitive" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/alarmSwitch"
@@ -244,6 +284,15 @@
                         android:text="@string/preference_setting"
                         android:textAppearance="@style/TextAppearance.Material3.TitleSmall" />
 
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal
+                        android:id="@+id/manualPlaySetting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:buttonVisible="arrow"
+                        app:icon="@drawable/icon_touch"
+                        app:description="@string/preference_setting_manual_play_desc_1"
+                        app:title="@string/preference_setting_manual_play" />
+
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/supportFreeFormSwitch"
                         android:layout_width="match_parent"
@@ -268,25 +317,6 @@
                         app:description="@string/preference_setting_color_desc"
                         app:icon="@drawable/icon_palette"
                         app:title="@string/preference_setting_color" />
-
-                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
-                        android:id="@+id/manualPlaySelect"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:description="@string/permission_setting_manual_play_desc"
-                        app:icon="@drawable/icon_touch"
-                        app:options="@array/manual_play_type"
-                        app:title="@string/permission_setting_manual_play" />
-
-                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSlider
-                        android:id="@+id/manualPlayPadding"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:description="@string/preference_setting_manual_play_padding_desc"
-                        app:icon="@drawable/icon_phone"
-                        app:max="10"
-                        app:title="@string/preference_setting_manual_play_padding"
-                        app:value="0" />
 
                 </LinearLayout>
 

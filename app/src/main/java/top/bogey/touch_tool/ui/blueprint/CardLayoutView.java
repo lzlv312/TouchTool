@@ -274,7 +274,11 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
         RectF area = getCardArea(card);
         area.offset(offsetX, offsetY);
-        card.setVisibility(RectF.intersects(new RectF(0, 0, getWidth(), getHeight()), area) ? VISIBLE : INVISIBLE);
+
+        RectF windowSize = new RectF(0, 0, getWidth(), getHeight());
+        boolean intersects = RectF.intersects(windowSize, area);
+        boolean contains = windowSize.contains(area);
+        card.setVisibility(intersects || contains ? VISIBLE : INVISIBLE);
     }
 
     public void updateCardsPos() {

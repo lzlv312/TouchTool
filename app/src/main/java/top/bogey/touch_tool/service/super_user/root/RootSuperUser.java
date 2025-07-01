@@ -11,6 +11,8 @@ import top.bogey.touch_tool.service.super_user.CmdResult;
 import top.bogey.touch_tool.service.super_user.ISuperUser;
 
 public class RootSuperUser implements ISuperUser {
+    private final static String EXIT_MARKER = "EXIT_MARKER";
+
     private boolean existRoot = false;
     private Process rootProcess = null;
     private BufferedWriter cmdWriter = null;
@@ -61,14 +63,14 @@ public class RootSuperUser implements ISuperUser {
 
         try {
             cmdWriter.write(cmd + "\n");
-            cmdWriter.write("echo $?\n");
+            cmdWriter.write("echo " + EXIT_MARKER + ":$?\n");
             cmdWriter.flush();
 
             StringBuilder output = new StringBuilder();
             String line;
             while ((line = outputReader.readLine()) != null) {
-                if (line.matches("^[0-9]+$")) {
-                    int exitCode = Integer.parseInt(line);
+                if (line.startsWith(EXIT_MARKER)) {
+                    int exitCode = Integer.parseInt(line.substring(EXIT_MARKER.length() + 1));
                     return new CmdResult(exitCode == 0, output.toString().trim());
                 }
                 output.append(line).append("\n");

@@ -24,6 +24,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -34,6 +36,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.ViewSettingBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.service.notification.NotificationService;
 import top.bogey.touch_tool.service.super_user.ISuperUser;
 import top.bogey.touch_tool.service.super_user.SuperUser;
 import top.bogey.touch_tool.service.super_user.root.RootSuperUser;
@@ -49,70 +52,22 @@ public class SettingView extends Fragment {
         @Override
         public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
             menuInflater.inflate(R.menu.menu_setting, menu);
-
-            MainActivity activity = (MainActivity) requireActivity();
-            if (activity.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
-                menu.findItem(R.id.reloadService).setVisible(true);
-            } else {
-                menu.findItem(R.id.reloadService).setVisible(false);
-            }
-        }
-
-        @Override
-        public void onPrepareMenu(@NonNull Menu menu) {
-            MainActivity activity = (MainActivity) requireActivity();
-            if (activity.checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED) {
-                menu.findItem(R.id.reloadService).setVisible(true);
-            } else {
-                menu.findItem(R.id.reloadService).setVisible(false);
-            }
         }
 
         @Override
         public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-            if (menuItem.getItemId() == R.id.reloadService) {
-                MainActivity activity = (MainActivity) requireActivity();
-                boolean result = activity.stopAccessibilityServiceBySecurePermission();
-                if (result) {
-                    binding.getRoot().postDelayed(() -> {
-                        SettingSaver.getInstance().setServiceEnabled(true);
-                        binding.enableSwitch.setChecked(true);
-                        activity.restartAccessibilityServiceBySecurePermission();
-                        Toast.makeText(activity, getString(R.string.setting_reload_accessibility_service_success), Toast.LENGTH_SHORT).show();
-                    }, 1000);
-                } else {
-                    Toast.makeText(activity, getString(R.string.setting_reload_accessibility_service_error), Toast.LENGTH_SHORT).show();
-                }
-
-                return true;
-            } else if (menuItem.getItemId() == R.id.writeSecureSetting) {
-                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(R.string.setting_write_secure_setting)
-                        .setMessage(R.string.setting_write_secure_setting_des);
-                String cmd = String.format("pm grant %s %s", requireActivity().getPackageName(), Manifest.permission.WRITE_SECURE_SETTINGS);
-                if (SuperUser.getInstance().isValid()) {
-                    builder.setPositiveButton(R.string.setting_rin_code, (dialog, which) -> SuperUser.getInstance().runCommand(cmd))
-                            .setNegativeButton(R.string.setting_copy_code, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
-                            .setNeutralButton(R.string.cancel, null)
-                            .show();
-                } else {
-                    builder.setPositiveButton(R.string.setting_copy_code, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
-                            .setNegativeButton(R.string.cancel, null)
-                            .show();
-                }
-                return true;
-            } else if (menuItem.getItemId() == R.id.autoGiveCapturePermission) {
+            if (menuItem.getItemId() == R.id.autoGiveCapturePermission) {
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.setting_auto_give_capture_permission)
                         .setMessage(R.string.setting_auto_give_capture_permission_des);
                 String cmd = String.format("appops set %s PROJECT_MEDIA allow", requireActivity().getPackageName());
                 if (SuperUser.getInstance().isValid()) {
-                    builder.setPositiveButton(R.string.setting_rin_code, (dialog, which) -> SuperUser.getInstance().runCommand(cmd))
-                            .setNegativeButton(R.string.setting_copy_code, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
+                    builder.setPositiveButton(R.string.setting_execute_shell, (dialog, which) -> SuperUser.getInstance().runCommand(cmd))
+                            .setNegativeButton(R.string.setting_copy_shell, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
                             .setNeutralButton(R.string.cancel, null)
                             .show();
                 } else {
-                    builder.setPositiveButton(R.string.setting_copy_code, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
+                    builder.setPositiveButton(R.string.setting_copy_shell, (dialog, which) -> AppUtil.copyToClipboard(requireContext(), cmd))
                             .setNegativeButton(R.string.cancel, null)
                             .show();
                 }
@@ -164,6 +119,38 @@ public class SettingView extends Fragment {
         MainAccessibilityService serv = MainApplication.getInstance().getService();
         binding.enableSwitch.setChecked(serv != null && serv.isEnabled());
 
+        // 重启服务
+        binding.reloadService.setOnButtonClickListener(v -> {
+            boolean result = activity.stopAccessibilityServiceBySecurePermission();
+            if (result) {
+                binding.getRoot().postDelayed(() -> {
+                    SettingSaver.getInstance().setServiceEnabled(true);
+                    binding.enableSwitch.setChecked(true);
+                    activity.restartAccessibilityServiceBySecurePermission();
+                    Toast.makeText(activity, getString(R.string.app_setting_reload_success), Toast.LENGTH_SHORT).show();
+                }, 1000);
+            } else {
+                Toast.makeText(activity, getString(R.string.app_setting_reload_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+        refreshReloadService();
+
+        // 自动重启服务
+        binding.autoReloadService.setOnButtonClickListener(v -> {
+            String cmd = String.format("pm grant %s %s", requireActivity().getPackageName(), Manifest.permission.WRITE_SECURE_SETTINGS);
+            if (SuperUser.getInstance().isValid()) {
+                SuperUser.getInstance().runCommand(cmd);
+                binding.getRoot().postDelayed(() -> {
+                    refreshReloadService();
+                    refreshAutoReloadService();
+                }, 500);
+            } else {
+                AppUtil.copyToClipboard(activity, cmd);
+                Toast.makeText(activity, R.string.copy_tips, Toast.LENGTH_SHORT).show();
+            }
+        });
+        refreshAutoReloadService();
+
         // 隐藏后台
         binding.hideBackSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setHideAppBackground(activity, binding.hideBackSwitch.isChecked()));
         binding.hideBackSwitch.setChecked(SettingSaver.getInstance().isHideAppBackground());
@@ -193,7 +180,7 @@ public class SettingView extends Fragment {
         binding.autoStartSwitch.setChecked(SettingSaver.getInstance().isBootCompletedAutoStart());
 
         // 清理缓存
-        binding.cleanCacheButton.setOnClickListener(v -> {
+        binding.cleanCacheButton.setOnButtonClickListener(v -> {
             String[] dirs = new String[]{AppUtil.LOG_DIR_NAME, AppUtil.TASK_DIR_NAME, AppUtil.DOCUMENT_DIR_NAME};
             String[] dirNames = getResources().getStringArray(R.array.cache_dir_name);
 
@@ -210,12 +197,16 @@ public class SettingView extends Fragment {
             new MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.app_setting_clean_cache)
                     .setPositiveButton(R.string.enter, (dialog, which) -> {
+                        boolean flag = true;
                         for (int i = 0; i < isChecked.length; i++) {
                             boolean checked = isChecked[i];
                             if (checked) {
                                 AppUtil.deleteFile(files[i]);
+                            } else {
+                                flag = false;
                             }
                         }
+                        if (flag) AppUtil.deleteFile(activity.getCacheDir());
                         binding.cleanCacheButton.setDescription(getString(R.string.app_setting_clean_cache_desc, AppUtil.getFileSizeString(activity.getCacheDir())));
                     })
                     .setNegativeButton(R.string.cancel, null)
@@ -241,18 +232,51 @@ public class SettingView extends Fragment {
                     if (instance instanceof ShizukuSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_shizuku, Toast.LENGTH_SHORT).show();
                     else if (instance instanceof RootSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_root, Toast.LENGTH_SHORT).show();
                 }
+                refreshNotificationCmd();
+                refreshAutoReloadService();
             }
         });
         binding.superUserSelect.checkIndex(SettingSaver.getInstance().getSuperUserType());
 
+        // 通知来源
+        binding.notificationTypeSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                View view = group.findViewById(checkedId);
+                int index = group.indexOfChild(view);
+                if (index == 0) {
+                    SettingSaver.getInstance().setNotificationType(0);
+                    activity.stopService(new Intent(activity, NotificationService.class));
+                } else {
+                    if (NotificationService.isEnabled()) {
+                        SettingSaver.getInstance().setNotificationType(1);
+                    } else {
+                        NotificationService.requestConnect(activity);
+                        SettingSaver.getInstance().setNotificationType(0);
+                        binding.notificationTypeSelect.checkIndex(0);
+                    }
+                }
+                refreshNotificationCmd();
+            }
+        });
+        binding.notificationTypeSelect.checkIndex(SettingSaver.getInstance().getNotificationType());
+
+        binding.notificationTypeCmd.setOnButtonClickListener(v -> {
+            String cmd = String.format("appops set %s RECEIVE_SENSITIVE_NOTIFICATIONS allow", requireActivity().getPackageName());
+            if (SuperUser.getInstance().isValid()) {
+                SuperUser.getInstance().runCommand(cmd);
+            } else {
+                AppUtil.copyToClipboard(activity, cmd);
+                Toast.makeText(activity, R.string.copy_tips, Toast.LENGTH_SHORT).show();
+            }
+        });
+        refreshNotificationCmd();
 
         // 精确定时
         AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-        boolean canScheduleExactAlarms = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms();
         binding.alarmSwitch.setOnSwitchClickListener(v -> {
             if (binding.alarmSwitch.isChecked()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (canScheduleExactAlarms) {
+                    if (alarmManager.canScheduleExactAlarms()) {
                         SettingSaver.getInstance().setExactAlarmEnabled(true);
                     } else {
                         Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
@@ -272,7 +296,7 @@ public class SettingView extends Fragment {
                 }
             }
         });
-        binding.alarmSwitch.setChecked(canScheduleExactAlarms && SettingSaver.getInstance().isExactAlarmEnabled());
+        binding.alarmSwitch.setChecked(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms() && SettingSaver.getInstance().isExactAlarmEnabled());
 
         // 蓝牙监听
         binding.bluetoothSwitch.setOnSwitchClickListener(v -> {
@@ -294,13 +318,19 @@ public class SettingView extends Fragment {
         binding.showTouchSwitch.setChecked(SettingSaver.getInstance().isShowGestureTrack());
 
         // 标记目标区域
-        binding.showTargetAreaSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowNodeArea(binding.showTouchSwitch.isChecked()));
+        binding.showTargetAreaSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowNodeArea(binding.showTargetAreaSwitch.isChecked()));
         binding.showTargetAreaSwitch.setChecked(SettingSaver.getInstance().isShowNodeArea());
 
         // 任务提示
         binding.taskTipsSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowTaskStartTips(binding.taskTipsSwitch.isChecked()));
         binding.taskTipsSwitch.setChecked(SettingSaver.getInstance().isShowTaskStartTips());
 
+
+        // 手动执行悬浮窗
+        binding.manualPlaySetting.setOnClickListener(v -> {
+            NavController controller = Navigation.findNavController(MainApplication.getInstance().getActivity(), R.id.conView);
+            controller.navigate(SettingViewDirections.actionSettingToSettingPlayView());
+        });
 
         // 小窗优化
         binding.supportFreeFormSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setSupportFreeForm(binding.supportFreeFormSwitch.isChecked()));
@@ -320,25 +350,6 @@ public class SettingView extends Fragment {
         binding.dynamicColorSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setDynamicColorTheme(activity, binding.dynamicColorSwitch.isChecked()));
         binding.dynamicColorSwitch.setChecked(SettingSaver.getInstance().isDynamicColorTheme());
 
-        // 手动执行
-        binding.manualPlaySelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
-            if (isChecked) {
-                View view = group.findViewById(checkedId);
-                int index = group.indexOfChild(view);
-                SettingSaver.getInstance().setManualPlayShowType(index);
-            }
-        });
-        binding.manualPlaySelect.checkIndex(SettingSaver.getInstance().getManualPlayShowType());
-        binding.manualPlaySelect.setOnClickListener(v -> {
-            SettingSaver.getInstance().setManualPlayViewPos(new Point());
-            SettingSaver.getInstance().setManualPlayViewState(true);
-            Toast.makeText(activity, R.string.permission_setting_manual_play_reset, Toast.LENGTH_SHORT).show();
-        });
-
-        // 手动执行悬浮窗偏移
-        binding.manualPlayPadding.setSliderOnChangeListener((slider, value, fromUser) -> SettingSaver.getInstance().setManualPlayViewPadding((int) value));
-        binding.manualPlayPadding.setValue(SettingSaver.getInstance().getManualPlayViewPadding());
-
         PackageManager packageManager = activity.getPackageManager();
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(activity.getPackageName(), 0);
@@ -348,5 +359,23 @@ public class SettingView extends Fragment {
         }
 
         return binding.getRoot();
+    }
+
+    private void refreshNotificationCmd() {
+        int notificationType = SettingSaver.getInstance().getNotificationType();
+        boolean version = Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM;
+        binding.notificationTypeCmd.setVisibility(notificationType == 1 && version ? View.VISIBLE : View.GONE);
+        binding.notificationTypeCmd.setButtonText(getString(SuperUser.getInstance().isValid() ? R.string.setting_execute_shell : R.string.setting_copy_shell));
+    }
+
+    private void refreshReloadService() {
+        boolean granted = requireActivity().checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
+        binding.reloadService.setVisibility(granted ? View.VISIBLE : View.GONE);
+    }
+
+    private void refreshAutoReloadService() {
+        boolean granted = requireActivity().checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
+        binding.autoReloadService.setVisibility(granted ? View.GONE : View.VISIBLE);
+        binding.autoReloadService.setButtonText(getString(SuperUser.getInstance().isValid() ? R.string.setting_execute_shell : R.string.setting_copy_shell));
     }
 }

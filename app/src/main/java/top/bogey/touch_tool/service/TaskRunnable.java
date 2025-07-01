@@ -68,9 +68,10 @@ public class TaskRunnable implements Runnable {
             }
             addLog(errorInfo);
 
-            while (!logStack.isEmpty()) {
-                addLog(logStack.pop(), 0);
-            }
+        }
+
+        while (!logStack.isEmpty()) {
+            addLog(logStack.pop(), 0);
         }
 
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onFinish(this));
@@ -92,13 +93,11 @@ public class TaskRunnable implements Runnable {
     public void pushStack(Task task, Action action) {
         taskStack.push(task);
         actionStack.push(action);
-        debug = task.hasFlag(Task.FLAG_DEBUG);
     }
 
     public void popStack() {
         taskStack.pop();
         actionStack.pop();
-        debug = taskStack.peek().hasFlag(Task.FLAG_DEBUG);
         if (taskStack.isEmpty() || actionStack.isEmpty()) stop();
     }
 

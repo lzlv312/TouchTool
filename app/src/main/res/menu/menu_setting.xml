@@ -19,14 +19,6 @@
     </item>
 
     <item
-        android:id="@+id/reloadService"
-        android:title="@string/setting_reload_accessibility_service" />
-
-    <item
-        android:id="@+id/writeSecureSetting"
-        android:title="@string/setting_write_secure_setting" />
-
-    <item
         android:id="@+id/autoGiveCapturePermission"
         android:title="@string/setting_auto_give_capture_permission" />
 

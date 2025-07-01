@@ -17,6 +17,7 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
@@ -50,12 +51,14 @@ public class SinglePlayView extends PlayFloatItemView implements FloatInterface 
 
     public SinglePlayView(@NonNull Context context, Task task, StartAction action) {
         super(context, task, action);
-        int px = (int) DisplayUtil.dp2px(context, 36);
+        size = SettingSaver.getInstance().getManualPlayViewSingleSize();
+
+        int px = (int) DisplayUtil.dp2px(context, 20 + 8 * size);
         DisplayUtil.setViewWidth(binding.cardLayout, px);
         DisplayUtil.setViewHeight(binding.cardLayout, px);
         DisplayUtil.setViewWidth(binding.title, px);
         DisplayUtil.setViewHeight(binding.title, px);
-        binding.playButton.setIndicatorSize(px);
+        binding.circleProgress.setIndicatorSize(px);
     }
 
     @Override

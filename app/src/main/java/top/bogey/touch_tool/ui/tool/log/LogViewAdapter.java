@@ -48,6 +48,20 @@ public class LogViewAdapter extends TreeAdapter {
         setTreeNodes(nodeList);
     }
 
+    public List<LogInfo> getLogs() {
+        return getLogs(treeNodes);
+    }
+
+    private List<LogInfo> getLogs(List<TreeNode> treeNodes) {
+        List<LogInfo> logs = new ArrayList<>();
+        for (TreeNode treeNode : treeNodes) {
+            LazyTreeNode node = (LazyTreeNode) treeNode;
+            logs.add((LogInfo) node.getData());
+            logs.addAll(getLogs(node.getChildren()));
+        }
+        return logs;
+    }
+
     public void addLog(LogSave logSave, LogInfo log) {
         TreeNode node = new LazyTreeNode(logSave, log.getUid());
         addTreeNode(node);

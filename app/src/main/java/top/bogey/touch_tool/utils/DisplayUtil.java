@@ -230,21 +230,30 @@ public class DisplayUtil {
         paint.setAntiAlias(true);
 
         // 2. 分割文本为多行并记录每行实际宽度
+        String[] paragraphs = text.split("\n", -1); // -1保留空行
+
         List<String> lines = new ArrayList<>();
         List<Float> lineWidths = new ArrayList<>();
-        int start = 0;
+        for (String paragraph : paragraphs) {
+            if (paragraph.isEmpty()) {
+                lines.add(" ");
+                lineWidths.add(0f);
+                continue;
+            }
 
-        while (start < text.length()) {
-            // 测量能显示多少个字符
-            int count = paint.breakText(text, start, text.length(), true, maxWidth - 2 * padding, null);
-            String line = text.substring(start, start + count);
-            lines.add(line);
+            int start = 0;
+            while (start < paragraph.length()) {
+                // 测量能显示多少个字符
+                int count = paint.breakText(paragraph, start, paragraph.length(), true, maxWidth - 2 * padding, null);
+                String line = paragraph.substring(start, start + count);
+                lines.add(line);
 
-            // 记录每行实际宽度
-            float lineWidth = paint.measureText(line);
-            lineWidths.add(lineWidth);
+                // 记录每行实际宽度
+                float lineWidth = paint.measureText(line);
+                lineWidths.add(lineWidth);
 
-            start += count;
+                start += count;
+            }
         }
 
         // 3. 计算实际需要的宽度（取最长行宽度）

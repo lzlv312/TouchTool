@@ -27,7 +27,7 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         super(ActionType.SET_VARIABLE);
         varId = variable.getId();
         varPin = new Pin(variable.getValue());
-        varPin.setId(varId);
+        varPin.setUid(varId);
         addPins(varPin, savePin);
     }
 
@@ -35,7 +35,7 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         super(jsonObject);
         varId = GsonUtil.getAsString(jsonObject, "varId", "");
         reAddPin(new Pin(new PinObject()), true);
-        varPin = getPinById(varId);
+        varPin = getPinByUid(varId);
         reAddPin(savePin);
     }
 
@@ -50,7 +50,7 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         Task task = runnable.getTask();
         Variable var = task.findVariable(varId);
         if (var == null) var = Saver.getInstance().getVar(varId);
-        if (var != null) {
+        if (var != null && varPin != null) {
             PinObject value = getPinValue(runnable, varPin);
             var.setValue(value);
             if (savePin.getValue(PinBoolean.class).getValue()) var.save();
@@ -67,6 +67,7 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         Variable variable = context.findVariable(varId);
         if (variable == null) variable = Saver.getInstance().getVar(varId);
         if (variable == null) return;
+        if (varPin == null) return;
         varPin.setValue(variable.getValue());
         varPin.setTitle(variable.getTitle());
         String globalFlag = variable.getParent() == null ? GLOBAL_FLAG : "";

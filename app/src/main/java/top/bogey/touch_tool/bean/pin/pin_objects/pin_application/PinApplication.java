@@ -72,6 +72,7 @@ public class PinApplication extends PinObject {
     @NonNull
     @Override
     public String toString() {
+        if (activityClasses == null || activityClasses.isEmpty()) return packageName;
         return packageName + activityClasses;
     }
 

@@ -26,6 +26,18 @@
                 android:backgroundTint="?attr/colorOnSurfaceVariant"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/exportButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="end|center"
+                android:layout_marginEnd="32dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:icon="@drawable/icon_upload" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/closeButton"
                 style="@style/Theme.TouchTool.IconButton"

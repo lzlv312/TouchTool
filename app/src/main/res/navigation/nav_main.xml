@@ -25,7 +25,11 @@
         android:id="@+id/setting"
         android:name="top.bogey.touch_tool.ui.setting.SettingView"
         android:label="@string/setting"
-        tools:layout="@layout/view_setting" />
+        tools:layout="@layout/view_setting" >
+        <action
+            android:id="@+id/action_setting_to_settingPlayView"
+            app:destination="@id/setting_play_view" />
+    </fragment>
 
     <fragment
         android:id="@+id/blueprint"
@@ -36,4 +40,9 @@
             android:name="taskId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/setting_play_view"
+        android:name="top.bogey.touch_tool.ui.setting.SettingPlayView"
+        android:label="view_setting_play_view"
+        tools:layout="@layout/view_setting_play_view" />
 </navigation>

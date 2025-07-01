@@ -99,9 +99,11 @@ public class PointPicker extends FullScreenPicker<Point> {
         float px = DisplayUtil.dp2px(getContext(), 4);
         if (currentY + binding.posBox.getHeight() > getHeight()) {
             binding.posBox.setScaleY(-1f);
+            binding.posText.setScaleY(-1f);
             binding.posBox.setY(currentY - binding.posBox.getHeight() + px);
         } else {
             binding.posBox.setScaleY(1f);
+            binding.posText.setScaleY(1f);
             binding.posBox.setY(currentY - px);
         }
 
@@ -114,7 +116,7 @@ public class PointPicker extends FullScreenPicker<Point> {
             float scale = 8;
             int width = (int) (getWidth() / scale);
             int height = (int) (getHeight() / scale);
-            Rect area = new Rect((int) (currentX - width / 2), (int) (currentY - height / 2), (int) (currentX + width / 2), (int) (currentY + height / 2));
+            Rect area = new Rect((int) (currentX - width / 2f), (int) (currentY - height / 2f), (int) (currentX + width / 2f), (int) (currentY + height / 2f));
             float x = getWidth() / 2f - area.width() * scale / 2 - area.left * scale;
             float y = getHeight() / 2f - area.height() * scale / 2 - area.top * scale;
             canvas.translate(x, y);

@@ -58,7 +58,7 @@ public class ShizukuSuperUser implements ISuperUser {
             bindShizukuService();
             return true;
         } else {
-            requestShizukuPermission();
+            if (existShizuku()) requestShizukuPermission();
             return false;
         }
     }

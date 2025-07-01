@@ -10,9 +10,13 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Map;
 
 import top.bogey.touch_tool.bean.base.Copyable;
 import top.bogey.touch_tool.bean.pin.PinInfo;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.utils.GsonUtil;
 
 public abstract class PinBase implements Copyable {
@@ -104,6 +108,63 @@ public abstract class PinBase implements Copyable {
                 Log.d("TAG", "deserialize pin json: " + json);
                 throw new JsonParseException(e);
             }
+        }
+    }
+
+    public static PinBase parseValue(Object value) {
+        if (value instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>) value;
+            PinMap pinMap = new PinMap();
+            map.forEach((key, v) -> {
+                PinBase pinKey = parseValue(key);
+                PinBase pinValue = parseValue(v);
+                if (pinMap.isDynamic()) {
+                    pinMap.setKeyType(getTypeValue((PinObject) pinKey));
+                    pinMap.setValueType(getTypeValue((PinObject) pinValue));
+                }
+                pinMap.put(new PinString(key), (PinObject) parseValue(v));
+            });
+            return pinMap;
+        } else if (value instanceof List<?> list) {
+            PinList pinList = new PinList();
+            for (Object v : list) {
+                PinBase pinValue = parseValue(v);
+                if (pinList.isDynamic()) {
+                    pinList.setValueType(getTypeValue((PinObject) pinValue));
+                }
+                pinList.add((PinObject) pinValue);
+            }
+            return pinList;
+        } else if (value instanceof String str) {
+            return new PinString(str);
+        } else if (value instanceof Number num) {
+            return new PinDouble(num.doubleValue());
+        } else if (value instanceof Boolean bool) {
+            return new PinBoolean(bool);
+        } else {
+            return new PinString(value.toString());
+        }
+    }
+
+    private static PinObject getTypeValue(PinObject pinObject) {
+        if (pinObject instanceof PinMap pinMap) {
+            for (Map.Entry<PinObject, PinObject> entry : pinMap.entrySet()) {
+                PinObject key = entry.getKey();
+                PinObject value = entry.getValue();
+                PinObject keyType = getTypeValue(key);
+                PinObject valueType = getTypeValue(value);
+                return new PinMap(keyType, valueType);
+            }
+            return new PinMap();
+        } else if (pinObject instanceof PinList pinList) {
+            for (PinObject value : pinList) {
+                PinObject valueType = getTypeValue(value);
+                return new PinList(valueType);
+            }
+            return new PinList();
+        } else {
+            PinInfo pinInfo = PinInfo.getPinInfo(pinObject);
+            return (PinObject) pinInfo.newInstance();
         }
     }
 }

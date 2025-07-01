@@ -43,14 +43,20 @@ public class PinObject extends PinBase {
 
     @Override
     public boolean linkFromAble(PinBase pin) {
-        if (isDynamic() || pin.isDynamic()) return true;
-        return super.linkFromAble(pin);
+        if (getType().getGroup() == pin.getType().getGroup()) {
+            if (isDynamic() || pin.isDynamic()) return true;
+            return super.linkFromAble(pin);
+        }
+        return false;
     }
 
     @Override
     public boolean linkToAble(PinBase pin) {
-        if (isDynamic() || pin.isDynamic()) return true;
-        return super.linkToAble(pin);
+        if (getType().getGroup() == pin.getType().getGroup()) {
+            if (isDynamic() || pin.isDynamic()) return true;
+            return super.linkFromAble(pin);
+        }
+        return false;
     }
 
     public boolean cast(String value) {

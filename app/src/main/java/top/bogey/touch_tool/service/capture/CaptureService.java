@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
@@ -160,17 +159,54 @@ public class CaptureService extends Service {
     public class CaptureBinder extends Binder {
 
         public synchronized Bitmap getScreenShot() {
+            Bitmap bitmap = null;
             try (Image image = imageReader.acquireLatestImage()) {
-                if (image == null) return null;
-                Image.Plane[] planes = image.getPlanes();
-                ByteBuffer buffer = planes[0].getBuffer();
-                byte[] bytes = new byte[buffer.remaining()];
-                buffer.get(bytes);
-                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                bitmap = rgba8888ImageToBitmap(image);
             } catch (Exception | Error e) {
                 e.printStackTrace();
             }
-            return null;
+            return bitmap;
         }
+    }
+
+    public static Bitmap rgba8888ImageToBitmap(Image image) {
+        if (image.getFormat() != PixelFormat.RGBA_8888) {
+            throw new IllegalArgumentException("Image format must be RGBA_8888");
+        }
+
+        Image.Plane plane = image.getPlanes()[0]; // RGBA 只有 1 个 Plane
+        ByteBuffer buffer = plane.getBuffer();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int pixelStride = plane.getPixelStride(); // 通常为 4（RGBA=4字节）
+        int rowStride = plane.getRowStride();     // 每行的字节数（可能包含 padding）
+
+        // 创建 Bitmap（ARGB_8888 格式）
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        // 检查是否有行填充（rowStride != width * pixelStride）
+        if (rowStride == width * pixelStride) {
+            // 无填充：直接复制整个缓冲区
+            bitmap.copyPixelsFromBuffer(buffer);
+        } else {
+            // 有填充：逐行复制，跳过填充字节
+            byte[] rowData = new byte[rowStride];
+            int[] pixels = new int[width];
+            buffer.rewind();
+
+            for (int y = 0; y < height; y++) {
+                buffer.get(rowData);
+                for (int x = 0; x < width; x++) {
+                    int r = rowData[x * pixelStride] & 0xFF;     // R
+                    int g = rowData[x * pixelStride + 1] & 0xFF; // G
+                    int b = rowData[x * pixelStride + 2] & 0xFF; // B
+                    int a = rowData[x * pixelStride + 3] & 0xFF; // A
+                    pixels[x] = (a << 24) | (r << 16) | (g << 8) | b; // ARGB
+                }
+                bitmap.setPixels(pixels, 0, width, 0, y, width, 1);
+            }
+        }
+
+        return bitmap;
     }
 }

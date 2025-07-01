@@ -1,13 +1,19 @@
 package top.bogey.touch_tool.bean.action.start;
 
+import android.app.Notification;
+
 import com.google.gson.JsonObject;
 
-import java.util.Objects;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
@@ -15,21 +21,22 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class NotificationStartAction extends StartAction {
     private final transient Pin appsPin = new NotLinkAblePin(new PinApplications(PinSubType.MULTI_APP, MainApplication.getInstance().getString(R.string.common_package)), R.string.pin_app);
-    private final transient Pin matchPin = new NotLinkAblePin(new PinString("."), R.string.notification_start_action_match);
     private final transient Pin notifyAppPin = new Pin(new PinApplication(PinSubType.SINGLE_APP), R.string.notification_start_action_notify_app, true);
     private final transient Pin notifyTextPin = new Pin(new PinString(), R.string.notification_start_action_notify_text, true);
+    private final transient Pin notifyValuePin = new Pin(new PinMap(new PinString(), new PinString()), R.string.notification_start_action_notify_value, true);
 
     public NotificationStartAction() {
         super(ActionType.NOTIFICATION_START);
-        addPins(appsPin, matchPin, notifyAppPin, notifyTextPin);
+        addPins(appsPin, notifyAppPin, notifyTextPin, notifyValuePin);
     }
 
     public NotificationStartAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(appsPin, matchPin, notifyAppPin, notifyTextPin);
+        reAddPins(appsPin, notifyAppPin, notifyTextPin, notifyValuePin);
     }
 
     @Override
@@ -38,15 +45,18 @@ public class NotificationStartAction extends StartAction {
         TaskInfoSummary.Notification notification = TaskInfoSummary.getInstance().getNotification();
         PinApplication application = new PinApplication(notification.packageName());
         notifyAppPin.setValue(application);
-        notifyTextPin.getValue(PinString.class).setValue(notification.content());
+        Map<String, String> content = notification.content();
+        PinBase pinBase = PinBase.parseValue(content);
+        notifyValuePin.setValue(pinBase);
+        notifyTextPin.getValue(PinString.class).setValue(content.get(Notification.EXTRA_TEXT));
         executeNext(runnable, executePin);
     }
 
     @Override
     public boolean ready() {
         TaskInfoSummary.Notification notification = TaskInfoSummary.getInstance().getNotification();
+        if (notification == null || notification.content() == null) return false;
         PinApplication application = new PinApplication(notification.packageName());
-        if (!appsPin.getValue(PinApplications.class).contains(application)) return false;
-        return Objects.equals(notification.content(), notifyTextPin.getValue(PinString.class).getValue());
+        return appsPin.getValue(PinApplications.class).contains(application);
     }
 }

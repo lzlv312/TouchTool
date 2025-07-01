@@ -66,50 +66,50 @@ public class PinMap extends PinObject implements Map<PinObject, PinObject> {
 
     @Override
     public boolean linkFromAble(PinBase pin) {
-        if (pin.isDynamic()) return true;
-        if (pin instanceof PinMap pinMap) {
-            if (isDynamic()) return true;
-
-            if (pinMap.isDynamicKey() || isDynamicKey()) {
-                if (pinMap.isDynamicValue() || isDynamicValue()) {
-                    return true;
-                }
-                return getValueType().linkFromAble(pinMap.getValueType());
-            }
-
-            if (pinMap.isDynamicValue() || isDynamicValue()) {
+        if (getType().getGroup() == pin.getType().getGroup()) {
+            if (isDynamic() || pin.isDynamic()) return true;
+            if (pin instanceof PinMap pinMap) {
                 if (pinMap.isDynamicKey() || isDynamicKey()) {
-                    return true;
+                    if (pinMap.isDynamicValue() || isDynamicValue()) {
+                        return true;
+                    }
+                    return getValueType().linkFromAble(pinMap.getValueType());
                 }
-                return getKeyType().linkFromAble(pinMap.getKeyType());
-            }
 
-            return getKeyType().linkFromAble(pinMap.getKeyType()) && getValueType().linkFromAble(pinMap.getValueType());
+                if (pinMap.isDynamicValue() || isDynamicValue()) {
+                    if (pinMap.isDynamicKey() || isDynamicKey()) {
+                        return true;
+                    }
+                    return getKeyType().linkFromAble(pinMap.getKeyType());
+                }
+
+                return getKeyType().linkFromAble(pinMap.getKeyType()) && getValueType().linkFromAble(pinMap.getValueType());
+            }
         }
         return false;
     }
 
     @Override
     public boolean linkToAble(PinBase pin) {
-        if (pin.isDynamic()) return true;
-        if (pin instanceof PinMap pinMap) {
-            if (isDynamic()) return true;
-
-            if (pinMap.isDynamicKey() || isDynamicKey()) {
-                if (pinMap.isDynamicValue() || isDynamicValue()) {
-                    return true;
-                }
-                return getValueType().linkToAble(pinMap.getValueType());
-            }
-
-            if (pinMap.isDynamicValue() || isDynamicValue()) {
+        if (getType().getGroup() == pin.getType().getGroup()) {
+            if (isDynamic() || pin.isDynamic()) return true;
+            if (pin instanceof PinMap pinMap) {
                 if (pinMap.isDynamicKey() || isDynamicKey()) {
-                    return true;
+                    if (pinMap.isDynamicValue() || isDynamicValue()) {
+                        return true;
+                    }
+                    return getValueType().linkFromAble(pinMap.getValueType());
                 }
-                return getKeyType().linkToAble(pinMap.getKeyType());
-            }
 
-            return getKeyType().linkToAble(pinMap.getKeyType()) && getValueType().linkToAble(pinMap.getValueType());
+                if (pinMap.isDynamicValue() || isDynamicValue()) {
+                    if (pinMap.isDynamicKey() || isDynamicKey()) {
+                        return true;
+                    }
+                    return getKeyType().linkFromAble(pinMap.getKeyType());
+                }
+
+                return getKeyType().linkFromAble(pinMap.getKeyType()) && getValueType().linkFromAble(pinMap.getValueType());
+            }
         }
         return false;
     }

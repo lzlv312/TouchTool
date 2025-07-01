@@ -19,6 +19,7 @@ import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -42,6 +43,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import top.bogey.ocr.IOcr;
 import top.bogey.ocr.IOcrCallback;
@@ -88,23 +91,37 @@ public class MainAccessibilityService extends AccessibilityService {
         String packageName = event.getPackageName().toString();
         String className = event.getClassName().toString();
         if (packageName.isEmpty() || className.isEmpty()) return;
-        Log.d("TAG", "onAccessibilityEvent: " + packageName + "/" + className);
 
         int eventType = event.getEventType();
         if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             taskInfoSummary.enterActivity(packageName, className);
         } else if (eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
+            if (SettingSaver.getInstance().getNotificationType() != 0) return;
+            Map<String, String> content = new HashMap<>();
+
             if (!className.contains(Notification.class.getSimpleName())) return;
 
             Notification notification = (Notification) event.getParcelableData();
-            if (notification == null) return;
-            if (notification.extras == null) return;
-            String title = notification.extras.getString(Notification.EXTRA_TITLE);
-            String text = notification.extras.getString(Notification.EXTRA_TEXT);
-            if (title == null && text == null) return;
-            Log.d("TAG", "onAccessibilityEvent: notification = " + title + "/" + text);
+            if (notification != null && notification.extras != null) {
+                Bundle extras = notification.extras;
+                for (String key : extras.keySet()) {
+                    Object value = extras.get(key);
+                    content.put(key, String.valueOf(value));
+                }
+            } else if (!event.getText().isEmpty()) {
+                String s = event.getText().get(0).toString();
+                Pattern pattern = AppUtil.getPattern("^(.+?): (.+)$");
+                if (pattern != null) {
+                    Matcher matcher = pattern.matcher(s);
+                    if (matcher.find()) {
+                        content.put(Notification.EXTRA_TITLE, matcher.group(1));
+                        content.put(Notification.EXTRA_TEXT, matcher.group(2));
+                    }
+                }
+            }
 
-            taskInfoSummary.setNotification(packageName, title, text);
+            Log.d("TAG", "onAccessibilityEvent: notification = " + content);
+            taskInfoSummary.setNotification(packageName, content);
         }
     }
 
@@ -408,6 +425,7 @@ public class MainAccessibilityService extends AccessibilityService {
             startActivity(intent);
             return true;
         } else {
+            callback.onResult(true);
             return false;
         }
     }
@@ -458,7 +476,7 @@ public class MainAccessibilityService extends AccessibilityService {
     private Bitmap lastScreenShot;
 
     public Bitmap getScreenShotByCapture() {
-        return captureBinder != null ? captureBinder.getScreenShot() : null;
+        return captureBinder != null ? captureBinder.getScreenShot() : lastScreenShot;
     }
 
     public boolean getScreenByAccessibility(BitmapResultCallback callback) {
@@ -486,16 +504,25 @@ public class MainAccessibilityService extends AccessibilityService {
                 }
             });
             return true;
+        } else {
+            callback.onResult(lastScreenShot);
         }
         return false;
     }
 
     public void tryGetScreenShot(BitmapResultCallback callback) {
-        Bitmap bitmap = getScreenShotByCapture();
-        if (bitmap != null) {
-            callback.onResult(bitmap);
-        } else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             getScreenByAccessibility(callback);
+        } else {
+            startCapture(result -> {
+                if (result) {
+                    Bitmap bm = getScreenShotByCapture();
+                    if (bm != null) callback.onResult(bm);
+                    else callback.onResult(lastScreenShot);
+                } else {
+                    callback.onResult(lastScreenShot);
+                }
+            });
         }
     }
 

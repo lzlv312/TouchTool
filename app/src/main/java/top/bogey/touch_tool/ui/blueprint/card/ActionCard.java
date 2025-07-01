@@ -2,7 +2,6 @@ package top.bogey.touch_tool.ui.blueprint.card;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.ViewGroup;
@@ -46,7 +45,8 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
 
         setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceVariant));
         setStrokeColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant));
-        setStrokeWidth(0);
+        setStrokeWidth(1);
+        setElevation(8);
         setPivotX(0);
         setPivotY(0);
 
@@ -202,7 +202,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         if (selected) {
             setStrokeWidth((int) DisplayUtil.dp2px(getContext(), 1));
         } else {
-            setStrokeWidth(0);
+            setStrokeWidth(1);
         }
     }
 
