@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.service.super_user.root;
 
+import android.util.Log;
+
 import androidx.annotation.Keep;
 
 import java.io.BufferedReader;
@@ -63,12 +65,14 @@ public class RootSuperUser implements ISuperUser {
 
         try {
             cmdWriter.write(cmd + "\n");
+            cmdWriter.write("echo \n");
             cmdWriter.write("echo " + EXIT_MARKER + ":$?\n");
             cmdWriter.flush();
 
             StringBuilder output = new StringBuilder();
             String line;
             while ((line = outputReader.readLine()) != null) {
+                Log.d("TAG", "runCommand: " + line);
                 if (line.startsWith(EXIT_MARKER)) {
                     int exitCode = Integer.parseInt(line.substring(EXIT_MARKER.length() + 1));
                     return new CmdResult(exitCode == 0, output.toString().trim());

@@ -80,7 +80,7 @@ public class LogViewAdapter extends TreeAdapter {
         if (searchIndex < 1 || searchIndex >= treeNodes.size()) {
             subList = treeNodes;
         } else {
-            if (Boolean.TRUE.equals(isNext)) {
+            if (isNext) {
                 subList = treeNodes.subList(searchIndex + 1, treeNodes.size());
             } else {
                 subList = treeNodes.subList(0, searchIndex - 1);
@@ -177,6 +177,9 @@ public class LogViewAdapter extends TreeAdapter {
                 Log log = logInfo.getLogObject();
                 if (log instanceof ActionLog actionLog) {
                     BlueprintView.tryFocusAction(task.getAction(actionLog.getActionId()));
+                    if (searchIndex != -1) notifyItemChanged(searchIndex);
+                    searchIndex = getAdapterPosition();
+                    notifyItemChanged(searchIndex);
                 }
             });
 

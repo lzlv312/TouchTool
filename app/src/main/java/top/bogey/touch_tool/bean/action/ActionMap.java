@@ -149,6 +149,7 @@ public class ActionMap {
                     ActionType.GET_IMAGE,
                     ActionType.LOAD_IMAGE,
                     ActionType.CROP_IMAGE,
+                    ActionType.RESIZE_IMAGE,
                     ActionType.SAVE_IMAGE,
                     ActionType.FIND_IMAGES,
                     ActionType.IS_IMAGE_EXIST,

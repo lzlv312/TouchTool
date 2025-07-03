@@ -11,15 +11,15 @@ import android.view.WindowManager;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class FloatAnimator {
-    public Animator enter(View view, FloatDockSide side, Point offset) {
-        return makeAnimator(view, side, offset, true);
+    public Animator enter(View view, FloatDockSide side) {
+        return makeAnimator(view, side, true);
     }
 
-    public Animator exit(View view, FloatDockSide side, Point offset) {
-        return makeAnimator(view, side, offset, false);
+    public Animator exit(View view, FloatDockSide side) {
+        return makeAnimator(view, side, false);
     }
 
-    private Animator makeAnimator(View view, FloatDockSide side, Point offset, boolean enter) {
+    private Animator makeAnimator(View view, FloatDockSide side, boolean enter) {
         WindowManager.LayoutParams params = (WindowManager.LayoutParams) view.getLayoutParams();
 
         Rect validLocationArea;
@@ -31,10 +31,10 @@ public class FloatAnimator {
         int width = view.getWidth();
         int height = view.getHeight();
 
-        int leftDistance = params.x - validLocationArea.left + offset.x;
-        int rightDistance = validLocationArea.right - params.x - width - offset.x;
-        int topDistance = params.y - validLocationArea.top + offset.y;
-        int bottomDistance = validLocationArea.bottom - params.y - height - offset.y;
+        int leftDistance = params.x - validLocationArea.left;
+        int rightDistance = validLocationArea.right - params.x - width;
+        int topDistance = params.y - validLocationArea.top;
+        int bottomDistance = validLocationArea.bottom - params.y - height;
 
         boolean isPortrait = false;
         int startValue = 0, endValue = 0;
@@ -57,7 +57,7 @@ public class FloatAnimator {
                 startValue = validLocationArea.bottom;
                 endValue = params.y;
             }
-            case HORIZONTAL -> {
+            case HORIZONTAL, DEFAULT -> {
                 startValue = leftDistance < rightDistance ? validLocationArea.left - width : validLocationArea.right;
                 endValue = params.x;
             }

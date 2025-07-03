@@ -307,6 +307,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     public void focusCard(ActionCard card) {
         if (card == null) return;
 
+        cleanSelectedCards();
+        addSelectedCard(card);
         Action action = card.getAction();
         Point pos = action.getPos();
         float x = -pos.x * getScaleGridSize() + (getWidth() - card.getWidth() * scale) / 2f;
@@ -341,6 +343,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     private void refreshEditView() {
         BlueprintView.tryShowFloatingToolBar(selectedCards.size() > 1);
+    }
+
+    public void refreshPinView() {
+        cards.forEach((id, card) -> card.getPinViews().forEach((pinId, pinView) -> pinView.refreshCopyButton()));
     }
 
     private RectF getCardArea(ActionCard card) {

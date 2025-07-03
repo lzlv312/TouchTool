@@ -478,21 +478,28 @@
 
     <string name="crop_image_action">裁剪图片</string>
     <string name="crop_image_action_desc">裁剪图片</string>
+    <string name="crop_image_action_offset">偏移</string>
+
+    <string name="resize_image_action">缩放图片</string>
+    <string name="resize_image_action_desc">缩放图片</string>
+    <string name="resize_image_action_scale">缩小倍数</string>
 
     <string name="save_image_action">保存图片</string>
     <string name="save_image_action_desc">静默保存图片到图片文件夹</string>
 
     <string name="find_images_action">识别图片</string>
-    <string name="find_images_action_desc">识别模板图片在图片中的所有区域</string>
-    <string name="find_images_action_template">模板</string>
+    <string name="find_images_action_desc">识别目标图片在图片中的所有区域</string>
+    <string name="find_images_action_template">目标</string>
     <string name="find_images_action_similarity">相似度</string>
-    <string name="find_images_action_fast">二值化</string>
+    <string name="find_images_action_fast">去色</string>
+    <string name="find_images_action_scale">加速</string>
 
     <string name="is_image_exist_action">图片是否存在</string>
-    <string name="is_image_exist_action_desc">判断模板图片是否存在</string>
-    <string name="is_image_exist_action_template">模板</string>
+    <string name="is_image_exist_action_desc">判断目标图片是否存在</string>
+    <string name="is_image_exist_action_template">目标</string>
     <string name="is_image_exist_action_similarity">相似度</string>
-    <string name="is_image_exist_action_fast">二值化</string>
+    <string name="is_image_exist_action_fast">去色</string>
+    <string name="is_image_exist_action_scale">加速</string>
 
     <string name="create_qrcode_action">生成二维码</string>
     <string name="create_qrcode_action_desc">生成二维码</string>

@@ -27,7 +27,7 @@ public class OpenUriSchemeAction extends ExecuteAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         PinString uri = getPinValue(runnable, uriPin);
-        AppUtil.gotoScheme(MainApplication.getInstance(), uri.getValue());
+        AppUtil.gotoScheme(MainApplication.getInstance().getService(), uri.getValue());
         executeNext(runnable, outPin);
     }
 }

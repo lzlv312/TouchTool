@@ -96,7 +96,7 @@
 
                 <data
                     android:host="do_action"
-                    android:scheme="ttp" />
+                    android:scheme="tt" />
             </intent-filter>
         </activity>
 

@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.KeyguardManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -187,7 +188,7 @@ public class AppUtil {
 
     public static void gotoScheme(Context context, String scheme) {
         try {
-            Intent intent = Intent.parseUri(scheme, Intent.URI_INTENT_SCHEME | Intent.URI_ANDROID_APP_SCHEME);
+            Intent intent = Intent.parseUri(scheme, 0);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         } catch (Exception e) {
@@ -213,6 +214,19 @@ public class AppUtil {
     public static void copyToClipboard(Context context, String text, boolean showToast) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(text, text);
+        clipboard.setPrimaryClip(clip);
+        if (showToast) Toast.makeText(context, R.string.copy_tips, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void copyToClipboard(Context context, Bitmap image, boolean showToast) {
+        if (image == null) return;
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        File file = writeFile(context, DOCUMENT_DIR_NAME, "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg", outputStream.toByteArray());
+        if (file == null) return;
+        Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newUri(context.getContentResolver(), "Image", uri);
         clipboard.setPrimaryClip(clip);
         if (showToast) Toast.makeText(context, R.string.copy_tips, Toast.LENGTH_SHORT).show();
     }

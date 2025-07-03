@@ -288,6 +288,9 @@ public class DisplayUtil {
     public static native List<MatchResult> nativeMatchTemplate(Bitmap bitmap, Bitmap template, int similarity, boolean fast, int speed);
 
     public static synchronized List<Rect> matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, boolean fast) {
+        return matchTemplate(bitmap, template, area, similarity, fast, 2);
+    }
+    public static synchronized List<Rect> matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, boolean fast, int speed) {
         if (bitmap == null) return null;
         if (template == null) return null;
         // 如果图片尺寸小于模板尺寸，则不匹配
@@ -302,7 +305,7 @@ public class DisplayUtil {
             if (bitmap == null) return null;
         }
 
-        List<MatchResult> matchResults = nativeMatchTemplate(bitmap, template, similarity, fast, 1);
+        List<MatchResult> matchResults = nativeMatchTemplate(bitmap, template, similarity, fast, (int) Math.pow(2, speed));
         if (tmp != null) tmp.recycle();
 
         if (matchResults == null || matchResults.isEmpty()) return null;

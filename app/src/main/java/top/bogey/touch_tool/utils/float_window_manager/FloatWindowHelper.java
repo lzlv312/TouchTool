@@ -75,7 +75,7 @@ public class FloatWindowHelper {
     }
 
     void onLayoutCreated() {
-        initWindowLocation();
+        setRelativePoint(config.gravity, config.location);
         isPortrait = DisplayUtil.isPortrait(context);
 
         if (config.callback != null) config.callback.onCreate();
@@ -85,7 +85,7 @@ public class FloatWindowHelper {
             boolean portrait = DisplayUtil.isPortrait(context);
             if (isPortrait == null || portrait == isPortrait) return;
             isPortrait = portrait;
-            initWindowLocation();
+            setRelativePoint(config.gravity, config.location);
         });
 
         initEditText(viewParent);
@@ -94,7 +94,7 @@ public class FloatWindowHelper {
     void showFloatWindow() {
         if (config.animator != null) {
             new Handler().postDelayed(() -> {
-                Animator enter = config.animator.enter(viewParent, config.side, getAnchorOffset());
+                Animator enter = config.animator.enter(viewParent, config.side);
                 if (enter != null) {
                     enter.addListener(new AnimatorListenerAdapter() {
                         @Override
@@ -134,7 +134,7 @@ public class FloatWindowHelper {
 
     void dismissFloatWindow() {
         if (config.animator != null) {
-            Animator exit = config.animator.exit(viewParent, config.side, getAnchorOffset());
+            Animator exit = config.animator.exit(viewParent, config.side);
             if (exit != null) {
                 exit.addListener(new AnimatorListenerAdapter() {
                     @Override
@@ -164,15 +164,6 @@ public class FloatWindowHelper {
         } else {
             manager.removeView(viewParent);
         }
-    }
-
-    void initWindowLocation() {
-        Rect showArea = getShowArea();
-        Point garvityPoint = getGarvityPoint();
-        Point offset = getAnchorOffset();
-        params.x = Math.max(showArea.left, Math.min(showArea.right, garvityPoint.x + config.location.x + offset.x));
-        params.y = Math.max(showArea.top, Math.min(showArea.bottom, garvityPoint.y + config.location.y + offset.y));
-        manager.updateViewLayout(viewParent, params);
     }
 
     // 设置窗口位置
@@ -224,8 +215,7 @@ public class FloatWindowHelper {
 
 
     Point getGarvityPoint() {
-        Rect showArea = getShowArea();
-        return config.gravity.getAnchorPoint(showArea);
+        return config.gravity.getAnchorPoint();
     }
 
     Rect getShowArea() {

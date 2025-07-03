@@ -83,6 +83,10 @@ public class PinPoint extends PinScaleAble<Point> {
         return point;
     }
 
+    public void setValue(int x, int y) {
+        setValue(new Point(x, y));
+    }
+
     @Override
     public void setValue(Point value) {
         super.setValue(value);

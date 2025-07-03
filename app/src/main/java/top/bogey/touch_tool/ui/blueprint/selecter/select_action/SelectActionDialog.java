@@ -151,6 +151,8 @@ public class SelectActionDialog extends BottomSheetDialog {
             }
         });
 
+        setCopyObject(copyObject);
+
         Point size = DisplayUtil.getScreenSize(context);
         DisplayUtil.setViewHeight(binding.getRoot(), (int) (size.y * 0.7f));
         DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);

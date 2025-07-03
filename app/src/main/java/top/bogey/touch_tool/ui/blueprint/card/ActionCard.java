@@ -128,12 +128,12 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     }
 
     protected void initExpand(MaterialButton button) {
+        setExpandType(action.getExpandType());
         button.setIconResource(switch (action.getExpandType()) {
             case NONE -> R.drawable.icon_visibility_off;
             case HALF -> R.drawable.icon_visibility_half;
             case FULL -> R.drawable.icon_visibility;
         });
-        setExpandType(action.getExpandType());
         button.setOnClickListener(v -> {
             expand();
             button.setIconResource(switch (action.getExpandType()) {
@@ -318,5 +318,9 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
 
     public Action getAction() {
         return action;
+    }
+
+    public Map<String, PinView> getPinViews() {
+        return pinViews;
     }
 }

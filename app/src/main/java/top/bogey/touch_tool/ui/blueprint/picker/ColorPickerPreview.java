@@ -19,6 +19,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
 import top.bogey.touch_tool.databinding.FloatPickerColorPreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.ui.custom.TouchPathFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
@@ -132,7 +133,10 @@ public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
                         List<Rect> rectList = DisplayUtil.matchColor(result, colorInfo.getColor(), null, offset);
                         if (rectList == null || rectList.isEmpty()) return;
                         Rect rect = rectList.get(0);
-                        service.runGesture(rect.left + rect.width() / 2, rect.top + rect.height() / 2, 50, null);
+                        int x = rect.left + rect.width() / 2;
+                        int y = rect.top + rect.height() / 2;
+                        service.runGesture(x, y, 50, null);
+                        TouchPathFloatView.showGesture(x, y);
                     }
                 })), 100);
             }

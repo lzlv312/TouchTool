@@ -141,7 +141,7 @@ public class PinWidgetString extends PinWidget<PinString> {
 
         switch (pinBase.getSubType()) {
             case URL -> {
-                String url = "ttp://do_action?" + InstantActivity.TASK_ID + "=" + card.getTask().getId() + "&" + InstantActivity.ACTION_ID + "=" + card.getAction().getId();
+                String url = "tt://do_action?" + InstantActivity.TASK_ID + "=" + card.getTask().getId() + "&" + InstantActivity.ACTION_ID + "=" + card.getAction().getId();
                 binding.editText.setText(url);
                 binding.pickButton.setIconResource(R.drawable.icon_copy);
                 binding.pickButton.setOnClickListener(v -> AppUtil.copyToClipboard(getContext(), url));

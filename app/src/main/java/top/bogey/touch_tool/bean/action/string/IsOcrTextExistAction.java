@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.action.SyncAction;
@@ -92,6 +93,14 @@ public class IsOcrTextExistAction extends CalculateAction implements SyncAction 
         }
     }
 
+    @Override
+    public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
+        List<String> options = typePin.getValue(PinSingleSelect.class).getOptions();
+        if (options.isEmpty()) {
+            result.addResult(ActionCheckResult.ResultType.ERROR, R.string.check_need_ocr_module_error);
+        }
+    }
     @Override
     public void sync(Task context) {
         typePin.getValue(PinSingleSelect.class).setOptions(TaskInfoSummary.getInstance().getOcrAppNames());

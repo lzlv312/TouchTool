@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.log.ActionLog;
 import top.bogey.touch_tool.bean.save.log.LogInfo;
@@ -22,6 +23,7 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatLogBinding;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
@@ -35,9 +37,12 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
 
     private final int minWidth, minHeight;
     private final int maxWidth, maxHeight;
+    private int originWidth = 0, originHeight = 0;
+    private int width = 0, height = 0;
 
     private float lastX = 0, lastY = 0;
     private boolean dragging = false;
+    private boolean expanded = true;
 
     @SuppressLint("ClickableViewAccessibility")
     public LogView(@NonNull Context context, Task task) {
@@ -53,6 +58,8 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
         binding = FloatLogBinding.inflate(LayoutInflater.from(context), this, true);
         adapter = new LogViewAdapter();
 
+        binding.title.setText(task.getTitle());
+
         binding.closeButton.setOnClickListener(v -> dismiss());
 
         binding.exportButton.setOnClickListener(v -> {
@@ -65,6 +72,32 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
                 builder.append(log.getLog()).append("\n");
             }
             AppUtil.shareText(context, builder.toString());
+        });
+
+        binding.expandButton.setOnClickListener(v -> {
+            expanded = !expanded;
+            if (expanded) {
+                binding.contentBox.setVisibility(VISIBLE);
+                int margin = (int) DisplayUtil.dp2px(context, 8);
+                DisplayUtil.setViewMargin(binding.expandButton, margin, 0, 0, 0);
+                ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
+                params.width = width;
+                params.height = height;
+                binding.getRoot().setLayoutParams(params);
+                binding.expandButton.setIconResource(R.drawable.icon_zoom_in);
+            } else {
+                binding.contentBox.setVisibility(GONE);
+                DisplayUtil.setViewMargin(binding.expandButton, 0, 0, 0, 0);
+                ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
+                width = params.width;
+                height = params.height;
+                params.width = binding.expandButton.getWidth();
+                params.height = binding.expandButton.getHeight();
+                binding.getRoot().setLayoutParams(params);
+                binding.expandButton.setIconResource(R.drawable.icon_zoom_out);
+
+            }
+            FloatWindow.updateLayoutParam(tag);
         });
 
         binding.recyclerView.setAdapter(adapter);
@@ -86,6 +119,11 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
         binding.preButton.setOnClickListener(v -> searchLog(false));
 
         binding.nextButton.setOnClickListener(v -> searchLog(true));
+
+        binding.clearButton.setOnClickListener(v -> {
+            Saver.getInstance().clearLog(task.getId());
+            adapter.setLogSave(Saver.getInstance().getLogSave(task.getId()));
+        });
     }
 
     private void searchLog(boolean isNext) {
@@ -120,6 +158,20 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
         return super.onInterceptTouchEvent(event);
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (originWidth == 0 || originHeight == 0) {
+            originWidth = binding.getRoot().getWidth();
+            originHeight = binding.getRoot().getHeight();
+            originWidth = Math.max(1, originWidth);
+            originHeight = Math.max(1, originHeight);
+
+            width = binding.expandButton.getWidth();
+            height = binding.expandButton.getHeight();
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -147,6 +199,8 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
                 float dx = x - lastX;
                 float dy = y - lastY;
                 ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
+                if (params.width <= 0) params.width = originWidth;
+                if (params.height <= 0) params.height = originHeight;
                 params.width += (int) dx;
                 params.height += (int) dy;
                 params.width = Math.min(maxWidth, Math.max(minWidth, params.width));
@@ -162,9 +216,6 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
                 if (dragging) {
                     dragging = false;
                     FloatWindow.setDragAble(tag, true);
-                } else {
-                    Saver.getInstance().clearLog(task.getId());
-                    adapter.setLogSave(Saver.getInstance().getLogSave(task.getId()));
                 }
                 return true;
             }
@@ -174,10 +225,12 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
 
     @Override
     public void show() {
+        Point size = DisplayUtil.getScreenSize(getContext());
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setLayout(this)
                 .setTag(tag)
                 .setSpecial(true)
+                .setLocation(EAnchor.BOTTOM_CENTER, 0, -size.y / 4)
                 .setExistEditText(true)
                 .show();
         Saver.getInstance().addListener(this);

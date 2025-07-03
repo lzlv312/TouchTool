@@ -1,31 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="?attr/materialCardViewFilledStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:clipToPadding="false">
+    app:cardElevation="0dp"
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:strokeWidth="1px"
+    tools:targetApi="p">
 
-    <FrameLayout
-        android:id="@+id/scaleBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:transformPivotX="0dp"
-        android:transformPivotY="0dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardLayout"
-            style="?attr/materialCardViewFilledStyle"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:icon="@drawable/icon_save" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/closeButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:icon="@drawable/icon_close" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/scaleBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:minWidth="96dp"
+            android:minWidth="48dp"
             android:minHeight="48dp"
-            app:cardElevation="0dp"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
-            app:strokeColor="?attr/colorOutlineVariant"
-            app:strokeWidth="1px"
-            tools:targetApi="p">
+            android:transformPivotX="0dp"
+            android:transformPivotY="0dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/image"
@@ -33,29 +52,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/saveButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="end|top"
-                android:alpha="0.5"
-                android:translationX="-4dp"
-                android:translationY="4dp"
-                app:icon="@drawable/icon_save" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/dragImage"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="end|bottom"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon_line_curve"
+                android:translationX="12dp"
+                android:translationY="12dp" />
 
-        </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/dragImage"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end|bottom"
-            android:scaleType="centerInside"
-            android:src="@drawable/icon_line_curve"
-            android:translationX="8dp"
-            android:translationY="8dp" />
+    </LinearLayout>
 
-    </FrameLayout>
-
-</FrameLayout>
+</com.google.android.material.card.MaterialCardView>

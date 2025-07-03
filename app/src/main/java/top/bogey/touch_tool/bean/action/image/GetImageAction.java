@@ -14,6 +14,7 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
+import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.action.SyncAction;
 import top.bogey.touch_tool.bean.action.system.SwitchCaptureAction;
 import top.bogey.touch_tool.bean.pin.Pin;
@@ -26,7 +27,7 @@ import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
-public class GetImageAction extends CalculateAction implements SyncAction {
+public class GetImageAction extends ExecuteAction implements SyncAction {
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area);
     private final transient Pin useAccPin = new NotLinkAblePin(new PinBoolean(true), R.string.get_image_action_use_accessibility, false, false, true);
     private final transient Pin imagePin = new Pin(new PinImage(), R.string.pin_image, true);
@@ -42,7 +43,7 @@ public class GetImageAction extends CalculateAction implements SyncAction {
     }
 
     @Override
-    public void calculate(TaskRunnable runnable, Pin pin) {
+    public void execute(TaskRunnable runnable, Pin pin) {
         sync(runnable.getTask());
         PinArea area = getPinValue(runnable, areaPin);
         PinBoolean useAcc = getPinValue(runnable, useAccPin);
@@ -61,6 +62,8 @@ public class GetImageAction extends CalculateAction implements SyncAction {
             Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, areaRect.left, areaRect.top, areaRect.width(), areaRect.height());
             if (clipBitmap != null) imagePin.getValue(PinImage.class).setImage(clipBitmap);
         }
+
+        executeNext(runnable, outPin);
     }
 
     @Override

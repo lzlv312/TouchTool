@@ -58,6 +58,7 @@ public class ShizukuService extends IShizukuService.Stub {
 
         try {
             cmdWriter.write(cmd + "\n");
+            cmdWriter.write("echo \n");
             cmdWriter.write("echo " + EXIT_MARKER + ":$?\n");
             cmdWriter.flush();
 

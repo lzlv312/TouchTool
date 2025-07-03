@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.bean.action.system;
 
+import android.graphics.Bitmap;
+
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.MainApplication;
@@ -7,6 +9,8 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
@@ -26,10 +30,15 @@ public class WriteToClipboardAction extends ExecuteAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
-        PinString text = getPinValue(runnable, textPin);
-        if (text.getValue() != null && !text.getValue().isEmpty()) {
-            MainApplication instance = MainApplication.getInstance();
-            AppUtil.copyToClipboard(instance, text.getValue(), false);
+        PinObject object = getPinValue(runnable, textPin);
+        MainApplication instance = MainApplication.getInstance();
+        if (object instanceof PinImage pinImage) {
+            Bitmap bitmap = pinImage.getImage();
+            if (bitmap != null) {
+                AppUtil.copyToClipboard(instance, bitmap, false);
+            }
+        } else if (!object.toString().isEmpty()) {
+            AppUtil.copyToClipboard(instance, object.toString(), false);
         }
         executeNext(runnable, outPin);
     }

@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
+import com.google.android.material.button.MaterialButton;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -26,6 +28,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.ui.blueprint.BlueprintView;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.pin_slot.PinSlotView;
 import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidget;
@@ -69,14 +72,15 @@ public abstract class PinView extends FrameLayout implements PinListener {
 
         Button copyButton = getCopyAndPasteButton();
         if (copyButton != null) {
-            copyButton.setVisibility(pin.getValue() instanceof PinObject ? VISIBLE : GONE);
             copyButton.setOnClickListener(v -> {
                 if (copyValue == null || !pin.isSameClass(copyValue)) {
                     copyValue = (PinObject) pin.getValue().copy();
-                    Toast.makeText(getContext(), R.string.copy_tips, Toast.LENGTH_SHORT).show();
+                    BlueprintView.tryRefreshPinView();
                 } else {
-                    pin.setValue(copyValue);
+                    pin.getValue().sync(copyValue);
+                    refreshPin();
                     copyValue = null;
+                    BlueprintView.tryRefreshPinView();
                 }
             });
         }
@@ -100,6 +104,8 @@ public abstract class PinView extends FrameLayout implements PinListener {
         TextView textView = getTitleView();
         if (textView != null) textView.setText(pin.getTitle());
 
+        refreshCopyButton();
+
         ViewGroup widgetBox = getWidgetBox();
         if (widgetBox != null) {
             widgetBox.removeAllViews();
@@ -117,6 +123,20 @@ public abstract class PinView extends FrameLayout implements PinListener {
                     }
                 }
             }
+        }
+    }
+
+    public void refreshCopyButton() {
+        MaterialButton button = (MaterialButton) getCopyAndPasteButton();
+        if (button == null) return;
+
+        boolean visible = (pin.getValue() instanceof PinObject) && (!pin.isLinked());
+        button.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+        if (copyValue == null || !pin.isSameClass(copyValue)) {
+            button.setIconResource(R.drawable.icon_copy);
+        } else {
+            button.setIconResource(R.drawable.icon_assignment);
         }
     }
 

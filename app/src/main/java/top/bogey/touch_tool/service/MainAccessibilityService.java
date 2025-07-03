@@ -506,8 +506,8 @@ public class MainAccessibilityService extends AccessibilityService {
             return true;
         } else {
             callback.onResult(lastScreenShot);
+            return false;
         }
-        return false;
     }
 
     public void tryGetScreenShot(BitmapResultCallback callback) {

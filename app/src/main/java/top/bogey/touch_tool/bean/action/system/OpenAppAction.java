@@ -41,9 +41,9 @@ public class OpenAppAction extends ExecuteAction {
 
         List<String> classes = app.getActivityClasses();
         if (classes == null || classes.isEmpty()) {
-            AppUtil.gotoApp(MainApplication.getInstance(), app.getPackageName(), params);
+            AppUtil.gotoApp(MainApplication.getInstance().getService(), app.getPackageName(), params);
         } else {
-            AppUtil.gotoActivity(MainApplication.getInstance(), app.getPackageName(), classes.get(0), params);
+            AppUtil.gotoActivity(MainApplication.getInstance().getService(), app.getPackageName(), classes.get(0), params);
         }
         executeNext(runnable, outPin);
     }

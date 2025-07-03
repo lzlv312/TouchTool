@@ -51,7 +51,7 @@ public class PinString extends PinObject {
 
     @Override
     public boolean linkFromAble(PinBase pin) {
-        if (getType().getGroup() == pin.getType().getGroup()) {
+        if (pin.getType().getGroup() != -1) {
             if (isDynamic() || pin.isDynamic()) return true;
             return pin instanceof PinObject;
         }

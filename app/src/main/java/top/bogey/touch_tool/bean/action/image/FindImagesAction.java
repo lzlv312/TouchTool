@@ -16,6 +16,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
@@ -24,18 +25,19 @@ public class FindImagesAction extends FindExecuteAction {
     private final transient Pin templatePin = new Pin(new PinImage(), R.string.find_images_action_template);
     private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.find_images_action_similarity);
     private final transient Pin fastPin = new Pin(new PinBoolean(true), R.string.find_images_action_fast);
+    private final transient Pin scalePin = new Pin(new PinSingleSelect(R.array.match_image_scale, 1), R.string.find_images_action_scale, false, false, true);
     private final transient Pin areasPin = new Pin(new PinList(new PinArea()), R.string.pin_area, true);
     private final transient Pin firstAreaPin = new Pin(new PinArea(), R.string.pin_area_first, true);
 
     public FindImagesAction() {
         super(ActionType.FIND_IMAGES);
         intervalPin.getValue(PinInteger.class).setValue(200);
-        addPins(sourcePin, templatePin, similarityPin, fastPin, areasPin, firstAreaPin);
+        addPins(sourcePin, templatePin, similarityPin, fastPin, scalePin, areasPin, firstAreaPin);
     }
 
     public FindImagesAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(sourcePin, templatePin, similarityPin, fastPin, areasPin, firstAreaPin);
+        reAddPins(sourcePin, templatePin, similarityPin, fastPin, scalePin, areasPin, firstAreaPin);
     }
 
     @Override
@@ -44,8 +46,9 @@ public class FindImagesAction extends FindExecuteAction {
         PinImage template = getPinValue(runnable, templatePin);
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);
         PinBoolean fast = getPinValue(runnable, fastPin);
+        PinSingleSelect scale = getPinValue(runnable, scalePin);
 
-        List<Rect> rectList = DisplayUtil.matchTemplate(source.getImage(), template.getImage(), null, similarity.intValue(), fast.getValue());
+        List<Rect> rectList = DisplayUtil.matchTemplate(source.getImage(), template.getImage(), null, similarity.intValue(), fast.getValue(), scale.getIndex() + 1);
         if (rectList != null && !rectList.isEmpty()) {
             rectList.forEach(rect -> areasPin.getValue(PinList.class).add(new PinArea(rect)));
             firstAreaPin.getValue(PinArea.class).setValue(rectList.get(0));

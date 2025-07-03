@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.action.SyncAction;
@@ -88,6 +89,15 @@ public class GetOcrTextAction extends ExecuteAction implements SyncAction {
             areaArray.clear();
         }
         executeNext(runnable, outPin);
+    }
+
+    @Override
+    public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
+        List<String> options = typePin.getValue(PinSingleSelect.class).getOptions();
+        if (options.isEmpty()) {
+            result.addResult(ActionCheckResult.ResultType.ERROR, R.string.check_need_ocr_module_error);
+        }
     }
 
     @Override

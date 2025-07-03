@@ -131,6 +131,7 @@ public enum ActionType {
     GET_IMAGE,
     LOAD_IMAGE,
     CROP_IMAGE,
+    RESIZE_IMAGE,
     SAVE_IMAGE,
     FIND_IMAGES,
     IS_IMAGE_EXIST,

@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.SyncAction;
 import top.bogey.touch_tool.bean.action.logic.FindExecuteAction;
@@ -34,7 +35,7 @@ public class FindOcrTextAction extends FindExecuteAction implements SyncAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image);
     private final transient Pin textPin = new Pin(new PinSingleLineString(), R.string.pin_string);
     private final transient Pin similarPin = new Pin(new PinInteger(60), R.string.find_ocr_text_action_similar);
-    private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(), R.string.find_ocr_text_action_type, false, false, true);
+    private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(), R.string.find_ocr_text_action_type);
     private final transient Pin resultAreaPin = new Pin(new PinArea(), R.string.pin_area, true);
     private final transient Pin resultTextPin = new Pin(new PinString(), R.string.pin_string, true);
 
@@ -89,6 +90,15 @@ public class FindOcrTextAction extends FindExecuteAction implements SyncAction {
         }
 
         return false;
+    }
+
+    @Override
+    public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
+        List<String> options = typePin.getValue(PinSingleSelect.class).getOptions();
+        if (options.isEmpty()) {
+            result.addResult(ActionCheckResult.ResultType.ERROR, R.string.check_need_ocr_module_error);
+        }
     }
 
     @Override

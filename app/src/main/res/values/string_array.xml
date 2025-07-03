@@ -226,4 +226,10 @@
         <item>截图</item>
     </string-array>
 
+    <string-array name="match_image_scale">
+        <item>不加速</item>
+        <item>4倍</item>
+        <item>16倍</item>
+    </string-array>
+
 </resources>

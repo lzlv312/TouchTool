@@ -53,13 +53,15 @@ public class CaptureService extends Service {
             if (data != null) {
                 MediaProjectionManager manager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
                 projection = manager.getMediaProjection(Activity.RESULT_OK, data);
-                projection.registerCallback(new MediaProjection.Callback() {
-                    @Override
-                    public void onStop() {
-                        stopService();
-                    }
-                }, null);
-                setVirtualDisplay();
+                if (projection != null) {
+                    projection.registerCallback(new MediaProjection.Callback() {
+                        @Override
+                        public void onStop() {
+                            stopService();
+                        }
+                    }, null);
+                    setVirtualDisplay();
+                }
             }
         }
         return new CaptureBinder();

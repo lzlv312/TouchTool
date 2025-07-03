@@ -63,6 +63,13 @@ public class BlueprintView extends Fragment {
         }
     }
 
+    public static void tryRefreshPinView() {
+        Fragment fragment = MainActivity.getCurrentFragment();
+        if (fragment instanceof BlueprintView blueprintView) {
+            blueprintView.binding.cardLayout.refreshPinView();
+        }
+    }
+
     public static void tryShowFloatingToolBar(boolean show) {
         Fragment fragment = MainActivity.getCurrentFragment();
         if (fragment instanceof BlueprintView blueprintView) {

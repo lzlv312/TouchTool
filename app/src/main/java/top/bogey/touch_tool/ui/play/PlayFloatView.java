@@ -28,6 +28,7 @@ import top.bogey.touch_tool.ui.blueprint.picker.FloatBaseCallback;
 import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
+import top.bogey.touch_tool.utils.float_window_manager.FloatAnimator;
 import top.bogey.touch_tool.utils.float_window_manager.FloatDockSide;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;

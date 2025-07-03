@@ -20,25 +20,25 @@ public enum EAnchor {
     public Point getAnchorOffset(int width, int height) {
         int x = 0, y = 0;
         switch (this) {
-            case TOP_LEFT -> {
-                x = width / 2;
-                y = height / 2;
-            }
-            case TOP_CENTER -> y = height / 2;
-            case TOP_RIGHT -> {
+            case TOP_CENTER -> x = -width / 2;
+            case TOP_RIGHT -> x = -width;
+            case CENTER_LEFT -> y = -height / 2;
+            case CENTER -> {
                 x = -width / 2;
-                y = height / 2;
-            }
-            case CENTER_LEFT -> x = width / 2;
-            case CENTER_RIGHT -> x = -width / 2;
-            case BOTTOM_LEFT -> {
-                x = width / 2;
                 y = -height / 2;
             }
-            case BOTTOM_CENTER -> y = -height / 2;
+            case CENTER_RIGHT -> {
+                x = -width;
+                y = -height / 2;
+            }
+            case BOTTOM_LEFT -> y = -height;
+            case BOTTOM_CENTER -> {
+                x = -width / 2;
+                y = -height;
+            }
             case BOTTOM_RIGHT -> {
-                x = -width / 2;
-                y = -height / 2;
+                x = -width;
+                y = -height;
             }
         }
         return new Point(x, y);

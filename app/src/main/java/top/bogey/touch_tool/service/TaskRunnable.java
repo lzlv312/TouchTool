@@ -27,7 +27,7 @@ public class TaskRunnable implements Runnable {
 
     private final Task task;
     private final StartAction startAction;
-    private boolean debug;
+    private final boolean debug;
     private boolean skipLog = false;
 
     private int progress = 0;

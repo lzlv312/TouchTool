@@ -23,7 +23,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.databinding.FloatStickScreenBinding;
-import top.bogey.touch_tool.ui.blueprint.picker.FloatBaseCallback;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
@@ -34,6 +33,7 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 public class StickScreenFloatView extends FrameLayout implements FloatInterface {
     private final FloatStickScreenBinding binding;
     private final String tag;
+    private final int top;
     private final int minWidth, minHeight;
     private final int maxWidth, maxHeight;
 
@@ -42,7 +42,6 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
     private int originWidth = 0, originHeight = 0;
     private float minScale, maxScale;
     private boolean dragging = false;
-    private final Handler longTouchHandler;
 
     public static String showStick(PinObject object, EAnchor anchor, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
@@ -60,8 +59,10 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         super(context);
         binding = FloatStickScreenBinding.inflate(LayoutInflater.from(context), this, true);
         this.tag = tag;
-        longTouchHandler = new Handler();
 
+        binding.closeButton.setOnClickListener(v -> dismiss());
+
+        top = (int) DisplayUtil.dp2px(context, 24);
         minWidth = (int) DisplayUtil.dp2px(context, 48);
         minHeight = (int) DisplayUtil.dp2px(context, 48);
         Point size = DisplayUtil.getScreenSize(context);
@@ -77,6 +78,9 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             originHeight = binding.scaleBox.getHeight();
             originWidth = Math.max(1, originWidth);
             originHeight = Math.max(1, originHeight);
+
+            DisplayUtil.setViewWidth(binding.scaleBox, originWidth);
+            DisplayUtil.setViewHeight(binding.scaleBox, originHeight);
 
             minScale = Math.max(minWidth * 1f / originWidth, minHeight * 1f / originHeight);
             maxScale = Math.min(maxWidth * 1f / originWidth, maxHeight * 1f / originHeight);
@@ -95,7 +99,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             int textColor = DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorOnSurface);
 
             if (object instanceof PinColor pinColor) {
-                binding.cardLayout.setCardBackgroundColor(pinColor.getValue().getColor());
+                binding.getRoot().setCardBackgroundColor(pinColor.getValue().getColor());
                 textSize = 9;
                 textColor = DisplayUtil.getTextColor(pinColor.getValue().getColor());
             }
@@ -123,12 +127,10 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
                 if (new RectF(location[0], location[1], location[0] + binding.dragImage.getWidth() * binding.scaleBox.getScaleX(), location[1] + binding.dragImage.getHeight() * binding.scaleBox.getScaleY()).contains(x, y)) {
                     FloatWindow.setDragAble(tag, false);
                 }
-                longTouchHandler.postDelayed(this::dismiss, 1000);
                 return true;
             }
 
             case MotionEvent.ACTION_MOVE -> {
-                longTouchHandler.removeCallbacksAndMessages(null);
                 if (lastX == 0 && lastY == 0) {
                     lastX = x;
                     lastY = y;
@@ -138,18 +140,22 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
                 float dx = x - lastX;
                 float dy = y - lastY;
                 ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
-                if (params.width <= 0) params.width = originWidth;
-                if (params.height <= 0) params.height = originHeight;
-                params.width += (int) dx;
-                params.height += (int) dy;
-                float xScale = (float) params.width / originWidth;
-                float yScale = (float) params.height / originHeight;
+                float width = params.width;
+                float height = params.height - top;
+                if (width <= 0) width = originWidth;
+                if (height <= 0) height = originHeight;
+                width += dx;
+                height += dy;
+                float xScale = width / originWidth;
+                float yScale = height / originHeight;
                 float scale = (xScale + yScale) / 2;
                 scale = Math.min(Math.max(scale, minScale), maxScale);
                 binding.scaleBox.setScaleX(scale);
                 binding.scaleBox.setScaleY(scale);
-                params.width = (int) (originWidth * scale);
-                params.height = (int) (originHeight * scale);
+                width = originWidth * scale;
+                height = originHeight * scale;
+                params.width = (int) width;
+                params.height = (int) (height + top);
                 binding.getRoot().setLayoutParams(params);
                 FloatWindow.updateLayoutParam(tag);
                 lastX = x;
@@ -158,7 +164,6 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             }
 
             case MotionEvent.ACTION_UP -> {
-                longTouchHandler.removeCallbacksAndMessages(null);
                 if (dragging) {
                     dragging = false;
                     FloatWindow.setDragAble(tag, true);
@@ -183,28 +188,11 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
                 .setTag(tag)
                 .setSpecial(true)
                 .setLocation(EAnchor.CENTER, 0, 0)
-                .setCallback(new FloatCallback())
                 .show();
     }
 
     @Override
     public void dismiss() {
         FloatWindow.dismiss(tag);
-    }
-
-    private class FloatCallback extends FloatBaseCallback {
-        @Override
-        public void onShow(String tag) {
-        }
-
-        @Override
-        public void onDismiss() {
-        }
-
-        @Override
-        public void onDrag() {
-            super.onDrag();
-            longTouchHandler.removeCallbacksAndMessages(null);
-        }
     }
 }
