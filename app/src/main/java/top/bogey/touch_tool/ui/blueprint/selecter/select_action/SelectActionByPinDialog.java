@@ -34,6 +34,7 @@ public class SelectActionByPinDialog extends SelectActionDialog {
     @Override
     protected Map<String, List<Object>> getGroupData(GroupType groupType) {
         Map<String, List<Object>> map = new LinkedHashMap<>();
+        if (touchedPin == null) return map;
         switch (groupType) {
             case PRESET -> {
                 for (ActionMap.ActionGroupType actionGroupType : ActionMap.ActionGroupType.values()) {

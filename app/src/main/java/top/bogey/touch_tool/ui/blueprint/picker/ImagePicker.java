@@ -16,8 +16,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import java.util.List;
-
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.databinding.FloatPickerAreaBinding;
@@ -171,8 +169,8 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
 
     @Override
     protected void realShow() {
-        List<Rect> rectList = DisplayUtil.matchTemplate(screenInfo.getScreenShot(), bitmap, null, 80, true);
-        if (rectList != null && !rectList.isEmpty()) area.set(rectList.get(0));
+        Rect rect = DisplayUtil.matchTemplate(screenInfo.getScreenShot(), bitmap, null, 80);
+        if (rect != null && !rect.isEmpty()) area.set(rect);
         area.offset(-location[0], -location[1]);
         refreshUI();
     }

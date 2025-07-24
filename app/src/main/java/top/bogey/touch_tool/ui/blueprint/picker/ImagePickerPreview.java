@@ -11,8 +11,6 @@ import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 
-import java.util.List;
-
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.databinding.FloatPickerImagePreviewBinding;
@@ -63,10 +61,9 @@ public class ImagePickerPreview extends BasePicker<Bitmap> {
                     FloatWindow.show(tag);
                     if (result != null) {
                         int similar = (int) binding.timeSlider.getValue();
-                        List<Rect> rectList = DisplayUtil.matchTemplate(result, bitmap, null, similar, true);
-                        if (rectList == null || rectList.isEmpty()) binding.matchedImage.setImageDrawable(null);
+                        Rect rect = DisplayUtil.matchTemplate(result, bitmap, null, similar);
+                        if (rect == null || rect.isEmpty()) binding.matchedImage.setImageDrawable(null);
                         else {
-                            Rect rect = rectList.get(0);
                             int px = (int) DisplayUtil.dp2px(getContext(), 16);
                             Rect area = DisplayUtil.safeClipBitmapArea(result, rect.left - px, rect.top - px, rect.width() + px * 2, rect.height() + px * 2);
                             if (area == null) return;
@@ -94,9 +91,8 @@ public class ImagePickerPreview extends BasePicker<Bitmap> {
                     FloatWindow.show(tag);
                     if (result != null) {
                         int similar = (int) binding.timeSlider.getValue();
-                        List<Rect> rectList = DisplayUtil.matchTemplate(result, bitmap, null, similar, true);
-                        if (rectList == null || rectList.isEmpty()) return;
-                        Rect rect = rectList.get(0);
+                        Rect rect = DisplayUtil.matchTemplate(result, bitmap, null, similar);
+                        if (rect == null || rect.isEmpty()) return;
                         int x = rect.left + rect.width() / 2;
                         int y = rect.top + rect.height() / 2;
                         service.runGesture(x, y, 50, null);

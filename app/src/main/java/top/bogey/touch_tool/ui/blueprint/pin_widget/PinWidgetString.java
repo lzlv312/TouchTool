@@ -37,6 +37,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinAutoPinString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinFileContentString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathTextString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinRingtoneString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinShortcutString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleLineString;
@@ -116,6 +117,10 @@ public class PinWidgetString extends PinWidget<PinString> {
     }
 
     public PinWidgetString(@NonNull Context context, ActionCard card, PinView pinView, PinNodePathString pinBase, boolean custom) {
+        this(context, card, pinView, (PinString) pinBase, custom);
+    }
+
+    public PinWidgetString(@NonNull Context context, ActionCard card, PinView pinView, PinNodePathTextString pinBase, boolean custom) {
         this(context, card, pinView, (PinString) pinBase, custom);
     }
 
@@ -231,6 +236,29 @@ public class PinWidgetString extends PinWidget<PinString> {
                     pinView.getPin().notifyValueUpdated();
                     binding.editText.setText(String.valueOf(nodePath.getNodeInfo()));
                 }, nodePath.getNodeInfo()).show());
+            }
+            case NODE_PATH_TEXT -> {
+                PinNodePathTextString nodePath = (PinNodePathTextString) pinBase;
+                binding.editText.setEnabled(true);
+                binding.editText.setSingleLine(false);
+                binding.editText.setMaxLines(10);
+                binding.editText.setText(nodePath.getValue());
+                binding.editText.addTextChangedListener(new TextChangedListener() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        nodePath.setValue(s.toString());
+                        pinView.getPin().notifyValueUpdated();
+                    }
+                });
+                binding.pickButton.setIconResource(R.drawable.icon_text);
+                binding.pickButton.setOnClickListener(v -> new NodePickerPreview(getContext(), result -> {
+                    nodePath.setValue(result);
+                    String regex = AppUtil.formatRegex(nodePath.getValue());
+                    nodePath.setValue(regex);
+                    pinView.getPin().notifyValueUpdated();
+                    binding.editText.setText(regex);
+                }, nodePath.getNodeInfo()).show());
+
             }
             case TASK_ID -> {
                 Task task = Saver.getInstance().getTask(card.getTask(), pinBase.getValue());

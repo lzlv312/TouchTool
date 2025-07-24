@@ -95,6 +95,7 @@ public enum ActionType {
     STRING_FROM_OBJECT,
     STRING_TO_NUMBER,
     STRING_APPEND,
+    STRING_SUBSTRING,
     STRING_REGEX,
     STRING_SPLIT,
     STRING_EQUAL,
@@ -104,6 +105,9 @@ public enum ActionType {
     IS_OCR_TEXT_EXIST,
     PARSE_JSON,
     TO_JSON,
+    STRING_ENCODE,
+    STRING_DECODE,
+    STRING_ENCRYPT,
 
     // 条件
     BOOLEAN_OR,
@@ -111,12 +115,8 @@ public enum ActionType {
     BOOLEAN_NOT,
 
     // 控件
-    FIND_NODE_BY_PATH,
-    IS_NODE_EXIST_BY_PATH,
-    FIND_NODES_BY_TEXT,
-    IS_NODE_EXIST_BY_TEXT,
-    FIND_NODES_BY_ID,
-    IS_NODE_EXIST_BY_ID,
+    FIND_NODE,
+    IS_NODE_EXIST,
     GET_NODES_IN_AREA,
     GET_NODE_INFO,
     GET_NODE_CHILDREN,
@@ -133,6 +133,7 @@ public enum ActionType {
     CROP_IMAGE,
     RESIZE_IMAGE,
     SAVE_IMAGE,
+    FIND_IMAGE,
     FIND_IMAGES,
     IS_IMAGE_EXIST,
     CREATE_QRCODE,

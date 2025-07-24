@@ -43,11 +43,8 @@ public class SelectActivityDialog extends FrameLayout {
                 } else {
                     List<SelectActivityInfo> newActivities = new ArrayList<>();
                     for (SelectActivityInfo activityInfo : activityInfoList) {
-                        if (applications.isShared()) {
-                            if (AppUtil.isStringContains(activityInfo.label, searchString)) newActivities.add(activityInfo);
-                        } else {
-                            if (AppUtil.isStringContains(activityInfo.name, searchString)) newActivities.add(activityInfo);
-                        }
+                        if (AppUtil.isStringContains(activityInfo.label, searchString)) newActivities.add(activityInfo);
+                        else if (AppUtil.isStringContains(activityInfo.name, searchString)) newActivities.add(activityInfo);
                     }
                     adapter.refreshActivities(newActivities);
                 }
@@ -85,34 +82,41 @@ public class SelectActivityDialog extends FrameLayout {
         } else {
             if (info.activities != null) {
                 for (ActivityInfo activityInfo : info.activities) {
-                    if (activityInfo.exported)
-                        activityInfoList.add(new SelectActivityInfo(
-                                activityInfo,
-                                activityInfo.name,
-                                null,
-                                launcherActivityName.equals(activityInfo.name)
-                        ));
+                    activityInfoList.add(new SelectActivityInfo(
+                            activityInfo,
+                            activityInfo.name,
+                            activityInfo.loadLabel(manager).toString(),
+                            launcherActivityName.equals(activityInfo.name)
+                    ));
                 }
             }
         }
 
         AppUtil.chineseSort(activityInfoList, activityInfo -> activityInfo.name);
-        int index = 0;
+        return sortActivityInfoList(application, activityInfoList);
+    }
 
-        int i = 0;
-        while (i < activityInfoList.size()) {
-            SelectActivityInfo activityInfo = activityInfoList.get(i);
-            if (activityInfo.isLauncher) {
-                activityInfoList.add(0, activityInfoList.remove(i));
-                index++;
-            } else if (application.getActivityClasses() != null && application.getActivityClasses().contains(activityInfo.name)) {
-                activityInfoList.add(index, activityInfoList.remove(i));
-                index++;
+    @NonNull
+    private static List<SelectActivityInfo> sortActivityInfoList(PinApplication application, List<SelectActivityInfo> activityInfoList) {
+        List<SelectActivityInfo> resultActivityInfoList = new ArrayList<>();
+        List<SelectActivityInfo> exportedActivityInfoList = new ArrayList<>();
+        List<SelectActivityInfo> nonExportedActivityInfoList = new ArrayList<>();
+        for (SelectActivityInfo activityInfo : activityInfoList) {
+            if (application.getActivityClasses() != null && application.getActivityClasses().contains(activityInfo.name)) {
+                resultActivityInfoList.add(activityInfo);
+            } else if (activityInfo.activityInfo.exported) {
+                if (activityInfo.isLauncher) {
+                    exportedActivityInfoList.add(0, activityInfo);
+                } else {
+                    exportedActivityInfoList.add(activityInfo);
+                }
+            } else {
+                nonExportedActivityInfoList.add(activityInfo);
             }
-            i++;
         }
-
-        return activityInfoList;
+        resultActivityInfoList.addAll(exportedActivityInfoList);
+        resultActivityInfoList.addAll(nonExportedActivityInfoList);
+        return resultActivityInfoList;
     }
 
     public record SelectActivityInfo(ActivityInfo activityInfo, String name, String label, boolean isLauncher) {

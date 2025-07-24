@@ -222,6 +222,14 @@ public class NodeInfo implements ITreeNodeData {
         return builder.toString();
     }
 
+    public String getPath() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(clazz);
+        if (id != null && !id.isEmpty()) builder.append("[id=").append(id).append("]");
+        builder.append("[").append(index).append("]");
+        return builder.toString();
+    }
+
     @Override
     public List<ITreeNodeData> getChildren() {
         return new ArrayList<>(children);

@@ -1,19 +1,23 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_app;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.radiobutton.MaterialRadioButton;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
+import top.bogey.touch_tool.databinding.DialogSelectActivityItemBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActivityDialogAdapter.ViewHolder> {
@@ -30,11 +34,8 @@ public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (applications.isSingle()) {
-            return new ViewHolder(new MaterialRadioButton(parent.getContext()));
-        } else {
-            return new ViewHolder(new MaterialCheckBox(parent.getContext()));
-        }
+        DialogSelectActivityItemBinding binding = DialogSelectActivityItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolder(binding);
     }
 
     @Override
@@ -106,25 +107,46 @@ public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private final CompoundButton button;
+        private final Context context;
+        private final DialogSelectActivityItemBinding binding;
+        private final PackageManager manager;
         private SelectActivityDialog.SelectActivityInfo info;
 
-        public ViewHolder(@NonNull CompoundButton button) {
-            super(button);
-            this.button = button;
 
-            button.setOnClickListener(v -> selectActivity());
+        public ViewHolder(@NonNull DialogSelectActivityItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            context = binding.getRoot().getContext();
+            manager = context.getPackageManager();
+
+            binding.getRoot().setOnClickListener(v -> {
+                selectActivity();
+                binding.getRoot().setChecked(!binding.getRoot().isChecked());
+            });
         }
 
         public void refresh(SelectActivityDialog.SelectActivityInfo info) {
             this.info = info;
-            if (applications.isShared()) {
-                button.setText(info.label());
+
+            binding.title.setText(info.label());
+            binding.packageName.setText(info.name());
+            Drawable icon = info.activityInfo().loadIcon(manager);
+            binding.icon.setImageDrawable(icon);
+
+            if (info.isLauncher()) {
+                binding.tips.setText(R.string.select_app_activity_launcher);
+                binding.tipsBg.setCardBackgroundColor(ColorStateList.valueOf(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant)));
             } else {
-                button.setText(info.name());
+                if (info.activityInfo().exported) {
+                    binding.tips.setText(R.string.select_app_activity_exported);
+                    binding.tipsBg.setCardBackgroundColor(ColorStateList.valueOf(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorTertiary)));
+                } else {
+                    binding.tips.setText(R.string.select_app_activity_not_exported);
+                    binding.tipsBg.setCardBackgroundColor(ColorStateList.valueOf(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorOutline)));
+                }
             }
-            button.setChecked(isSelectedActivity(info.name()));
-            button.setTextColor(DisplayUtil.getAttrColor(button.getContext(), info.isLauncher() ? com.google.android.material.R.attr.colorError : com.google.android.material.R.attr.colorOnSurface));
+
+            binding.getRoot().setChecked(isSelectedActivity(info.name()));
         }
 
         private void selectActivity() {

@@ -33,10 +33,10 @@ public class StringReplaceAction extends CalculateAction {
         PinObject replace = getPinValue(runnable, replacePin);
 
         if (text.toString().isEmpty()) return;
-        if (find.toString().isEmpty() || replace.toString().isEmpty()) {
+        if (find.toString().isEmpty()) {
             resultPin.getValue(PinString.class).setValue(text.toString());
         } else {
-            String string = text.toString().replace(find.toString(), replace.toString());
+            String string = text.toString().replaceAll(find.toString(), replace.toString());
             resultPin.getValue(PinString.class).setValue(string);
         }
     }

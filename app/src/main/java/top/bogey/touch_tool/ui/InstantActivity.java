@@ -46,7 +46,7 @@ public class InstantActivity extends BaseActivity {
 
         Uri uri = intent.getData();
         if (uri != null) {
-            if ("ttp".equals(uri.getScheme()) && "do_action".equals(uri.getHost()) && uri.getQuery() != null) {
+            if ("tt".equals(uri.getScheme()) && "do_action".equals(uri.getHost()) && uri.getQuery() != null) {
                 HashMap<String, String> params = new HashMap<>();
                 for (String name : uri.getQueryParameterNames()) {
                     params.put(name, uri.getQueryParameter(name));

@@ -1,7 +1,7 @@
 [versions]
 appcompat = "1.7.1"
 material = "1.12.0"
-nav = "2.9.0"
+nav = "2.9.2"
 
 flexbox = "3.0.0"
 
@@ -10,9 +10,9 @@ mmkv = "2.2.2"
 shizuku = "13.1.5"
 exp4j = "0.4.8"
 
-zxing = "3.2.0"
+zxing = "3.3.0"
 
-agp = "8.11.0"
+agp = "8.11.1"
 
 [libraries]
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

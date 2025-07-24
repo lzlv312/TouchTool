@@ -285,12 +285,13 @@ public class DisplayUtil {
         return bitmap;
     }
 
-    public static native List<MatchResult> nativeMatchTemplate(Bitmap bitmap, Bitmap template, int similarity, boolean fast, int speed);
+    public static native MatchResult nativeMatchTemplate(Bitmap bitmap, Bitmap template, int speed);
 
-    public static synchronized List<Rect> matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, boolean fast) {
-        return matchTemplate(bitmap, template, area, similarity, fast, 2);
+    public static Rect matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity) {
+        return matchTemplate(bitmap, template, area, similarity, 2);
     }
-    public static synchronized List<Rect> matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, boolean fast, int speed) {
+
+    public static Rect matchTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed) {
         if (bitmap == null) return null;
         if (template == null) return null;
         // 如果图片尺寸小于模板尺寸，则不匹配
@@ -305,7 +306,31 @@ public class DisplayUtil {
             if (bitmap == null) return null;
         }
 
-        List<MatchResult> matchResults = nativeMatchTemplate(bitmap, template, similarity, fast, (int) Math.pow(2, speed));
+        MatchResult matchResult = nativeMatchTemplate(bitmap, template, (int) Math.pow(2, speed));
+        if (tmp != null) tmp.recycle();
+        if (matchResult == null) return null;
+        if (matchResult.value * 100 < similarity) return null;
+        return matchResult.area;
+    }
+
+    public static native List<MatchResult> nativeMatchAllTemplate(Bitmap bitmap, Bitmap template, int similarity, int speed);
+
+    public static synchronized List<Rect> matchAllTemplate(Bitmap bitmap, Bitmap template, Rect area, int similarity, int speed) {
+        if (bitmap == null) return null;
+        if (template == null) return null;
+        // 如果图片尺寸小于模板尺寸，则不匹配
+        if (bitmap.getWidth() < template.getWidth() || bitmap.getHeight() < template.getHeight()) return null;
+
+        if (area == null) area = new Rect();
+
+        Bitmap tmp = null;
+        if (!area.isEmpty()) {
+            bitmap = safeClipBitmap(bitmap, area.left, area.top, area.width(), area.height());
+            tmp = bitmap;
+            if (bitmap == null) return null;
+        }
+
+        List<MatchResult> matchResults = nativeMatchAllTemplate(bitmap, template, similarity, (int) Math.pow(2, speed));
         if (tmp != null) tmp.recycle();
 
         if (matchResults == null || matchResults.isEmpty()) return null;

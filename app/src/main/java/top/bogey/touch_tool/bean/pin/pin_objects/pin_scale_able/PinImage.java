@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.utils.EAnchor;
@@ -37,6 +38,15 @@ public class PinImage extends PinScaleAble<String> {
         value = GsonUtil.getAsString(jsonObject, "value", null);
     }
 
+    @Override
+    public PinBase copy() {
+        PinImage pinImage = new PinImage(getSubType());
+        pinImage.setScreen(screen);
+        pinImage.setAnchor(anchor);
+        pinImage.image = image;
+        pinImage.value = value;
+        return pinImage;
+    }
 
     public Bitmap getImage() {
         if (image == null || image.isRecycled()) {

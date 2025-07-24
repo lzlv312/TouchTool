@@ -69,10 +69,19 @@
             android:layout_height="24dp"
             android:layout_gravity="center_vertical">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/expandButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:icon="@drawable/icon_visibility_half"
+                app:iconSize="16dp" />
+
             <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:minWidth="4dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"
@@ -80,15 +89,6 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:icon="@drawable/icon_lock_open"
-                app:iconSize="16dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/expandButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="4dp"
-                app:icon="@drawable/icon_visibility_half"
                 app:iconSize="16dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -123,19 +123,19 @@
                 android:id="@+id/inBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical" />
 
             <Space
-                android:layout_width="8dp"
-                android:layout_height="wrap_content" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_weight="1" />
 
             <LinearLayout
                 android:id="@+id/outBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_weight="1"
                 android:gravity="end"
                 android:orientation="vertical" />
 

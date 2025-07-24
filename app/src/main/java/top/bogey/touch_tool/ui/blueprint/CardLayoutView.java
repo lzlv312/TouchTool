@@ -224,6 +224,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                 if (!actions.isEmpty()) {
                     Action first = actions.get(0);
                     syncAction = (SyncAction) first.newCopy();
+                    action = (Action) syncAction;
                 }
             }
             syncAction.sync(task);

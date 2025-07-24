@@ -38,6 +38,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -524,6 +525,12 @@ public class MainAccessibilityService extends AccessibilityService {
                 }
             });
         }
+    }
+
+    public Bitmap tryGetScreenShotSync() {
+        CompletableFuture<Bitmap> future = new CompletableFuture<>();
+        tryGetScreenShot(future::complete);
+        return future.join();
     }
 
     // 截图 ----------------------------------------------------------------------------- end

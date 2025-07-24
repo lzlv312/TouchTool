@@ -42,6 +42,14 @@ public class SequenceExecuteAction extends ExecuteAction implements DynamicPinsA
     }
 
     @Override
+    public void onExecuteNext(TaskRunnable runnable, Pin pin) {
+        List<Pin> dynamicPins = getDynamicPins();
+        if (pin == dynamicPins.get(dynamicPins.size() - 1)) {
+            super.onExecuteNext(runnable, pin);
+        }
+    }
+
+    @Override
     public List<Pin> getDynamicPins() {
         List<Pin> pins = new ArrayList<>();
         pins.add(outPin);

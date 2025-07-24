@@ -305,6 +305,12 @@
     <string name="string_append_action">文本拼接</string>
     <string name="string_append_action_desc">将多个文本拼接成一个文本</string>
 
+    <string name="string_substring_action">文本截取</string>
+    <string name="string_substring_action_desc">将文本截取为指定范围的文本</string>
+    <string name="string_substring_action_start">起始位置</string>
+    <string name="string_substring_action_end">结束位置</string>
+    <string name="string_substring_action_result">结果</string>
+
     <string name="string_split_action">文本分割</string>
     <string name="string_split_action_desc">将文本按特定字符分割为多个文本</string>
     <string name="string_split_action_split">分割符</string>
@@ -322,6 +328,18 @@
     <string name="string_replace_action_find">查找文本</string>
     <string name="string_replace_action_replace">替换文本</string>
     <string name="string_replace_action_result">替换结果</string>
+
+    <string name="string_encode_action">文本编码</string>
+    <string name="string_encode_action_desc">将文本编码为指定编码</string>
+    <string name="string_encode_action_type">编码方式</string>
+
+    <string name="string_decode_action">文本解码</string>
+    <string name="string_decode_action_desc">将文本解码为指定编码</string>
+    <string name="string_decode_action_type">解码方式</string>
+
+    <string name="string_encrypt_action">文本加密</string>
+    <string name="string_encrypt_action_desc">将文本加密为指定编码</string>
+    <string name="string_encrypt_action_type">加密方式</string>
 
     <string name="get_ocr_text_action">OCR识别文本</string>
     <string name="get_ocr_text_action_desc">识别图片中指定区域文字</string>
@@ -409,27 +427,19 @@
     <string name="pin_node_first">首个控件</string>
     <string name="pin_node_top">最上层控件</string>
 
-    <string name="find_node_by_path_action">查找控件(身份)</string>
-    <string name="find_node_by_path_action_desc">根据身份获取控件</string>
-    <string name="find_node_by_path_action_path">身份</string>
+    <string name="find_node_action">查找控件</string>
+    <string name="find_node_action_desc">根据条件获取控件</string>
+    <string name="find_node_action_type">方式</string>
+    <string name="find_node_action_path">身份</string>
+    <string name="find_node_action_id">控件ID</string>
+    <string name="find_node_action_regex_path">正则路径</string>
 
-    <string name="is_node_exist_by_path_action">控件是否存在(身份)</string>
-    <string name="is_node_exist_by_path_action_desc">根据身份判断控件是否存在</string>
-    <string name="is_node_exist_by_path_action_path">身份</string>
-
-    <string name="find_nodes_by_text_action">查找控件(文本)</string>
-    <string name="find_nodes_by_text_action_desc">获取指定文本的所有控件</string>
-
-    <string name="is_node_exist_by_text_action">控件是否存在(文本)</string>
-    <string name="is_node_exist_by_text_action_desc">根据文本判断控件是否存在</string>
-
-    <string name="find_nodes_by_id_action">查找控件(ID)</string>
-    <string name="find_nodes_by_id_action_desc">获取指定ID的所有控件</string>
-    <string name="find_nodes_by_id_action_id">控件ID</string>
-
-    <string name="is_node_exist_by_id_action">控件是否存在(ID)</string>
-    <string name="is_node_exist_by_id_action_desc">根据ID判断控件是否存在</string>
-    <string name="is_node_exist_by_id_action_id">控件ID</string>
+    <string name="is_node_exist_action">控件是否存在</string>
+    <string name="is_node_exist_action_desc">判断控件是否存在</string>
+    <string name="is_node_exist_action_type">方式</string>
+    <string name="is_node_exist_action_path">身份</string>
+    <string name="is_node_exist_action_id">控件ID</string>
+    <string name="is_node_exist_action_regex_path">正则路径</string>
 
     <string name="find_nodes_in_area_action">获取区域内控件</string>
     <string name="find_nodes_in_area_action_desc">获取与区域相交的所有控件</string>
@@ -487,19 +497,26 @@
     <string name="save_image_action">保存图片</string>
     <string name="save_image_action_desc">静默保存图片到图片文件夹</string>
 
-    <string name="find_images_action">识别图片</string>
+    <string name="find_image_action">识别图片区域位置</string>
+    <string name="find_image_action_desc">识别目标图片在图片中的位置</string>
+    <string name="find_image_action_template">目标</string>
+    <string name="find_image_action_similarity">相似度</string>
+    <string name="find_image_action_fast">去色</string>
+    <string name="find_image_action_scale">缩小倍数</string>
+
+    <string name="find_images_action">识别所有匹配图片</string>
     <string name="find_images_action_desc">识别目标图片在图片中的所有区域</string>
     <string name="find_images_action_template">目标</string>
     <string name="find_images_action_similarity">相似度</string>
     <string name="find_images_action_fast">去色</string>
-    <string name="find_images_action_scale">加速</string>
+    <string name="find_images_action_scale">缩小倍数</string>
 
     <string name="is_image_exist_action">图片是否存在</string>
     <string name="is_image_exist_action_desc">判断目标图片是否存在</string>
     <string name="is_image_exist_action_template">目标</string>
     <string name="is_image_exist_action_similarity">相似度</string>
     <string name="is_image_exist_action_fast">去色</string>
-    <string name="is_image_exist_action_scale">加速</string>
+    <string name="is_image_exist_action_scale">缩小倍数</string>
 
     <string name="create_qrcode_action">生成二维码</string>
     <string name="create_qrcode_action_desc">生成二维码</string>

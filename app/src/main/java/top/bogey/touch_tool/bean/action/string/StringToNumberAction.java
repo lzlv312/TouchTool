@@ -9,6 +9,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
@@ -17,28 +18,35 @@ import top.bogey.touch_tool.utils.AppUtil;
 
 public class StringToNumberAction extends CalculateAction {
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
-    private final transient Pin numberPin = new Pin(new PinDouble(), R.string.pin_number_integer, true);
+    private final transient Pin numberPin = new Pin(new PinDouble(), R.string.pin_number_double, true);
+    private final transient Pin numbersPin = new Pin(new PinList(new PinDouble()), R.string.pin_number_double, true);
 
     public StringToNumberAction() {
         super(ActionType.STRING_TO_NUMBER);
-        addPins(textPin, numberPin);
+        addPins(textPin, numberPin, numbersPin);
     }
 
     public StringToNumberAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(textPin, numberPin);
+        reAddPins(textPin, numberPin, numbersPin);
     }
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
-        numberPin.getValue(PinDouble.class).setValue(0.0);
         PinObject text = getPinValue(runnable, textPin);
         if (text.toString().isEmpty()) return;
+
+        PinList pinList = numbersPin.getValue(PinList.class);
+
         Pattern pattern = AppUtil.getPattern("-?\\d+(\\.\\d+)?");
         if (pattern == null) return;
         Matcher matcher = pattern.matcher(text.toString());
-        if (matcher.find()) {
-            numberPin.getValue(PinDouble.class).setValue(Double.parseDouble(matcher.group()));
+
+        while (matcher.find()) {
+            pinList.add(new PinDouble(Double.parseDouble(matcher.group())));
+        }
+        if (!pinList.isEmpty()) {
+            numberPin.setValue(pinList.get(0));
         }
     }
 }

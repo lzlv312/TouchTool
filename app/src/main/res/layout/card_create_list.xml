@@ -132,19 +132,19 @@
                 android:id="@+id/inBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical" />
 
             <Space
-                android:layout_width="8dp"
-                android:layout_height="wrap_content" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_weight="1" />
 
             <LinearLayout
                 android:id="@+id/outBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_weight="1"
                 android:gravity="end"
                 android:orientation="vertical" />
 

@@ -22,6 +22,7 @@ import top.bogey.touch_tool.bean.action.bool.BooleanOrAction;
 import top.bogey.touch_tool.bean.action.image.CreateQRCodeAction;
 import top.bogey.touch_tool.bean.action.image.CropImageAction;
 import top.bogey.touch_tool.bean.action.image.FindColorsAction;
+import top.bogey.touch_tool.bean.action.image.FindImageAction;
 import top.bogey.touch_tool.bean.action.image.FindImagesAction;
 import top.bogey.touch_tool.bean.action.image.GetColorAction;
 import top.bogey.touch_tool.bean.action.image.GetImageAction;
@@ -67,17 +68,13 @@ import top.bogey.touch_tool.bean.action.map.MapSetAction;
 import top.bogey.touch_tool.bean.action.map.MapSizeAction;
 import top.bogey.touch_tool.bean.action.node.CheckNodeValidAction;
 import top.bogey.touch_tool.bean.action.node.EditTextInputAction;
-import top.bogey.touch_tool.bean.action.node.FindNodeByPathAction;
-import top.bogey.touch_tool.bean.action.node.FindNodesByIdAction;
-import top.bogey.touch_tool.bean.action.node.FindNodesByTextAction;
+import top.bogey.touch_tool.bean.action.node.FindNodeAction;
 import top.bogey.touch_tool.bean.action.node.GetNodeChildrenAction;
 import top.bogey.touch_tool.bean.action.node.GetNodeInfoAction;
 import top.bogey.touch_tool.bean.action.node.GetNodeParentAction;
 import top.bogey.touch_tool.bean.action.node.GetNodesInAreaAction;
 import top.bogey.touch_tool.bean.action.node.GetWindowsAction;
-import top.bogey.touch_tool.bean.action.node.IsNodeExistByIdAction;
-import top.bogey.touch_tool.bean.action.node.IsNodeExistByPathAction;
-import top.bogey.touch_tool.bean.action.node.IsNodeExistByTextAction;
+import top.bogey.touch_tool.bean.action.node.IsNodeExistAction;
 import top.bogey.touch_tool.bean.action.node.NodeTouchAction;
 import top.bogey.touch_tool.bean.action.normal.DelayAction;
 import top.bogey.touch_tool.bean.action.normal.InputParamAction;
@@ -119,11 +116,15 @@ import top.bogey.touch_tool.bean.action.string.GetOcrTextAction;
 import top.bogey.touch_tool.bean.action.string.IsOcrTextExistAction;
 import top.bogey.touch_tool.bean.action.string.ParseJsonAction;
 import top.bogey.touch_tool.bean.action.string.StringAppendAction;
+import top.bogey.touch_tool.bean.action.string.StringDecodeAction;
+import top.bogey.touch_tool.bean.action.string.StringEncodeAction;
+import top.bogey.touch_tool.bean.action.string.StringEncryptAction;
 import top.bogey.touch_tool.bean.action.string.StringEqualAction;
 import top.bogey.touch_tool.bean.action.string.StringFromObjectAction;
 import top.bogey.touch_tool.bean.action.string.StringMatchAction;
 import top.bogey.touch_tool.bean.action.string.StringReplaceAction;
 import top.bogey.touch_tool.bean.action.string.StringSplitAction;
+import top.bogey.touch_tool.bean.action.string.StringSubStringAction;
 import top.bogey.touch_tool.bean.action.string.StringToNumberAction;
 import top.bogey.touch_tool.bean.action.system.CheckCaptureReadyAction;
 import top.bogey.touch_tool.bean.action.system.CheckInAppAction;
@@ -154,7 +155,6 @@ import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.CreateListActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.CustomActionCard;
-import top.bogey.touch_tool.ui.blueprint.card.DelayActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.ExecuteCustomActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.NormalActionCard;
 
@@ -190,7 +190,7 @@ public class ActionInfo {
 
 
     // 通用动作
-    private final static ActionInfo DELAY_INFO = new ActionInfo(ActionType.DELAY, DelayAction.class, R.drawable.icon_schedule, R.string.delay_action, R.string.delay_action_desc, R.string.delay_action_help, DelayActionCard.class);
+    private final static ActionInfo DELAY_INFO = new ActionInfo(ActionType.DELAY, DelayAction.class, R.drawable.icon_schedule, R.string.delay_action, R.string.delay_action_desc, R.string.delay_action_help, NormalActionCard.class);
     private final static ActionInfo LOG_INFO = new ActionInfo(ActionType.LOG, LoggerAction.class, R.drawable.icon_draw, R.string.log_action, R.string.log_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STICK_INFO = new ActionInfo(ActionType.STICK, StickScreenAction.class, R.drawable.icon_note_stack, R.string.stick_screen_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo CLOSE_STICK_INFO = new ActionInfo(ActionType.CLOSE_STICK, StickCloseAction.class, R.drawable.icon_note_stack, R.string.stick_close_action, 0, 0, NormalActionCard.class);
@@ -253,10 +253,14 @@ public class ActionInfo {
     private final static ActionInfo STRING_FROM_OBJECT_INFO = new ActionInfo(ActionType.STRING_FROM_OBJECT, StringFromObjectAction.class, R.drawable.icon_text, R.string.string_from_object_action, R.string.string_from_object_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_TO_NUMBER_INFO = new ActionInfo(ActionType.STRING_TO_NUMBER, StringToNumberAction.class, R.drawable.icon_number, R.string.string_to_number_action, R.string.string_to_number_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_APPEND_INFO = new ActionInfo(ActionType.STRING_APPEND, StringAppendAction.class, R.drawable.icon_add, R.string.string_append_action, R.string.string_append_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_SUBSTRING_INFO = new ActionInfo(ActionType.STRING_SUBSTRING, StringSubStringAction.class, R.drawable.icon_split, R.string.string_substring_action, R.string.string_substring_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_REGEX_INFO = new ActionInfo(ActionType.STRING_REGEX, StringMatchAction.class, R.drawable.icon_regular, R.string.string_match_action, R.string.string_match_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo STRING_SPLIT_INFO = new ActionInfo(ActionType.STRING_SPLIT, StringSplitAction.class, R.drawable.icon_split, R.string.string_split_action, R.string.string_split_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_SPLIT_INFO = new ActionInfo(ActionType.STRING_SPLIT, StringSplitAction.class, R.drawable.icon_array, R.string.string_split_action, R.string.string_split_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_EQUAL_INFO = new ActionInfo(ActionType.STRING_EQUAL, StringEqualAction.class, R.drawable.icon_equal, R.string.string_equal_action, R.string.string_equal_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_REPLACE_INFO = new ActionInfo(ActionType.STRING_REPLACE, StringReplaceAction.class, R.drawable.icon_swap, R.string.string_replace_action, R.string.string_replace_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_ENCODE_INFO = new ActionInfo(ActionType.STRING_ENCODE, StringEncodeAction.class, R.drawable.icon_input, R.string.string_encode_action, R.string.string_encode_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_DECODE_INFO = new ActionInfo(ActionType.STRING_DECODE, StringDecodeAction.class, R.drawable.icon_output, R.string.string_decode_action, R.string.string_decode_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_ENCRYPT_INFO = new ActionInfo(ActionType.STRING_ENCRYPT, StringEncryptAction.class, R.drawable.icon_input, R.string.string_encrypt_action, R.string.string_encrypt_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_OCR_TEXT_INFO = new ActionInfo(ActionType.GET_OCR_TEXT, GetOcrTextAction.class, R.drawable.icon_ocr, R.string.get_ocr_text_action, R.string.get_ocr_text_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo IS_OCR_TEXT_EXIST_INFO = new ActionInfo(ActionType.IS_OCR_TEXT_EXIST, IsOcrTextExistAction.class, R.drawable.icon_ocr, R.string.is_ocr_text_exist_action, R.string.is_ocr_text_exist_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_OCR_TEXT_INFO = new ActionInfo(ActionType.FIND_OCR_TEXT, FindOcrTextAction.class, R.drawable.icon_ocr, R.string.find_ocr_text_action, R.string.find_ocr_text_action_desc, 0, NormalActionCard.class);
@@ -270,12 +274,8 @@ public class ActionInfo {
 
 
     // 控件操作
-    private final static ActionInfo FIND_NODE_BY_PATH_INFO = new ActionInfo(ActionType.FIND_NODE_BY_PATH, FindNodeByPathAction.class, R.drawable.icon_widget, R.string.find_node_by_path_action, R.string.find_node_by_path_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo IS_NODE_EXIST_BY_PATH_INFO = new ActionInfo(ActionType.IS_NODE_EXIST_BY_PATH, IsNodeExistByPathAction.class, R.drawable.icon_check, R.string.is_node_exist_by_path_action, R.string.is_node_exist_by_path_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo FIND_NODES_BY_TEXT_INFO = new ActionInfo(ActionType.FIND_NODES_BY_TEXT, FindNodesByTextAction.class, R.drawable.icon_widget, R.string.find_nodes_by_text_action, R.string.find_nodes_by_text_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo IS_NODE_EXIST_BY_TEXT_INFO = new ActionInfo(ActionType.IS_NODE_EXIST_BY_TEXT, IsNodeExistByTextAction.class, R.drawable.icon_check, R.string.is_node_exist_by_text_action, R.string.is_node_exist_by_text_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo FIND_NODES_BY_ID_INFO = new ActionInfo(ActionType.FIND_NODES_BY_ID, FindNodesByIdAction.class, R.drawable.icon_widget, R.string.find_nodes_by_id_action, R.string.find_nodes_by_id_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo IS_NODE_EXIST_BY_ID_INFO = new ActionInfo(ActionType.IS_NODE_EXIST_BY_ID, IsNodeExistByIdAction.class, R.drawable.icon_check, R.string.is_node_exist_by_id_action, R.string.is_node_exist_by_id_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo FIND_NODE_BY_PATH_INFO = new ActionInfo(ActionType.FIND_NODE, FindNodeAction.class, R.drawable.icon_widget, R.string.find_node_action, R.string.find_node_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo IS_NODE_EXIST_BY_PATH_INFO = new ActionInfo(ActionType.IS_NODE_EXIST, IsNodeExistAction.class, R.drawable.icon_check, R.string.is_node_exist_action, R.string.is_node_exist_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo FIND_NODES_IN_AREA_INFO = new ActionInfo(ActionType.GET_NODES_IN_AREA, GetNodesInAreaAction.class, R.drawable.icon_widget, R.string.find_nodes_in_area_action, R.string.find_nodes_in_area_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_NODE_INFO_INFO = new ActionInfo(ActionType.GET_NODE_INFO, GetNodeInfoAction.class, R.drawable.icon_info, R.string.get_node_info_action, R.string.get_node_info_action_desc, 0, NormalActionCard.class);
@@ -294,6 +294,7 @@ public class ActionInfo {
     private final static ActionInfo CROP_IMAGE_INFO = new ActionInfo(ActionType.CROP_IMAGE, CropImageAction.class, R.drawable.icon_crop, R.string.crop_image_action, R.string.crop_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo RESIZE_IMAGE_INFO = new ActionInfo(ActionType.RESIZE_IMAGE, ResizeImageAction.class, R.drawable.icon_area, R.string.resize_image_action, R.string.resize_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SAVE_IMAGE_INFO = new ActionInfo(ActionType.SAVE_IMAGE, SaveImageAction.class, R.drawable.icon_save, R.string.save_image_action, R.string.save_image_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo FIND_IMAGE_INFO = new ActionInfo(ActionType.FIND_IMAGE, FindImageAction.class, R.drawable.icon_visibility, R.string.find_image_action, R.string.find_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_IMAGES_INFO = new ActionInfo(ActionType.FIND_IMAGES, FindImagesAction.class, R.drawable.icon_visibility, R.string.find_images_action, R.string.find_images_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo IS_IMAGE_EXIST_INFO = new ActionInfo(ActionType.IS_IMAGE_EXIST, IsImageExistAction.class, R.drawable.icon_check, R.string.is_image_exist_action, R.string.is_image_exist_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CREATE_QRCODE_INFO = new ActionInfo(ActionType.CREATE_QRCODE, CreateQRCodeAction.class, R.drawable.icon_qr_code, R.string.create_qrcode_action, R.string.create_qrcode_action_desc, 0, NormalActionCard.class);
@@ -442,10 +443,14 @@ public class ActionInfo {
             case STRING_FROM_OBJECT -> STRING_FROM_OBJECT_INFO;
             case STRING_TO_NUMBER -> STRING_TO_NUMBER_INFO;
             case STRING_APPEND -> STRING_APPEND_INFO;
+            case STRING_SUBSTRING -> STRING_SUBSTRING_INFO;
             case STRING_REGEX -> STRING_REGEX_INFO;
             case STRING_SPLIT -> STRING_SPLIT_INFO;
             case STRING_EQUAL -> STRING_EQUAL_INFO;
             case STRING_REPLACE -> STRING_REPLACE_INFO;
+            case STRING_ENCODE -> STRING_ENCODE_INFO;
+            case STRING_DECODE -> STRING_DECODE_INFO;
+            case STRING_ENCRYPT -> STRING_ENCRYPT_INFO;
             case GET_OCR_TEXT -> GET_OCR_TEXT_INFO;
             case FIND_OCR_TEXT -> FIND_OCR_TEXT_INFO;
             case IS_OCR_TEXT_EXIST -> IS_OCR_TEXT_EXIST_INFO;
@@ -457,12 +462,8 @@ public class ActionInfo {
             case BOOLEAN_NOT -> BOOLEAN_NOT_INFO;
 
 
-            case FIND_NODE_BY_PATH -> FIND_NODE_BY_PATH_INFO;
-            case IS_NODE_EXIST_BY_PATH -> IS_NODE_EXIST_BY_PATH_INFO;
-            case FIND_NODES_BY_TEXT -> FIND_NODES_BY_TEXT_INFO;
-            case IS_NODE_EXIST_BY_TEXT -> IS_NODE_EXIST_BY_TEXT_INFO;
-            case FIND_NODES_BY_ID -> FIND_NODES_BY_ID_INFO;
-            case IS_NODE_EXIST_BY_ID -> IS_NODE_EXIST_BY_ID_INFO;
+            case FIND_NODE -> FIND_NODE_BY_PATH_INFO;
+            case IS_NODE_EXIST -> IS_NODE_EXIST_BY_PATH_INFO;
             case GET_NODES_IN_AREA -> FIND_NODES_IN_AREA_INFO;
             case GET_NODE_INFO -> GET_NODE_INFO_INFO;
             case GET_NODE_CHILDREN -> GET_NODE_CHILDREN_INFO;
@@ -479,6 +480,7 @@ public class ActionInfo {
             case CROP_IMAGE -> CROP_IMAGE_INFO;
             case RESIZE_IMAGE -> RESIZE_IMAGE_INFO;
             case SAVE_IMAGE -> SAVE_IMAGE_INFO;
+            case FIND_IMAGE -> FIND_IMAGE_INFO;
             case FIND_IMAGES -> FIND_IMAGES_INFO;
             case IS_IMAGE_EXIST -> IS_IMAGE_EXIST_INFO;
             case CREATE_QRCODE -> CREATE_QRCODE_INFO;

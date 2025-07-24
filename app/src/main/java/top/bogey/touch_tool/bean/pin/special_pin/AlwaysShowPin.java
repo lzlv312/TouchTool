@@ -2,10 +2,9 @@ package top.bogey.touch_tool.bean.pin.special_pin;
 
 import com.google.gson.JsonObject;
 
-import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 
-public class AlwaysShowPin extends Pin {
+public class AlwaysShowPin extends NotLinkAblePin {
 
     public AlwaysShowPin(PinBase value) {
         super(value);
@@ -33,10 +32,5 @@ public class AlwaysShowPin extends Pin {
 
     public AlwaysShowPin(JsonObject jsonObject) {
         super(jsonObject);
-    }
-
-    @Override
-    public boolean linkAble() {
-        return false;
     }
 }

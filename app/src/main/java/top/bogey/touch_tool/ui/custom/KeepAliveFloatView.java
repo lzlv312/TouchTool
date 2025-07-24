@@ -38,7 +38,7 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, I
         cardView.setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceVariant));
         addView(cardView);
 
-//        setAlpha(0);
+        setAlpha(0);
     }
 
     private void showMe() {

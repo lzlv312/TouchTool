@@ -109,6 +109,24 @@
         <item>已解锁</item>
     </string-array>
 
+    <string-array name="find_node_type">
+        <item>身份</item>
+        <item>文本</item>
+        <item>控件ID</item>
+        <item>正则路径</item>
+    </string-array>
+
+    <string-array name="string_encode_type">
+        <item>URL</item>
+        <item>Base64</item>
+    </string-array>
+
+    <string-array name="string_encrypt_type">
+        <item>MD5</item>
+        <item>SHA-1</item>
+        <item>SHA-256</item>
+    </string-array>
+
     <string-array name="super_user_type">
         <item>不启用</item>
         <item>Shizuku模式</item>
@@ -227,9 +245,9 @@
     </string-array>
 
     <string-array name="match_image_scale">
-        <item>不加速</item>
-        <item>4倍</item>
-        <item>16倍</item>
+        <item>原图</item>
+        <item>两倍</item>
+        <item>四倍</item>
     </string-array>
 
 </resources>

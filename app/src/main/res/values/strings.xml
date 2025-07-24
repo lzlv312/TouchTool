@@ -84,6 +84,9 @@
     <string name="select_app_search_all">搜索%d个所有应用</string>
     <string name="select_app_activity">选择活动</string>
     <string name="select_app_search_activity">搜索活动</string>
+    <string name="select_app_activity_launcher">启动项</string>
+    <string name="select_app_activity_exported">已导出</string>
+    <string name="select_app_activity_not_exported">未导出</string>
 
     <string name="select_icon_search">搜索图标</string>
     <string name="select_icon_preset">预设</string>
@@ -128,6 +131,7 @@
     <string name="pin_string_file_content">文件内容</string>
     <string name="pin_string_single_line">单行文本</string>
     <string name="pin_string_node_path">控件身份</string>
+    <string name="pin_string_node_path_text">控件路径</string>
     <string name="pin_string_log">通配文本</string>
     <string name="pin_string_task">任务</string>
     <string name="pin_string_select">单选</string>

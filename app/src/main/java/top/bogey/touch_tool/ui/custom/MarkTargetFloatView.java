@@ -25,7 +25,6 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class MarkTargetFloatView extends AppCompatImageView implements FloatInterface {
     private final static int LINE_WIDTH = 10;
-    private final static int PADDING = LINE_WIDTH * 2;
 
     private final String tag = UUID.randomUUID().toString();
 
@@ -59,22 +58,22 @@ public class MarkTargetFloatView extends AppCompatImageView implements FloatInte
 
     private void innerShowTargetArea(Rect targetArea) {
         this.targetArea = targetArea;
-        int width = targetArea.width() + PADDING * 2;
-        int height = targetArea.height() + PADDING * 2;
+        int width = targetArea.width();
+        int height = targetArea.height();
         if (width <= 0 || height <= 0) return;
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        canvas.translate(PADDING - targetArea.left, PADDING - targetArea.top);
+        canvas.translate(-targetArea.left, -targetArea.top);
 
-        canvas.drawRoundRect(new RectF(targetArea), PADDING, PADDING, paint);
+        canvas.drawRoundRect(new RectF(targetArea), 0, 0, paint);
         setImageBitmap(bitmap);
         postDelayed(() -> animate().alpha(0).withEndAction(this::dismiss), 500);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int width = targetArea.width() + PADDING * 2;
-        int height = targetArea.height() + PADDING * 2;
+        int width = targetArea.width();
+        int height = targetArea.height();
         setMeasuredDimension(width, height);
     }
 
@@ -83,7 +82,8 @@ public class MarkTargetFloatView extends AppCompatImageView implements FloatInte
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setLayout(this)
                 .setTag(tag)
-                .setLocation(EAnchor.TOP_LEFT, targetArea.left - PADDING, targetArea.top - PADDING)
+                .setLocation(EAnchor.TOP_LEFT, targetArea.left, targetArea.top)
+                .setAnchor(EAnchor.TOP_LEFT)
                 .setDragAble(false)
                 .setSpecial(true)
                 .setFlag(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)

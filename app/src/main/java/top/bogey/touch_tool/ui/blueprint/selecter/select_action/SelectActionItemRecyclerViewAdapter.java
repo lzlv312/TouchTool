@@ -383,8 +383,12 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
 
                 binding.copyButton.setVisibility(View.VISIBLE);
                 binding.editButton.setVisibility(View.VISIBLE);
-                Task taskParent = task.getParentTask(dialog.task.getId());
-                binding.deleteButton.setVisibility(taskParent == null && !task.equals(dialog.task) ? View.VISIBLE : View.GONE);
+                Task childTask = dialog.task.findChildTask(task.getId());
+                if (task.equals(dialog.task) || childTask == null) {
+                    binding.deleteButton.setVisibility(View.GONE);
+                } else {
+                    binding.deleteButton.setVisibility(View.VISIBLE);
+                }
 
                 binding.settingButton.setVisibility(View.VISIBLE);
 

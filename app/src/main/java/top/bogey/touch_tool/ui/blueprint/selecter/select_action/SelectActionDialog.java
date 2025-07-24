@@ -26,6 +26,7 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.ITagManager;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
@@ -74,6 +75,7 @@ public class SelectActionDialog extends BottomSheetDialog {
         binding.group.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
+                SettingSaver.getInstance().setLastGroup(((MaterialButton) view).getText().toString());
                 groupType = (GroupType) view.getTag();
                 binding.addButton.setTag(groupType);
                 dataMap = getGroupData(groupType);
@@ -85,6 +87,7 @@ public class SelectActionDialog extends BottomSheetDialog {
         binding.subGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
+                SettingSaver.getInstance().setLastSubGroup(((MaterialButton) view).getText().toString());
                 subGroupTag = (String) view.getTag();
                 dataList = dataMap.get(subGroupTag);
                 adapter.setData(dataList, groupType != GroupType.PRESET);
@@ -93,13 +96,16 @@ public class SelectActionDialog extends BottomSheetDialog {
         });
 
         String[] groupName = getContext().getResources().getStringArray(R.array.group_type);
+        String lastGroup = SettingSaver.getInstance().getLastGroup();
+        int index = 0;
         for (GroupType groupType : getGroupTypes()) {
             WidgetSettingSelectButtonBinding buttonBinding = WidgetSettingSelectButtonBinding.inflate(LayoutInflater.from(getContext()), binding.group, true);
             buttonBinding.getRoot().setId(View.generateViewId());
             buttonBinding.getRoot().setText(groupName[groupType.ordinal()]);
             buttonBinding.getRoot().setTag(groupType);
+            if (lastGroup.equals(groupName[groupType.ordinal()])) index = groupType.ordinal();
         }
-        binding.group.check(binding.group.getChildAt(0).getId());
+        binding.group.check(binding.group.getChildAt(index).getId());
 
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override
@@ -227,14 +233,18 @@ public class SelectActionDialog extends BottomSheetDialog {
     private void refreshSubGroup(String[] chips) {
         binding.subGroup.clearChecked();
         binding.subGroup.removeAllViews();
-        for (String s : chips) {
+        String subGroup = SettingSaver.getInstance().getLastSubGroup();
+        int index = 0;
+        for (int i = 0; i < chips.length; i++) {
+            String s = chips[i];
             WidgetSettingSelectButton2Binding buttonBinding = WidgetSettingSelectButton2Binding.inflate(LayoutInflater.from(getContext()), binding.subGroup, true);
             MaterialButton button = buttonBinding.getRoot();
             button.setId(View.generateViewId());
             button.setText(s);
             button.setTag(s);
+            if (subGroup.equals(s)) index = i;
         }
-        if (chips.length > 0) binding.subGroup.check(binding.subGroup.getChildAt(0).getId());
+        if (chips.length > 0) binding.subGroup.check(binding.subGroup.getChildAt(index).getId());
     }
 
     protected GroupType[] getGroupTypes() {

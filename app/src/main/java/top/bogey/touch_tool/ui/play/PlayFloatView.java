@@ -124,6 +124,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
                 Task task = entry.getValue();
                 if (itemView.check(task, action)) {
                     already.add(action);
+                    itemView.setNeedRemove(false);
                     flag = false;
                     break;
                 }

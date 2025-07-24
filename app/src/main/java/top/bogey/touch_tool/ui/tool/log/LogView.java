@@ -41,6 +41,7 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
     private int width = 0, height = 0;
 
     private float lastX = 0, lastY = 0;
+    private boolean canDrag = false;
     private boolean dragging = false;
     private boolean expanded = true;
 
@@ -136,29 +137,6 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        float x = event.getRawX();
-        float y = event.getRawY();
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            int[] location = new int[2];
-            binding.recyclerView.getLocationOnScreen(location);
-            if (new RectF(location[0], location[1], location[0] + binding.recyclerView.getWidth(), location[1] + binding.recyclerView.getHeight()).contains(x, y)) {
-                FloatWindow.setDragAble(tag, false);
-                return super.onInterceptTouchEvent(event);
-            }
-
-            location = new int[2];
-            binding.dragImage.getLocationOnScreen(location);
-            if (new RectF(location[0], location[1], location[0] + binding.dragImage.getWidth(), location[1] + binding.dragImage.getHeight()).contains(x, y)) {
-                FloatWindow.setDragAble(tag, false);
-                return true;
-            }
-            FloatWindow.setDragAble(tag, true);
-        }
-        return super.onInterceptTouchEvent(event);
-    }
-
-    @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (originWidth == 0 || originHeight == 0) {
@@ -172,30 +150,49 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
         }
     }
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        float x = event.getRawX();
+        float y = event.getRawY();
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            int[] location = new int[2];
+            binding.recyclerView.getLocationOnScreen(location);
+            if (new RectF(location[0], location[1], location[0] + binding.recyclerView.getWidth(), location[1] + binding.recyclerView.getHeight()).contains(x, y)) {
+                FloatWindow.setDragAble(tag, false);
+                canDrag = false;
+                return super.onInterceptTouchEvent(event);
+            }
+
+            location = new int[2];
+            binding.dragImage.getLocationOnScreen(location);
+            if (new RectF(location[0], location[1], location[0] + binding.dragImage.getWidth(), location[1] + binding.dragImage.getHeight()).contains(x, y)) {
+                FloatWindow.setDragAble(tag, false);
+                lastX = 0;
+                lastY = 0;
+                canDrag = true;
+                return super.onInterceptTouchEvent(event);
+            }
+            FloatWindow.setDragAble(tag, true);
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            if (!canDrag) return false;
+            if (lastX == 0 && lastY == 0) {
+                lastX = x;
+                lastY = y;
+                return false;
+            }
+            dragging = true;
+            return true;
+        }
+        return super.onInterceptTouchEvent(event);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getRawX();
         float y = event.getRawY();
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN -> {
-                lastX = 0;
-                lastY = 0;
-                int[] location = new int[2];
-                binding.dragImage.getLocationOnScreen(location);
-                if (new RectF(location[0], location[1], location[0] + binding.dragImage.getWidth(), location[1] + binding.dragImage.getHeight()).contains(x, y)) {
-                    FloatWindow.setDragAble(tag, false);
-                }
-                return true;
-            }
-
             case MotionEvent.ACTION_MOVE -> {
-                if (lastX == 0 && lastY == 0) {
-                    lastX = x;
-                    lastY = y;
-                    return true;
-                }
-                dragging = true;
                 float dx = x - lastX;
                 float dy = y - lastY;
                 ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();

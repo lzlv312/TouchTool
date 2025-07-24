@@ -4,14 +4,20 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class PinNodePathString extends PinString {
 
     public PinNodePathString() {
         super(PinSubType.NODE_PATH);
+    }
+
+    protected PinNodePathString(PinSubType subType) {
+        super(subType);
     }
 
     public PinNodePathString(String str) {
@@ -42,6 +48,27 @@ public class PinNodePathString extends PinString {
             if (result != null) return result;
         }
         return null;
+    }
+
+    public List<NodeInfo> findNodes(List<NodeInfo> nodes) {
+        if (value == null || value.isEmpty()) return null;
+
+        String[] strings = value.split("\n");
+        return findNodes(nodes, strings, 0);
+    }
+
+    private List<NodeInfo> findNodes(List<NodeInfo> nodes, String[] path, int index) {
+        List<NodeInfo> result = new ArrayList<>();
+        if (index >= path.length) return result;
+        for (NodeInfo node : nodes) {
+            Pattern pattern = AppUtil.getPattern(path[index]);
+            if (pattern == null) continue;
+            if (pattern.matcher(node.getPath()).find()) {
+                if (index == path.length - 1) result.add(node);
+                else result.addAll(findNodes(node.children, path, index + 1));
+            }
+        }
+        return result;
     }
 
     public void setValue(NodeInfo node) {

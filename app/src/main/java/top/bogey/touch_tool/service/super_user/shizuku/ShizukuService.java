@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.service.super_user.shizuku;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.Keep;
 
@@ -13,6 +14,7 @@ import top.bogey.touch_tool.service.super_user.CmdResult;
 
 public class ShizukuService extends IShizukuService.Stub {
     private final static String EXIT_MARKER = "EXIT_MARKER";
+    private Context context;
 
     private Process process = null;
     private BufferedWriter cmdWriter = null;
@@ -33,6 +35,7 @@ public class ShizukuService extends IShizukuService.Stub {
     @Keep
     public ShizukuService(Context context) {
         this();
+        this.context = context;
     }
 
     @Override
@@ -65,6 +68,7 @@ public class ShizukuService extends IShizukuService.Stub {
             StringBuilder output = new StringBuilder();
             String line;
             while ((line = outputReader.readLine()) != null) {
+                Log.d("TAG", "runCommand: " + line);
                 if (line.startsWith(EXIT_MARKER)) {
                     int exitCode = Integer.parseInt(line.substring(EXIT_MARKER.length() + 1));
                     return new CmdResult(exitCode == 0, output.toString().trim());

@@ -162,10 +162,11 @@
 
             </LinearLayout>
 
-            <FrameLayout
+            <LinearLayout
                 android:id="@+id/testBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -200,7 +201,7 @@
                     android:layout_marginTop="4dp"
                     android:scaleType="fitCenter"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
-            </FrameLayout>
+            </LinearLayout>
 
         </FrameLayout>
 

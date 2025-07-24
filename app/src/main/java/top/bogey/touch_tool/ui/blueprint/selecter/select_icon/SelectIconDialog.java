@@ -1,26 +1,35 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_icon;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.databinding.DialogSelectIconBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.BitmapResultCallback;
 
@@ -43,6 +52,23 @@ public class SelectIconDialog extends BottomSheetDialog {
                 tab.setText(adapter.tags.get(position));
             }
         }).attach();
+
+        binding.addButton.setOnClickListener(v -> {
+            MainActivity activity = MainApplication.getInstance().getActivity();
+            activity.launcherPickMedia((code, intent) -> {
+                if (code == Activity.RESULT_OK) {
+                    Uri uri = intent.getData();
+                    if (uri != null) {
+                        try (InputStream inputStream = activity.getContentResolver().openInputStream(uri)) {
+                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                            callback.onResult(bitmap);
+                            dismiss();
+                        } catch (IOException ignored) {
+                        }
+                    }
+                }
+            }, ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE);
+        });
 
         calculateShowData();
         adapter.setData(icons);

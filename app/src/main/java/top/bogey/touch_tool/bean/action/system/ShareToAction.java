@@ -58,12 +58,10 @@ public class ShareToAction extends ExecuteAction {
                 intent.putExtra(Intent.EXTRA_TEXT, value.toString());
             }
             case 1 -> {
-                String parent;
                 String fileName;
                 byte[] bytes = new byte[0];
-                parent = AppUtil.DOCUMENT_DIR_NAME;
                 if (value instanceof PinImage image) {
-                    fileName = parent + "_" + AppUtil.formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg";
+                    fileName = "Picture_" + AppUtil.formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg";
                     intent.setType("image/*");
                     Bitmap bitmap = image.getImage();
                     if (bitmap != null) {
@@ -72,11 +70,11 @@ public class ShareToAction extends ExecuteAction {
                         bytes = outputStream.toByteArray();
                     }
                 } else {
-                    fileName = parent + "_" + AppUtil.formatDateTime(context, System.currentTimeMillis(), false, true) + ".txt";
+                    fileName = "Text_" + AppUtil.formatDateTime(context, System.currentTimeMillis(), false, true) + ".txt";
                     intent.setType("text/*");
                     bytes = value.toString().getBytes();
                 }
-                File file = AppUtil.writeFile(context, parent, fileName, bytes);
+                File file = AppUtil.writeFile(context, AppUtil.DOCUMENT_DIR_NAME, fileName, bytes);
                 if (file != null) {
                     Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
                     if (uri != null) {

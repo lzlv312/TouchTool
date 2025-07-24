@@ -26,13 +26,17 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 
 @SuppressLint("ViewConstructor")
 public class PlayFloatItemView extends FrameLayout implements ITaskListener {
+    public static final int PLAY_STATE_STOPED = 0;
+    public static final int PLAY_STATE_RUNNING = 1;
+    public static final int PLAY_STATE_PAUSED = 2;
+
     protected final FloatPlayItemBinding binding;
     protected int size;
 
     protected Task task;
     protected StartAction startAction;
 
-    protected boolean playing = false;
+    protected int playState = PLAY_STATE_STOPED;
     protected TaskRunnable runnable;
     protected boolean remove = false;
 
@@ -48,7 +52,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         binding.title.setText(getTitle(task, action));
 
         binding.getRoot().setOnClickListener(v -> {
-            if (playing) {
+            if (playState == PLAY_STATE_RUNNING) {
                 if (pauseType == 0) pause();
                 else stop();
             } else {
@@ -77,16 +81,21 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
     }
 
     public void tryRemoveFromParent() {
-        if (playing) remove = true;
-        else {
+        if (playState == PLAY_STATE_STOPED) {
             ((ViewGroup) getParent()).removeView(this);
+        } else {
+            remove = true;
         }
+    }
+
+    public void setNeedRemove(boolean needRemove) {
+        this.remove = needRemove;
     }
 
     private void pause() {
         if (runnable == null) return;
         runnable.pause();
-        playing = false;
+        playState = PLAY_STATE_PAUSED;
 
         binding.circleProgress.setIndeterminate(false);
         binding.lineProgress.setIndeterminate(false);
@@ -96,7 +105,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
     }
 
     private void setPlaying() {
-        playing = true;
+        playState = PLAY_STATE_RUNNING;
 
         binding.circleProgress.setIndeterminate(true);
         binding.lineProgress.setIndeterminate(true);
@@ -116,7 +125,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         if (runnable == null) return;
         runnable.stop();
         runnable = null;
-        playing = false;
+        playState = PLAY_STATE_STOPED;
 
         binding.circleProgress.setIndeterminate(false);
         binding.lineProgress.setIndeterminate(false);
@@ -147,7 +156,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
     @Override
     public void onExecute(TaskRunnable runnable, Action action, int progress) {
         post(() -> {
-            if (playing) binding.title.setText(String.valueOf(progress));
+            if (playState == PLAY_STATE_RUNNING) binding.title.setText(String.valueOf(progress));
         });
     }
 

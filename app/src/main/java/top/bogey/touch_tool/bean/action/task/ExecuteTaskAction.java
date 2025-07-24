@@ -15,6 +15,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.SyncAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinTaskString;
@@ -25,8 +26,8 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ExecuteTaskAction extends Action implements DynamicPinsAction, SyncAction {
-    private final transient Pin inPin = new ShowAblePin(new PinExecute(), R.string.pin_execute);
-    private final transient Pin outPin = new ShowAblePin(new PinExecute(), R.string.pin_execute, true);
+    private final transient Pin inPin = new ExecuteShowAblePin(new PinExecute(), R.string.pin_execute);
+    private final transient Pin outPin = new ExecuteShowAblePin(new PinExecute(), R.string.pin_execute, true);
     private final transient Pin taskPin = new NotLinkAblePin(new PinTaskString(), R.string.execute_task_action_task_id, false, false, true);
 
     private transient boolean synced = false;
@@ -207,5 +208,21 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
     public String getTitle() {
         if (title == null) return super.getTitle();
         return title;
+    }
+
+    private static class ExecuteShowAblePin extends ShowAblePin {
+        public ExecuteShowAblePin(PinBase value, int titleId) {
+            super(value, titleId);
+        }
+
+        public ExecuteShowAblePin(PinBase value, int titleId, boolean out) {
+            super(value, titleId, out);
+        }
+
+        @Override
+        public boolean showAble(Task context) {
+            ExecuteTaskAction action = (ExecuteTaskAction) context.getAction(getOwnerId());
+            return !action.isJustCall(context);
+        }
     }
 }

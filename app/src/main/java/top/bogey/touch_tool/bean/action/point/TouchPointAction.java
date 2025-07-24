@@ -13,6 +13,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.action.SyncAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinValueArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
@@ -27,7 +28,7 @@ import top.bogey.touch_tool.ui.custom.TouchPathFloatView;
 
 public class TouchPointAction extends ExecuteAction implements SyncAction {
     private final transient Pin touchPin = new Pin(new PinPoint(), R.string.pin_point);
-    private final transient Pin timePin = new Pin(new PinInteger(100), R.string.touch_point_action_time, false, false, true);
+    private final transient Pin timePin = new Pin(new PinValueArea(100, 100), R.string.touch_point_action_time, false, false, true);
     private final transient Pin offsetPin = new Pin(new PinInteger(), R.string.touch_point_action_offset);
     private final transient Pin typePin = new SingleSelectPin(new PinSingleSelect(), R.string.touch_point_action_type, false, false, true);
 
@@ -46,7 +47,7 @@ public class TouchPointAction extends ExecuteAction implements SyncAction {
     public void execute(TaskRunnable runnable, Pin pin) {
         sync(runnable.getTask());
         PinPoint point = getPinValue(runnable, touchPin);
-        PinNumber<?> time = getPinValue(runnable, timePin);
+        PinValueArea time = getPinValue(runnable, timePin);
         PinNumber<?> offset = getPinValue(runnable, offsetPin);
         PinSingleSelect type = getPinValue(runnable, typePin);
 
@@ -56,7 +57,7 @@ public class TouchPointAction extends ExecuteAction implements SyncAction {
 
         if (type.getIndex() == 0) {
             MainAccessibilityService service = MainApplication.getInstance().getService();
-            service.runGesture(x, y, time.intValue(), null);
+            service.runGesture(x, y, time.getRandomValue(), null);
         } else {
             if (SuperUser.getInstance().isValid()) {
                 SuperUser.getInstance().runCommand(String.format("input tap %d %d", x, y));

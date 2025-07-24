@@ -85,7 +85,7 @@ public class TaskRunnable implements Runnable {
                 wait(pauseTime);
                 pauseTime = -1;
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }

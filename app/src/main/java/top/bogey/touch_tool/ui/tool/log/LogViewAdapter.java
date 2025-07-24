@@ -224,7 +224,7 @@ public class LogViewAdapter extends TreeAdapter {
                 binding.copyButton.setVisibility(View.VISIBLE);
                 binding.title.setText(":" + logInfo.getLog());
             } else {
-                binding.copyButton.setIconResource(node.isExpanded() ? R.drawable.icon_arrow_up : R.drawable.icon_arrow_down);
+                binding.copyButton.setIconResource(node.isExpanded() ? R.drawable.icon_arrow_down : R.drawable.icon_arrow_right);
                 int size = logInfo.getChildrenFlags().size();
                 binding.copyButton.setVisibility(size == 0 ? View.INVISIBLE : View.VISIBLE);
                 binding.title.setText(logInfo.getLog());

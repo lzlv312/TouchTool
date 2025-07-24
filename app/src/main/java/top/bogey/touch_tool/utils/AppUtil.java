@@ -254,6 +254,19 @@ public class AppUtil {
         }
     }
 
+    public static String formatRegex(String value) {
+        if (value == null) return null;
+        final String[] metaCharacters = {"\\", "^", "$", "{", "}", "[", "]", "(", ")", ".", "*", "+", "?", "|", "/"};
+
+        // 逐个转义特殊字符
+        for (String metaCharacter : metaCharacters) {
+            if (value.contains(metaCharacter)) {
+                value = value.replace(metaCharacter, "\\" + metaCharacter);
+            }
+        }
+        return value;
+    }
+
     public static boolean isStringContains(String str, String value) {
         Pattern pattern = getPattern(value);
         if (pattern == null) {
@@ -406,7 +419,7 @@ public class AppUtil {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setType("text/*");
-        File file = writeFile(context, DOCUMENT_DIR_NAME, "Txt_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".txt", text.getBytes());
+        File file = writeFile(context, DOCUMENT_DIR_NAME, "Text_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".txt", text.getBytes());
         if (file != null) {
             Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".file_provider", file);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

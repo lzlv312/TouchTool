@@ -12,6 +12,7 @@ import top.bogey.touch_tool.bean.action.SyncAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
@@ -21,12 +22,12 @@ import top.bogey.touch_tool.utils.GsonUtil;
 public class SetVariableAction extends ExecuteAction implements SyncAction {
     private final String varId;
     private final transient Pin varPin;
-    private final transient Pin savePin = new Pin(new PinBoolean(false), R.string.set_value_action_save);
+    private final transient Pin savePin = new NotLinkAblePin(new PinBoolean(false), R.string.set_value_action_save);
 
     public SetVariableAction(Variable variable) {
         super(ActionType.SET_VARIABLE);
         varId = variable.getId();
-        varPin = new Pin(variable.getValue());
+        varPin = new Pin(variable.getValue().copy());
         varPin.setUid(varId);
         addPins(varPin, savePin);
     }
@@ -68,7 +69,6 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         if (variable == null) variable = Saver.getInstance().getVar(varId);
         if (variable == null) return;
         if (varPin == null) return;
-        varPin.setValue(variable.getValue());
         varPin.setTitle(variable.getTitle());
         String globalFlag = variable.getParent() == null ? GLOBAL_FLAG : "";
         setTitle(MainApplication.getInstance().getString(R.string.set_value_action) + " - " + globalFlag + variable.getTitle());

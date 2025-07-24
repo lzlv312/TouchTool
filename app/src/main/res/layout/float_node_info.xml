@@ -8,7 +8,18 @@
     android:maxWidth="240dp"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/expandButton"
+        style="@style/Theme.TouchTool.IconButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        app:icon="@drawable/icon_zoom_in" />
+
     <LinearLayout
+        android:id="@+id/contentBox"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:minWidth="96dp"
@@ -16,8 +27,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:paddingHorizontal="4dp">
+            android:layout_height="32dp"
+            android:paddingHorizontal="8dp">
 
             <com.google.android.material.button.MaterialButton
                 style="@style/Theme.TouchTool.IconButton"
@@ -27,30 +38,15 @@
                 android:backgroundTint="?attr/colorOnSurfaceVariant"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/zoomButton"
-                    style="@style/Theme.TouchTool.IconButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    app:icon="@drawable/icon_zoom_in" />
-
-                <Space
-                    android:layout_width="8dp"
-                    android:layout_height="wrap_content"/>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/closeButton"
-                    style="@style/Theme.TouchTool.IconButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    app:icon="@drawable/icon_close" />
-
-            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/closeButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="end|center"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:icon="@drawable/icon_close" />
 
         </FrameLayout>
 
@@ -64,7 +60,7 @@
             app:cardBackgroundColor="?attr/colorSurface">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/contentBox"
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

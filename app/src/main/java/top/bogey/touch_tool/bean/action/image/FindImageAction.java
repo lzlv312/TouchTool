@@ -13,37 +13,40 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
-import top.bogey.touch_tool.bean.action.CalculateAction;
+import top.bogey.touch_tool.bean.action.logic.FindExecuteAction;
 import top.bogey.touch_tool.bean.action.system.SwitchCaptureAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
-public class IsColorExistAction extends CalculateAction {
+public class FindImageAction extends FindExecuteAction {
     private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image, false, false, true);
-    private final transient Pin templatePin = new Pin(new PinColor(), R.string.find_colors_action_template);
-    private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.find_colors_action_similarity);
-    private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
+    private final transient Pin templatePin = new Pin(new PinImage(), R.string.find_image_action_template);
+    private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.find_image_action_similarity);
+    private final transient Pin scalePin = new Pin(new PinSingleSelect(R.array.match_image_scale, 1), R.string.find_image_action_scale, false, false, true);
+    private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area, true);
 
-    public IsColorExistAction() {
-        super(ActionType.IS_COLOR_EXIST);
-        addPins(sourcePin, templatePin, similarityPin, resultPin);
+    public FindImageAction() {
+        super(ActionType.FIND_IMAGE);
+        intervalPin.getValue(PinInteger.class).setValue(200);
+        addPins(sourcePin, templatePin, similarityPin, scalePin, areaPin);
     }
 
-    public IsColorExistAction(JsonObject jsonObject) {
+    public FindImageAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(sourcePin, templatePin, similarityPin, resultPin);
+        reAddPins(sourcePin, templatePin, similarityPin, scalePin, areaPin);
     }
 
     @Override
-    public void calculate(TaskRunnable runnable, Pin pin) {
+    public boolean find(TaskRunnable runnable) {
         Bitmap bitmap;
         if (sourcePin.isLinked()) {
             PinImage source = getPinValue(runnable, sourcePin);
@@ -52,13 +55,16 @@ public class IsColorExistAction extends CalculateAction {
             MainAccessibilityService service = MainApplication.getInstance().getService();
             bitmap = service.tryGetScreenShotSync();
         }
-        PinColor template = getPinValue(runnable, templatePin);
+        PinImage template = getPinValue(runnable, templatePin);
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);
+        PinSingleSelect scale = getPinValue(runnable, scalePin);
 
-        List<Rect> rectList = DisplayUtil.matchColor(bitmap, template.getValue().getColor(), null, similarity.intValue());
-        if (rectList != null && !rectList.isEmpty()) {
-            resultPin.getValue(PinBoolean.class).setValue(true);
+        Rect rect = DisplayUtil.matchTemplate(bitmap, template.getImage(), null, similarity.intValue(), scale.getIndex() + 1);
+        if (rect == null || rect.isEmpty()) {
+            return false;
         }
+        areaPin.getValue(PinArea.class).setValue(rect);
+        return true;
     }
 
     @Override

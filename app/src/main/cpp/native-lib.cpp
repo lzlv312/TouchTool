@@ -23,7 +23,7 @@ static int clamp(int up, int low, int value) {
 }
 
 extern "C" JNIEXPORT jobject JNICALL
-Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchTemplate(JNIEnv *env, jclass clazz, jobject bitmap, jobject temp, jint similarity, jboolean fast, jint speed) {
+Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchTemplate(JNIEnv *env, jclass clazz, jobject bitmap, jobject temp, jint speed) {
     int scale = speed;
 
     Mat src = bitmap_to_cv_mat(env, bitmap);
@@ -36,11 +36,39 @@ Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchTemplate(JNIEnv *env, jc
         resize(tmp, tmp, Size(tmp.cols / scale, tmp.rows / scale));
     }
 
-    if (fast) {
-        cvtColor(src, src, COLOR_BGR2GRAY);
-        adaptiveThreshold(src, src, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 11, 2);
-        cvtColor(tmp, tmp, COLOR_BGR2GRAY);
-        adaptiveThreshold(tmp, tmp, 255, ADAPTIVE_THRESH_GAUSSIAN_C, THRESH_BINARY, 11, 2);
+    int resultCol = src.cols - tmp.cols + 1;
+    int resultRow = src.rows - tmp.rows + 1;
+
+    Mat result;
+    result.create(resultCol, resultRow, CV_32FC1);
+
+    matchTemplate(src, tmp, result, TM_CCOEFF_NORMED);
+
+    double minValue = -1;
+    double maxValue;
+    Point minLoc;
+    Point maxLoc;
+    minMaxLoc(result, &minValue, &maxValue, &minLoc, &maxLoc);
+
+    jobject matchResult = createMatchResult(env, maxValue, maxLoc.x * scale, maxLoc.y * scale, tmp.cols * scale, tmp.rows * scale);
+    src.release();
+    tmp.release();
+    result.release();
+    return matchResult;
+}
+
+extern "C" JNIEXPORT jobject JNICALL
+Java_top_bogey_touch_1tool_utils_DisplayUtil_nativeMatchAllTemplate(JNIEnv *env, jclass clazz, jobject bitmap, jobject temp, jint similarity, jint speed) {
+    int scale = speed;
+
+    Mat src = bitmap_to_cv_mat(env, bitmap);
+    Mat tmp = bitmap_to_cv_mat(env, temp);
+    if (src.empty() || tmp.empty())
+        return createMatchResult(env, 0, 0, 0, 0, 0);
+
+    if (scale != 1) {
+        resize(src, src, Size(src.cols / scale, src.rows / scale));
+        resize(tmp, tmp, Size(tmp.cols / scale, tmp.rows / scale));
     }
 
     int resultCol = src.cols - tmp.cols + 1;

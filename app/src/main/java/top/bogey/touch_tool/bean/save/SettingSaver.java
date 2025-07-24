@@ -14,9 +14,7 @@ import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.DynamicColorsOptions;
 import com.tencent.mmkv.MMKV;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import top.bogey.touch_tool.service.KeepAliveService;
 import top.bogey.touch_tool.service.notification.NotificationService;
@@ -43,7 +41,9 @@ public class SettingSaver {
     private static final String MANUAL_CHOICE_VIEW_POS = "MANUAL_CHOICE_VIEW_POS";                      // 选择执行悬浮窗位置
     private static final String PICK_NODE_TYPE = "PICK_NODE_TYPE";                                      // 选择控件方式
 
-    private static final String FAV_TAGS = "FAV_TAGS";                                                  // 收藏的标签
+    private static final String LAST_GROUP = "LAST_GROUP";                                              // 上次打开的分组
+    private static final String LAST_SUB_GROUP = "LAST_SUB_GROUP";                                      // 上次打开的次级分组
+
 
     // 设置
     private static final String SERVICE_ENABLED = "SERVICE_ENABLED";                                    // 功能是否开启
@@ -143,12 +143,21 @@ public class SettingSaver {
         mmkv.encode(PICK_NODE_TYPE, type);
     }
 
-    public Set<String> getFavTags() {
-        return mmkv.decodeStringSet(FAV_TAGS, new HashSet<>());
+    public String getLastGroup() {
+        return mmkv.decodeString(LAST_GROUP, "");
     }
 
-    public void setFavTags(Set<String> tags) {
-        mmkv.encode(FAV_TAGS, tags);
+    public void setLastGroup(String group) {
+        mmkv.encode(LAST_GROUP, group);
+    }
+
+
+    public String getLastSubGroup() {
+        return mmkv.decodeString(LAST_SUB_GROUP, "");
+    }
+
+    public void setLastSubGroup(String group) {
+        mmkv.encode(LAST_SUB_GROUP, group);
     }
 
     // 设置

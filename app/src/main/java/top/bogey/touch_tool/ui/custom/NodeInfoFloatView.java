@@ -21,6 +21,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.databinding.FloatNodeInfoBinding;
 import top.bogey.touch_tool.databinding.FloatNodeInfoItemBinding;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
@@ -33,6 +34,9 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
     private final NodeInfoFloatViewAdapter adapter;
 
     private NodeInfo nodeInfo;
+
+    private int width = 0, height = 0;
+    private boolean expanded = true;
 
     public static void showInfo(NodeInfo nodeInfo, ResultCallback<NodeInfo> callback) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
@@ -52,7 +56,7 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
         this.callback = callback;
         binding = FloatNodeInfoBinding.inflate(LayoutInflater.from(context), this, true);
         adapter = new NodeInfoFloatViewAdapter();
-        binding.contentBox.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
 
         binding.parentButton.setOnClickListener(v -> {
             if (nodeInfo == null || nodeInfo.parent == null) return;
@@ -73,9 +77,30 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
 
         binding.closeButton.setOnClickListener(v -> dismiss());
 
-        binding.zoomButton.setOnClickListener(v -> {
-            binding.contentBox.setVisibility(binding.contentBox.getVisibility() == VISIBLE ? GONE : VISIBLE);
-            binding.zoomButton.setIconResource(binding.contentBox.getVisibility() == VISIBLE ? R.drawable.icon_zoom_in : R.drawable.icon_zoom_out);
+        binding.expandButton.setOnClickListener(v -> {
+            expanded = !expanded;
+            if (expanded) {
+                binding.contentBox.setVisibility(VISIBLE);
+                int margin = (int) DisplayUtil.dp2px(context, 8);
+                DisplayUtil.setViewMargin(binding.expandButton, margin, 0, 0, 0);
+                ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
+                params.width = width;
+                params.height = height;
+                binding.getRoot().setLayoutParams(params);
+                binding.expandButton.setIconResource(R.drawable.icon_zoom_in);
+            } else {
+                binding.contentBox.setVisibility(GONE);
+                DisplayUtil.setViewMargin(binding.expandButton, 0, 0, 0, 0);
+                ViewGroup.LayoutParams params = binding.getRoot().getLayoutParams();
+                width = params.width;
+                height = params.height;
+                params.width = binding.expandButton.getWidth();
+                params.height = binding.expandButton.getHeight();
+                binding.getRoot().setLayoutParams(params);
+                binding.expandButton.setIconResource(R.drawable.icon_zoom_out);
+
+            }
+            FloatWindow.updateLayoutParam(NodeInfoFloatView.class.getName());
         });
     }
 

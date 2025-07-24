@@ -108,16 +108,6 @@
                 android:layout_marginBottom="8dp"
                 android:baselineAligned="false">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/clearButton"
-                    style="@style/Theme.TouchTool.IconButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginEnd="4dp"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:icon="@drawable/icon_delete" />
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/searchBox"
                     style="?attr/textInputFilledStyle"
@@ -164,6 +154,16 @@
                     android:rotation="-90"
                     android:visibility="gone"
                     app:icon="@drawable/icon_back" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/clearButton"
+                    style="@style/Theme.TouchTool.IconButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="4dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:icon="@drawable/icon_delete" />
 
             </LinearLayout>
 
