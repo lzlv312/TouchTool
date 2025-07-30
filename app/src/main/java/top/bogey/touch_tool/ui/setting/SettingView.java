@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -331,6 +330,16 @@ public class SettingView extends Fragment {
             NavController controller = Navigation.findNavController(MainApplication.getInstance().getActivity(), R.id.conView);
             controller.navigate(SettingViewDirections.actionSettingToSettingPlayView());
         });
+
+        // 卡片默认展开状态
+        binding.cardTypeSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (isChecked) {
+                View view = group.findViewById(checkedId);
+                int index = group.indexOfChild(view);
+                SettingSaver.getInstance().setDefaultCardExpandType(index);
+            }
+        });
+        binding.cardTypeSelect.checkIndex(SettingSaver.getInstance().getDefaultCardExpandType());
 
         // 小窗优化
         binding.supportFreeFormSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setSupportFreeForm(binding.supportFreeFormSwitch.isChecked()));

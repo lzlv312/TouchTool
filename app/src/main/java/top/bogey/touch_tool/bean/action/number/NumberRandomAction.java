@@ -11,17 +11,18 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class NumberRandomAction extends CalculateAction {
-    protected final transient Pin firstPin = new Pin(new PinDouble(), R.string.pin_value_area_min);
-    protected final transient Pin secondPin = new Pin(new PinDouble(), R.string.pin_value_area_max);
+    protected final transient Pin firstPin = new Pin(new PinDouble(0), R.string.pin_value_area_min);
+    protected final transient Pin secondPin = new Pin(new PinDouble(1), R.string.pin_value_area_max);
     protected final transient Pin resultPin = new Pin(new PinDouble(), R.string.pin_number_double, true);
 
     public NumberRandomAction() {
         super(ActionType.NUMBER_RANDOM);
-        secondPin.getValue(PinDouble.class).setValue(1.0);
+        addPins(firstPin, secondPin, resultPin);
     }
 
     public NumberRandomAction(JsonObject jsonObject) {
         super(jsonObject);
+        reAddPins(firstPin, secondPin, resultPin);
     }
 
     @Override

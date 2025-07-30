@@ -38,7 +38,7 @@ public class ActionLog extends Log {
             builder.append(loggerAction.getLogPin().getValue().toString());
         } else {
             builder.append("[").append(index).append("] ");
-            builder.append(action.getTitle());
+            builder.append(action.getFullDescription());
         }
         log = builder.toString();
     }

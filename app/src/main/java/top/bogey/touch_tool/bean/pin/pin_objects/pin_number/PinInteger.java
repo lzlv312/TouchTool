@@ -8,8 +8,7 @@ import top.bogey.touch_tool.utils.GsonUtil;
 public class PinInteger extends PinNumber<Integer> {
 
     public PinInteger() {
-        super(PinSubType.INTEGER);
-        value = 0;
+        super(PinSubType.INTEGER, 0);
     }
 
     public PinInteger(int value) {

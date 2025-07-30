@@ -169,6 +169,12 @@
         <item>总是开启</item>
     </string-array>
 
+    <string-array name="card_default_type">
+        <item>不展开</item>
+        <item>半展开</item>
+        <item>全展开</item>
+    </string-array>
+
     <string-array name="restart_type">
         <item>重新执行</item>
         <item>放弃执行</item>
@@ -248,6 +254,129 @@
         <item>原图</item>
         <item>两倍</item>
         <item>四倍</item>
+    </string-array>
+
+
+    <string-array name="activity_flag" translatable="false">
+        <item>FLAG_ACTIVITY_NEW_TASK *</item>
+        <item>FLAG_ACTIVITY_NO_HISTORY</item>
+        <item>FLAG_ACTIVITY_SINGLE_TOP</item>
+        <item>FLAG_ACTIVITY_MULTIPLE_TASK</item>
+        <item>FLAG_ACTIVITY_CLEAR_TOP</item>
+        <item>FLAG_ACTIVITY_FORWARD_RESULT</item>
+        <item>FLAG_ACTIVITY_PREVIOUS_IS_TOP</item>
+        <item>FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS</item>
+        <item>FLAG_ACTIVITY_BROUGHT_TO_FRONT</item>
+        <item>FLAG_ACTIVITY_RESET_TASK_IF_NEEDED</item>
+        <item>FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY</item>
+        <item>FLAG_ACTIVITY_NEW_DOCUMENT</item>
+        <item>FLAG_ACTIVITY_NO_USER_ACTION</item>
+        <item>FLAG_ACTIVITY_REORDER_TO_FRONT</item>
+        <item>FLAG_ACTIVITY_NO_ANIMATION</item>
+        <item>FLAG_ACTIVITY_CLEAR_TASK</item>
+        <item>FLAG_ACTIVITY_TASK_ON_HOME</item>
+        <item>FLAG_ACTIVITY_RETAIN_IN_RECENTS</item>
+        <item>FLAG_ACTIVITY_LAUNCH_ADJACENT</item>
+    </string-array>
+    
+    <string-array name="activity_flag_desc">
+        <item>新建任务栈(0x10000000)</item>
+        <item>不保留在历史记录中(0x40000000)</item>
+        <item>栈顶已是目标就复用(0x20000000)</item>
+        <item>始终新建任务栈(0x08000000)</item>
+        <item>清除目标上方的Activity(0x04000000)</item>
+        <item>结果转发给目标Activity(0x02000000)</item>
+        <item>替换顶部Activity(0x01000000)</item>
+        <item>不显示在最近任务(0x00800000)</item>
+        <item>Activity被系统带到前台(0x00400000)</item>
+        <item>重置任务栈(0x00200000)</item>
+        <item>从历史记录启动(0x00100000)</item>
+        <item>文档模式，可多开(0x00080000)</item>
+        <item>不是用户主动行为(0x00040000)</item>
+        <item>已有Activity移到前台(0x00020000)</item>
+        <item>启动时无动画(0x00010000)</item>
+        <item>清空整个任务栈(0x00008000)</item>
+        <item>成为任务栈首页(0x00004000)</item>
+        <item>保留在最近任务中(0x00002000)</item>
+        <item>分屏启动(0x00001000)</item>
+    </string-array>
+
+    <string-array name="intent_category" translatable="false">
+        <item>CATEGORY_DEFAULT</item>
+        <item>CATEGORY_BROWSABLE</item>
+        <item>CATEGORY_VOICE</item>
+        <item>CATEGORY_ALTERNATIVE</item>
+        <item>CATEGORY_SELECTED_ALTERNATIVE</item>
+        <item>CATEGORY_TAB</item>
+        <item>CATEGORY_LAUNCHER</item>
+        <item>CATEGORY_LEANBACK_LAUNCHER</item>
+        <item>CATEGORY_INFO</item>
+        <item>CATEGORY_HOME</item>
+        <item>CATEGORY_PREFERENCE</item>
+        <item>CATEGORY_DEVELOPMENT_PREFERENCE</item>
+        <item>CATEGORY_EMBED</item>
+        <item>CATEGORY_APP_MARKET</item>
+        <item>CATEGORY_MONKEY</item>
+        <item>CATEGORY_TEST</item>
+        <item>CATEGORY_UNIT_TEST</item>
+        <item>CATEGORY_SAMPLE_CODE</item>
+        <item>CATEGORY_OPENABLE</item>
+        <item>CATEGORY_FRAMEWORK_INSTRUMENTATION_TEST</item>
+        <item>CATEGORY_CAR_DOCK</item>
+        <item>CATEGORY_DESK_DOCK</item>
+        <item>CATEGORY_LE_DESK_DOCK</item>
+        <item>CATEGORY_HE_DESK_DOCK</item>
+        <item>CATEGORY_CAR_MODE</item>
+
+        <!-- App categories -->
+        <item>CATEGORY_APP_BROWSER</item>
+        <item>CATEGORY_APP_CALCULATOR</item>
+        <item>CATEGORY_APP_CALENDAR</item>
+        <item>CATEGORY_APP_CONTACTS</item>
+        <item>CATEGORY_APP_EMAIL</item>
+        <item>CATEGORY_APP_GALLERY</item>
+        <item>CATEGORY_APP_MAPS</item>
+        <item>CATEGORY_APP_MESSAGING</item>
+        <item>CATEGORY_APP_MUSIC</item>
+    </string-array>
+
+    <string-array name="intent_category_desc">
+        <item>默认类别</item>
+        <item>可从浏览器等外部应用启动</item>
+        <item>支持语音交互</item>
+        <item>当前数据的可选操作</item>
+        <item>列表选中项的可选操作</item>
+        <item>用于TabActivity中的标签页</item>
+        <item>可在启动器中显示</item>
+        <item>适用于电视启动器（Leanback）</item>
+        <item>展示应用信息</item>
+        <item>主界面（如桌面）</item>
+        <item>设置面板</item>
+        <item>开发者设置面板</item>
+        <item>可嵌入到其他活动中</item>
+        <item>应用市场类活动</item>
+        <item>允许Monkey测试工具运行</item>
+        <item>普通测试用途</item>
+        <item>单元测试用途</item>
+        <item>示例代码用途</item>
+        <item>可通过ContentResolver打开的文件</item>
+        <item>框架级别的自动化测试</item>
+        <item>插入车载底座时启动</item>
+        <item>插入桌面底座时启动</item>
+        <item>插入低端桌面底座时启动</item>
+        <item>插入高端桌面底座时启动</item>
+        <item>支持车载模式</item>
+
+        <!-- App categories -->
+        <item>浏览器应用</item>
+        <item>计算器应用</item>
+        <item>日历应用</item>
+        <item>联系人应用</item>
+        <item>邮件应用</item>
+        <item>图库应用</item>
+        <item>地图应用</item>
+        <item>短信应用</item>
+        <item>音乐应用</item>
     </string-array>
 
 </resources>

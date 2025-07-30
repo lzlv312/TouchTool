@@ -62,7 +62,8 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
 
         binding.closeButton.setOnClickListener(v -> dismiss());
 
-        top = (int) DisplayUtil.dp2px(context, 24);
+//        top = (int) DisplayUtil.dp2px(context, 24);
+        top = 0;
         minWidth = (int) DisplayUtil.dp2px(context, 48);
         minHeight = (int) DisplayUtil.dp2px(context, 48);
         Point size = DisplayUtil.getScreenSize(context);

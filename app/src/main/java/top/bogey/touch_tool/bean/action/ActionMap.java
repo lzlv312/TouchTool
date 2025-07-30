@@ -158,7 +158,8 @@ public class ActionMap {
                     ActionType.PARSE_QRCODE,
                     ActionType.GET_COLOR,
                     ActionType.FIND_COLORS,
-                    ActionType.IS_COLOR_EXIST
+                    ActionType.IS_COLOR_EXIST,
+                    ActionType.COLOR_EQUAL
             ));
 
             case AREA -> list.addAll(Arrays.asList(

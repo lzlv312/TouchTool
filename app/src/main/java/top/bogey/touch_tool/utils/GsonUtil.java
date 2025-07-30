@@ -9,9 +9,10 @@ import java.lang.reflect.Type;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinMultiSelect;
 import top.bogey.touch_tool.bean.save.log.Log;
 import top.bogey.touch_tool.bean.save.log.LogInfo;
 import top.bogey.touch_tool.bean.task.Task;
@@ -27,6 +28,7 @@ public class GsonUtil {
 
             .registerTypeAdapter(PinList.class, new PinList.PinListSerializer())
             .registerTypeAdapter(PinApplications.class, new PinList.PinListSerializer())
+            .registerTypeAdapter(PinMultiSelect.class, new PinList.PinListSerializer())
             .registerTypeAdapter(PinMap.class, new PinMap.PinMapSerializer())
 
             .registerTypeAdapter(LogInfo.class, new LogInfo.LogInfoDeserialize())

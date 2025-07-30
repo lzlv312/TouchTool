@@ -6,7 +6,9 @@
     <group
         android:pivotX="480"
         android:pivotY="480"
-        android:rotation="90">
+        android:rotation="90"
+        android:scaleX="1.4"
+        android:scaleY="1.4">
         <path
             android:fillColor="@android:color/darker_gray"
             android:pathData="M760,800q-17,0 -28.5,-13T718,756q-8,-103 -50.5,-193t-111,-158.5Q488,336 398,293t-192,-51q-18,-2 -32,-13.5T160,200q0,-17 12.5,-28.5T202,161q120,8 225.5,57.5T613,348q80,80 129.5,186T799,760q1,17 -10.5,28.5T760,800Z" />

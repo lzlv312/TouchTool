@@ -25,13 +25,13 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/dragImage"
             style="@style/Theme.TouchTool.IconButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="end|bottom"
             android:scaleType="centerInside"
             android:src="@drawable/icon_line_curve"
-            android:translationX="12dp"
-            android:translationY="12dp" />
+            android:translationX="2dp"
+            android:translationY="2dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,17 +39,31 @@
             android:minWidth="168dp"
             android:orientation="vertical">
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
+                android:orientation="horizontal"
                 android:paddingHorizontal="8dp">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="36dp" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical">
+
+                    <Space
+                        android:layout_width="32dp"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:maxLines="1" />
+
+                </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
                     style="@style/Theme.TouchTool.IconButton"
@@ -59,27 +73,35 @@
                     android:backgroundTint="?attr/colorOnSurfaceVariant"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/exportButton"
-                    style="@style/Theme.TouchTool.IconButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="end|center"
-                    android:layout_marginEnd="32dp"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:icon="@drawable/icon_upload" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|end">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/closeButton"
-                    style="@style/Theme.TouchTool.IconButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="end|center"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:icon="@drawable/icon_close" />
-            </FrameLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/exportButton"
+                        style="@style/Theme.TouchTool.IconButton"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="end|center"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        app:icon="@drawable/icon_upload" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/closeButton"
+                        style="@style/Theme.TouchTool.IconButton"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="end|center"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        app:icon="@drawable/icon_close" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
                 style="?attr/materialCardViewFilledStyle"

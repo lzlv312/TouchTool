@@ -147,6 +147,8 @@
     <!-- 动作-System -->
     <string name="open_app_action">打开应用</string>
     <string name="open_app_action_desc">打开选定的应用</string>
+    <string name="open_app_action_flags">启动标志(Flags)</string>
+    <string name="open_app_action_category">分类(Category)</string>
     <string name="open_app_action_params">参数</string>
 
     <string name="open_uri_scheme_action">打开链接</string>
@@ -542,6 +544,10 @@
     <string name="is_color_exist_action_desc">判断指定颜色是否存在</string>
     <string name="is_color_exist_action_template">颜色</string>
     <string name="is_color_exist_action_similarity">相似度</string>
+
+    <string name="color_equal_action">颜色比较</string>
+    <string name="color_equal_action_desc">判断两个颜色是否相似</string>
+    <string name="color_equal_action_offset">RGB偏移</string>
 
 
     <!-- 动作-List -->

@@ -62,8 +62,7 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
             }
         }
 
-        task.execute(runnable, this, params, isJustCall(runnable.getTask()));
-
+        task.execute(runnable, this, params);
         if (!isJustCall(runnable.getTask())) executeNext(runnable, outPin);
     }
 
@@ -73,11 +72,11 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
     }
 
     @Override
-    public void resetReturnValue(TaskRunnable runnable) {
-        if (isJustCall(runnable.getTask())) {
-            for (Pin pin : getDynamicPins()) {
-                if (pin.isOut()) {
-                    pin.getValue().reset();
+    public void resetReturnValue(TaskRunnable runnable, Pin pin) {
+        if (isJustCall(runnable.getTask()) || (!pin.isOut() && pin.isSameClass(PinExecute.class))) {
+            for (Pin p : getDynamicPins()) {
+                if (p.isOut()) {
+                    p.getValue().reset();
                 }
             }
         }

@@ -143,6 +143,7 @@ public enum ActionType {
     GET_COLOR,
     FIND_COLORS,
     IS_COLOR_EXIST,
+    COLOR_EQUAL,
 
     // 区域
     AREA_TO_INT,

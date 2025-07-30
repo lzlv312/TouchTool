@@ -8,8 +8,7 @@ import top.bogey.touch_tool.utils.GsonUtil;
 public class PinLong extends PinNumber<Long> {
 
     public PinLong() {
-        super(PinSubType.LONG);
-        value = 0L;
+        super(PinSubType.LONG, 0L);
     }
 
     public PinLong(long value) {

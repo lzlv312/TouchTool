@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.pin.pin_objects;
+package top.bogey.touch_tool.bean.pin.pin_objects.pin_list;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +17,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.utils.GsonUtil;
 
 public class PinList extends PinObject implements List<PinObject> {
@@ -29,6 +33,11 @@ public class PinList extends PinObject implements List<PinObject> {
 
     public PinList(PinObject valueType) {
         this();
+        this.valueType = valueType;
+    }
+
+    public PinList(PinSubType subType, PinObject valueType) {
+        super(PinType.LIST, subType);
         this.valueType = valueType;
     }
 

@@ -9,11 +9,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -73,9 +77,22 @@ public class SelectIconDialog extends BottomSheetDialog {
         calculateShowData();
         adapter.setData(icons);
 
-        Point size = DisplayUtil.getScreenSize(context);
-        DisplayUtil.setViewHeight(binding.getRoot(), (int) (size.y * 0.7f));
-        DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
+        BottomSheetBehavior<FrameLayout> behavior = getBehavior();
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+        MainActivity activity = MainApplication.getInstance().getActivity();
+        View decorView = activity.getWindow().getDecorView();
+        int width = decorView.getWidth();
+        int height = decorView.getHeight();
+
+        boolean portrait = DisplayUtil.isPortrait(context);
+        if (portrait) {
+            DisplayUtil.setViewHeight(binding.getRoot(), (int) (height * 0.7f));
+            DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
+        } else {
+            DisplayUtil.setViewHeight(binding.getRoot(), (int) (height * 0.8f));
+            behavior.setMaxWidth(width);
+        }
     }
 
     public void calculateShowData() {

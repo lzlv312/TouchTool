@@ -13,10 +13,10 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
-import top.bogey.touch_tool.bean.action.logic.FindExecuteAction;
+import top.bogey.touch_tool.bean.action.FindExecuteAction;
 import top.bogey.touch_tool.bean.action.system.SwitchCaptureAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
@@ -28,7 +28,7 @@ import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class FindColorsAction extends FindExecuteAction {
-    private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image, false, false, true);
+    private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image_full, false, false, true);
     private final transient Pin templatePin = new Pin(new PinColor(), R.string.find_colors_action_template);
     private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.find_colors_action_similarity);
     private final transient Pin areasPin = new Pin(new PinList(new PinArea()), R.string.pin_area, true);

@@ -122,9 +122,8 @@ public class NodeInfo implements ITreeNodeData {
 
     public List<NodeInfo> findChildrenInArea(Rect area) {
         List<NodeInfo> result = new ArrayList<>();
-        if (!visible) return result;
         for (NodeInfo child : children) {
-            if (Rect.intersects(area, child.area)) {
+            if (Rect.intersects(area, child.area) || area.contains(child.area)) {
                 result.add(child);
                 result.addAll(child.findChildrenInArea(area));
             }
@@ -133,9 +132,8 @@ public class NodeInfo implements ITreeNodeData {
     }
 
     public void findChildrenInArea(Map<NodeInfo, Integer> map, Rect area, int depth) {
-        if (!visible) return;
         for (NodeInfo child : children) {
-            if (Rect.intersects(area, child.area)) {
+            if (Rect.intersects(area, child.area) || area.contains(child.area)) {
                 map.put(child, depth);
                 child.findChildrenInArea(map, area, depth + 1);
             }

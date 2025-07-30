@@ -58,6 +58,9 @@ public class AreaPicker extends FullScreenPicker<Rect> {
         super(context, callback);
         binding = FloatPickerAreaBinding.inflate(LayoutInflater.from(context), this, true);
         area.set(rect);
+        if (rect.equals(DisplayUtil.getScreenArea(context))) {
+            area.set(new Rect());
+        }
         offset = DisplayUtil.dp2px(context, 4);
 
         markPaint = new Paint(Paint.ANTI_ALIAS_FLAG);

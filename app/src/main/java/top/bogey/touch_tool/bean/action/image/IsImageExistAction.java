@@ -27,7 +27,7 @@ import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class IsImageExistAction extends CalculateAction {
-    private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image, false, false, true);
+    private final transient Pin sourcePin = new Pin(new PinImage(), R.string.pin_image_full, false, false, true);
     private final transient Pin templatePin = new Pin(new PinImage(), R.string.is_image_exist_action_template);
     private final transient Pin similarityPin = new Pin(new PinInteger(80), R.string.is_image_exist_action_similarity);
     private final transient Pin scalePin = new Pin(new PinSingleSelect(R.array.match_image_scale, 1), R.string.is_image_exist_action_scale, false, false, true);

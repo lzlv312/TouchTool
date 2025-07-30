@@ -47,9 +47,8 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
         Variable var = task.findVariable(varId);
         if (var == null) var = Saver.getInstance().getVar(varId);
         if (var == null || varPin == null) return;
-        varPin.setValue(var.getValue());
+        varPin.setValue(returnValue(var.getSaveValue()));
     }
-
 
     public String getVarId() {
         return varId;
@@ -62,6 +61,9 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
         if (variable == null) return;
         if (varPin == null) return;
         varPin.setTitle(variable.getTitle());
+        if (!varPin.isSameClass(variable.getValue())) {
+            varPin.setValue(variable.getValue().copy());
+        }
         String globalFlag = variable.getParent() == null ? GLOBAL_FLAG : "";
         setTitle(MainApplication.getInstance().getString(R.string.get_value_action) + " - " + globalFlag + variable.getTitle());
     }

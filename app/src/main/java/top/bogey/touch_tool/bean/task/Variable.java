@@ -13,7 +13,7 @@ import java.util.UUID;
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.Saver;
@@ -22,17 +22,20 @@ import top.bogey.touch_tool.utils.GsonUtil;
 public class Variable extends Identity implements ITagManager {
     private transient Task parent;
     private PinObject value;
+    private PinObject saveValue;
     private final TagManager tagManager;
 
     public Variable(PinObject value) {
         super();
         this.value = value;
+        saveValue = (PinObject) value.copy();
         tagManager = new TagManager();
     }
 
     public Variable(JsonObject jsonObject) {
         super(jsonObject);
         value = (PinObject) GsonUtil.getAsObject(jsonObject, "value", PinBase.class, new PinObject());
+        saveValue = (PinObject) GsonUtil.getAsObject(jsonObject, "saveValue", PinBase.class, new PinObject());
         tagManager = GsonUtil.getAsObject(jsonObject, "tagManager", TagManager.class, new TagManager());
     }
 
@@ -57,6 +60,16 @@ public class Variable extends Identity implements ITagManager {
 
     public void setValue(PinObject value) {
         this.value = value;
+        if (value.getClass().equals(saveValue.getClass())) return;
+        saveValue = (PinObject) value.copy();
+    }
+
+    public PinObject getSaveValue() {
+        return saveValue;
+    }
+
+    public void setSaveValue(PinObject saveValue) {
+        this.saveValue = saveValue;
     }
 
     public VariableType getType() {

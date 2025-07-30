@@ -26,10 +26,11 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinListener;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.GsonUtil;
@@ -38,7 +39,7 @@ public abstract class Action extends Identity implements PinListener {
     private final ActionType type;
     private final List<Pin> pins = new ArrayList<>();
 
-    private ExpandType expandType = ExpandType.HALF;
+    private ExpandType expandType;
     private boolean locked = false;
     private Point pos = new Point();
 
@@ -47,6 +48,7 @@ public abstract class Action extends Identity implements PinListener {
 
     protected Action(ActionType type) {
         this.type = type;
+        expandType = ExpandType.values()[SettingSaver.getInstance().getDefaultCardExpandType()];
     }
 
     protected Action(JsonObject jsonObject) {
@@ -192,7 +194,6 @@ public abstract class Action extends Identity implements PinListener {
         Action copy = copy();
         copy.setId(UUID.randomUUID().toString());
         copy.setLocked(false);
-        copy.setExpandType(ExpandType.HALF);
         copy.getPins().forEach(pin -> {
             pin.setId(UUID.randomUUID().toString());
             pin.setOwnerId(copy.getId());
@@ -225,6 +226,7 @@ public abstract class Action extends Identity implements PinListener {
 
         runnable.addExecuteProgress(this);
         runnable.addDebugLog(action, 1);
+        action.resetReturnValue(runnable, linkedPin);
         action.execute(runnable, linkedPin);
     }
 
@@ -234,13 +236,13 @@ public abstract class Action extends Identity implements PinListener {
 
     public abstract void calculate(TaskRunnable runnable, Pin pin);
 
-    public void resetReturnValue(TaskRunnable runnable) {
+    public void resetReturnValue(TaskRunnable runnable, Pin pin) {
 
     }
 
     public <T extends PinObject> T getPinValue(TaskRunnable runnable, Pin pin) {
         if (pin.isOut()) {
-            resetReturnValue(runnable);
+            resetReturnValue(runnable, pin);
             calculate(runnable, pin);
             runnable.addDebugLog(this, 0);
             runnable.addCalculateProgress(this);

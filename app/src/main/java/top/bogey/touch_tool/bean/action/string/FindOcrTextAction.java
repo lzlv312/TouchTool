@@ -13,7 +13,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.SyncAction;
-import top.bogey.touch_tool.bean.action.logic.FindExecuteAction;
+import top.bogey.touch_tool.bean.action.FindExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;

@@ -12,11 +12,11 @@ import java.util.Set;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
-import top.bogey.touch_tool.bean.action.logic.FindExecuteAction;
+import top.bogey.touch_tool.bean.action.FindExecuteAction;
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
@@ -64,7 +64,8 @@ public class FindNodeAction extends FindExecuteAction {
                 for (AccessibilityNodeInfo window : AppUtil.getWindows(service)) {
                     rootNodes.add(new NodeInfo(window));
                 }
-                PinNodePathString path = getPinValue(runnable, pathPin);
+                PinString pathString = getPinValue(runnable, pathPin);
+                PinNodePathString path = new PinNodePathString(pathString.getValue());
                 NodeInfo node = path.findNode(rootNodes);
                 if (node == null) return false;
                 nodePin.getValue(PinNode.class).setNodeInfo(node);
@@ -104,7 +105,8 @@ public class FindNodeAction extends FindExecuteAction {
                 for (AccessibilityNodeInfo window : AppUtil.getWindows(service)) {
                     rootNodes.add(new NodeInfo(window));
                 }
-                PinNodePathTextString path = getPinValue(runnable, pathTextPin);
+                PinString pathString = getPinValue(runnable, pathPin);
+                PinNodePathTextString path = new PinNodePathTextString(pathString.getValue());
                 List<NodeInfo> findNodes = path.findNodes(rootNodes);
                 if (findNodes.isEmpty()) return false;
                 for (NodeInfo findNode : findNodes) {

@@ -10,6 +10,10 @@ public class PinNodePathTextString extends PinNodePathString {
         super(PinSubType.NODE_PATH_TEXT);
     }
 
+    public PinNodePathTextString(String str) {
+        super(PinSubType.NODE_PATH_TEXT, str);
+    }
+
     public PinNodePathTextString(JsonObject jsonObject) {
         super(jsonObject);
     }

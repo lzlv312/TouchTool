@@ -1,7 +1,11 @@
 package top.bogey.touch_tool.bean.action.system;
 
+import android.content.Context;
+import android.content.Intent;
+
 import com.google.gson.JsonObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,39 +16,163 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinMultiSelect;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
-import top.bogey.touch_tool.utils.AppUtil;
 
 public class OpenAppAction extends ExecuteAction {
+    private final static List<Integer> FLAGS = Arrays.asList(
+            Intent.FLAG_ACTIVITY_NEW_TASK,
+            Intent.FLAG_ACTIVITY_NO_HISTORY,
+            Intent.FLAG_ACTIVITY_SINGLE_TOP,
+            Intent.FLAG_ACTIVITY_MULTIPLE_TASK,
+            Intent.FLAG_ACTIVITY_CLEAR_TOP,
+            Intent.FLAG_ACTIVITY_FORWARD_RESULT,
+            Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP,
+            Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS,
+            Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT,
+            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED,
+            Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY,
+            Intent.FLAG_ACTIVITY_NEW_DOCUMENT,
+            Intent.FLAG_ACTIVITY_NO_USER_ACTION,
+            Intent.FLAG_ACTIVITY_REORDER_TO_FRONT,
+            Intent.FLAG_ACTIVITY_NO_ANIMATION,
+            Intent.FLAG_ACTIVITY_CLEAR_TASK,
+            Intent.FLAG_ACTIVITY_TASK_ON_HOME,
+            Intent.FLAG_ACTIVITY_RETAIN_IN_RECENTS,
+            Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT
+    );
+    public static final List<String> CATEGORIES = Arrays.asList(
+            Intent.CATEGORY_DEFAULT,
+            Intent.CATEGORY_BROWSABLE,
+            Intent.CATEGORY_VOICE,
+            Intent.CATEGORY_ALTERNATIVE,
+            Intent.CATEGORY_SELECTED_ALTERNATIVE,
+            Intent.CATEGORY_TAB,
+            Intent.CATEGORY_LAUNCHER,
+            Intent.CATEGORY_LEANBACK_LAUNCHER,
+            Intent.CATEGORY_INFO,
+            Intent.CATEGORY_HOME,
+            Intent.CATEGORY_PREFERENCE,
+            Intent.CATEGORY_DEVELOPMENT_PREFERENCE,
+            Intent.CATEGORY_EMBED,
+            Intent.CATEGORY_APP_MARKET,
+            Intent.CATEGORY_MONKEY,
+            Intent.CATEGORY_TEST,
+            Intent.CATEGORY_UNIT_TEST,
+            Intent.CATEGORY_SAMPLE_CODE,
+            Intent.CATEGORY_OPENABLE,
+            Intent.CATEGORY_FRAMEWORK_INSTRUMENTATION_TEST,
+            Intent.CATEGORY_CAR_DOCK,
+            Intent.CATEGORY_DESK_DOCK,
+            Intent.CATEGORY_LE_DESK_DOCK,
+            Intent.CATEGORY_HE_DESK_DOCK,
+            Intent.CATEGORY_CAR_MODE,
+
+            // App categories
+            Intent.CATEGORY_APP_BROWSER,
+            Intent.CATEGORY_APP_CALCULATOR,
+            Intent.CATEGORY_APP_CALENDAR,
+            Intent.CATEGORY_APP_CONTACTS,
+            Intent.CATEGORY_APP_EMAIL,
+            Intent.CATEGORY_APP_GALLERY,
+            Intent.CATEGORY_APP_MAPS,
+            Intent.CATEGORY_APP_MESSAGING,
+            Intent.CATEGORY_APP_MUSIC
+    );
+
     private final transient Pin appPin = new Pin(new PinApplication(PinSubType.SINGLE_APP_WITH_ACTIVITY), R.string.pin_app);
+    private final transient Pin flagPin = new Pin(new PinMultiSelect(new PinInteger()), R.string.open_app_action_flags, false, false, true);
+    private final transient Pin categoryPin = new Pin(new PinMultiSelect(new PinString()), R.string.open_app_action_category, false, false, true);
     private final transient Pin paramsPin = new Pin(new PinMap(new PinString(), new PinString()), R.string.open_app_action_params, false, false, true);
 
     public OpenAppAction() {
         super(ActionType.OPEN_APP);
-        addPins(appPin, paramsPin);
+        addPins(appPin, flagPin, categoryPin, paramsPin);
+        initFlagSelection();
+        initCategorySelection();
     }
 
     public OpenAppAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(appPin, paramsPin);
+        reAddPins(appPin, flagPin, categoryPin, paramsPin);
+        initFlagSelection();
+        initCategorySelection();
     }
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         PinApplication app = getPinValue(runnable, appPin);
+        String packageName = app.getPackageName();
+        String activityClass = app.getFirstActivity();
+
+        PinList flags = getPinValue(runnable, flagPin);
+        int flag = 0;
+        for (PinObject object : flags) {
+            PinNumber<?> number = (PinNumber<?>) object;
+            flag |= number.intValue();
+        }
+        if (flag == 0) flag = Intent.FLAG_ACTIVITY_NEW_TASK;
+
+        PinList category = getPinValue(runnable, categoryPin);
+
         PinMap map = getPinValue(runnable, paramsPin);
         Map<String, String> params = new HashMap<>();
         map.forEach((key, value) -> params.put(key.toString(), value.toString()));
 
-        List<String> classes = app.getActivityClasses();
-        if (classes == null || classes.isEmpty()) {
-            AppUtil.gotoApp(MainApplication.getInstance().getService(), app.getPackageName(), params);
+        Context context = MainApplication.getInstance().getService();
+        Intent intent;
+        if (activityClass == null) {
+            intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+            if (intent != null) intent.addCategory(Intent.CATEGORY_LAUNCHER);
         } else {
-            AppUtil.gotoActivity(MainApplication.getInstance().getService(), app.getPackageName(), classes.get(0), params);
+            intent = new Intent(Intent.ACTION_MAIN);
+            intent.setClassName(packageName, activityClass);
         }
+        if (intent != null) {
+            intent.setFlags(flag);
+            for (PinObject object : category) {
+                PinString pinString = (PinString) object;
+                intent.addCategory(pinString.getValue());
+            }
+            params.forEach(intent::putExtra);
+
+            context.startActivity(intent);
+        }
+
         executeNext(runnable, outPin);
+    }
+
+    private void initFlagSelection() {
+        PinMultiSelect multiSelect = flagPin.getValue(PinMultiSelect.class);
+        multiSelect.resetSelectObjects();
+        Context context = MainApplication.getInstance();
+        String[] names = context.getResources().getStringArray(R.array.activity_flag);
+        String[] desc = context.getResources().getStringArray(R.array.activity_flag_desc);
+        for (int i = 0; i < FLAGS.size(); i++) {
+            Integer value = FLAGS.get(i);
+            PinMultiSelect.MultiSelectObject object = new PinMultiSelect.MultiSelectObject(names[i], desc[i], value);
+            multiSelect.addSelectObject(object);
+        }
+    }
+
+    private void initCategorySelection() {
+        PinMultiSelect multiSelect = categoryPin.getValue(PinMultiSelect.class);
+        multiSelect.resetSelectObjects();
+        Context context = MainApplication.getInstance();
+
+        String[] names = context.getResources().getStringArray(R.array.intent_category);
+        String[] desc = context.getResources().getStringArray(R.array.intent_category_desc);
+        for (int i = 0, categoriesSize = CATEGORIES.size(); i < categoriesSize; i++) {
+            String value = CATEGORIES.get(i);
+            PinMultiSelect.MultiSelectObject object = new PinMultiSelect.MultiSelectObject(names[i], desc[i], value);
+            multiSelect.addSelectObject(object);
+        }
     }
 }

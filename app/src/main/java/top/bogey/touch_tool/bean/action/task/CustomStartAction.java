@@ -33,6 +33,7 @@ public class CustomStartAction extends Action implements DynamicPinsAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
+        runnable.addExecuteProgress(this);
         runnable.addDebugLog(this, 1);
         executeNext(runnable, executePin);
     }

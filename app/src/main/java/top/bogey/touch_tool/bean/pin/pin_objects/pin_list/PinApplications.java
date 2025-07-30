@@ -1,4 +1,4 @@
-package top.bogey.touch_tool.bean.pin.pin_objects.pin_application;
+package top.bogey.touch_tool.bean.pin.pin_objects.pin_list;
 
 import com.google.gson.JsonObject;
 
@@ -7,7 +7,7 @@ import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;

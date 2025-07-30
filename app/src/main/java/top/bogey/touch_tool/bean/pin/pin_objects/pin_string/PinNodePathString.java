@@ -20,6 +20,10 @@ public class PinNodePathString extends PinString {
         super(subType);
     }
 
+    protected PinNodePathString(PinSubType subType, String value) {
+        super(subType, value);
+    }
+
     public PinNodePathString(String str) {
         super(PinSubType.NODE_PATH, str);
     }

@@ -6,12 +6,18 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.XmlResourceParser;
+import android.net.Uri;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import top.bogey.touch_tool.MainApplication;
@@ -34,6 +40,8 @@ import top.bogey.touch_tool.utils.AppUtil;
 
 public class TaskInfoSummary {
     public static final String OCR_SERVICE_ACTION = "top.bogey.ocr.OcrService";
+    private static final String XMLNS_ANDROID = "http://schemas.android.com/apk/res/android";
+    private static final int PACKAGE_FLAGS = PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_ALL;
 
     private static TaskInfoSummary instance;
 
@@ -64,8 +72,7 @@ public class TaskInfoSummary {
             try {
                 PackageInfo packageInfo = packageManager.getPackageInfo(application.packageName, PackageManager.GET_ACTIVITIES);
                 if (packageInfo != null) apps.put(packageInfo.packageName, packageInfo);
-            } catch (Exception e) {
-//                e.printStackTrace();
+            } catch (Exception ignored) {
             }
         }
 
@@ -138,6 +145,88 @@ public class TaskInfoSummary {
             }
         }
         return packages;
+    }
+
+    public List<ShortcutInfo> findShortcutApps() {
+        List<ShortcutInfo> shortcuts = new ArrayList<>();
+
+        PackageManager packageManager = MainApplication.getInstance().getPackageManager();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(intent, PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.MATCH_ALL | PackageManager.GET_META_DATA);
+        for (ResolveInfo resolveInfo : resolveInfos) {
+            ActivityInfo activityInfo = resolveInfo.activityInfo;
+            try (XmlResourceParser parser = activityInfo.loadXmlMetaData(packageManager, "android.app.shortcuts")) {
+                if (parser == null) continue;
+                int eventType = parser.getEventType();
+                Intent shortcutIntent = null;
+                ShortcutInfo shortcutInfo = new ShortcutInfo(activityInfo.packageName);
+
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    if (eventType == XmlPullParser.END_TAG && "shortcut".equals(parser.getName())) {
+                        if (shortcutInfo.isValid()) {
+                            shortcuts.add(shortcutInfo);
+                        }
+                        shortcutInfo = new ShortcutInfo(activityInfo.packageName);
+                    } else if (eventType == XmlPullParser.END_TAG && "intent".equals(parser.getName())) {
+                        if (shortcutIntent != null) {
+                            shortcutInfo.intent = shortcutIntent.toUri(Intent.URI_INTENT_SCHEME);
+                            shortcutIntent = null;
+                        }
+                    } else if (eventType == XmlPullParser.START_TAG) {
+                        if ("shortcut".equals(parser.getName()) && parser.getAttributeBooleanValue(XMLNS_ANDROID, "enabled", true)) {
+                            shortcutInfo.id = parser.getAttributeValue(XMLNS_ANDROID, "shortcutId");
+                            if (shortcutInfo.id == null) shortcutInfo.id = UUID.randomUUID().toString();
+
+                            int titleId = parser.getAttributeResourceValue(XMLNS_ANDROID, "shortcutShortLabel", 0);
+                            if (titleId == 0) titleId = parser.getAttributeResourceValue(XMLNS_ANDROID, "shortcutLongLabel", 0);
+                            if (titleId != 0) {
+                                try {
+                                    shortcutInfo.title = packageManager.getResourcesForApplication(activityInfo.packageName).getString(titleId);
+                                } catch (PackageManager.NameNotFoundException ignored) {
+                                    shortcutInfo.title = shortcutInfo.id;
+                                }
+                            }
+                            shortcutInfo.icon = parser.getAttributeResourceValue(XMLNS_ANDROID, "icon", 0);
+                        } else if ("intent".equals(parser.getName()) && shortcutInfo.id != null) {
+                            shortcutIntent = new Intent();
+                            shortcutIntent.setAction(parser.getAttributeValue(XMLNS_ANDROID, "action"));
+
+                            String pkg = parser.getAttributeValue(XMLNS_ANDROID, "targetPackage");
+                            String cls = parser.getAttributeValue(XMLNS_ANDROID, "targetClass");
+                            if (cls == null) {
+                                cls = parser.getAttributeValue(XMLNS_ANDROID, "targetActivity");
+                                if (cls != null) {
+                                    cls = cls.replace("$", "_");
+                                }
+                            }
+                            if (pkg != null && cls != null) {
+                                shortcutIntent.setClassName(pkg, cls);
+                            }
+                            if (shortcutInfo.title == null && cls != null) {
+                                shortcutInfo.title = cls;
+                            }
+                            String data = parser.getAttributeValue(XMLNS_ANDROID, "data");
+                            if (data != null) {
+                                shortcutIntent.setData(Uri.parse(data));
+                            }
+                        } else if ("extra".equals(parser.getName()) && shortcutIntent != null) {
+                            String name = parser.getAttributeValue(XMLNS_ANDROID, "name");
+                            String value = parser.getAttributeValue(XMLNS_ANDROID, "value");
+                            if (name != null && value != null) shortcutIntent.putExtra(name, value);
+                        } else if ("categories".equals(parser.getName()) && shortcutIntent != null) {
+                            String name = parser.getAttributeValue(XMLNS_ANDROID, "name");
+                            if (name != null) shortcutIntent.addCategory(name);
+                        }
+                    }
+                    eventType = parser.next();
+                }
+            } catch (XmlPullParserException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return shortcuts;
     }
 
     public List<String> getOcrApps() {
@@ -282,6 +371,22 @@ public class TaskInfoSummary {
     public void setNetworkState(List<NotworkState> networkState) {
         this.networkState = networkState;
         tryStartActions(NetworkStartAction.class);
+    }
+
+    public static class ShortcutInfo {
+        public final String packageName;
+        public String id;
+        public String title;
+        public int icon;
+        public String intent;
+
+        public ShortcutInfo(String packageName) {
+            this.packageName = packageName;
+        }
+
+        public boolean isValid() {
+            return id != null && title != null && intent != null;
+        }
     }
 
     public record PackageActivity(String packageName, String activityName) {

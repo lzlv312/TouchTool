@@ -28,12 +28,10 @@ public class EditTextInputAction extends ExecuteAction {
         super(ActionType.EDITTEXT_INPUT);
         addPins(nodePin, contentPin, appendPin, enterPin, elsePin);
     }
-
     public EditTextInputAction(JsonObject jsonObject) {
         super(jsonObject);
         reAddPins(nodePin, contentPin, appendPin, enterPin, elsePin);
     }
-
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         PinNode node = getPinValue(runnable, nodePin);

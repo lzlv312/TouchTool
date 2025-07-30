@@ -14,7 +14,7 @@ import java.util.List;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
 import top.bogey.touch_tool.databinding.PinWidgetAppBinding;
 import top.bogey.touch_tool.databinding.PinWidgetAppItemBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
@@ -85,9 +85,9 @@ public class PinWidgetApp extends PinWidget<PinApplication> {
         } else {
             itemBinding.numberText.setText(String.valueOf(classes.size()));
         }
-        itemBinding.getRoot().setOnClickListener(v -> {
-            applications.clear();
-            refreshApps();
-        });
+//        itemBinding.getRoot().setOnClickListener(v -> {
+//            applications.clear();
+//            refreshApps();
+//        });
     }
 }

@@ -289,9 +289,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:buttonVisible="arrow"
-                        app:icon="@drawable/icon_touch"
                         app:description="@string/preference_setting_manual_play_desc_1"
+                        app:icon="@drawable/icon_touch"
                         app:title="@string/preference_setting_manual_play" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
+                        android:id="@+id/cardTypeSelect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/preference_setting_card_default_desc"
+                        app:icon="@drawable/icon_visibility"
+                        app:options="@array/card_default_type"
+                        app:title="@string/preference_setting_card_default" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/supportFreeFormSwitch"

@@ -19,7 +19,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
@@ -28,10 +28,11 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinValueArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinIconExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinStringExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinMultiSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDate;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinFloat;
@@ -70,6 +71,7 @@ import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidgetBoolean;
 import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidgetColor;
 import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidgetExecute;
 import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidgetImage;
+import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidgetList;
 import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidgetNumber;
 import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidgetPoint;
 import top.bogey.touch_tool.ui.blueprint.pin_widget.PinWidgetSelect;
@@ -90,6 +92,7 @@ public class PinInfo {
     private final static PinInfo DYNAMIC_OBJECT_INFO = new PinInfo(PinType.OBJECT, PinSubType.DYNAMIC, PinObject.class, NormalPinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryInverse, R.string.pin_object, null, false, false);
 
     private final static PinInfo LIST_INFO = new PinInfo(PinType.LIST, PinSubType.NORMAL, PinList.class, ListPinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryInverse, R.string.pin_list, null, false, false);
+    private final static PinInfo MULTI_SELECT_INFO = new PinInfo(PinType.LIST, PinSubType.MULTI_SELECT, PinMultiSelect.class, ListPinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryInverse, R.string.pin_multi_select, PinWidgetList.class, false, false);
 
     private final static PinInfo MAP_INFO = new PinInfo(PinType.MAP, PinSubType.NORMAL, PinMap.class, MapPinSlotView.class, 0, com.google.android.material.R.attr.colorPrimaryInverse, R.string.pin_map, null, false, false);
 
@@ -150,7 +153,12 @@ public class PinInfo {
                     case DYNAMIC -> info = DYNAMIC_OBJECT_INFO;
                 }
             }
-            case LIST -> info = LIST_INFO;
+            case LIST -> {
+                switch (subType) {
+                    case NORMAL -> info = LIST_INFO;
+                    case MULTI_SELECT -> info = MULTI_SELECT_INFO;
+                }
+            }
             case MAP -> info = MAP_INFO;
             case STRING -> {
                 switch (subType) {

@@ -49,7 +49,7 @@ public class CustomEndAction extends Action implements DynamicPinsAction, SyncAc
                 params.put(p.getUid(), value);
             }
         }
-        runnable.addDebugLog(this, -1);
+        onExecuteNext(runnable, null);
         runnable.getTask().executeNext(runnable, params);
     }
 

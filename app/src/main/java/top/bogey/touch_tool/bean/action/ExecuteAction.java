@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.service.TaskRunnable;
 
@@ -35,7 +36,15 @@ public abstract class ExecuteAction extends Action {
     }
 
     @Override
-    public final void resetReturnValue(TaskRunnable runnable) {
-
+    public final void resetReturnValue(TaskRunnable runnable, Pin pin) {
+        if (!pin.isOut() && pin.isSameClass(PinExecute.class)) {
+            for (Pin p : getPins()) {
+                if (p.isOut()) {
+                    if (p.getValue() instanceof PinObject pinObject) {
+                        pinObject.reset();
+                    }
+                }
+            }
+        }
     }
 }

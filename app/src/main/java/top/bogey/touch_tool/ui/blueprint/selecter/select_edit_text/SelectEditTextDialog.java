@@ -4,14 +4,20 @@ import android.content.Context;
 import android.graphics.Point;
 import android.text.Editable;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.databinding.DialogFullScreenEditBinding;
+import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.StringResultCallback;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
@@ -41,5 +47,22 @@ public class SelectEditTextDialog extends BottomSheetDialog {
         Point size = DisplayUtil.getScreenSize(context);
         DisplayUtil.setViewHeight(binding.getRoot(), (int) (size.y * 0.7f));
         DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
+
+        MainActivity activity = MainApplication.getInstance().getActivity();
+        View decorView = activity.getWindow().getDecorView();
+        int width = decorView.getWidth();
+        int height = decorView.getHeight();
+
+        BottomSheetBehavior<FrameLayout> behavior = getBehavior();
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+        boolean portrait = DisplayUtil.isPortrait(context);
+        if (portrait) {
+            DisplayUtil.setViewHeight(binding.getRoot(), (int) (height * 0.7f));
+            DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
+        } else {
+            DisplayUtil.setViewHeight(binding.getRoot(), (int) (height * 0.8f));
+            behavior.setMaxWidth(width);
+        }
     }
 }

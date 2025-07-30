@@ -10,7 +10,7 @@ import java.util.List;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
@@ -29,8 +29,7 @@ public class ListGetAction extends ListCalculateAction {
 
     public ListGetAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPin(listPin);
-        reAddPin(indexPin);
+        reAddPins(listPin, indexPin);
         reAddPin(resultPin, true);
     }
 

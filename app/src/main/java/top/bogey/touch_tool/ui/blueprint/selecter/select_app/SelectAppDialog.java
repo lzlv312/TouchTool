@@ -2,19 +2,25 @@ package top.bogey.touch_tool.ui.blueprint.selecter.select_app;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
-import android.graphics.Point;
 import android.text.Editable;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
 import top.bogey.touch_tool.databinding.DialogSelectAppBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
@@ -35,6 +41,9 @@ public class SelectAppDialog extends BottomSheetDialog {
         binding = DialogSelectAppBinding.inflate(LayoutInflater.from(context));
         setContentView(binding.getRoot());
 
+        BottomSheetBehavior<FrameLayout> behavior = getBehavior();
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
         binding.appIconBox.setAdapter(adapter);
         adapter.refreshApps(searchApps());
 
@@ -51,9 +60,25 @@ public class SelectAppDialog extends BottomSheetDialog {
             adapter.refreshApps(searchApps());
         });
 
-        Point size = DisplayUtil.getScreenSize(context);
-        DisplayUtil.setViewHeight(binding.getRoot(), (int) (size.y * 0.7f));
-        DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
+
+        MainActivity activity = MainApplication.getInstance().getActivity();
+        View decorView = activity.getWindow().getDecorView();
+        int width = decorView.getWidth();
+        int height = decorView.getHeight();
+
+        GridLayoutManager layoutManager = (GridLayoutManager) binding.appIconBox.getLayoutManager();
+        if (layoutManager != null) {
+            boolean portrait = DisplayUtil.isPortrait(context);
+            if (portrait) {
+                DisplayUtil.setViewHeight(binding.getRoot(), (int) (height * 0.7f));
+                DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
+                layoutManager.setSpanCount(3);
+            } else {
+                DisplayUtil.setViewHeight(binding.getRoot(), (int) (height * 0.8f));
+                behavior.setMaxWidth(width);
+                layoutManager.setSpanCount(6);
+            }
+        }
     }
 
     private List<PackageInfo> searchApps() {

@@ -14,7 +14,7 @@ import java.util.List;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplications;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
 import top.bogey.touch_tool.databinding.PinWidgetAppBinding;
 import top.bogey.touch_tool.databinding.PinWidgetAppItemBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
@@ -61,10 +61,10 @@ public class PinWidgetApps extends PinWidget<PinApplications> {
             PinWidgetAppItemBinding itemBinding = PinWidgetAppItemBinding.inflate(LayoutInflater.from(getContext()), binding.iconBox, true);
             itemBinding.icon.setImageDrawable(getContext().getApplicationInfo().loadIcon(manager));
             itemBinding.numberBox.setVisibility(GONE);
-            itemBinding.getRoot().setOnClickListener(v -> {
-                pinBase.remove(commonApplication);
-                refreshApps();
-            });
+//            itemBinding.getRoot().setOnClickListener(v -> {
+//                pinBase.remove(commonApplication);
+//                refreshApps();
+//            });
             count++;
 
             if (pinBase.size() == 1) return;

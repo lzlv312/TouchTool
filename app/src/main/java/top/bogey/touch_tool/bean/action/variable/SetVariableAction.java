@@ -53,8 +53,19 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         if (var == null) var = Saver.getInstance().getVar(varId);
         if (var != null && varPin != null) {
             PinObject value = getPinValue(runnable, varPin);
-            var.setValue(value);
-            if (savePin.getValue(PinBoolean.class).getValue()) var.save();
+            var.setSaveValue(value);
+            // 保存变量，需要找到原始任务来保存
+            if (savePin.getValue(PinBoolean.class).getValue()) {
+                Task startTask = runnable.getStartTask();
+                Task saveTask = Saver.getInstance().getTask(startTask.getId());
+                if (saveTask == null) saveTask = task;
+                Variable variable = saveTask.findVariable(varId);
+                if (variable == null) variable = Saver.getInstance().getVar(varId);
+                if (variable != null) {
+                    variable.setSaveValue(value);
+                    variable.save();
+                }
+            }
         }
         executeNext(runnable, outPin);
     }
@@ -70,6 +81,9 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         if (variable == null) return;
         if (varPin == null) return;
         varPin.setTitle(variable.getTitle());
+        if (!varPin.isSameClass(variable.getValue())) {
+            varPin.setValue(variable.getValue().copy());
+        }
         String globalFlag = variable.getParent() == null ? GLOBAL_FLAG : "";
         setTitle(MainApplication.getInstance().getString(R.string.set_value_action) + " - " + globalFlag + variable.getTitle());
     }

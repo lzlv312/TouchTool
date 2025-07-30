@@ -94,6 +94,9 @@
     <string name="select_icon_system_app">系统应用</string>
     <string name="select_icon_tips">请选择一个图标</string>
 
+    <string name="multi_select">多选</string>
+    <string name="multi_select_search">搜索选项</string>
+
     <!-- 错误 -->
     <string name="card_check_error_tips">存在%d个问题卡片</string>
 
@@ -121,6 +124,7 @@
 
     <string name="pin_list">列表</string>
     <string name="pin_list_app">应用列表</string>
+    <string name="pin_multi_select">多选</string>
 
     <string name="pin_map">字典</string>
 
@@ -160,6 +164,7 @@
     <string name="pin_node">控件</string>
 
     <string name="pin_image">图片</string>
+    <string name="pin_image_full">图片(默认全屏)</string>
     <string name="pin_color">颜色</string>
 
     <string name="pin_app">应用或界面</string>
@@ -293,6 +298,9 @@
 
     <!-- 设置-偏好设置 -->
     <string name="preference_setting">偏好设置</string>
+
+    <string name="preference_setting_card_default">卡片展开状态</string>
+    <string name="preference_setting_card_default_desc">蓝图中新添加的默认展开状态</string>
 
     <string name="preference_setting_support_free_form">小窗优化</string>
     <string name="preference_setting_support_free_form_desc">当软件运行在小窗模式下时，蓝图编辑时采集悬浮窗不再将软件切到后台</string>

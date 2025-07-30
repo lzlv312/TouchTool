@@ -9,16 +9,17 @@ import java.util.List;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
-import top.bogey.touch_tool.bean.action.logic.FindExecuteAction;
+import top.bogey.touch_tool.bean.action.CalculateAction;
+import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class GetNodesInAreaAction extends FindExecuteAction {
+public class GetNodesInAreaAction extends ExecuteAction {
     private final transient Pin areaPin = new Pin(new PinArea(), R.string.pin_area);
     private final transient Pin nodesPin = new Pin(new PinList(new PinNode()), R.string.pin_node, true);
     private final transient Pin firstNodePin = new Pin(new PinNode(), R.string.pin_node_top, true);
@@ -34,7 +35,7 @@ public class GetNodesInAreaAction extends FindExecuteAction {
     }
 
     @Override
-    public boolean find(TaskRunnable runnable) {
+    public void execute(TaskRunnable runnable, Pin pin) {
         PinArea area = getPinValue(runnable, areaPin);
         PinList nodes = nodesPin.getValue();
 
@@ -46,8 +47,10 @@ public class GetNodesInAreaAction extends FindExecuteAction {
             nodes.add(new PinNode(info));
         }
 
-        if (nodes.isEmpty()) return false;
-        firstNodePin.setValue(nodes.get(nodes.size() - 1));
-        return true;
+        if (!nodes.isEmpty()) {
+            firstNodePin.setValue(nodes.get(nodes.size() - 1));
+        }
+
+        executeNext(runnable, outPin);
     }
 }

@@ -512,6 +512,11 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     public void tryGetScreenShot(BitmapResultCallback callback) {
+        if (isCaptureEnabled()) {
+            callback.onResult(getScreenShotByCapture());
+            return;
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             getScreenByAccessibility(callback);
         } else {

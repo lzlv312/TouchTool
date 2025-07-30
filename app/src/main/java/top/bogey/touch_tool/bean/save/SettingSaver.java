@@ -60,6 +60,7 @@ public class SettingSaver {
     private static final String SHOW_NODE_AREA = "SHOW_NODE_AREA";                                      // 标记目标控件区域
     private static final String SHOW_TASK_START_TIPS = "SHOW_TASK_START_TIPS";                          // 任务开始运行提示
 
+    private static final String DEFAULT_CARD_TYPE = "DEFAULT_CARD_TYPE";                                // 默认卡片展开类型
     private static final String SUPPORT_FREE_FORM = "SUPPORT_FREE_FORM";                                // 小窗支持
     private static final String NIGHT_MODE_TYPE = "NIGHT_MODE_TYPE";                                    // 深色模式
     private static final String DYNAMIC_COLOR = "DYNAMIC_COLOR";                                        // 动态颜色
@@ -267,6 +268,14 @@ public class SettingSaver {
         mmkv.encode(SHOW_TASK_START_TIPS, enable);
     }
 
+
+    public int getDefaultCardExpandType() {
+        return mmkv.decodeInt(DEFAULT_CARD_TYPE, 1);
+    }
+
+    public void setDefaultCardExpandType(int type) {
+        mmkv.encode(DEFAULT_CARD_TYPE, type);
+    }
 
     public boolean isSupportFreeForm() {
         return mmkv.decodeBool(SUPPORT_FREE_FORM, false);

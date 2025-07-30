@@ -14,8 +14,7 @@ import top.bogey.touch_tool.utils.GsonUtil;
 public class PinDouble extends PinNumber<Double> {
 
     public PinDouble() {
-        super(PinSubType.DOUBLE);
-        value = 0.0;
+        super(PinSubType.DOUBLE, 0.0);
     }
 
     public PinDouble(double value) {

@@ -7,10 +7,8 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 public class PinTime extends PinLong {
 
     public PinTime() {
-        super(PinSubType.TIME);
-        value = formatTime(System.currentTimeMillis());
+        super(PinSubType.TIME, formatTime(System.currentTimeMillis()));
     }
-
     public PinTime(long value) {
         super(PinSubType.TIME, formatTime(value));
     }

@@ -1,7 +1,6 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_action;
 
 import android.content.Context;
-import android.graphics.Point;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionMap;
@@ -33,6 +34,7 @@ import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.databinding.DialogSelectActionBinding;
 import top.bogey.touch_tool.databinding.WidgetSettingSelectButton2Binding;
 import top.bogey.touch_tool.databinding.WidgetSettingSelectButtonBinding;
+import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.ui.custom.EditVariableDialog;
 import top.bogey.touch_tool.utils.AppUtil;
@@ -68,6 +70,7 @@ public class SelectActionDialog extends BottomSheetDialog {
 
         BottomSheetBehavior<FrameLayout> behavior = getBehavior();
         behavior.setDraggable(false);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         adapter = new SelectActionItemRecyclerViewAdapter(this, callback);
         binding.actionsBox.setAdapter(adapter);
@@ -158,10 +161,24 @@ public class SelectActionDialog extends BottomSheetDialog {
         });
 
         setCopyObject(copyObject);
+        MainActivity activity = MainApplication.getInstance().getActivity();
+        View decorView = activity.getWindow().getDecorView();
+        int width = decorView.getWidth();
+        int height = decorView.getHeight();
 
-        Point size = DisplayUtil.getScreenSize(context);
-        DisplayUtil.setViewHeight(binding.getRoot(), (int) (size.y * 0.7f));
-        DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
+        StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) binding.actionsBox.getLayoutManager();
+        boolean portrait = DisplayUtil.isPortrait(context);
+        if (layoutManager != null) {
+            if (portrait) {
+                DisplayUtil.setViewHeight(binding.getRoot(), (int) (height * 0.7f));
+                DisplayUtil.setViewWidth(binding.getRoot(), ViewGroup.LayoutParams.MATCH_PARENT);
+                layoutManager.setSpanCount(2);
+            } else {
+                DisplayUtil.setViewHeight(binding.getRoot(), (int) (height * 0.8f));
+                behavior.setMaxWidth(width);
+                layoutManager.setSpanCount(4);
+            }
+        }
     }
 
     private void showNewVariableDialog() {

@@ -19,6 +19,7 @@ import top.bogey.touch_tool.bean.action.area.PickAreaAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanAndAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanNotAction;
 import top.bogey.touch_tool.bean.action.bool.BooleanOrAction;
+import top.bogey.touch_tool.bean.action.image.ColorEqualAction;
 import top.bogey.touch_tool.bean.action.image.CreateQRCodeAction;
 import top.bogey.touch_tool.bean.action.image.CropImageAction;
 import top.bogey.touch_tool.bean.action.image.FindColorsAction;
@@ -302,6 +303,7 @@ public class ActionInfo {
     private final static ActionInfo GET_COLOR_INFO = new ActionInfo(ActionType.GET_COLOR, GetColorAction.class, R.drawable.icon_palette, R.string.get_color_action, R.string.get_color_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_COLORS_INFO = new ActionInfo(ActionType.FIND_COLORS, FindColorsAction.class, R.drawable.icon_visibility, R.string.find_colors_action, R.string.find_colors_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo IS_COLOR_EXIST_INFO = new ActionInfo(ActionType.IS_COLOR_EXIST, IsColorExistAction.class, R.drawable.icon_check, R.string.is_color_exist_action, R.string.is_color_exist_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo COLOR_EQUAL_INFO = new ActionInfo(ActionType.COLOR_EQUAL, ColorEqualAction.class, R.drawable.icon_equal, R.string.color_equal_action, R.string.color_equal_action_desc, 0, NormalActionCard.class);
 
 
     // 区域操作
@@ -490,6 +492,7 @@ public class ActionInfo {
             case GET_COLOR -> GET_COLOR_INFO;
             case FIND_COLORS -> FIND_COLORS_INFO;
             case IS_COLOR_EXIST -> IS_COLOR_EXIST_INFO;
+            case COLOR_EQUAL -> COLOR_EQUAL_INFO;
 
 
             case AREA_TO_INT -> AREA_TO_INT_INFO;

@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import top.bogey.touch_tool.databinding.DialogSelectIconPageBinding;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.BitmapResultCallback;
 
 public class SelectIconPageAdapter extends RecyclerView.Adapter<SelectIconPageAdapter.ViewHolder> {
@@ -57,6 +59,11 @@ public class SelectIconPageAdapter extends RecyclerView.Adapter<SelectIconPageAd
 
             adapter = new SelectIconPageItemRecyclerViewAdapter(callback);
             binding.getRoot().setAdapter(adapter);
+            GridLayoutManager layoutManager = (GridLayoutManager) binding.getRoot().getLayoutManager();
+            if (layoutManager != null) {
+                boolean portrait = DisplayUtil.isPortrait(binding.getRoot().getContext());
+                layoutManager.setSpanCount(portrait ? 6 : 12);
+            }
         }
 
         public void refresh(String tag) {

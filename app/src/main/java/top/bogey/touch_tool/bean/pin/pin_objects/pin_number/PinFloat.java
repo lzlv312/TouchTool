@@ -8,8 +8,7 @@ import top.bogey.touch_tool.utils.GsonUtil;
 public class PinFloat extends PinNumber<Float> {
 
     public PinFloat() {
-        super(PinSubType.FLOAT);
-        value = 0f;
+        super(PinSubType.FLOAT, 0f);
     }
 
     public PinFloat(float value) {

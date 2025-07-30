@@ -13,6 +13,7 @@ import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleLineString;
@@ -27,16 +28,17 @@ public class StringMatchAction extends ExecuteAction implements DynamicPinsActio
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin matchPin = new Pin(new PinSingleLineString(), R.string.string_match_action_match);
     private final transient Pin elsePin = new Pin(new PinExecute(), R.string.if_action_else, true);
+    private final transient Pin resultPin = new Pin(new PinList(new PinString()), R.string.pin_string, true);
     private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_pin, true);
 
     public StringMatchAction() {
         super(ActionType.STRING_REGEX);
-        addPins(textPin, matchPin, elsePin, addPin);
+        addPins(textPin, matchPin, elsePin, resultPin, addPin);
     }
 
     public StringMatchAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(textPin, matchPin, elsePin);
+        reAddPins(textPin, matchPin, elsePin, resultPin);
         reAddPins(morePin);
         reAddPin(addPin);
     }
@@ -45,6 +47,7 @@ public class StringMatchAction extends ExecuteAction implements DynamicPinsActio
     public void execute(TaskRunnable runnable, Pin pin) {
         PinObject text = getPinValue(runnable, textPin);
         PinObject match = getPinValue(runnable, matchPin);
+        PinList result = resultPin.getValue();
 
         Pattern pattern = AppUtil.getPattern(match.toString().trim());
         if (pattern != null) {
@@ -52,8 +55,9 @@ public class StringMatchAction extends ExecuteAction implements DynamicPinsActio
             if (matcher.find()) {
                 List<Pin> pins = getDynamicPins();
                 for (int i = 0; i < matcher.groupCount(); i++) {
-                    if (i >= pins.size()) break;
                     String group = matcher.group(i + 1);
+                    result.add(new PinString(group));
+                    if (i >= pins.size()) break;
                     pins.get(i).getValue(PinString.class).setValue(group);
                 }
                 executeNext(runnable, outPin);
