@@ -16,6 +16,7 @@ import top.bogey.touch_tool.bean.action.FindExecuteAction;
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
@@ -34,6 +35,7 @@ import top.bogey.touch_tool.utils.AppUtil;
 public class FindNodeAction extends FindExecuteAction {
     private final transient Pin typePin = new NotLinkAblePin(new PinSingleSelect(R.array.find_node_type), R.string.find_node_action_type);
     private final transient Pin pathPin = new PathShowablePin(new PinNodePathString(), R.string.find_node_action_path);
+    private final transient Pin fullPathPin = new PathShowablePin(new PinBoolean(true), R.string.find_node_action_full_path);
     private final transient Pin textPin = new TextShowablePin(new PinString(), R.string.pin_string);
     private final transient Pin idPin = new IdShowablePin(new PinString(), R.string.find_node_action_id);
     private final transient Pin areaPin = new NotAllPathShowablePin(new PinArea(), R.string.pin_area);
@@ -43,12 +45,12 @@ public class FindNodeAction extends FindExecuteAction {
 
     public FindNodeAction() {
         super(ActionType.FIND_NODE);
-        reAddPins(typePin, pathPin, textPin, idPin, areaPin, pathTextPin, nodePin, nodesPin);
+        reAddPins(typePin, pathPin, fullPathPin, textPin, idPin, areaPin, pathTextPin, nodePin, nodesPin);
     }
 
     public FindNodeAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(typePin, pathPin, textPin, idPin, areaPin, pathTextPin, nodePin, nodesPin);
+        reAddPins(typePin, pathPin, fullPathPin, textPin, idPin, areaPin, pathTextPin, nodePin, nodesPin);
     }
 
     @Override
@@ -66,7 +68,8 @@ public class FindNodeAction extends FindExecuteAction {
                 }
                 PinString pathString = getPinValue(runnable, pathPin);
                 PinNodePathString path = new PinNodePathString(pathString.getValue());
-                NodeInfo node = path.findNode(rootNodes);
+                PinBoolean fullPath = getPinValue(runnable, fullPathPin);
+                NodeInfo node = path.findNode(rootNodes, fullPath.getValue());
                 if (node == null) return false;
                 nodePin.getValue(PinNode.class).setNodeInfo(node);
                 MarkTargetFloatView.showTargetArea(node.area);
@@ -108,7 +111,7 @@ public class FindNodeAction extends FindExecuteAction {
                 PinString pathString = getPinValue(runnable, pathPin);
                 PinNodePathTextString path = new PinNodePathTextString(pathString.getValue());
                 List<NodeInfo> findNodes = path.findNodes(rootNodes);
-                if (findNodes.isEmpty()) return false;
+                if (findNodes == null || findNodes.isEmpty()) return false;
                 for (NodeInfo findNode : findNodes) {
                     nodes.add(new PinNode(findNode));
                     MarkTargetFloatView.showTargetArea(findNode.area);

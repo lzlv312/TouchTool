@@ -73,7 +73,7 @@ public class StringMatchAction extends ExecuteAction implements DynamicPinsActio
         for (Pin pin : getPins()) {
             if (pin == addPin) start = false;
             if (start) pins.add(pin);
-            if (pin == elsePin) start = true;
+            if (pin == resultPin) start = true;
         }
         return pins;
     }

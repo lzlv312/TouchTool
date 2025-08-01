@@ -167,7 +167,7 @@ public class NodeInfo implements ITreeNodeData {
     /**
      * 用自身的信息在节点中找到和自身差不多的
      */
-    public NodeInfo findSelfInNode(NodeInfo node) {
+    public NodeInfo findSelfInNode(NodeInfo node, boolean fullPath) {
         NodeInfo result = null;
 
         // 先根据class,id,index一起查找
@@ -195,7 +195,7 @@ public class NodeInfo implements ITreeNodeData {
         }
 
         // 带标记，却没有找到，不再继续
-        if (index > 1 || id != null) return result;
+        if (fullPath && (index > 1 || id != null)) return result;
 
         // 如果还是没找到，再根据class查找
         if (result == null) {

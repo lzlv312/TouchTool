@@ -33,6 +33,10 @@ public class PinNodePathString extends PinString {
     }
 
     public NodeInfo findNode(List<NodeInfo> nodes) {
+        return findNode(nodes, true);
+    }
+
+    public NodeInfo findNode(List<NodeInfo> nodes, boolean fullPath) {
         if (value == null || value.isEmpty()) return null;
 
         String[] strings = value.split("\n");
@@ -44,7 +48,7 @@ public class PinNodePathString extends PinString {
                 if (result == null) result = node;
                 else {
                     NodeInfo nodeInfo = new NodeInfo(string);
-                    result = nodeInfo.findSelfInNode(result);
+                    result = nodeInfo.findSelfInNode(result, fullPath);
                     if (result == null) break;
                 }
             }
