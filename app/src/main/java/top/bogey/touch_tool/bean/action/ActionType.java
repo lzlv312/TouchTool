@@ -186,7 +186,6 @@ public enum ActionType {
     MAP_IS_EMPTY,
     MAP_CONTAIN_KEY,
     MAP_CONTAIN_VALUE,
-    MAP_ADD,
     MAP_REMOVE,
     MAP_APPEND,
     MAP_CLEAR,

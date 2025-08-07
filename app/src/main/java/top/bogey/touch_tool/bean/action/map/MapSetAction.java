@@ -20,11 +20,11 @@ public class MapSetAction extends MapExecuteAction {
     private final transient Pin mapPin = new Pin(new PinMap(), R.string.pin_map);
     private final transient Pin keyPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_key);
     private final transient Pin valuePin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_value);
-    private final transient Pin resultPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_set_action_pre_value, true);
+    private final transient Pin lastPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_remove_action_pre_value, true);
 
     public MapSetAction() {
         super(ActionType.MAP_SET);
-        addPins(mapPin, keyPin, valuePin, resultPin);
+        addPins(mapPin, keyPin, valuePin, lastPin);
     }
 
     public MapSetAction(JsonObject jsonObject) {
@@ -32,7 +32,7 @@ public class MapSetAction extends MapExecuteAction {
         reAddPin(mapPin);
         reAddPin(keyPin, true);
         reAddPin(valuePin, true);
-        reAddPin(resultPin, true);
+        reAddPin(lastPin, true);
     }
 
     @Override
@@ -40,14 +40,14 @@ public class MapSetAction extends MapExecuteAction {
         PinMap map = getPinValue(runnable, mapPin);
         PinObject key = getPinValue(runnable, keyPin);
         PinObject value = getPinValue(runnable, valuePin);
-        resultPin.setValue(map.put(key, value));
+        lastPin.setValue(map.put(key, value));
         executeNext(runnable, outPin);
     }
 
     @NonNull
     @Override
     public List<Pin> getDynamicTypePins() {
-        return Arrays.asList(mapPin, keyPin, valuePin, resultPin);
+        return Arrays.asList(mapPin, keyPin, valuePin, lastPin);
     }
 
     @NonNull
@@ -59,6 +59,6 @@ public class MapSetAction extends MapExecuteAction {
     @NonNull
     @Override
     public List<Pin> getDynamicValueTypePins() {
-        return Arrays.asList(valuePin, resultPin);
+        return Arrays.asList(valuePin, lastPin);
     }
 }

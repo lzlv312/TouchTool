@@ -650,9 +650,9 @@
     <string name="map_get_action">获取值</string>
     <string name="map_get_action_desc">从字典中获取值</string>
 
-    <string name="map_set_action">设置值</string>
-    <string name="map_set_action_desc">向字典中设置值</string>
-    <string name="map_set_action_pre_value">之前的值</string>
+    <string name="map_set_action">添加或替换值</string>
+    <string name="map_set_action_desc">向字典中添加或替换值</string>
+    <string name="map_set_action_pre_value">替换前的值</string>
 
     <string name="map_keys_action">获取键</string>
     <string name="map_keys_action_desc">获取字典中的所有键</string>
