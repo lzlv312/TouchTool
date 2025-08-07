@@ -87,7 +87,7 @@ public class InstantActivity extends BaseActivity {
             if (params != null) {
                 params.forEach((key, value) -> {
                     Variable var = copy.findVariableByName(key);
-                    if (var != null) var.getValue().cast(value);
+                    if (var != null) var.getSaveValue().cast(value);
                 });
             }
             service.runTask(copy, startAction);
