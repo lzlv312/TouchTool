@@ -23,6 +23,7 @@ import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.other.Usage;
+import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -299,14 +300,13 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         action.execute(runnable, null);
     }
 
-    public void execute(TaskRunnable runnable, ExecuteTaskAction startAction, Map<String, PinObject> params) {
+    public void execute(TaskRunnable runnable, ExecuteTaskAction startAction, Pin pin, Map<String, PinObject> params) {
         Task copy = copy();
         copy.startAction = startAction;
         for (Action action : copy.getActions(CustomStartAction.class)) {
             ((CustomStartAction) action).setParams(params);
             runnable.pushStack(copy, action);
-
-            action.execute(runnable, null);
+            action.execute(runnable, pin);
 
             Task task = runnable.getTask();
             if (copy.equals(task)) {
@@ -317,10 +317,11 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         }
     }
 
-    public void executeNext(TaskRunnable runnable, Map<String, PinObject> params) {
+    public void executeNext(TaskRunnable runnable, Pin pin, Map<String, PinObject> params) {
         runnable.popStack();
         if (startAction != null) {
             startAction.setParams(params);
+            startAction.executeNext(runnable, pin);
         }
     }
 

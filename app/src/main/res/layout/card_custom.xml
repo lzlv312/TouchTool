@@ -22,11 +22,25 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/topBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="4dp" />
+            android:paddingHorizontal="4dp">
+
+            <LinearLayout
+                android:id="@+id/topBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/topPinBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,6 +95,14 @@
                 android:layout_height="24dp"
                 app:icon="@drawable/icon_add"
                 app:iconSize="20dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addExecuteButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:icon="@drawable/icon_graph_2"
+                app:iconSize="18dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"
@@ -166,13 +188,27 @@
             android:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/bottomBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:gravity="bottom"
             android:orientation="horizontal"
-            android:paddingHorizontal="4dp" />
+            android:paddingHorizontal="4dp">
+
+            <LinearLayout
+                android:id="@+id/bottomBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bottomPinBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

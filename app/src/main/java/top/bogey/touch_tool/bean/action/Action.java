@@ -217,6 +217,7 @@ public abstract class Action extends Identity implements PinListener {
         onExecuteNext(runnable, pin);
 
         if (runnable.isInterrupt()) return;
+        if (pin == null) return;
         if (!pin.isOut()) return;
 
         Pin linkedPin = pin.getLinkedPin(runnable.getTask());

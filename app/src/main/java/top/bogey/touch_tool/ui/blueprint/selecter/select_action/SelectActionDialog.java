@@ -108,7 +108,7 @@ public class SelectActionDialog extends BottomSheetDialog {
             buttonBinding.getRoot().setTag(groupType);
             if (lastGroup.equals(groupName[groupType.ordinal()])) index = groupType.ordinal();
         }
-        binding.group.check(binding.group.getChildAt(index).getId());
+        if (binding.group.getChildCount() > index) binding.group.check(binding.group.getChildAt(index).getId());
 
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override

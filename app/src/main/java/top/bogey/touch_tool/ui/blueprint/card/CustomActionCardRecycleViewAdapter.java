@@ -13,8 +13,10 @@ import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.ui.blueprint.pin.PinBottomCustomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinLeftCustomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinRightCustomView;
+import top.bogey.touch_tool.ui.blueprint.pin.PinTopCustomView;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 
 public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<CustomActionCardRecycleViewAdapter.ViewHolder> {
@@ -29,7 +31,7 @@ public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<Cus
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         FrameLayout frameLayout = new FrameLayout(parent.getContext());
-        frameLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        frameLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         return new ViewHolder(frameLayout);
     }
 
@@ -46,9 +48,17 @@ public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<Cus
     public PinView addPin(Pin pin) {
         PinView pinView;
         if (pin.isOut()) {
-            pinView = new PinRightCustomView(card.getContext(), card, pin);
+            if (pin.isVertical()) {
+                pinView = new PinBottomCustomView(card.getContext(), card, pin);
+            } else {
+                pinView = new PinRightCustomView(card.getContext(), card, pin);
+            }
         } else {
-            pinView = new PinLeftCustomView(card.getContext(), card, pin);
+            if (pin.isVertical()) {
+                pinView = new PinTopCustomView(card.getContext(), card, pin);
+            } else {
+                pinView = new PinLeftCustomView(card.getContext(), card, pin);
+            }
         }
         pinViews.add(pinView);
         notifyItemInserted(pinViews.size() - 1);
@@ -99,11 +109,31 @@ public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<Cus
         }
     }
 
-    public static class DragViewHolderHelper extends ItemTouchHelper.SimpleCallback {
+    public static class HorizontalDragViewHolderHelper extends ItemTouchHelper.SimpleCallback {
         private final CustomActionCardRecycleViewAdapter adapter;
 
-        public DragViewHolderHelper(CustomActionCardRecycleViewAdapter adapter) {
+        public HorizontalDragViewHolderHelper(CustomActionCardRecycleViewAdapter adapter) {
             super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
+            this.adapter = adapter;
+        }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder source, @NonNull RecyclerView.ViewHolder target) {
+            adapter.swapPin(source.getAdapterPosition(), target.getAdapterPosition());
+            return true;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    }
+
+    public static class VerticalDragViewHolderHelper extends ItemTouchHelper.SimpleCallback {
+        private final CustomActionCardRecycleViewAdapter adapter;
+
+        public VerticalDragViewHolderHelper(CustomActionCardRecycleViewAdapter adapter) {
+            super(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0);
             this.adapter = adapter;
         }
 

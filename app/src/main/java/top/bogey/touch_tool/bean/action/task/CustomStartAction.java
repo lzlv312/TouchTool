@@ -16,17 +16,14 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class CustomStartAction extends Action implements DynamicPinsAction {
-    private final transient Pin executePin = new Pin(new PinExecute(), R.string.pin_execute, true);
 
     public CustomStartAction() {
         super(ActionType.CUSTOM_START);
         setExpandType(ExpandType.FULL);
-        addPin(executePin);
     }
 
     public CustomStartAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPin(executePin);
         tmpPins.forEach(this::addPin);
         tmpPins.clear();
     }
@@ -35,7 +32,8 @@ public class CustomStartAction extends Action implements DynamicPinsAction {
     public void execute(TaskRunnable runnable, Pin pin) {
         runnable.addExecuteProgress(this);
         runnable.addDebugLog(this, 1);
-        executeNext(runnable, executePin);
+        Pin pinByUid = getPinByUid(pin.getUid());
+        executeNext(runnable, pinByUid);
     }
 
     @Override
@@ -54,13 +52,7 @@ public class CustomStartAction extends Action implements DynamicPinsAction {
 
     @Override
     public List<Pin> getDynamicPins() {
-        List<Pin> pins = new ArrayList<>();
-        boolean start = false;
-        for (Pin pin : getPins()) {
-            if (start) pins.add(pin);
-            if (pin == executePin) start = true;
-        }
-        return pins;
+        return new ArrayList<>(getPins());
     }
 
 }

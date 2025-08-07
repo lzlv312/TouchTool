@@ -28,20 +28,18 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ExecuteTaskAction extends Action implements DynamicPinsAction, SyncAction {
-    private final transient Pin inPin = new ExecuteShowAblePin(new PinExecute(), R.string.pin_execute);
-    private final transient Pin outPin = new ExecuteShowAblePin(new PinExecute(), R.string.pin_execute, true);
     private final transient Pin taskPin = new NotLinkAblePin(new PinTaskString(), R.string.execute_task_action_task_id, false, false, true);
 
     private transient boolean synced = false;
 
     public ExecuteTaskAction() {
         super(ActionType.EXECUTE_TASK);
-        addPins(inPin, outPin, taskPin);
+        addPin(taskPin);
     }
 
     public ExecuteTaskAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(inPin, outPin, taskPin);
+        reAddPin(taskPin);
         tmpPins.forEach(this::addPin);
         tmpPins.clear();
     }
@@ -58,14 +56,20 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
 
         Map<String, PinObject> params = new HashMap<>();
         for (Pin p : getDynamicPins()) {
-            if (!p.isOut()) {
+            if (!p.isOut() && !p.isVertical()) {
                 PinObject value = getPinValue(runnable, p);
                 params.put(p.getUid(), value);
             }
         }
 
-        task.execute(runnable, this, params);
-        if (!isJustCall(runnable.getTask())) executeNext(runnable, outPin);
+        task.execute(runnable, this, pin, params);
+    }
+
+    @Override
+    public void executeNext(TaskRunnable runnable, Pin pin) {
+        if (isJustCall(runnable.getTask())) return;
+        Pin pinByUid = getPinByUid(pin.getUid());
+        super.executeNext(runnable, pinByUid);
     }
 
     @Override
@@ -140,11 +144,6 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
         String globalFlag = task.getParent() == null ? GLOBAL_FLAG : "";
         setTitle(globalFlag + task.getTitle());
 
-        if (isJustCall(context)) {
-            inPin.clearLinks(context);
-            outPin.clearLinks(context);
-        }
-
         List<Pin> syncPins = new ArrayList<>();
         for (Action action : task.getActions(CustomStartAction.class)) {
             CustomStartAction startAction = (CustomStartAction) action;
@@ -176,6 +175,12 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
             Pin dynamicPin = getPinByUid(syncPin.getUid());
             if (dynamicPin == null) {
                 dynamicPin = syncPin.newCopy();
+                if (dynamicPin.getValue() instanceof PinExecute) {
+                    ExecuteShowAblePin showAblePin = new ExecuteShowAblePin(new PinExecute());
+                    showAblePin.sync(dynamicPin);
+                    dynamicPin = showAblePin;
+                }
+
                 // 同步过来的针脚不再是动态的了
                 dynamicPin.setDynamic(false);
                 // 方向需要反转一下
@@ -227,12 +232,8 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
     }
 
     private static class ExecuteShowAblePin extends ShowAblePin {
-        public ExecuteShowAblePin(PinBase value, int titleId) {
-            super(value, titleId);
-        }
-
-        public ExecuteShowAblePin(PinBase value, int titleId, boolean out) {
-            super(value, titleId, out);
+        public ExecuteShowAblePin(PinBase value) {
+            super(value);
         }
 
         @Override
