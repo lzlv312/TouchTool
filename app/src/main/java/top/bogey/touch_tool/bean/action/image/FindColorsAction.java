@@ -61,8 +61,18 @@ public class FindColorsAction extends FindExecuteAction {
         PinList list = areasPin.getValue(PinList.class);
         List<Rect> rectList = DisplayUtil.matchColor(bitmap, template.getValue().getColor(), null, similarity.intValue());
         if (rectList != null && !rectList.isEmpty()) {
-            rectList.forEach(rect -> list.add(new PinArea(rect)));
-            firstAreaPin.getValue(PinArea.class).setValue(rectList.get(0));
+            int minArea = template.getValue().getMinArea();
+            int maxArea = template.getValue().getMaxArea();
+            for (Rect rect : rectList) {
+                int size = rect.width() * rect.height();
+                if (size >= minArea && size <= maxArea) {
+                    list.add(new PinArea(rect));
+                }
+            }
+            if (!list.isEmpty()) {
+                PinArea area = (PinArea) list.get(0);
+                firstAreaPin.getValue(PinArea.class).setValue(area.getValue());
+            }
         }
 
         return !list.isEmpty();

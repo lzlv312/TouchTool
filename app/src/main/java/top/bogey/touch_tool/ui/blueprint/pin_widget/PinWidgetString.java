@@ -161,6 +161,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                             new SelectIconDialog(getContext(), icon -> {
                                 Intent intent = new Intent(getContext(), InstantActivity.class);
                                 intent.setAction(Intent.ACTION_VIEW);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(InstantActivity.INTENT_KEY_DO_ACTION, true);
                                 intent.putExtra(InstantActivity.TASK_ID, card.getTask().getId());
                                 intent.putExtra(InstantActivity.ACTION_ID, card.getAction().getId());

@@ -57,10 +57,11 @@ public class StringMatchAction extends ExecuteAction implements DynamicPinsActio
                 for (int i = 0; i < matcher.groupCount(); i++) {
                     String group = matcher.group(i + 1);
                     result.add(new PinString(group));
-                    if (i >= pins.size()) break;
+                    if (i >= pins.size()) continue;
                     pins.get(i).getValue(PinString.class).setValue(group);
                 }
                 executeNext(runnable, outPin);
+                return;
             }
         }
         executeNext(runnable, elsePin);

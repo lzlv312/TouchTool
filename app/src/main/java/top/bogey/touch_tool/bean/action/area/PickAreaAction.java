@@ -28,6 +28,8 @@ public class PickAreaAction extends ExecuteAction {
         AreaPicker.showPicker(result -> {
             if (result != null) {
                 areaPin.getValue(PinArea.class).setValue(result);
+            } else {
+                runnable.stop();
             }
             runnable.resume();
         });

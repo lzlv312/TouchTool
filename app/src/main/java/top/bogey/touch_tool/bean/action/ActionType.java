@@ -56,6 +56,7 @@ public enum ActionType {
     SEND_TOAST,
 
     WRITE_TO_CLIPBOARD,
+    READ_FROM_CLIPBOARD,
 
     SWITCH_SCREEN,
     GET_SCREEN_STATUS,
@@ -136,6 +137,7 @@ public enum ActionType {
     FIND_IMAGE,
     FIND_IMAGES,
     IS_IMAGE_EXIST,
+    TOUCH_IMAGE,
     CREATE_QRCODE,
     PARSE_QRCODE,
 
@@ -144,6 +146,7 @@ public enum ActionType {
     FIND_COLORS,
     IS_COLOR_EXIST,
     COLOR_EQUAL,
+    TOUCH_COLOR,
 
     // 区域
     AREA_TO_INT,
@@ -183,6 +186,7 @@ public enum ActionType {
     MAP_IS_EMPTY,
     MAP_CONTAIN_KEY,
     MAP_CONTAIN_VALUE,
+    MAP_ADD,
     MAP_REMOVE,
     MAP_APPEND,
     MAP_CLEAR,

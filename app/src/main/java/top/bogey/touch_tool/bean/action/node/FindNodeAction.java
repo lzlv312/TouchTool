@@ -78,6 +78,7 @@ public class FindNodeAction extends FindExecuteAction {
             case 1, 2 -> {
                 PinArea area = getPinValue(runnable, areaPin);
                 AccessibilityNodeInfo root = service.getRootInActiveWindow();
+                if (root == null) return false;
                 NodeInfo nodeInfo = new NodeInfo(root);
                 List<NodeInfo> children;
                 if (type.getIndex() == 1) {
@@ -108,7 +109,7 @@ public class FindNodeAction extends FindExecuteAction {
                 for (AccessibilityNodeInfo window : AppUtil.getWindows(service)) {
                     rootNodes.add(new NodeInfo(window));
                 }
-                PinString pathString = getPinValue(runnable, pathPin);
+                PinString pathString = getPinValue(runnable, pathTextPin);
                 PinNodePathTextString path = new PinNodePathTextString(pathString.getValue());
                 List<NodeInfo> findNodes = path.findNodes(rootNodes);
                 if (findNodes == null || findNodes.isEmpty()) return false;

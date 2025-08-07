@@ -46,14 +46,15 @@ public class ActionMap {
                     ActionType.CLOSE_STICK,
                     ActionType.CLOSE_ALL_STICK,
 
-                    ActionType.SEND_TOAST,
+                    ActionType.INPUT_PARAM
+            ));
 
+            case CLICK -> list.addAll(Arrays.asList(
                     ActionType.TOUCH,
                     ActionType.TOUCH_POINT,
                     ActionType.NODE_TOUCH,
-
-                    ActionType.OPEN_APP,
-                    ActionType.INPUT_PARAM
+                    ActionType.TOUCH_IMAGE,
+                    ActionType.TOUCH_COLOR
             ));
 
             case SYSTEM -> list.addAll(Arrays.asList(
@@ -70,6 +71,7 @@ public class ActionMap {
                     ActionType.SEND_TOAST,
 
                     ActionType.WRITE_TO_CLIPBOARD,
+                    ActionType.READ_FROM_CLIPBOARD,
 
                     ActionType.SWITCH_SCREEN,
                     ActionType.GET_SCREEN_STATUS,
@@ -154,12 +156,14 @@ public class ActionMap {
                     ActionType.FIND_IMAGE,
                     ActionType.FIND_IMAGES,
                     ActionType.IS_IMAGE_EXIST,
+                    ActionType.TOUCH_IMAGE,
                     ActionType.CREATE_QRCODE,
                     ActionType.PARSE_QRCODE,
                     ActionType.GET_COLOR,
                     ActionType.FIND_COLORS,
                     ActionType.IS_COLOR_EXIST,
-                    ActionType.COLOR_EQUAL
+                    ActionType.COLOR_EQUAL,
+                    ActionType.TOUCH_COLOR
             ));
 
             case AREA -> list.addAll(Arrays.asList(
@@ -200,6 +204,7 @@ public class ActionMap {
             case MAP -> list.addAll(Arrays.asList(
                     ActionType.MAP_MAKE,
                     ActionType.MAP_FOREACH,
+                    ActionType.MAP_ADD,
                     ActionType.MAP_GET,
                     ActionType.MAP_SET,
                     ActionType.MAP_SIZE,
@@ -217,7 +222,7 @@ public class ActionMap {
     }
 
     public enum ActionGroupType {
-        START, LOGIC, NORMAL, SYSTEM, NUMBER, STRING, BOOLEAN, NODE, IMAGE, AREA, POINT, LIST, MAP;
+        START, LOGIC, NORMAL, CLICK, SYSTEM, NUMBER, STRING, BOOLEAN, NODE, IMAGE, AREA, POINT, LIST, MAP;
 
         public String getName() {
             String[] strings = MainApplication.getInstance().getResources().getStringArray(R.array.action_group);

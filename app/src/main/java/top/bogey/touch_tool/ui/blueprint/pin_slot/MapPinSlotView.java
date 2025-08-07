@@ -53,18 +53,16 @@ public class MapPinSlotView extends PinSlotView {
     }
 
     private @ColorInt int getPinKeyColor() {
-        if (pin.linkAble()) {
-            PinBase pinBase = pin.getValue();
-            PinMap pinMap = (PinMap) pinBase;
+        PinBase pinBase = pin.getValue();
+        if (pin.linkAble() && pinBase instanceof PinMap pinMap) {
             return getPinColor(new Pin(pinMap.getKeyType()));
         }
         return Color.GRAY;
     }
 
     private @ColorInt int getPinValueColor() {
-        if (pin.linkAble()) {
-            PinBase pinBase = pin.getValue();
-            PinMap pinMap = (PinMap) pinBase;
+        PinBase pinBase = pin.getValue();
+        if (pin.linkAble() && pinBase instanceof PinMap pinMap) {
             return getPinColor(new Pin(pinMap.getValueType()));
         }
         return Color.GRAY;

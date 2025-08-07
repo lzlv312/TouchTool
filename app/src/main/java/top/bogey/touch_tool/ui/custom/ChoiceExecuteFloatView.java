@@ -59,6 +59,7 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
         this.callback = callback;
         for (Choice choice : choices) {
             FloatChoiceExecuteItemBinding itemBinding = FloatChoiceExecuteItemBinding.inflate(LayoutInflater.from(getContext()), binding.flexBox, true);
+            itemBinding.icon.setVisibility(choice.icon() == null ? GONE : VISIBLE);
             itemBinding.icon.setImageBitmap(choice.icon());
             itemBinding.titleText.setText(choice.title());
             itemBinding.getRoot().setOnClickListener(v -> {

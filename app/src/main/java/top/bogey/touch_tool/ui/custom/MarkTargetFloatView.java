@@ -60,7 +60,10 @@ public class MarkTargetFloatView extends AppCompatImageView implements FloatInte
         this.targetArea = targetArea;
         int width = targetArea.width();
         int height = targetArea.height();
-        if (width <= 0 || height <= 0) return;
+        if (width <= 0 || height <= 0) {
+            post(this::dismiss);
+            return;
+        }
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.translate(-targetArea.left, -targetArea.top);

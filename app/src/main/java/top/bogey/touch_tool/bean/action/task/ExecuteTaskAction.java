@@ -16,8 +16,10 @@ import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.SyncAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinTaskString;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
@@ -184,6 +186,21 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
                 if (!syncPin.isSameClass(dynamicPin)) {
                     dynamicPin.clearLinks(context);
                     dynamicPin.setValue(syncPin.getValue().copy());
+                } else {
+                    // 类型一致但是内部类型不一致的针脚
+                    if (syncPin.getValue() instanceof PinMap pinMap) {
+                        PinMap dPinMap = dynamicPin.getValue();
+                        if (pinMap.getKeyType() != dPinMap.getKeyType() || pinMap.getValueType() != dPinMap.getValueType()) {
+                            dynamicPin.clearLinks(context);
+                            dynamicPin.setValue(syncPin.getValue().copy());
+                        }
+                    } else if (syncPin.getValue() instanceof PinList pinList) {
+                        PinList dPinList = dynamicPin.getValue();
+                        if (pinList.getValueType() != dPinList.getValueType()) {
+                            dynamicPin.clearLinks(context);
+                            dynamicPin.setValue(syncPin.getValue().copy());
+                        }
+                    }
                 }
                 dynamicPin.setHide(syncPin.isHide());
                 dynamicPin.setTitle(syncPin.getTitle());
@@ -221,6 +238,7 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
         @Override
         public boolean showAble(Task context) {
             ExecuteTaskAction action = (ExecuteTaskAction) context.getAction(getOwnerId());
+            if (action == null) return false;
             return !action.isJustCall(context);
         }
     }

@@ -62,6 +62,7 @@ public class TaskInfoSummary {
     private Notification notification;
     private BatteryInfo batteryInfo;
     private BluetoothInfo bluetoothInfo;
+    private String lastClipboard;
     private List<NotworkState> networkState;
 
     public void resetApps() {
@@ -259,8 +260,8 @@ public class TaskInfoSummary {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service == null || !service.isEnabled()) return;
 
-        Map<ManualStartAction, Task> actionTasks = new LinkedHashMap<>();
-        Map<ManualStartAction, Task> singleShowActionTasks = new LinkedHashMap<>();
+        List<ManualExecuteInfo> normalList = new ArrayList<>();
+        List<ManualExecuteInfo> singleShowList = new ArrayList<>();
 
         if (show) {
             for (Task task : Saver.getInstance().getTasks(ManualStartAction.class)) {
@@ -268,9 +269,9 @@ public class TaskInfoSummary {
                     ManualStartAction startAction = (ManualStartAction) action;
                     if (startAction.isEnable() && startAction.ready()) {
                         if (startAction.isSingleShow()) {
-                            singleShowActionTasks.put(startAction, task);
+                            singleShowList.add(new ManualExecuteInfo(task, startAction));
                         } else {
-                            actionTasks.put(startAction, task);
+                            normalList.add(new ManualExecuteInfo(task, startAction));
                         }
                     }
                 }
@@ -280,12 +281,12 @@ public class TaskInfoSummary {
         // 手动悬浮窗显示限制
         int playType = SettingSaver.getInstance().getManualPlayShowType();
         if (playType == 0 || (playType == 1 && getPhoneState() != PhoneState.ON)) {
-            actionTasks.clear();
-            singleShowActionTasks.clear();
+            normalList.clear();
+            singleShowList.clear();
         }
 
-        PlayFloatView.showActions(actionTasks);
-        SinglePlayView.showActions(singleShowActionTasks);
+        PlayFloatView.showActions(normalList);
+        SinglePlayView.showActions(singleShowList);
     }
 
     public boolean isActivityClass(String packageName, String activityName) {
@@ -373,6 +374,14 @@ public class TaskInfoSummary {
         tryStartActions(NetworkStartAction.class);
     }
 
+    public String getLastClipboard() {
+        return lastClipboard;
+    }
+
+    public void setLastClipboard(String lastClipboard) {
+        this.lastClipboard = lastClipboard;
+    }
+
     public static class ShortcutInfo {
         public final String packageName;
         public String id;
@@ -399,6 +408,9 @@ public class TaskInfoSummary {
     }
 
     public record BluetoothInfo(String bluetoothAddress, String bluetoothName, boolean active) {
+    }
+
+    public record ManualExecuteInfo(Task task, ManualStartAction action){
     }
 
     public enum PhoneState {OFF, LOCKED, ON}

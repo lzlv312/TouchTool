@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.ui.custom;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Handler;
 import android.widget.FrameLayout;
@@ -8,6 +10,8 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.color.DynamicColors;
+
+import java.util.concurrent.CompletableFuture;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
@@ -19,9 +23,37 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
+import top.bogey.touch_tool.utils.float_window_manager.FloatWindowHelper;
 
 public class KeepAliveFloatView extends FrameLayout implements FloatInterface, ITaskListener {
     private final Handler handler;
+
+    public static synchronized String getClipboardText() {
+        CompletableFuture<String> future = new CompletableFuture<>();
+
+        FloatWindowHelper helper = FloatWindow.getHelper(KeepAliveFloatView.class.getName());
+        if (helper != null) {
+            helper.viewParent.post(() -> {
+                helper.setFocusable(true);
+                helper.viewParent.postDelayed(() -> {
+
+                    String text = null;
+                    ClipboardManager clipboard = (ClipboardManager) MainApplication.getInstance().getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (clipboard.hasPrimaryClip()) {
+                        ClipData clip = clipboard.getPrimaryClip();
+                        if (clip != null && clip.getItemCount() > 0) {
+                            text = clip.getItemAt(0).coerceToText(MainApplication.getInstance()).toString();
+                        }
+                    }
+
+                    helper.setFocusable(false);
+                    future.complete(text);
+                }, 200);
+            });
+        }
+
+        return future.join();
+    }
 
     public KeepAliveFloatView(@NonNull Context context) {
         super(context);

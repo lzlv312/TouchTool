@@ -2,6 +2,7 @@ package top.bogey.touch_tool.bean.action.system;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 import com.google.gson.JsonObject;
 
@@ -90,18 +91,19 @@ public class OpenAppAction extends ExecuteAction {
     private final transient Pin appPin = new Pin(new PinApplication(PinSubType.SINGLE_APP_WITH_ACTIVITY), R.string.pin_app);
     private final transient Pin flagPin = new Pin(new PinMultiSelect(new PinInteger()), R.string.open_app_action_flags, false, false, true);
     private final transient Pin categoryPin = new Pin(new PinMultiSelect(new PinString()), R.string.open_app_action_category, false, false, true);
+    private final transient Pin uriPin = new Pin(new PinString(), R.string.open_app_action_uri_data, false, false, true);
     private final transient Pin paramsPin = new Pin(new PinMap(new PinString(), new PinString()), R.string.open_app_action_params, false, false, true);
 
     public OpenAppAction() {
         super(ActionType.OPEN_APP);
-        addPins(appPin, flagPin, categoryPin, paramsPin);
+        addPins(appPin, flagPin, categoryPin, uriPin, paramsPin);
         initFlagSelection();
         initCategorySelection();
     }
 
     public OpenAppAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(appPin, flagPin, categoryPin, paramsPin);
+        reAddPins(appPin, flagPin, categoryPin, uriPin, paramsPin);
         initFlagSelection();
         initCategorySelection();
     }
@@ -126,6 +128,8 @@ public class OpenAppAction extends ExecuteAction {
         Map<String, String> params = new HashMap<>();
         map.forEach((key, value) -> params.put(key.toString(), value.toString()));
 
+        PinString uri = getPinValue(runnable, uriPin);
+
         Context context = MainApplication.getInstance().getService();
         Intent intent;
         if (activityClass == null) {
@@ -140,6 +144,9 @@ public class OpenAppAction extends ExecuteAction {
             for (PinObject object : category) {
                 PinString pinString = (PinString) object;
                 intent.addCategory(pinString.getValue());
+            }
+            if (uri.getValue() != null && !uri.getValue().isEmpty()) {
+                intent.setData(Uri.parse(uri.getValue()));
             }
             params.forEach(intent::putExtra);
 

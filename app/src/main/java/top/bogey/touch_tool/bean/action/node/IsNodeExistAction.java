@@ -33,6 +33,7 @@ import top.bogey.touch_tool.utils.AppUtil;
 public class IsNodeExistAction extends CalculateAction {
     private final transient Pin typePin = new NotLinkAblePin(new PinSingleSelect(R.array.find_node_type), R.string.is_node_exist_action_type);
     private final transient Pin pathPin = new PathShowablePin(new PinNodePathString(), R.string.is_node_exist_action_path);
+    private final transient Pin fullPathPin = new PathShowablePin(new PinBoolean(true), R.string.is_node_exist_action_full_path);
     private final transient Pin textPin = new TextShowablePin(new PinString(), R.string.pin_string);
     private final transient Pin idPin = new IdShowablePin(new PinString(), R.string.is_node_exist_action_id);
     private final transient Pin areaPin = new NotAllPathShowablePin(new PinArea(), R.string.pin_area);
@@ -41,12 +42,12 @@ public class IsNodeExistAction extends CalculateAction {
 
     public IsNodeExistAction() {
         super(ActionType.IS_NODE_EXIST);
-        addPins(typePin, pathPin, textPin, idPin, areaPin, pathTextPin, resultPin);
+        addPins(typePin, pathPin, fullPathPin, textPin, idPin, areaPin, pathTextPin, resultPin);
     }
 
     public IsNodeExistAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(typePin, pathPin, textPin, idPin, areaPin, pathTextPin, resultPin);
+        reAddPins(typePin, pathPin, fullPathPin, textPin, idPin, areaPin, pathTextPin, resultPin);
     }
 
     @Override
@@ -63,7 +64,8 @@ public class IsNodeExistAction extends CalculateAction {
                     rootNodes.add(new NodeInfo(window));
                 }
                 PinNodePathString path = getPinValue(runnable, pathPin);
-                NodeInfo node = path.findNode(rootNodes);
+                PinBoolean fullPath = getPinValue(runnable, fullPathPin);
+                NodeInfo node = path.findNode(rootNodes, fullPath.getValue());
                 if (node == null) break;
                 result = true;
                 MarkTargetFloatView.showTargetArea(node.area);

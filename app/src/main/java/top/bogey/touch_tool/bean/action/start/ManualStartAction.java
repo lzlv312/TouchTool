@@ -11,6 +11,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
@@ -27,20 +28,22 @@ import top.bogey.touch_tool.utils.EAnchor;
 public class ManualStartAction extends StartAction {
     private final transient Pin appsPin = new NotLinkAblePin(new PinApplications(PinSubType.MULTI_APP_WITH_ACTIVITY, MainApplication.getInstance().getString(R.string.common_package)), R.string.pin_app);
     private final transient Pin showTypePin = new NotLinkAblePin(new PinSingleSelect(R.array.manual_action_show_type), R.string.manual_start_action_type, false, false, true);
-    private final transient Pin anchorPin = new ParamsShowablePin(new PinSingleSelect(R.array.anchor, 0), R.string.manual_start_action_anchor, false, false, true);
-    private final transient Pin showPosPin = new ParamsShowablePin(new PinPoint(), R.string.manual_start_action_pos, false, false, true);
+    private final transient Pin expandPin = new NormalShowablePin(new PinBoolean(), R.string.manual_start_action_expand, false, false, true);
+    private final transient Pin anchorPin = new SingleShowablePin(new PinSingleSelect(R.array.anchor, 0), R.string.manual_start_action_anchor, false, false, true);
+    private final transient Pin showPosPin = new SingleShowablePin(new PinPoint(), R.string.manual_start_action_pos, false, false, true);
+    private final transient Pin lockPin = new SingleShowablePin(new PinBoolean(), R.string.manual_start_action_lock, false, false, true);
     private final transient Pin appPin = new Pin(new PinApplication(), R.string.manual_start_action_app, true);
 
     public ManualStartAction() {
         super(ActionType.MANUAL_START);
         Point size = DisplayUtil.getScreenSize(MainApplication.getInstance());
         showPosPin.getValue(PinPoint.class).setValue(new Point(size.x / 2, size.y / 2));
-        addPins(appsPin, showTypePin, showPosPin, anchorPin, appPin);
+        addPins(appsPin, showTypePin, expandPin, showPosPin, anchorPin, lockPin, appPin);
     }
 
     public ManualStartAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(appsPin, showTypePin, showPosPin, anchorPin, appPin);
+        reAddPins(appsPin, showTypePin, expandPin, showPosPin, anchorPin, lockPin, appPin);
     }
 
     @Override
@@ -70,6 +73,10 @@ public class ManualStartAction extends StartAction {
         return showTypePin.getValue(PinSingleSelect.class).getIndex() == 1;
     }
 
+    public boolean isExpand() {
+        return expandPin.getValue(PinBoolean.class).getValue();
+    }
+
     public EAnchor getAnchor() {
         return EAnchor.values()[anchorPin.getValue(PinSingleSelect.class).getIndex()];
     }
@@ -78,9 +85,32 @@ public class ManualStartAction extends StartAction {
         return showPosPin.getValue(PinPoint.class).getValue();
     }
 
-    private static class ParamsShowablePin extends ShowAblePin {
+    public boolean isLock() {
+        return lockPin.getValue(PinBoolean.class).getValue();
+    }
 
-        public ParamsShowablePin(PinBase value, int titleId, boolean out, boolean dynamic, boolean hide) {
+
+    private static class NormalShowablePin extends ShowAblePin {
+
+        public NormalShowablePin(PinBase value, int titleId, boolean out, boolean dynamic, boolean hide) {
+            super(value, titleId, out, dynamic, hide);
+        }
+
+        @Override
+        public boolean showAble(Task context) {
+            ManualStartAction action = (ManualStartAction) context.getAction(getOwnerId());
+            return !action.isSingleShow();
+        }
+
+        @Override
+        public boolean linkAble(Task context) {
+            return false;
+        }
+    }
+
+    private static class SingleShowablePin extends ShowAblePin {
+
+        public SingleShowablePin(PinBase value, int titleId, boolean out, boolean dynamic, boolean hide) {
             super(value, titleId, out, dynamic, hide);
         }
 
@@ -88,6 +118,11 @@ public class ManualStartAction extends StartAction {
         public boolean showAble(Task context) {
             ManualStartAction action = (ManualStartAction) context.getAction(getOwnerId());
             return action.isSingleShow();
+        }
+
+        @Override
+        public boolean linkAble(Task context) {
+            return false;
         }
     }
 }

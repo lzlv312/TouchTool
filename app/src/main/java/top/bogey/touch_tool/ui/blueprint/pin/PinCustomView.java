@@ -4,8 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Editable;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,33 +20,67 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinInfo;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.CustomActionCard;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionVariableTypeDialog;
+import top.bogey.touch_tool.utils.listener.SpinnerSelectedListener;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
 public abstract class PinCustomView extends PinView {
+    private final Variable variable;
+
     public PinCustomView(@NonNull Context context, ActionCard card, Pin pin) {
         super(context, card, pin, true);
+        variable = new Variable((PinObject) pin.getValue().copy());
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void init() {
         super.init();
-        TextView typeView = getTypeView();
-        typeView.setOnClickListener(v -> {
+        TextView keyTypeView = getKeyTypeView();
+        keyTypeView.setOnClickListener(v -> {
             SelectActionVariableTypeDialog dialog = new SelectActionVariableTypeDialog(getContext());
             new MaterialAlertDialogBuilder(getContext())
                     .setView(dialog)
                     .setPositiveButton(R.string.enter, (view, which) -> {
                         PinInfo pinInfo = dialog.getSelected();
-                        typeView.setText(pinInfo.getTitle());
-                        pin.setValue(pinInfo.newInstance());
+                        keyTypeView.setText(pinInfo.getTitle());
+                        variable.setKeyPinInfo(pinInfo);
+                        pin.setValue(variable.getValue().copy());
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .show();
+        });
+
+        TextView valueTypeView = getValueTypeView();
+        valueTypeView.setOnClickListener(v -> {
+            SelectActionVariableTypeDialog dialog = new SelectActionVariableTypeDialog(getContext());
+            new MaterialAlertDialogBuilder(getContext())
+                    .setView(dialog)
+                    .setPositiveButton(R.string.enter, (view, which) -> {
+                        PinInfo pinInfo = dialog.getSelected();
+                        valueTypeView.setText(pinInfo.getTitle());
+                        variable.setValuePinInfo(pinInfo);
+                        pin.setValue(variable.getValue().copy());
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        });
+
+        Spinner typeSpinner = getTypeSpinner();
+        typeSpinner.setOnItemSelectedListener(new SpinnerSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Variable.VariableType type = Variable.VariableType.values()[position];
+                if (variable.getType() == type) return;
+                variable.setType(type);
+                pin.setValue(variable.getValue().copy());
+                refreshPin();
+            }
         });
 
         EditText editText = getTitleEdit();
@@ -76,9 +114,20 @@ public abstract class PinCustomView extends PinView {
             editText.setText(pin.getTitle());
         }
 
-        TextView typeView = getTypeView();
-        PinInfo pinInfo = PinInfo.getPinInfo(pin.getValue());
-        typeView.setText(pinInfo.getTitle());
+        TextView keyTypeView = getKeyTypeView();
+        PinInfo keyPinInfo = variable.getKeyPinInfo();
+        if (keyPinInfo != null) keyTypeView.setText(keyPinInfo.getTitle());
+
+        Spinner typeSpinner = getTypeSpinner();
+        String[] array = getResources().getStringArray(R.array.pin_simple_type);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.pin_widget_select_item, array);
+        typeSpinner.setAdapter(adapter);
+        typeSpinner.setSelection(variable.getType().ordinal());
+
+        TextView valueTypeView = getValueTypeView();
+        valueTypeView.setVisibility(variable.getType() == Variable.VariableType.MAP ? View.VISIBLE : View.GONE);
+        PinInfo valuePinInfo = variable.getValuePinInfo();
+        if (valuePinInfo != null) valueTypeView.setText(valuePinInfo.getTitle());
 
         MaterialButton visibleButton = getVisibleButton();
         visibleButton.setIconResource(pin.isHide() ? R.drawable.icon_visibility_off : R.drawable.icon_visibility);
@@ -86,7 +135,11 @@ public abstract class PinCustomView extends PinView {
         super.refreshPin();
     }
 
-    public abstract TextView getTypeView();
+    public abstract TextView getKeyTypeView();
+
+    public abstract TextView getValueTypeView();
+
+    public abstract Spinner getTypeSpinner();
 
     public abstract EditText getTitleEdit();
 

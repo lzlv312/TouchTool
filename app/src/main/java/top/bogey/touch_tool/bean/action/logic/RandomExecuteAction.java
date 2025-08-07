@@ -50,6 +50,7 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
         List<Pin> dynamicPins = getDynamicPins();
         for (int i = 0; i < times.intValue(); i++) {
             if (runnable.isInterrupt()) break;
+            if (dynamicPins.isEmpty()) break;
             int index = random.nextInt(dynamicPins.size());
             if (allowRepeat.getValue()) {
                 executeNext(runnable, dynamicPins.get(index));

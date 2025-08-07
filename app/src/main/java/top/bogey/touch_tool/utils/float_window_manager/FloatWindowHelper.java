@@ -251,4 +251,13 @@ public class FloatWindowHelper {
     public void setBorder(int left, int top, int right, int bottom) {
         setBorder(new Rect(left, top, right, bottom));
     }
+
+    public void setFocusable(boolean focusable) {
+        if (focusable) {
+            params.flags = FloatWindow.FOCUSABLE | config.flag;
+        } else {
+            params.flags = FloatWindow.NOT_FOCUSABLE | config.flag;
+        }
+        manager.updateViewLayout(viewParent, params);
+    }
 }

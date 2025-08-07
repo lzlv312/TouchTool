@@ -14,7 +14,7 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.ShapeAppearanceModel;
 
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import top.bogey.touch_tool.MainApplication;
@@ -28,7 +28,6 @@ import top.bogey.touch_tool.ui.blueprint.picker.FloatBaseCallback;
 import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
-import top.bogey.touch_tool.utils.float_window_manager.FloatAnimator;
 import top.bogey.touch_tool.utils.float_window_manager.FloatDockSide;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
@@ -43,7 +42,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
     private final FloatPlayBinding binding;
     private final int padding = SettingSaver.getInstance().getManualPlayViewPadding() * UNIT_PIXEL;
 
-    public static void showActions(Map<ManualStartAction, Task> actions) {
+    public static void showActions(List<TaskInfoSummary.ManualExecuteInfo> actions) {
         TaskInfoSummary.PackageActivity packageActivity = TaskInfoSummary.getInstance().getPackageActivity();
         if (packageActivity != null && packageActivity.packageName().equals(HIDE_PACKAGE)) return;
         if (System.currentTimeMillis() < HIDE_TIME) return;
@@ -105,12 +104,12 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
         });
     }
 
-    public PlayFloatView(Context context, Map<ManualStartAction, Task> actions) {
+    public PlayFloatView(Context context, List<TaskInfoSummary.ManualExecuteInfo> actions) {
         this(context);
         setActions(actions);
     }
 
-    public void setActions(Map<ManualStartAction, Task> actions) {
+    public void setActions(List<TaskInfoSummary.ManualExecuteInfo> actions) {
         Set<ManualStartAction> already = new HashSet<>();
         Set<PlayFloatItemView> needRemove = new HashSet<>();
 
@@ -119,9 +118,9 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
             PlayFloatItemView itemView = (PlayFloatItemView) binding.buttonBox.getChildAt(index);
             // 如果itemView不在actions中，则移除
             boolean flag = true;
-            for (Map.Entry<ManualStartAction, Task> entry : actions.entrySet()) {
-                ManualStartAction action = entry.getKey();
-                Task task = entry.getValue();
+            for (TaskInfoSummary.ManualExecuteInfo info : actions) {
+                Task task = info.task();
+                ManualStartAction action = info.action();
                 if (itemView.check(task, action)) {
                     already.add(action);
                     itemView.setNeedRemove(false);
@@ -132,11 +131,16 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
             if (flag) needRemove.add(itemView);
         }
 
-        actions.forEach((action, task) -> {
-            if (already.contains(action)) return;
+        boolean expand = false;
+        for (TaskInfoSummary.ManualExecuteInfo info : actions) {
+            Task task = info.task();
+            ManualStartAction action = info.action();
+            if (action.isExpand()) expand = true;
+            if (already.contains(action)) continue;
             PlayFloatItemView itemView = new PlayFloatItemView(getContext(), task, action);
             binding.buttonBox.addView(itemView);
-        });
+        }
+        if (expand) refreshExpand(true);
 
         needRemove.forEach(PlayFloatItemView::tryRemoveFromParent);
     }

@@ -570,7 +570,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                                 }
                             }
 
-                            if (flag) tryLink(card.getAction());
+                            if (flag) tryLinkTouchPin(card.getAction());
                         } else {
                             showActionSelector();
                         }
@@ -605,26 +605,56 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         updateCardsPos();
     }
 
-    private void tryLink(Action action) {
-        tryLink(touchState, action);
-    }
+    public boolean isTouchLinkablePin(int touchState, Pin pin) {
+        if (!pin.linkAble(task)) return false;
 
-    public void tryLink(int touchState, Action action) {
-        if (touchedPin == null) return;
-        Pin p = touchedPin.getPin();
         if (touchState == TOUCH_DRAG_PIN) {
-            for (Pin pin : action.getPins()) {
-                if (pin.linkAble(task) && pin.linkAble(p)) {
-                    pin.mutualAddLink(task, p);
+            if (touchedPin == null) return false;
+            Pin touchPin = touchedPin.getPin();
+            return pin.linkAble(task) && pin.linkAble(touchPin);
+        } else if (touchState == TOUCH_DRAG_LINK) {
+            if (selectedLinks.isEmpty()) return false;
+            boolean flag = true;
+            for (Map.Entry<String, String> entry : selectedLinks.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                ActionCard actionCard = cards.get(value);
+                if (actionCard == null) continue;
+                PinView pinView = actionCard.getPinView(key);
+                if (pinView == null) continue;
+                if (!pinView.getPin().linkAble(pin)) {
+                    flag = false;
                     break;
                 }
             }
-        } else if (touchState == TOUCH_DRAG_LINK) {
-            for (Pin pin : action.getPins()) {
-                if (pin.linkAble(task) && pin.linkAble(p.getValue())) {
-                    pin.addLinks(task, selectedLinks);
-                }
+            return flag;
+        }
+        return false;
+    }
+
+    public Pin getTouchLinkblePin(int touchState, Action action) {
+        for (Pin pin : action.getPins()) {
+            if (isTouchLinkablePin(touchState, pin)) {
+                return pin;
             }
+        }
+        return null;
+    }
+
+    private void tryLinkTouchPin(Action action) {
+        tryLinkTouchPin(touchState, action);
+    }
+
+    public void tryLinkTouchPin(int touchState, Action action) {
+        Pin linkblePin = getTouchLinkblePin(touchState, action);
+        if (linkblePin == null) return;
+
+        Pin p = touchedPin.getPin();
+
+        if (touchState == TOUCH_DRAG_PIN) {
+            linkblePin.mutualAddLink(task, p);
+        } else if (touchState == TOUCH_DRAG_LINK) {
+            linkblePin.addLinks(task, selectedLinks);
         }
     }
 
@@ -643,7 +673,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         actionDialog = new SelectActionByPinDialog(getContext(), task, pin, action -> {
             ActionCard card = addCard(action);
             if (card != null) {
-                tryLink(touchState, action);
+                tryLinkTouchPin(touchState, action);
                 action.setPos((int) ((lastX - offsetX) / getScaleGridSize()), (int) ((lastY - offsetY) / getScaleGridSize()));
                 updateCardPos(card);
             }
@@ -835,27 +865,34 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         linkPaint.setStrokeWidth(gridSize / 4);
 
         // 拖动针脚，要么连线，要么挪线
-        if (touchState == TOUCH_DRAG_PIN || touchState == TOUCH_DRAG_LINK) {
+        if (touchedPin != null && (touchState == TOUCH_DRAG_PIN || touchState == TOUCH_DRAG_LINK)) {
             linkPaint.setColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorPrimaryInverse));
 
-            PinView currPosPinView = null;
-            ActionCard card = getActionCard(lastX, lastY, false);
+            ActionCard card = getActionCard(lastX - offsetX, lastY - offsetY, false);
             if (card != null) {
-                currPosPinView = card.getLinkAblePinView(lastX - card.getX(), lastY - card.getY());
+                PinView currPosPinView = card.getLinkAblePinView(lastX - card.getX(), lastY - card.getY());
+                Pin validPin = null;
+                if (currPosPinView == null) validPin = getTouchLinkblePin(touchState, card.getAction());
+                else if (isTouchLinkablePin(touchState, currPosPinView.getPin())) validPin = currPosPinView.getPin();
+                if (validPin != null) {
+                    PinView pinView = card.getPinView(validPin.getId());
+                    if (pinView != null) {
+                        if (touchedPin.getPin().isSameClass(validPin)) {
+                            linkPaint.setShader(null);
+                            linkPaint.setColor(touchedPin.getPinColor());
+                        } else {
+                            PointF startPoint = touchedPin.getSlotPosInLayout(scale);
+                            PointF endPoint = pinView.getSlotPosInLayout(scale);
+                            linkPaint.setShader(new LinearGradient(startPoint.x, startPoint.y, endPoint.x, endPoint.y, touchedPin.getPinColor(), pinView.getPinColor(), Shader.TileMode.CLAMP));
+                            linkPaint.setColor(Color.WHITE);
+                        }
+                    }
+                }
             }
 
             if (touchState == TOUCH_DRAG_PIN) {
-                if (currPosPinView != null) {
-                    if (touchedPin.getPin().linkAble(currPosPinView.getPin())) {
-                        linkPaint.setColor(touchedPin.getPinColor());
-                    }
-                }
                 canvas.drawPath(calculateLinkPath(touchedPin), linkPaint);
             } else {
-                if (currPosPinView != null && touchedPin.getPin().isSameClass(currPosPinView.getPin())) {
-                    linkPaint.setColor(touchedPin.getPinColor());
-                }
-
                 for (Map.Entry<String, String> entry : selectedLinks.entrySet()) {
                     String key = entry.getKey();
                     String value = entry.getValue();

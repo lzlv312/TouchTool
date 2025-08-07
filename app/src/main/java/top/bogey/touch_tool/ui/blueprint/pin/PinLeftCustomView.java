@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,8 +28,18 @@ public class PinLeftCustomView extends PinCustomView {
     }
 
     @Override
-    public TextView getTypeView() {
+    public TextView getKeyTypeView() {
         return binding.keySlot;
+    }
+
+    @Override
+    public TextView getValueTypeView() {
+        return binding.valueSlot;
+    }
+
+    @Override
+    public Spinner getTypeSpinner() {
+        return binding.typeSpinner;
     }
 
     @Override

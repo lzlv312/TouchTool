@@ -33,6 +33,8 @@ import top.bogey.touch_tool.bean.action.image.LoadImageAction;
 import top.bogey.touch_tool.bean.action.image.ParseQRCodeAction;
 import top.bogey.touch_tool.bean.action.image.ResizeImageAction;
 import top.bogey.touch_tool.bean.action.image.SaveImageAction;
+import top.bogey.touch_tool.bean.action.image.TouchColorAction;
+import top.bogey.touch_tool.bean.action.image.TouchImageAction;
 import top.bogey.touch_tool.bean.action.list.ListAddAction;
 import top.bogey.touch_tool.bean.action.list.ListAppendAction;
 import top.bogey.touch_tool.bean.action.list.ListClearAction;
@@ -55,6 +57,7 @@ import top.bogey.touch_tool.bean.action.logic.SwitchAction;
 import top.bogey.touch_tool.bean.action.logic.WaitConditionAction;
 import top.bogey.touch_tool.bean.action.logic.WhileLoopAction;
 import top.bogey.touch_tool.bean.action.map.MakeMapAction;
+import top.bogey.touch_tool.bean.action.map.MapAddAction;
 import top.bogey.touch_tool.bean.action.map.MapAppendAction;
 import top.bogey.touch_tool.bean.action.map.MapClearAction;
 import top.bogey.touch_tool.bean.action.map.MapContainKeyAction;
@@ -139,6 +142,7 @@ import top.bogey.touch_tool.bean.action.system.GetTimeAction;
 import top.bogey.touch_tool.bean.action.system.OpenAppAction;
 import top.bogey.touch_tool.bean.action.system.OpenUriSchemeAction;
 import top.bogey.touch_tool.bean.action.system.PlayRingtoneAction;
+import top.bogey.touch_tool.bean.action.system.ReadFromClipboardAction;
 import top.bogey.touch_tool.bean.action.system.SendNotificationAction;
 import top.bogey.touch_tool.bean.action.system.SendToastAction;
 import top.bogey.touch_tool.bean.action.system.ShareToAction;
@@ -213,6 +217,7 @@ public class ActionInfo {
     private final static ActionInfo SEND_TOAST_INFO = new ActionInfo(ActionType.SEND_TOAST, SendToastAction.class, R.drawable.icon_toast, R.string.send_toast_action, R.string.send_toast_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo WRITE_TO_CLIPBOARD_INFO = new ActionInfo(ActionType.WRITE_TO_CLIPBOARD, WriteToClipboardAction.class, R.drawable.icon_copy, R.string.write_to_clipboard_action, R.string.write_to_clipboard_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo READ_FROM_CLIPBOARD_INFO = new ActionInfo(ActionType.READ_FROM_CLIPBOARD, ReadFromClipboardAction.class, R.drawable.icon_content_paste, R.string.read_from_clipboard_action, R.string.read_from_clipboard_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo SWITCH_SCREEN_INFO = new ActionInfo(ActionType.SWITCH_SCREEN, SwitchScreenAction.class, R.drawable.icon_phone, R.string.switch_screen_action, R.string.switch_screen_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_SCREEN_STATUS_INFO = new ActionInfo(ActionType.GET_SCREEN_STATUS, GetScreenStatusAction.class, R.drawable.icon_phone, R.string.get_screen_status_action, R.string.get_screen_status_action_desc, 0, NormalActionCard.class);
@@ -298,12 +303,15 @@ public class ActionInfo {
     private final static ActionInfo FIND_IMAGE_INFO = new ActionInfo(ActionType.FIND_IMAGE, FindImageAction.class, R.drawable.icon_visibility, R.string.find_image_action, R.string.find_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_IMAGES_INFO = new ActionInfo(ActionType.FIND_IMAGES, FindImagesAction.class, R.drawable.icon_visibility, R.string.find_images_action, R.string.find_images_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo IS_IMAGE_EXIST_INFO = new ActionInfo(ActionType.IS_IMAGE_EXIST, IsImageExistAction.class, R.drawable.icon_check, R.string.is_image_exist_action, R.string.is_image_exist_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo TOUCH_IMAGE_INFO = new ActionInfo(ActionType.TOUCH_IMAGE, TouchImageAction.class, R.drawable.icon_touch, R.string.touch_image_action, R.string.touch_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CREATE_QRCODE_INFO = new ActionInfo(ActionType.CREATE_QRCODE, CreateQRCodeAction.class, R.drawable.icon_qr_code, R.string.create_qrcode_action, R.string.create_qrcode_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo PARSE_QRCODE_INFO = new ActionInfo(ActionType.PARSE_QRCODE, ParseQRCodeAction.class, R.drawable.icon_qr_code_scanner, R.string.parse_qrcode_action, R.string.parse_qrcode_action_desc, 0, NormalActionCard.class);
+
     private final static ActionInfo GET_COLOR_INFO = new ActionInfo(ActionType.GET_COLOR, GetColorAction.class, R.drawable.icon_palette, R.string.get_color_action, R.string.get_color_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_COLORS_INFO = new ActionInfo(ActionType.FIND_COLORS, FindColorsAction.class, R.drawable.icon_visibility, R.string.find_colors_action, R.string.find_colors_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo IS_COLOR_EXIST_INFO = new ActionInfo(ActionType.IS_COLOR_EXIST, IsColorExistAction.class, R.drawable.icon_check, R.string.is_color_exist_action, R.string.is_color_exist_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo COLOR_EQUAL_INFO = new ActionInfo(ActionType.COLOR_EQUAL, ColorEqualAction.class, R.drawable.icon_equal, R.string.color_equal_action, R.string.color_equal_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo TOUCH_COLOR_INFO = new ActionInfo(ActionType.TOUCH_COLOR, TouchColorAction.class, R.drawable.icon_touch, R.string.touch_color_action, R.string.touch_color_action_desc, 0, NormalActionCard.class);
 
 
     // 区域操作
@@ -347,6 +355,7 @@ public class ActionInfo {
     private final static ActionInfo MAP_IS_EMPTY_INFO = new ActionInfo(ActionType.MAP_IS_EMPTY, MapIsEmptyAction.class, R.drawable.icon_map, R.string.map_is_empty_action, R.string.map_is_empty_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo MAP_CONTAIN_KEY_INFO = new ActionInfo(ActionType.MAP_CONTAIN_KEY, MapContainKeyAction.class, R.drawable.icon_check_circle, R.string.map_contain_key_action, R.string.map_contain_key_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo MAP_CONTAIN_VALUE_INFO = new ActionInfo(ActionType.MAP_CONTAIN_VALUE, MapContainValueAction.class, R.drawable.icon_check_circle, R.string.map_contain_value_action, R.string.map_contain_value_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_ADD_INFO = new ActionInfo(ActionType.MAP_ADD, MapAddAction.class, R.drawable.icon_add, R.string.map_add_action, R.string.map_add_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo MAP_REMOVE_INFO = new ActionInfo(ActionType.MAP_REMOVE, MapRemoveAction.class, R.drawable.icon_remove, R.string.map_remove_action, R.string.map_remove_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo MAP_APPEND_INFO = new ActionInfo(ActionType.MAP_APPEND, MapAppendAction.class, R.drawable.icon_add, R.string.map_append_action, R.string.map_append_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo MAP_CLEAR_INFO = new ActionInfo(ActionType.MAP_CLEAR, MapClearAction.class, R.drawable.icon_delete, R.string.map_clear_action, R.string.map_clear_action_desc, 0, NormalActionCard.class);
@@ -406,6 +415,7 @@ public class ActionInfo {
             case SEND_TOAST -> SEND_TOAST_INFO;
 
             case WRITE_TO_CLIPBOARD -> WRITE_TO_CLIPBOARD_INFO;
+            case READ_FROM_CLIPBOARD -> READ_FROM_CLIPBOARD_INFO;
 
             case SWITCH_SCREEN -> SWITCH_SCREEN_INFO;
             case GET_SCREEN_STATUS -> GET_SCREEN_STATUS_INFO;
@@ -485,6 +495,7 @@ public class ActionInfo {
             case FIND_IMAGE -> FIND_IMAGE_INFO;
             case FIND_IMAGES -> FIND_IMAGES_INFO;
             case IS_IMAGE_EXIST -> IS_IMAGE_EXIST_INFO;
+            case TOUCH_IMAGE -> TOUCH_IMAGE_INFO;
             case CREATE_QRCODE -> CREATE_QRCODE_INFO;
             case PARSE_QRCODE -> PARSE_QRCODE_INFO;
 
@@ -493,6 +504,7 @@ public class ActionInfo {
             case FIND_COLORS -> FIND_COLORS_INFO;
             case IS_COLOR_EXIST -> IS_COLOR_EXIST_INFO;
             case COLOR_EQUAL -> COLOR_EQUAL_INFO;
+            case TOUCH_COLOR -> TOUCH_COLOR_INFO;
 
 
             case AREA_TO_INT -> AREA_TO_INT_INFO;
@@ -531,6 +543,7 @@ public class ActionInfo {
             case MAP_IS_EMPTY -> MAP_IS_EMPTY_INFO;
             case MAP_CONTAIN_KEY -> MAP_CONTAIN_KEY_INFO;
             case MAP_CONTAIN_VALUE -> MAP_CONTAIN_VALUE_INFO;
+            case MAP_ADD -> MAP_ADD_INFO;
             case MAP_REMOVE -> MAP_REMOVE_INFO;
             case MAP_APPEND -> MAP_APPEND_INFO;
             case MAP_CLEAR -> MAP_CLEAR_INFO;

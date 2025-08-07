@@ -8,8 +8,10 @@
     <string name="manual_start_action">手动执行</string>
     <string name="manual_start_action_app">触发界面</string>
     <string name="manual_start_action_type">显示模式</string>
+    <string name="manual_start_action_expand">自动展开</string>
     <string name="manual_start_action_anchor">屏幕锚点</string>
     <string name="manual_start_action_pos">相对锚点位置</string>
+    <string name="manual_start_action_lock">锁定位置</string>
 
     <string name="application_start_action">进应用或界面时执行</string>
     <string name="application_start_action_break">自动中断</string>
@@ -149,6 +151,7 @@
     <string name="open_app_action_desc">打开选定的应用</string>
     <string name="open_app_action_flags">启动标志(Flags)</string>
     <string name="open_app_action_category">分类(Category)</string>
+    <string name="open_app_action_uri_data">Uri数据</string>
     <string name="open_app_action_params">参数</string>
 
     <string name="open_uri_scheme_action">打开链接</string>
@@ -191,6 +194,9 @@
 
     <string name="write_to_clipboard_action">复制到剪贴板</string>
     <string name="write_to_clipboard_action_desc">将针脚值复制到剪贴板</string>
+
+    <string name="read_from_clipboard_action">从剪贴板读取</string>
+    <string name="read_from_clipboard_action_desc">将剪贴板中的内容复制到针脚</string>
 
     <string name="share_to_action">分享到</string>
     <string name="share_to_action_desc">将针脚值分享到选定的应用</string>
@@ -441,6 +447,7 @@
     <string name="is_node_exist_action_desc">判断控件是否存在</string>
     <string name="is_node_exist_action_type">方式</string>
     <string name="is_node_exist_action_path">身份</string>
+    <string name="is_node_exist_action_full_path">精确身份</string>
     <string name="is_node_exist_action_id">控件ID</string>
     <string name="is_node_exist_action_regex_path">正则路径</string>
 
@@ -474,7 +481,7 @@
 
     <string name="edit_text_input_action">输入文本</string>
     <string name="edit_text_input_action_desc">对文本框控件输入文本</string>
-    <string name="edit_text_input_action_edit_text">输入框</string>
+    <string name="edit_text_input_action_edit_text">输入框(默认首个)</string>
     <string name="edit_text_input_action_append">追加</string>
     <string name="edit_text_input_action_enter">模拟回车</string>
 
@@ -504,22 +511,28 @@
     <string name="find_image_action_desc">识别目标图片在图片中的位置</string>
     <string name="find_image_action_template">目标</string>
     <string name="find_image_action_similarity">相似度</string>
-    <string name="find_image_action_fast">去色</string>
     <string name="find_image_action_scale">缩小倍数</string>
 
     <string name="find_images_action">识别所有匹配图片</string>
     <string name="find_images_action_desc">识别目标图片在图片中的所有区域</string>
     <string name="find_images_action_template">目标</string>
     <string name="find_images_action_similarity">相似度</string>
-    <string name="find_images_action_fast">去色</string>
     <string name="find_images_action_scale">缩小倍数</string>
 
     <string name="is_image_exist_action">图片是否存在</string>
     <string name="is_image_exist_action_desc">判断目标图片是否存在</string>
     <string name="is_image_exist_action_template">目标</string>
     <string name="is_image_exist_action_similarity">相似度</string>
-    <string name="is_image_exist_action_fast">去色</string>
     <string name="is_image_exist_action_scale">缩小倍数</string>
+
+    <string name="touch_image_action">点击图片</string>
+    <string name="touch_image_action_desc">点击目标图片</string>
+    <string name="touch_image_action_template">目标</string>
+    <string name="touch_image_action_similarity">相似度</string>
+    <string name="touch_image_action_area">区域限制</string>
+    <string name="touch_image_action_scale">缩小倍数</string>
+    <string name="touch_image_action_use_accessibility">无障碍截屏</string>
+    <string name="touch_image_action_offset">随机偏移</string>
 
     <string name="create_qrcode_action">生成二维码</string>
     <string name="create_qrcode_action_desc">生成二维码</string>
@@ -550,6 +563,15 @@
     <string name="color_equal_action_desc">判断两个颜色是否相似</string>
     <string name="color_equal_action_offset">RGB偏移</string>
 
+    <string name="touch_color_action">点击颜色</string>
+    <string name="touch_color_action_desc">点击指定颜色</string>
+    <string name="touch_color_action_template">颜色</string>
+    <string name="touch_color_action_similarity">相似度</string>
+    <string name="touch_color_action_area">区域限制</string>
+    <string name="touch_color_action_use_accessibility">无障碍截屏</string>
+    <string name="touch_color_action_offset">随机偏移</string>
+    <string name="touch_color_action_touch_all">点击所有</string>
+    <string name="touch_color_action_touch_interval">点击间隔(ms)</string>
 
     <!-- 动作-List -->
     <string name="list_action_index">索引</string>
@@ -611,6 +633,9 @@
 
     <string name="map_contain_value_action">字典是否包含值</string>
     <string name="map_contain_value_action_desc">判断字典是否包含值</string>
+
+    <string name="map_add_action">添加键值对</string>
+    <string name="map_add_action_desc">向字典中添加键值对</string>
 
     <string name="map_remove_action">移除键值对</string>
     <string name="map_remove_action_desc">从字典中移除键值对</string>

@@ -25,17 +25,51 @@
         app:icon="@drawable/icon_remove"
         app:iconTint="?attr/colorOutline" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/keySlot"
+
+    <LinearLayout
+        android:id="@+id/varBox"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginHorizontal="4dp"
-        android:background="@drawable/shape_border"
-        android:gravity="center"
-        android:minWidth="48dp"
-        android:paddingHorizontal="4dp"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="11sp" />
+        android:baselineAligned="false">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/keySlot"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="@drawable/shape_border"
+            android:gravity="center"
+            android:minWidth="48dp"
+            android:paddingHorizontal="4dp"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="11sp" />
+
+        <Spinner
+            android:id="@+id/typeSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:background="@drawable/shape_spinner"
+            android:dropDownWidth="match_parent"
+            android:gravity="center"
+            android:minWidth="48dp"
+            android:popupBackground="@drawable/shape_spinner_background"
+            android:spinnerMode="dropdown" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/valueSlot"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="4dp"
+            android:background="@drawable/shape_border"
+            android:gravity="center"
+            android:minWidth="48dp"
+            android:paddingHorizontal="4dp"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="11sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/visibleButton"

@@ -244,29 +244,31 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public boolean isTaskRunning(Task task) {
         if (task == null) return false;
-        for (TaskRunnable runnable : tasks) {
-            if (runnable.isInterrupt()) continue;
-
-            Task startTask = runnable.getStartTask();
-            if (task.getId().equals(startTask.getId())) {
-                return true;
-            }
-        }
-        return false;
+        return getTaskRunnable(task.getId(), null) != null;
     }
 
     public boolean isTaskRunning(Task task, Action action) {
         if (task == null || action == null) return false;
+        return getTaskRunnable(task.getId(), action.getId()) != null;
+    }
+
+    public TaskRunnable getTaskRunnable(String taskId, String actionId) {
         for (TaskRunnable runnable : tasks) {
             if (runnable.isInterrupt()) continue;
 
             Task startTask = runnable.getStartTask();
-            Action startAction = runnable.getStartAction();
-            if (task.getId().equals(startTask.getId()) && action.getId().equals(startAction.getId())) {
-                return true;
+            if (taskId.equals(startTask.getId())) {
+                if (actionId != null) {
+                    Action action = runnable.getStartAction();
+                    if (actionId.equals(action.getId())) {
+                        return runnable;
+                    }
+                } else {
+                    return runnable;
+                }
             }
         }
-        return false;
+        return null;
     }
 
     public void stopTask(Task task) {

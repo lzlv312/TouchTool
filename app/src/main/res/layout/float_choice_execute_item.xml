@@ -9,7 +9,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:minWidth="48dp"
+        android:minHeight="32dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/icon"
@@ -20,11 +22,12 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/titleText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="8dp" />
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="4dp"
+            android:layout_weight="1"
+            android:gravity="center" />
 
     </LinearLayout>
 
