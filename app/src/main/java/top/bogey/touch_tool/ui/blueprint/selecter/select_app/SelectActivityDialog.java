@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_app;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -81,8 +82,14 @@ public class SelectActivityDialog extends FrameLayout {
             }
         } else if (isShortcut) {
             for (TaskInfoSummary.ShortcutInfo shortcutInfo : TaskInfoSummary.getInstance().findShortcutInfo(info.packageName, null)) {
+                ActivityInfo activityInfo = null;
+                try {
+                    activityInfo = manager.getActivityInfo(new ComponentName(shortcutInfo.packageName, shortcutInfo.activityClass), 0);
+                } catch (Exception ignored) {
+
+                }
                 activityInfoList.add(new SelectActivityInfo(
-                        null,
+                        activityInfo,
                         shortcutInfo.intent,
                         shortcutInfo.title,
                         false
