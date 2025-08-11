@@ -42,7 +42,7 @@ public class NodePickerPreview extends BasePicker<NodeInfo> {
         binding.switchButton.setOnClickListener(v -> {
             test = !test;
             binding.title.setText(test ? R.string.picker_test_title : R.string.picker_node_title);
-            binding.buttonBox.setVisibility(test ? GONE : VISIBLE);
+            binding.contentBox.setVisibility(test ? GONE : VISIBLE);
             binding.testBox.setVisibility(test ? VISIBLE : GONE);
         });
 
