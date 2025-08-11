@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,16 +35,19 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.databinding.DialogSelectIconBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.MainActivity;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.BitmapResultCallback;
+import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 public class SelectIconDialog extends BottomSheetDialog {
+    private final DialogSelectIconBinding binding;
     private final SelectIconPageAdapter adapter;
     private final Map<String, List<Object>> icons = new LinkedHashMap<>();
 
     public SelectIconDialog(@NonNull Context context, BitmapResultCallback callback) {
         super(context);
-        DialogSelectIconBinding binding = DialogSelectIconBinding.inflate(LayoutInflater.from(context));
+        binding = DialogSelectIconBinding.inflate(LayoutInflater.from(context));
         setContentView(binding.getRoot());
 
         adapter = new SelectIconPageAdapter(result -> {
@@ -72,6 +78,23 @@ public class SelectIconDialog extends BottomSheetDialog {
             }, ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE);
         });
 
+        binding.searchButton.setOnClickListener(v -> {
+            if (binding.searchBox.getVisibility() == View.VISIBLE) {
+                binding.searchBox.setVisibility(View.GONE);
+                binding.searchEdit.setText("");
+            } else {
+                binding.searchBox.setVisibility(View.VISIBLE);
+                binding.searchEdit.requestFocus();
+            }
+        });
+
+        binding.searchEdit.addTextChangedListener(new TextChangedListener() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                search();
+            }
+        });
+
         calculateShowData();
         adapter.setData(icons);
 
@@ -98,6 +121,29 @@ public class SelectIconDialog extends BottomSheetDialog {
         icons.put(getContext().getString(R.string.select_icon_preset), new ArrayList<>(getPresetIcons()));
         icons.put(getContext().getString(R.string.select_icon_app), new ArrayList<>(getInstalledPackages()));
         icons.put(getContext().getString(R.string.select_icon_system_app), new ArrayList<>(getSystemPackages()));
+    }
+
+    private void search() {
+        Editable text = binding.searchEdit.getText();
+        if (text == null || text.length() == 0) {
+            adapter.setData(icons);
+        } else {
+            Map<String, List<Object>> map = new HashMap<>();
+            List<Object> objects = new ArrayList<>();
+            PackageManager manager = getContext().getPackageManager();
+            map.put(text.toString(), objects);
+            for (List<Object> values : icons.values()) {
+                for (Object value : values) {
+                    if (value instanceof PackageInfo packageInfo && packageInfo.applicationInfo != null) {
+                        CharSequence label = packageInfo.applicationInfo.loadLabel(manager);
+                        if (AppUtil.isStringContains(label.toString(), text.toString())) {
+                            objects.add(value);
+                        }
+                    }
+                }
+            }
+            adapter.setData(map);
+        }
     }
 
     private List<Integer> getPresetIcons() {

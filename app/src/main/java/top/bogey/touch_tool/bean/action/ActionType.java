@@ -43,6 +43,7 @@ public enum ActionType {
     // 系统动作
     OPEN_APP,
     OPEN_URI_SCHEME,
+    OPEN_SHORTCUT,
     SHELL,
     SHARE_TO,
 

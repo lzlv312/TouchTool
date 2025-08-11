@@ -160,6 +160,9 @@
     <string name="open_uri_scheme_action_desc">打开Uri Scheme链接</string>
     <string name="open_uri_scheme_action_uri">链接</string>
 
+    <string name="open_shortcut_action">打开快捷方式</string>
+    <string name="open_shortcut_action_desc">打开应用的快捷方式</string>
+
     <string name="execute_shell_action">执行Shell命令</string>
     <string name="execute_shell_action_desc">执行Shell命令</string>
     <string name="execute_shell_action_cmd">命令</string>

@@ -14,7 +14,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -106,12 +105,10 @@ public class TaskInfoSummary {
                 if (keyword == null || keyword.isEmpty()) {
                     packages.add(info);
                 } else {
-                    if (info.packageName.toLowerCase().contains(keyword.toLowerCase()))
-                        packages.add(info);
+                    if (info.packageName.toLowerCase().contains(keyword.toLowerCase())) packages.add(info);
                     else {
                         String appName = info.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString();
-                        if (appName.toLowerCase().contains(keyword.toLowerCase()))
-                            packages.add(info);
+                        if (appName.toLowerCase().contains(keyword.toLowerCase())) packages.add(info);
                     }
                 }
             }
@@ -127,20 +124,17 @@ public class TaskInfoSummary {
         intent.setType("*/*");
         List<ResolveInfo> resolves = packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
         for (ResolveInfo resolveInfo : resolves) {
-            if (resolveInfo.activityInfo.packageName.equals(MainApplication.getInstance().getPackageName()))
-                continue;
+            if (resolveInfo.activityInfo.packageName.equals(MainApplication.getInstance().getPackageName())) continue;
             PackageInfo info = apps.get(resolveInfo.activityInfo.packageName);
             if (info == null || info.applicationInfo == null) continue;
             if (system || (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
                 if (keyword == null || keyword.isEmpty()) {
                     packages.add(info);
                 } else {
-                    if (info.packageName.toLowerCase().contains(keyword.toLowerCase()))
-                        packages.add(info);
+                    if (info.packageName.toLowerCase().contains(keyword.toLowerCase())) packages.add(info);
                     else {
                         String appName = info.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString();
-                        if (appName.toLowerCase().contains(keyword.toLowerCase()))
-                            packages.add(info);
+                        if (appName.toLowerCase().contains(keyword.toLowerCase())) packages.add(info);
                     }
                 }
             }
@@ -148,7 +142,7 @@ public class TaskInfoSummary {
         return packages;
     }
 
-    public List<ShortcutInfo> findShortcutApps() {
+    private List<ShortcutInfo> findShortcutInfo() {
         List<ShortcutInfo> shortcuts = new ArrayList<>();
 
         PackageManager packageManager = MainApplication.getInstance().getPackageManager();
@@ -201,6 +195,7 @@ public class TaskInfoSummary {
                                     cls = cls.replace("$", "_");
                                 }
                             }
+                            shortcutInfo.activityClass = cls;
                             if (pkg != null && cls != null) {
                                 shortcutIntent.setClassName(pkg, cls);
                             }
@@ -226,8 +221,39 @@ public class TaskInfoSummary {
                 e.printStackTrace();
             }
         }
-
         return shortcuts;
+    }
+
+    public List<ShortcutInfo> findShortcutInfo(String packageName, String activityClass) {
+        List<ShortcutInfo> shortcuts = new ArrayList<>();
+        if (packageName == null) return shortcuts;
+        for (ShortcutInfo shortcutApp : findShortcutInfo()) {
+            if (shortcutApp.packageName.equals(packageName) && (activityClass == null || activityClass.equals(shortcutApp.activityClass))) {
+                shortcuts.add(shortcutApp);
+            }
+        }
+        return shortcuts;
+    }
+
+    public List<PackageInfo> findShortcutApps(String keyword, boolean system) {
+        List<PackageInfo> shortcutApps = new ArrayList<>();
+        for (ShortcutInfo shortcutApp : findShortcutInfo()) {
+            PackageInfo info = getAppInfo(shortcutApp.packageName);
+            if (info == null || info.applicationInfo == null) continue;
+            if (shortcutApps.contains(info)) continue;
+            if (system || (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
+                if (keyword == null || keyword.isEmpty()) {
+                    shortcutApps.add(info);
+                } else {
+                    if (info.packageName.toLowerCase().contains(keyword.toLowerCase())) shortcutApps.add(info);
+                    else {
+                        String appName = info.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString();
+                        if (appName.toLowerCase().contains(keyword.toLowerCase())) shortcutApps.add(info);
+                    }
+                }
+            }
+        }
+        return shortcutApps;
     }
 
     public List<String> getOcrApps() {
@@ -322,8 +348,7 @@ public class TaskInfoSummary {
     public boolean setPackageActivity(String packageName, String activityName) {
         if (packageName == null || activityName == null) return false;
         if (packageName.isEmpty() || activityName.isEmpty()) return false;
-        if (packageActivity != null && packageActivity.packageName.equals(packageName) && packageActivity.activityName.equals(activityName))
-            return false;
+        if (packageActivity != null && packageActivity.packageName.equals(packageName) && packageActivity.activityName.equals(activityName)) return false;
         packageActivity = new PackageActivity(packageName, activityName);
         return true;
     }
@@ -384,6 +409,7 @@ public class TaskInfoSummary {
 
     public static class ShortcutInfo {
         public final String packageName;
+        public String activityClass;
         public String id;
         public String title;
         public int icon;
@@ -394,7 +420,7 @@ public class TaskInfoSummary {
         }
 
         public boolean isValid() {
-            return id != null && title != null && intent != null;
+            return activityClass != null && id != null && title != null && intent != null;
         }
     }
 
@@ -410,7 +436,7 @@ public class TaskInfoSummary {
     public record BluetoothInfo(String bluetoothAddress, String bluetoothName, boolean active) {
     }
 
-    public record ManualExecuteInfo(Task task, ManualStartAction action){
+    public record ManualExecuteInfo(Task task, ManualStartAction action) {
     }
 
     public enum PhoneState {OFF, LOCKED, ON}

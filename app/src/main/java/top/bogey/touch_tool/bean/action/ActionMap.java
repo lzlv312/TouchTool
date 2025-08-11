@@ -60,6 +60,7 @@ public class ActionMap {
             case SYSTEM -> list.addAll(Arrays.asList(
                     ActionType.OPEN_APP,
                     ActionType.OPEN_URI_SCHEME,
+                    ActionType.OPEN_SHORTCUT,
                     ActionType.SHELL,
                     ActionType.SHARE_TO,
                     ActionType.SYSTEM_KEY,

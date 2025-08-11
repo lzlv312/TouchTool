@@ -115,7 +115,7 @@ public class PinApplications extends PinList {
     }
 
     public boolean isSingle() {
-        return getSubType() == PinSubType.SINGLE_APP || getSubType() == PinSubType.SINGLE_APP_WITH_ACTIVITY || getSubType() == PinSubType.SINGLE_APP_WITH_EXPORT_ACTIVITY || getSubType() == PinSubType.SINGLE_ACTIVITY || getSubType() == PinSubType.SINGLE_SEND_ACTIVITY;
+        return getSubType() == PinSubType.SINGLE_APP || getSubType() == PinSubType.SINGLE_APP_WITH_ACTIVITY || getSubType() == PinSubType.SINGLE_APP_WITH_EXPORT_ACTIVITY || getSubType() == PinSubType.SINGLE_ACTIVITY || getSubType() == PinSubType.SINGLE_SEND_ACTIVITY || getSubType() == PinSubType.SINGLE_SHORTCUT_ACTIVITY;
     }
 
     public boolean isJustApp() {
@@ -128,5 +128,9 @@ public class PinApplications extends PinList {
 
     public boolean isShared() {
         return getSubType() == PinSubType.SINGLE_SEND_ACTIVITY || getSubType() == PinSubType.MULTI_APP_WITH_EXPORT_ACTIVITY;
+    }
+
+    public boolean isShortcut() {
+        return getSubType() == PinSubType.SINGLE_SHORTCUT_ACTIVITY;
     }
 }

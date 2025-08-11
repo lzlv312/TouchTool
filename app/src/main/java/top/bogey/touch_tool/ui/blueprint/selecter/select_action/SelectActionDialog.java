@@ -127,6 +127,10 @@ public class SelectActionDialog extends BottomSheetDialog {
                     if (GLOBAL.equals(tag)) {
                         Saver.getInstance().saveTask(copy);
                     }
+                } else if (o == null) {
+                    copy.getTags().clear();
+                    copy.addTag(subGroupTag.replace(TAG_PREFIX, ""));
+                    Saver.getInstance().saveTask(copy);
                 }
             } else if (groupType == GroupType.VARIABLE && copyObject instanceof Variable copy) {
                 Object o = subGroupMap.get(subGroupTag);
@@ -136,6 +140,10 @@ public class SelectActionDialog extends BottomSheetDialog {
                     if (GLOBAL.equals(tag)) {
                         Saver.getInstance().saveVar(copy);
                     }
+                } else if (o == null) {
+                    copy.getTags().clear();
+                    copy.addTag(subGroupTag.replace(TAG_PREFIX, ""));
+                    Saver.getInstance().saveVar(copy);
                 }
             }
             adapter.addData(copyObject);

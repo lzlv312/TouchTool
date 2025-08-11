@@ -129,14 +129,18 @@ public class SelectActivityDialogAdapter extends RecyclerView.Adapter<SelectActi
 
             binding.title.setText(info.label());
             binding.packageName.setText(info.name());
-            Drawable icon = info.activityInfo().loadIcon(manager);
-            binding.icon.setImageDrawable(icon);
+            if (info.activityInfo() != null) {
+                Drawable icon = info.activityInfo().loadIcon(manager);
+                binding.icon.setImageDrawable(icon);
+            } else {
+                binding.icon.setImageDrawable(null);
+            }
 
             if (info.isLauncher()) {
                 binding.tips.setText(R.string.select_app_activity_launcher);
                 binding.tipsBg.setCardBackgroundColor(ColorStateList.valueOf(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimaryVariant)));
             } else {
-                if (info.activityInfo().exported) {
+                if (info.activityInfo() == null || info.activityInfo().exported) {
                     binding.tips.setText(R.string.select_app_activity_exported);
                     binding.tipsBg.setCardBackgroundColor(ColorStateList.valueOf(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorTertiary)));
                 } else {

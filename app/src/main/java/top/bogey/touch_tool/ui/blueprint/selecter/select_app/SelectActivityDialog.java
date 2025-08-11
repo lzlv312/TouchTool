@@ -19,6 +19,7 @@ import java.util.List;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
 import top.bogey.touch_tool.databinding.DialogSelectActivityBinding;
+import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
@@ -31,7 +32,7 @@ public class SelectActivityDialog extends FrameLayout {
 
         SelectActivityDialogAdapter adapter = new SelectActivityDialogAdapter(applications, application);
         binding.activityBox.setAdapter(adapter);
-        List<SelectActivityInfo> activityInfoList = getActivities(applications.isShared(), application, info);
+        List<SelectActivityInfo> activityInfoList = getActivities(applications.isShared(), applications.isShortcut(), application, info);
         adapter.refreshActivities(activityInfoList);
 
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
@@ -52,7 +53,7 @@ public class SelectActivityDialog extends FrameLayout {
         });
     }
 
-    private List<SelectActivityInfo> getActivities(boolean isShared, PinApplication application, PackageInfo info) {
+    private List<SelectActivityInfo> getActivities(boolean isShared, boolean isShortcut, PinApplication application, PackageInfo info) {
         List<SelectActivityInfo> activityInfoList = new ArrayList<>();
         PackageManager manager = getContext().getPackageManager();
         String launcherActivityName = "";
@@ -76,6 +77,15 @@ public class SelectActivityDialog extends FrameLayout {
                         activityInfo.name,
                         String.valueOf(resolveInfo.loadLabel(manager)),
                         launcherActivityName.equals(activityInfo.name)
+                ));
+            }
+        } else if (isShortcut) {
+            for (TaskInfoSummary.ShortcutInfo shortcutInfo : TaskInfoSummary.getInstance().findShortcutInfo(info.packageName, null)) {
+                activityInfoList.add(new SelectActivityInfo(
+                        null,
+                        shortcutInfo.intent,
+                        shortcutInfo.title,
+                        false
                 ));
             }
         } else {
@@ -103,7 +113,7 @@ public class SelectActivityDialog extends FrameLayout {
         for (SelectActivityInfo activityInfo : activityInfoList) {
             if (application.getActivityClasses() != null && application.getActivityClasses().contains(activityInfo.name)) {
                 resultActivityInfoList.add(activityInfo);
-            } else if (activityInfo.activityInfo.exported) {
+            } else if (activityInfo.activityInfo != null && activityInfo.activityInfo.exported) {
                 if (activityInfo.isLauncher) {
                     exportedActivityInfoList.add(0, activityInfo);
                 } else {

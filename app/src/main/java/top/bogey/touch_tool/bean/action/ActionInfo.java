@@ -139,6 +139,7 @@ import top.bogey.touch_tool.bean.action.system.GetNetworkStatusAction;
 import top.bogey.touch_tool.bean.action.system.GetScreenStatusAction;
 import top.bogey.touch_tool.bean.action.system.GetTimeAction;
 import top.bogey.touch_tool.bean.action.system.OpenAppAction;
+import top.bogey.touch_tool.bean.action.system.OpenShortcutAction;
 import top.bogey.touch_tool.bean.action.system.OpenUriSchemeAction;
 import top.bogey.touch_tool.bean.action.system.PlayRingtoneAction;
 import top.bogey.touch_tool.bean.action.system.ReadFromClipboardAction;
@@ -207,6 +208,7 @@ public class ActionInfo {
     // 系统动作
     private final static ActionInfo OPEN_APP_INFO = new ActionInfo(ActionType.OPEN_APP, OpenAppAction.class, R.drawable.icon_apps, R.string.open_app_action, R.string.open_app_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo OPEN_URI_SCHEME_INFO = new ActionInfo(ActionType.OPEN_URI_SCHEME, OpenUriSchemeAction.class, R.drawable.icon_link, R.string.open_uri_scheme_action, R.string.open_uri_scheme_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo OPEN_SHORTCUT_INFO = new ActionInfo(ActionType.OPEN_SHORTCUT, OpenShortcutAction.class, R.drawable.icon_apps, R.string.open_shortcut_action, R.string.open_shortcut_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SHELL_INFO = new ActionInfo(ActionType.SHELL, ExecuteShellAction.class, R.drawable.icon_terminal, R.string.execute_shell_action, R.string.execute_shell_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SHARE_TO_INFO = new ActionInfo(ActionType.SHARE_TO, ShareToAction.class, R.drawable.icon_share, R.string.share_to_action, R.string.share_to_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SYSTEM_KEY_INFO = new ActionInfo(ActionType.SYSTEM_KEY, SystemKeyAction.class, R.drawable.icon_keyboard, R.string.system_key_action, R.string.system_key_action_desc, 0, NormalActionCard.class);
@@ -404,6 +406,7 @@ public class ActionInfo {
 
             case OPEN_APP -> OPEN_APP_INFO;
             case OPEN_URI_SCHEME -> OPEN_URI_SCHEME_INFO;
+            case OPEN_SHORTCUT -> OPEN_SHORTCUT_INFO;
             case SHELL -> SHELL_INFO;
             case SHARE_TO -> SHARE_TO_INFO;
             case SYSTEM_KEY -> SYSTEM_KEY_INFO;

@@ -85,6 +85,8 @@ public class SelectAppDialog extends BottomSheetDialog {
         List<PackageInfo> apps;
         if (applications.isShared()) {
             apps = TaskInfoSummary.getInstance().findSendApps(searchString, includeSystemApp);
+        } else if (applications.isShortcut()) {
+            apps = TaskInfoSummary.getInstance().findShortcutApps(searchString, includeSystemApp);
         } else {
             apps = TaskInfoSummary.getInstance().findApps(searchString, includeSystemApp);
         }

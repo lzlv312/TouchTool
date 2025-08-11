@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         android:layout_margin="8dp"
         android:scaleType="centerInside"
-        android:src="@drawable/icon_refresh"
+        android:src="@drawable/icon_app"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
 
 </com.google.android.material.card.MaterialCardView>

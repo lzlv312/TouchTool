@@ -30,6 +30,7 @@
             android:layout_gravity="end|bottom"
             android:scaleType="centerInside"
             android:src="@drawable/icon_line_curve"
+            android:tint="?attr/colorOutlineVariant"
             android:translationX="2dp"
             android:translationY="2dp" />
 
