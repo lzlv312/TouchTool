@@ -14,7 +14,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class ListClearAction extends ListExecuteAction {
-    private final transient Pin listPin = new Pin(new PinList(), R.string.pin_list);
+    private final transient Pin listPin = new Pin(new PinList());
 
     public ListClearAction() {
         super(ActionType.LIST_CLEAR);

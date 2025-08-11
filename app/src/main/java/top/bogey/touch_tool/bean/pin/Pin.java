@@ -306,17 +306,19 @@ public class Pin extends Identity {
     @Override
     public String getTitle() {
         if (title != null && !title.isEmpty()) return title;
-        if (titleId == 0) return "";
-        if (isSameClass(PinList.class)) {
-            PinList list = getValue();
-            PinInfo info = PinInfo.getPinInfo(list.getValueType());
-            if (info != null) return info.getTitle() + MainApplication.getInstance().getString(R.string.pin_list);
-        }
-        if (isSameClass(PinMap.class)) {
-            PinMap map = getValue();
-            PinInfo keyInfo = PinInfo.getPinInfo(map.getKeyType());
-            PinInfo valueInfo = PinInfo.getPinInfo(map.getValueType());
-            if (keyInfo != null && valueInfo != null) return keyInfo.getTitle() + "-" + valueInfo.getTitle();
+        if (titleId == 0) {
+            if (isSameClass(PinList.class)) {
+                PinList list = getValue();
+                PinInfo info = PinInfo.getPinInfo(list.getValueType());
+                if (info != null) return info.getTitle() + MainApplication.getInstance().getString(R.string.pin_list);
+            }
+            if (isSameClass(PinMap.class)) {
+                PinMap map = getValue();
+                PinInfo keyInfo = PinInfo.getPinInfo(map.getKeyType());
+                PinInfo valueInfo = PinInfo.getPinInfo(map.getValueType());
+                if (keyInfo != null && valueInfo != null) return keyInfo.getTitle() + "-" + valueInfo.getTitle();
+            }
+            return "";
         }
         return MainApplication.getInstance().getString(titleId);
     }

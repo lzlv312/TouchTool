@@ -20,7 +20,7 @@ import top.bogey.touch_tool.service.TaskRunnable;
 
 public class MapForeachAction extends MapExecuteAction {
     private final transient Pin breakPin = new Pin(new PinExecute(), R.string.map_foreach_action_break);
-    private final transient Pin mapPin = new Pin(new PinMap(), R.string.pin_map);
+    private final transient Pin mapPin = new Pin(new PinMap());
     private final transient Pin keyPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_key, true);
     private final transient Pin valuePin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_value, true);
     private final transient Pin completePin = new Pin(new PinExecute(), R.string.for_loop_action_complete, true);

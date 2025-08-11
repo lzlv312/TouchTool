@@ -17,7 +17,7 @@ import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class GetWindowsAction extends CalculateAction {
-    private final transient Pin windowsPin = new Pin(new PinList(new PinNode()), R.string.pin_node, true);
+    private final transient Pin windowsPin = new Pin(new PinList(new PinNode()), true);
 
     public GetWindowsAction() {
         super(ActionType.GET_WINDOWS);

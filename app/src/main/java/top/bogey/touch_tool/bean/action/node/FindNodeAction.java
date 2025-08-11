@@ -41,7 +41,7 @@ public class FindNodeAction extends FindExecuteAction {
     private final transient Pin areaPin = new NotAllPathShowablePin(new PinArea(), R.string.pin_area);
     private final transient Pin pathTextPin = new PathTextShowablePin(new PinNodePathTextString(), R.string.find_node_action_regex_path);
     private final transient Pin nodePin = new Pin(new PinNode(), R.string.pin_node, true);
-    private final transient Pin nodesPin = new NotPathShowablePin(new PinList(new PinNode()), R.string.pin_node, true);
+    private final transient Pin nodesPin = new NotPathShowablePin(new PinList(new PinNode()), true);
 
     public FindNodeAction() {
         super(ActionType.FIND_NODE);
@@ -166,8 +166,8 @@ public class FindNodeAction extends FindExecuteAction {
     }
 
     private static class NotPathShowablePin extends ShowAblePin {
-        public NotPathShowablePin(PinBase value, int titleId, boolean out) {
-            super(value, titleId, out);
+        public NotPathShowablePin(PinBase value, boolean out) {
+            super(value, out);
         }
 
         @Override

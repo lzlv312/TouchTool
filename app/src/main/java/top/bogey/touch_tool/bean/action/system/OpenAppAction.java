@@ -88,6 +88,8 @@ public class OpenAppAction extends ExecuteAction {
     );
 
     private final transient Pin appPin = new Pin(new PinApplication(PinSubType.SINGLE_APP_WITH_ACTIVITY), R.string.pin_app);
+
+    private final transient Pin actionPin = new Pin(new PinString(), R.string.open_app_action_action, false, false, true);
     private final transient Pin flagPin = new Pin(new PinMultiSelect(new PinInteger()), R.string.open_app_action_flags, false, false, true);
     private final transient Pin categoryPin = new Pin(new PinMultiSelect(new PinString()), R.string.open_app_action_category, false, false, true);
     private final transient Pin uriPin = new Pin(new PinString(), R.string.open_app_action_uri_data, false, false, true);
@@ -96,14 +98,14 @@ public class OpenAppAction extends ExecuteAction {
 
     public OpenAppAction() {
         super(ActionType.OPEN_APP);
-        addPins(appPin, flagPin, categoryPin, uriPin, paramsPin, bundlePin);
+        addPins(appPin, actionPin, flagPin, categoryPin, uriPin, paramsPin, bundlePin);
         initFlagSelection();
         initCategorySelection();
     }
 
     public OpenAppAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(appPin, flagPin, categoryPin, uriPin, paramsPin, bundlePin);
+        reAddPins(appPin, actionPin, flagPin, categoryPin, uriPin, paramsPin, bundlePin);
         initFlagSelection();
         initCategorySelection();
     }
@@ -113,6 +115,9 @@ public class OpenAppAction extends ExecuteAction {
         PinApplication app = getPinValue(runnable, appPin);
         String packageName = app.getPackageName();
         String activityClass = app.getFirstActivity();
+
+        PinString action = getPinValue(runnable, actionPin);
+        String actionString = action.getValue();
 
         PinList flags = getPinValue(runnable, flagPin);
         int flag = 0;
@@ -143,7 +148,9 @@ public class OpenAppAction extends ExecuteAction {
             intent = new Intent(Intent.ACTION_MAIN);
             intent.setClassName(packageName, activityClass);
         }
+
         if (intent != null) {
+            if (actionString != null && !actionString.isEmpty()) intent.setAction(actionString);
             intent.setFlags(flag);
             for (PinObject object : category) {
                 PinString pinString = (PinString) object;

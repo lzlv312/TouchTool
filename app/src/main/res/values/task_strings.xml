@@ -150,6 +150,7 @@
     <!-- 动作-System -->
     <string name="open_app_action">打开应用</string>
     <string name="open_app_action_desc">打开选定的应用</string>
+    <string name="open_app_action_action">动作(Action)</string>
     <string name="open_app_action_flags">启动标志(Flags)</string>
     <string name="open_app_action_category">分类(Category)</string>
     <string name="open_app_action_uri_data">Uri数据</string>

@@ -14,7 +14,7 @@ import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class GetNetworkStatusAction extends CalculateAction {
-    private final transient Pin statusPin = new Pin(new PinList(new PinString()), R.string.get_screen_status_action_state, true);
+    private final transient Pin statusPin = new Pin(new PinList(new PinString()), R.string.get_network_status_action_state, true);
 
     public GetNetworkStatusAction() {
         super(ActionType.GET_NETWORK_STATUS);

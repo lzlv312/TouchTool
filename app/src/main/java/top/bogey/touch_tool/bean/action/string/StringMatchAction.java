@@ -28,7 +28,7 @@ public class StringMatchAction extends ExecuteAction implements DynamicPinsActio
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin matchPin = new Pin(new PinSingleLineString(), R.string.string_match_action_match);
     private final transient Pin elsePin = new Pin(new PinExecute(), R.string.if_action_else, true);
-    private final transient Pin resultPin = new Pin(new PinList(new PinString()), R.string.pin_string, true);
+    private final transient Pin resultPin = new Pin(new PinList(new PinString()), true);
     private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_pin, true);
 
     public StringMatchAction() {

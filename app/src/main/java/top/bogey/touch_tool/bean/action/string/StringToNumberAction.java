@@ -19,7 +19,7 @@ import top.bogey.touch_tool.utils.AppUtil;
 public class StringToNumberAction extends CalculateAction {
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin numberPin = new Pin(new PinDouble(), R.string.pin_number_double, true);
-    private final transient Pin numbersPin = new Pin(new PinList(new PinDouble()), R.string.pin_number_double, true);
+    private final transient Pin numbersPin = new Pin(new PinList(new PinDouble()), true);
 
     public StringToNumberAction() {
         super(ActionType.STRING_TO_NUMBER);

@@ -310,6 +310,7 @@ public class DisplayUtil {
         if (tmp != null) tmp.recycle();
         if (matchResult == null) return null;
         if (matchResult.value * 100 < similarity) return null;
+        matchResult.area.offset(area.left, area.top);
         return matchResult.area;
     }
 

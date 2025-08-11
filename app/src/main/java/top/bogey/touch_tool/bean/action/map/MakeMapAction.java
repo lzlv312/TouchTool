@@ -23,7 +23,7 @@ public class MakeMapAction extends MapCalculateAction implements DynamicPinsActi
     private final static Pin keyMorePin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_key);
     private final static Pin valueMorePin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_value);
     private final transient Pin addPin = new Pin(new PinAdd(Arrays.asList(keyMorePin, valueMorePin)), R.string.pin_add_pin);
-    private final transient Pin mapPin = new Pin(new PinMap(), R.string.pin_map, true);
+    private final transient Pin mapPin = new Pin(new PinMap(), true);
 
     public MakeMapAction() {
         super(ActionType.MAP_MAKE);
