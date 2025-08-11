@@ -108,7 +108,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             Bitmap textBitmap = DisplayUtil.createTextBitmap(getContext(), object.toString(), textColor, textSize, maxWidth, 0, (int) DisplayUtil.dp2px(getContext(), 8));
             binding.image.setImageBitmap(textBitmap);
 
-            binding.saveButton.setIconResource(R.drawable.icon_copy);
+            binding.saveButton.setIconResource(R.drawable.icon_content_copy);
             binding.saveButton.setOnClickListener(v -> AppUtil.copyToClipboard(getContext(), object.toString()));
         }
         post(() -> FloatWindow.setLocation(tag, anchor, location));

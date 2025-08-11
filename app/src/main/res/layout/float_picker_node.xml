@@ -37,7 +37,7 @@
             android:layout_marginHorizontal="8dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            app:icon="@drawable/icon_back" />
+            app:icon="@drawable/icon_arrow_back" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/saveButton"
@@ -57,7 +57,7 @@
             android:layout_marginHorizontal="8dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            app:icon="@drawable/icon_more" />
+            app:icon="@drawable/icon_more_horiz" />
 
     </LinearLayout>
 

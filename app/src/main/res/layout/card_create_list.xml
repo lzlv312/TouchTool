@@ -11,7 +11,7 @@
         android:layout_height="48dp"
         android:layout_gravity="center_horizontal"
         android:alpha="0.1"
-        app:srcCompat="@drawable/icon_setting"
+        app:srcCompat="@drawable/icon_settings"
         app:tint="?attr/colorSecondary" />
 
     <LinearLayout
@@ -97,7 +97,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="4dp"
-                app:icon="@drawable/icon_visibility_half"
+                app:icon="@drawable/icon_symptoms"
                 app:iconSize="16dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -106,7 +106,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="4dp"
-                app:icon="@drawable/icon_copy"
+                app:icon="@drawable/icon_content_copy"
                 app:iconSize="16dp" />
 
             <com.google.android.material.button.MaterialButton

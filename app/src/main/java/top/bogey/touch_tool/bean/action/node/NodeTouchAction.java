@@ -32,20 +32,22 @@ public class NodeTouchAction extends ExecuteAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         PinNode node = getPinValue(runnable, nodePin);
-        PinBoolean longTouch = getPinValue(runnable, ltPin);
-        NodeInfo nodeInfo = node.getNodeInfo();
-        if (nodeInfo != null) {
-            AccessibilityNodeInfo accessibilityNodeInfo = nodeInfo.findUsableParentNode();
-            if (accessibilityNodeInfo != null) {
-                if (longTouch.getValue()) {
-                    if (accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK)) {
-                        executeNext(runnable, outPin);
-                        return;
-                    }
-                } else {
-                    if (accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK)) {
-                        executeNext(runnable, outPin);
-                        return;
+        if (node != null) {
+            PinBoolean longTouch = getPinValue(runnable, ltPin);
+            NodeInfo nodeInfo = node.getNodeInfo();
+            if (nodeInfo != null) {
+                AccessibilityNodeInfo accessibilityNodeInfo = nodeInfo.findUsableParentNode();
+                if (accessibilityNodeInfo != null) {
+                    if (longTouch.getValue()) {
+                        if (accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK)) {
+                            executeNext(runnable, outPin);
+                            return;
+                        }
+                    } else {
+                        if (accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK)) {
+                            executeNext(runnable, outPin);
+                            return;
+                        }
                     }
                 }
             }

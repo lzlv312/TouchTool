@@ -40,7 +40,15 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
     public ExecuteTaskAction(JsonObject jsonObject) {
         super(jsonObject);
         reAddPin(taskPin);
-        tmpPins.forEach(this::addPin);
+        tmpPins.forEach(pin -> {
+            if (pin.getValue() instanceof PinExecute) {
+                ExecuteShowAblePin showAblePin = new ExecuteShowAblePin(new PinExecute());
+                showAblePin.sync(pin);
+                addPin(showAblePin);
+            } else {
+                addPin(pin);
+            }
+        });
         tmpPins.clear();
     }
 

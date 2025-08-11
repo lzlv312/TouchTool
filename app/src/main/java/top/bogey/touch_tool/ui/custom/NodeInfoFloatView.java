@@ -87,7 +87,7 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
                 params.width = width;
                 params.height = height;
                 binding.getRoot().setLayoutParams(params);
-                binding.expandButton.setIconResource(R.drawable.icon_zoom_in);
+                binding.expandButton.setIconResource(R.drawable.icon_zoom_in_map);
             } else {
                 binding.contentBox.setVisibility(GONE);
                 DisplayUtil.setViewMargin(binding.expandButton, 0, 0, 0, 0);
@@ -97,7 +97,7 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
                 params.width = binding.expandButton.getWidth();
                 params.height = binding.expandButton.getHeight();
                 binding.getRoot().setLayoutParams(params);
-                binding.expandButton.setIconResource(R.drawable.icon_zoom_out);
+                binding.expandButton.setIconResource(R.drawable.icon_zoom_out_map);
 
             }
             FloatWindow.updateLayoutParam(NodeInfoFloatView.class.getName());

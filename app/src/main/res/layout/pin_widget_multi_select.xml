@@ -8,11 +8,11 @@
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:breakStrategy="simple"
         android:ellipsize="end"
         android:maxWidth="192dp"
-        android:textSize="11sp"
-        android:breakStrategy="simple"
-        android:maxLines="5" />
+        android:maxLines="5"
+        android:textSize="11sp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/pickButton"
@@ -21,7 +21,7 @@
         android:layout_height="20dp"
         android:layout_gravity="center_vertical"
         android:layout_marginHorizontal="4dp"
-        app:icon="@drawable/icon_array"
+        app:icon="@drawable/icon_data_array"
         app:iconSize="16dp" />
 
 </LinearLayout>

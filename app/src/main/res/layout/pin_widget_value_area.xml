@@ -61,7 +61,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_gravity="center"
-        android:backgroundTint="@color/fill_button_background_check"
+        android:backgroundTint="@color/fill_button_background_normal_check"
         android:checkable="true"
         app:icon="@drawable/icon_lock_open"
         app:iconSize="12dp"

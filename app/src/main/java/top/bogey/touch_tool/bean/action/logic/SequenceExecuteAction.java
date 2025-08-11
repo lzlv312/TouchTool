@@ -18,19 +18,18 @@ import top.bogey.touch_tool.service.TaskRunnable;
 public class SequenceExecuteAction extends ExecuteAction implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinExecute(), R.string.pin_execute, true);
 
-    private final transient Pin secondPin = new Pin(new PinExecute(), R.string.pin_execute, true);
     private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_execute, true);
+    private final transient Pin completePin = new Pin(new PinExecute(), R.string.sequence_action_complete, true);
 
     public SequenceExecuteAction() {
         super(ActionType.SEQUENCE_LOGIC);
-        addPins(secondPin, addPin);
+        addPins(addPin, completePin);
     }
 
     public SequenceExecuteAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPin(secondPin);
         reAddPins(morePin);
-        reAddPin(addPin);
+        reAddPins(addPin, completePin);
     }
 
     @Override
@@ -43,8 +42,7 @@ public class SequenceExecuteAction extends ExecuteAction implements DynamicPinsA
 
     @Override
     public void onExecuteNext(TaskRunnable runnable, Pin pin) {
-        List<Pin> dynamicPins = getDynamicPins();
-        if (pin == dynamicPins.get(dynamicPins.size() - 1)) {
+        if (pin == completePin) {
             super.onExecuteNext(runnable, pin);
         }
     }
@@ -52,10 +50,9 @@ public class SequenceExecuteAction extends ExecuteAction implements DynamicPinsA
     @Override
     public List<Pin> getDynamicPins() {
         List<Pin> pins = new ArrayList<>();
-        pins.add(outPin);
         boolean start = false;
         for (Pin pin : getPins()) {
-            if (pin == secondPin) start = true;
+            if (pin == outPin) start = true;
             if (pin == addPin) start = false;
             if (start) pins.add(pin);
         }

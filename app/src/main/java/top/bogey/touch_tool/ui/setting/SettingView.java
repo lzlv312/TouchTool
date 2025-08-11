@@ -324,6 +324,14 @@ public class SettingView extends Fragment {
         binding.taskTipsSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setShowTaskStartTips(binding.taskTipsSwitch.isChecked()));
         binding.taskTipsSwitch.setChecked(SettingSaver.getInstance().isShowTaskStartTips());
 
+        // 详细日志
+        binding.detailLogSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setDetailLog(binding.detailLogSwitch.isChecked()));
+        binding.detailLogSwitch.setChecked(SettingSaver.getInstance().isDetailLog());
+
+        // 音量键退出
+        binding.volumeButtonExitSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setVolumeButtonExit(binding.volumeButtonExitSwitch.isChecked()));
+        binding.volumeButtonExitSwitch.setChecked(SettingSaver.getInstance().isVolumeButtonExit());
+
 
         // 手动执行悬浮窗
         binding.manualPlaySetting.setOnClickListener(v -> {

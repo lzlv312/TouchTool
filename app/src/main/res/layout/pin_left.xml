@@ -36,6 +36,7 @@
         android:layout_height="16dp"
         android:layout_marginHorizontal="4dp"
         app:icon="@drawable/icon_copy"
+        app:iconSize="14dp"
         app:iconTint="?attr/colorOutline" />
 
     <com.google.android.material.button.MaterialButton

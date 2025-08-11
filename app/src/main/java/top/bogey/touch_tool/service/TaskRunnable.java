@@ -14,6 +14,7 @@ import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.InnerStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.save.log.ActionLog;
 import top.bogey.touch_tool.bean.save.log.LogInfo;
 import top.bogey.touch_tool.bean.save.log.NormalLog;
@@ -43,7 +44,7 @@ public class TaskRunnable implements Runnable {
     public TaskRunnable(Task task, StartAction startAction) {
         this.task = task;
         this.startAction = startAction;
-        this.debug = task.hasFlag(Task.FLAG_DEBUG);
+        this.debug = task.hasFlag(Task.FLAG_DEBUG) && SettingSaver.getInstance().isDetailLog();
     }
 
     @Override

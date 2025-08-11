@@ -149,7 +149,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
         SettingSaver.getInstance().setManualPlayViewState(expand);
         binding.playButtonBox.setVisibility(expand ? VISIBLE : GONE);
         binding.dragSpace.setVisibility(expand ? GONE : VISIBLE);
-        binding.dragSpaceButton.setIconResource(inLeft() ? R.drawable.icon_arrow_down : R.drawable.icon_arrow_up);
+        binding.dragSpaceButton.setIconResource(inLeft() ? R.drawable.icon_keyboard_arrow_down : R.drawable.icon_keyboard_arrow_up);
         binding.getRoot().animate().alpha(expand ? 1 : 0.3f);
     }
 

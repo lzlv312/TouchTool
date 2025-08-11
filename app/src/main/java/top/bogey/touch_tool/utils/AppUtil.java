@@ -7,13 +7,16 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.KeyguardManager;
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -48,6 +51,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.databinding.DialogInputTextBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
@@ -98,7 +102,7 @@ public class AppUtil {
                         callback.onResult(binding.titleEdit.getText().toString());
                     }
                 })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> callback.onResult(null))
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -229,6 +233,35 @@ public class AppUtil {
         ClipData clip = ClipData.newUri(context.getContentResolver(), "Image", uri);
         clipboard.setPrimaryClip(clip);
         if (showToast) Toast.makeText(context, R.string.copy_tips, Toast.LENGTH_SHORT).show();
+    }
+
+    public static Object readFromClipboard(Context context) {
+        Object result = null;
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard.hasPrimaryClip()) {
+            ClipData clip = clipboard.getPrimaryClip();
+            if (clip != null && clip.getItemCount() > 0) {
+                ClipDescription description = clip.getDescription();
+                ClipData.Item item = clip.getItemAt(0);
+                if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                    CharSequence text = item.getText();
+                    if (text != null) result = text.toString();
+                } else if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
+                    result = item.getHtmlText();
+                } else {
+                    Uri uri = item.getUri();
+                    if (uri != null) {
+                        ContentResolver resolver = context.getContentResolver();
+                        String type = resolver.getType(uri);
+                        if (type != null && type.startsWith("image")) {
+                            byte[] bytes = readFile(context, uri);
+                            result = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        }
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     public static boolean isAccessibilityServiceEnabled(Context context) {

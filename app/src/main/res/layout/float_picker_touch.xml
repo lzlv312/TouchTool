@@ -24,7 +24,7 @@
             android:layout_height="12dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            app:icon="@drawable/icon_radio_checked"
+            app:icon="@drawable/icon_radio_button_checked"
             app:iconSize="12dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -34,7 +34,7 @@
             android:layout_height="12dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            app:icon="@drawable/icon_radio_checked"
+            app:icon="@drawable/icon_radio_button_checked"
             app:iconSize="12dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -44,7 +44,7 @@
             android:layout_height="12dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            app:icon="@drawable/icon_radio_checked"
+            app:icon="@drawable/icon_radio_button_checked"
             app:iconSize="12dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -54,7 +54,7 @@
             android:layout_height="12dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            app:icon="@drawable/icon_radio_checked"
+            app:icon="@drawable/icon_radio_button_checked"
             app:iconSize="12dp" />
 
     </FrameLayout>
@@ -73,7 +73,7 @@
             android:layout_marginHorizontal="8dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            app:icon="@drawable/icon_back" />
+            app:icon="@drawable/icon_arrow_back" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/saveButton"

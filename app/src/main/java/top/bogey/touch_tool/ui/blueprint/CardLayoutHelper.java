@@ -141,7 +141,7 @@ public class CardLayoutHelper {
     }
 
     public static class ActionArea {
-        private final static int SCALE = (CORNER_OFFSET_SCALE + 1) * 2;
+        private final static int SCALE = (CORNER_OFFSET_SCALE + 2) * 2;
 
         public Action action;
         public boolean execute;

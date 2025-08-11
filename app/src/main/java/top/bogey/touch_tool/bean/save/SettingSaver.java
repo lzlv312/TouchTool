@@ -59,6 +59,8 @@ public class SettingSaver {
     private static final String SHOW_GESTURE_TRACK = "SHOW_GESTURE_TRACK";                              // 显示手势轨迹
     private static final String SHOW_NODE_AREA = "SHOW_NODE_AREA";                                      // 标记目标控件区域
     private static final String SHOW_TASK_START_TIPS = "SHOW_TASK_START_TIPS";                          // 任务开始运行提示
+    private static final String DETAIL_LOG = "DETAIL_LOG";                                              // 详细日志
+    private static final String VOLUME_BUTTON_EXIT = "VOLUME_BUTTON_EXIT";                              // 音量键退出
 
     private static final String DEFAULT_CARD_TYPE = "DEFAULT_CARD_TYPE";                                // 默认卡片展开类型
     private static final String SUPPORT_FREE_FORM = "SUPPORT_FREE_FORM";                                // 小窗支持
@@ -268,9 +270,25 @@ public class SettingSaver {
         mmkv.encode(SHOW_TASK_START_TIPS, enable);
     }
 
+    public boolean isDetailLog() {
+        return mmkv.decodeBool(DETAIL_LOG, true);
+    }
+
+    public void setDetailLog(boolean enable) {
+        mmkv.encode(DETAIL_LOG, enable);
+    }
+
+    public boolean isVolumeButtonExit() {
+        return mmkv.decodeBool(VOLUME_BUTTON_EXIT, false);
+    }
+
+    public void setVolumeButtonExit(boolean enable) {
+        mmkv.encode(VOLUME_BUTTON_EXIT, enable);
+    }
+
 
     public int getDefaultCardExpandType() {
-        return mmkv.decodeInt(DEFAULT_CARD_TYPE, 1);
+        return mmkv.decodeInt(DEFAULT_CARD_TYPE, 2);
     }
 
     public void setDefaultCardExpandType(int type) {

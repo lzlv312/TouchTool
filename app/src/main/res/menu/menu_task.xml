@@ -4,13 +4,13 @@
 
     <item
         android:id="@+id/importTask"
-        android:icon="@drawable/icon_download"
+        android:icon="@drawable/menu_download"
         android:title="@string/task_import"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/exportTask"
-        android:icon="@drawable/icon_upload"
+        android:icon="@drawable/menu_upload"
         android:title="@string/task_export"
         app:showAsAction="ifRoom" />
 </menu>

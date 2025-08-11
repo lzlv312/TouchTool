@@ -220,11 +220,11 @@ public class LogViewAdapter extends TreeAdapter {
             binding.gotoButton.setVisibility(View.VISIBLE);
 
             if (actionLog == null || actionLog.getIndex() == -1) {
-                binding.copyButton.setIconResource(R.drawable.icon_copy);
+                binding.copyButton.setIconResource(R.drawable.icon_content_copy);
                 binding.copyButton.setVisibility(View.VISIBLE);
                 binding.title.setText(":" + logInfo.getLog());
             } else {
-                binding.copyButton.setIconResource(node.isExpanded() ? R.drawable.icon_arrow_down : R.drawable.icon_arrow_right);
+                binding.copyButton.setIconResource(node.isExpanded() ? R.drawable.icon_keyboard_arrow_down : R.drawable.icon_keyboard_arrow_right);
                 int size = logInfo.getChildrenFlags().size();
                 binding.copyButton.setVisibility(size == 0 ? View.INVISIBLE : View.VISIBLE);
                 binding.title.setText(logInfo.getLog());

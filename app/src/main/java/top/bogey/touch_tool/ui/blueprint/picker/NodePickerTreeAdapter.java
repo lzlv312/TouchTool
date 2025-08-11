@@ -171,7 +171,7 @@ public class NodePickerTreeAdapter extends TreeAdapter {
 
             binding.imageView.setImageTintList(ColorStateList.valueOf(color));
             binding.imageView.setVisibility(nodeInfo.children.isEmpty() ? View.INVISIBLE : View.VISIBLE);
-            binding.imageView.setImageResource(node.isExpanded() ? R.drawable.icon_arrow_up : R.drawable.icon_arrow_down);
+            binding.imageView.setImageResource(node.isExpanded() ? R.drawable.icon_keyboard_arrow_up : R.drawable.icon_keyboard_arrow_down);
 
             binding.visibleButton.setIconResource(nodeInfo.visible ? R.drawable.icon_visibility : R.drawable.icon_visibility_off);
             binding.visibleButton.setAlpha(nodeInfo.visible ? 0.3f : 1);

@@ -135,7 +135,7 @@ public abstract class PinView extends FrameLayout implements PinListener {
         if (copyValue == null || !pin.isSameClass(copyValue)) {
             button.setIconResource(R.drawable.icon_copy);
         } else {
-            button.setIconResource(R.drawable.icon_assignment);
+            button.setIconResource(R.drawable.icon_content_paste);
         }
     }
 

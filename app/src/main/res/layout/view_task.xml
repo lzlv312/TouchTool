@@ -42,18 +42,18 @@
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:hint="@string/task_search"
-                        android:textAppearance="@style/TextAppearance.Material3.SearchView.Prefix"
                         android:inputType="text"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:textAppearance="@style/TextAppearance.Material3.SearchView.Prefix" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/clean"
                         style="@style/Theme.TouchTool.IconButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         app:icon="@drawable/icon_close"
                         app:iconSize="24dp"
-                        android:visibility="gone"
                         app:iconTint="?attr/colorOnSurfaceVariant" />
 
                 </LinearLayout>
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/copy"
-                    app:icon="@drawable/icon_copy" />
+                    app:icon="@drawable/icon_content_copy" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/moveButton"

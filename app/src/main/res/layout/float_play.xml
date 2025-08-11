@@ -22,7 +22,7 @@
                 style="@style/Theme.TouchTool.IconButton"
                 android:layout_width="32dp"
                 android:layout_height="24dp"
-                app:icon="@drawable/icon_arrow_up" />
+                app:icon="@drawable/icon_keyboard_arrow_up" />
 
             <LinearLayout
                 android:id="@+id/buttonBox"
@@ -48,7 +48,7 @@
             android:layout_width="16dp"
             android:layout_height="32dp"
             android:rotation="-90"
-            app:icon="@drawable/icon_arrow_up" />
+            app:icon="@drawable/icon_keyboard_arrow_up" />
     </com.google.android.material.card.MaterialCardView>
 
 </FrameLayout>

@@ -106,6 +106,10 @@ public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<Cus
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) pinView.getLayoutParams();
             params.gravity = pinView.getPin().isOut() ? Gravity.END : Gravity.START;
             pinView.setLayoutParams(params);
+
+            ViewGroup.LayoutParams layoutParams = layout.getLayoutParams();
+            layoutParams.width = pinView.getPin().isVertical() ? ViewGroup.LayoutParams.WRAP_CONTENT : ViewGroup.LayoutParams.MATCH_PARENT;
+            layout.setLayoutParams(layoutParams);
         }
     }
 

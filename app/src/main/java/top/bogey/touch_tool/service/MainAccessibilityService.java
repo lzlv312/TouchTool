@@ -27,6 +27,7 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -595,13 +596,18 @@ public class MainAccessibilityService extends AccessibilityService {
 
     @Override
     protected boolean onKeyEvent(KeyEvent event) {
+        if (!SettingSaver.getInstance().isVolumeButtonExit()) return super.onKeyEvent(event);
         if (handler == null) handler = new Handler();
 
         if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                handler.postDelayed(() -> setEnabled(!isEnabled()), 5000);
+                handler.postDelayed(() -> {
+                    Toast.makeText(this, isEnabled() ? R.string.app_setting_disable : R.string.app_setting_enabled, Toast.LENGTH_SHORT).show();
+                    setEnabled(!isEnabled());
+                }, 2000);
             } else if (event.getAction() == KeyEvent.ACTION_UP) {
                 handler.removeCallbacksAndMessages(null);
+                if (isEnabled()) stopAllTask();
             }
         }
         return super.onKeyEvent(event);

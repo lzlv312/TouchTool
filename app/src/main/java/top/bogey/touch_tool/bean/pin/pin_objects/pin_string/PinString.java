@@ -22,7 +22,7 @@ public class PinString extends PinObject {
         this.value = value;
     }
 
-    protected PinString(PinSubType subType) {
+    public PinString(PinSubType subType) {
         super(PinType.STRING, subType);
     }
 

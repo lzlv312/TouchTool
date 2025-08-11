@@ -6,13 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class CustomStartAction extends Action implements DynamicPinsAction {
@@ -33,6 +31,15 @@ public class CustomStartAction extends Action implements DynamicPinsAction {
         runnable.addExecuteProgress(this);
         runnable.addDebugLog(this, 1);
         Pin pinByUid = getPinByUid(pin.getUid());
+        // 如果pin不是执行针脚，便利所有针脚找到执行针脚
+        if (pinByUid == null && !pin.isVertical()) {
+            for (Pin p : getPins()) {
+                if (p.isVertical()) {
+                    pinByUid = p;
+                    break;
+                }
+            }
+        }
         executeNext(runnable, pinByUid);
     }
 
@@ -55,4 +62,8 @@ public class CustomStartAction extends Action implements DynamicPinsAction {
         return new ArrayList<>(getPins());
     }
 
+    @Override
+    public Pin findConnectToAblePin(Pin pin) {
+        return getPins().stream().filter(p -> p.linkAble() && p.linkAble(pin.getValue())).findFirst().orElse(null);
+    }
 }

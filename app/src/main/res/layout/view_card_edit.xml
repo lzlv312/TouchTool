@@ -18,7 +18,7 @@
         style="@style/Theme.TouchTool.IconButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        app:icon="@drawable/icon_copy"
+        app:icon="@drawable/icon_content_copy"
         app:iconSize="16dp" />
 
     <com.google.android.material.button.MaterialButton

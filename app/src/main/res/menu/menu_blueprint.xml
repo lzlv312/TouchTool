@@ -4,19 +4,19 @@
 
     <item
         android:id="@+id/back"
-        android:icon="@drawable/icon_undo"
+        android:icon="@drawable/menu_undo"
         android:title=""
         app:showAsAction="always" />
 
     <item
         android:id="@+id/forward"
-        android:icon="@drawable/icon_redo"
+        android:icon="@drawable/menu_redo"
         android:title=""
         app:showAsAction="always" />
 
     <item
         android:id="@+id/save"
-        android:icon="@drawable/icon_save"
+        android:icon="@drawable/menu_save"
         android:title=""
         app:showAsAction="always" />
 

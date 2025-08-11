@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:layout_margin="8dp"
         android:scaleType="centerInside"
         android:src="@drawable/icon_refresh"
-        android:layout_margin="8dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
 
 </com.google.android.material.card.MaterialCardView>

@@ -104,7 +104,7 @@ public class ManualStartAction extends StartAction {
 
         @Override
         public boolean linkAble(Task context) {
-            return false;
+            return super.linkAble(context);
         }
     }
 
@@ -122,7 +122,7 @@ public class ManualStartAction extends StartAction {
 
         @Override
         public boolean linkAble(Task context) {
-            return false;
+            return super.linkAble(context);
         }
     }
 }

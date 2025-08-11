@@ -38,6 +38,7 @@ public class GetNodeInfoAction extends CalculateAction {
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
         PinNode node = getPinValue(runnable, nodePin);
+        if (node == null) return;
         NodeInfo nodeInfo = node.getNodeInfo();
         clazzPin.getValue(PinString.class).setValue(nodeInfo.clazz);
         idPin.getValue(PinString.class).setValue(nodeInfo.id);

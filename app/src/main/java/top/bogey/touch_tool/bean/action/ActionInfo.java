@@ -164,15 +164,15 @@ import top.bogey.touch_tool.ui.blueprint.card.NormalActionCard;
 
 public class ActionInfo {
     // 开始动作
-    private final static ActionInfo MANUAL_START_INFO = new ActionInfo(ActionType.MANUAL_START, ManualStartAction.class, R.drawable.icon_hand, R.string.manual_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo APPLICATION_START_INFO = new ActionInfo(ActionType.APPLICATION_START, ApplicationStartAction.class, R.drawable.icon_widget, R.string.application_start_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo MANUAL_START_INFO = new ActionInfo(ActionType.MANUAL_START, ManualStartAction.class, R.drawable.icon_waving_hand, R.string.manual_start_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo APPLICATION_START_INFO = new ActionInfo(ActionType.APPLICATION_START, ApplicationStartAction.class, R.drawable.icon_widgets, R.string.application_start_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo TIME_START_INFO = new ActionInfo(ActionType.TIME_START, TimeStartAction.class, R.drawable.icon_timer, R.string.time_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo NOTIFICATION_START_INFO = new ActionInfo(ActionType.NOTIFICATION_START, NotificationStartAction.class, R.drawable.icon_notification, R.string.notification_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo NETWORK_START_INFO = new ActionInfo(ActionType.NETWORK_START, NetworkStartAction.class, R.drawable.icon_network, R.string.network_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo BATTERY_START_INFO = new ActionInfo(ActionType.BATTERY_START, BatteryStartAction.class, R.drawable.icon_battery, R.string.battery_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo SCREEN_START_INFO = new ActionInfo(ActionType.SCREEN_START, ScreenStartAction.class, R.drawable.icon_phone, R.string.screen_start_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo NOTIFICATION_START_INFO = new ActionInfo(ActionType.NOTIFICATION_START, NotificationStartAction.class, R.drawable.icon_notifications, R.string.notification_start_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo NETWORK_START_INFO = new ActionInfo(ActionType.NETWORK_START, NetworkStartAction.class, R.drawable.icon_globe, R.string.network_start_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo BATTERY_START_INFO = new ActionInfo(ActionType.BATTERY_START, BatteryStartAction.class, R.drawable.icon_battery_android_full, R.string.battery_start_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo SCREEN_START_INFO = new ActionInfo(ActionType.SCREEN_START, ScreenStartAction.class, R.drawable.icon_mobile, R.string.screen_start_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo BLUETOOTH_START_INFO = new ActionInfo(ActionType.BLUETOOTH_START, BluetoothStartAction.class, R.drawable.icon_bluetooth, R.string.bluetooth_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo OUT_CALL_START_INFO = new ActionInfo(ActionType.OUT_CALL_START, OutCallStartAction.class, R.drawable.icon_auto_play, R.string.out_call_start_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo OUT_CALL_START_INFO = new ActionInfo(ActionType.OUT_CALL_START, OutCallStartAction.class, R.drawable.icon_autoplay, R.string.out_call_start_action, 0, 0, NormalActionCard.class);
 
     private final static ActionInfo CUSTOM_START_INFO = new ActionInfo(ActionType.CUSTOM_START, CustomStartAction.class, R.drawable.icon_output, R.string.custom_start_action, 0, 0, CustomActionCard.class);
     private final static ActionInfo CUSTOM_END_INFO = new ActionInfo(ActionType.CUSTOM_END, CustomEndAction.class, R.drawable.icon_input, R.string.custom_end_action, 0, 0, CustomActionCard.class);
@@ -183,7 +183,7 @@ public class ActionInfo {
 
     // 逻辑动作
     private final static ActionInfo IF_LOGIC_INFO = new ActionInfo(ActionType.IF_LOGIC, IfConditionAction.class, R.drawable.icon_graph_1, R.string.if_action, R.string.if_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo WAIT_IF_LOGIC_INFO = new ActionInfo(ActionType.WAIT_IF_LOGIC, WaitConditionAction.class, R.drawable.icon_hourglass_arrow_down, R.string.wait_if_action, R.string.wait_if_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo WAIT_IF_LOGIC_INFO = new ActionInfo(ActionType.WAIT_IF_LOGIC, WaitConditionAction.class, R.drawable.icon_hourglass_bottom, R.string.wait_if_action, R.string.wait_if_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SWITCH_LOGIC_INFO = new ActionInfo(ActionType.SWITCH_LOGIC, SwitchAction.class, R.drawable.icon_live_help, R.string.switch_action, R.string.switch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHOICE_LOGIC_INFO = new ActionInfo(ActionType.CHOICE_LOGIC, ChoiceExecuteAction.class, R.drawable.icon_person_check, R.string.choice_action, R.string.choice_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FOR_LOGIC_INFO = new ActionInfo(ActionType.FOR_LOGIC, ForLoopAction.class, R.drawable.icon_repeat_one, R.string.for_loop_action, R.string.for_loop_action_desc, R.string.for_loop_action_help, NormalActionCard.class);
@@ -209,17 +209,17 @@ public class ActionInfo {
     private final static ActionInfo SHARE_TO_INFO = new ActionInfo(ActionType.SHARE_TO, ShareToAction.class, R.drawable.icon_share, R.string.share_to_action, R.string.share_to_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SYSTEM_KEY_INFO = new ActionInfo(ActionType.SYSTEM_KEY, SystemKeyAction.class, R.drawable.icon_keyboard, R.string.system_key_action, R.string.system_key_action_desc, 0, NormalActionCard.class);
 
-    private final static ActionInfo PLAY_RINGTONE_INFO = new ActionInfo(ActionType.PLAY_RINGTONE, PlayRingtoneAction.class, R.drawable.icon_notification_active, R.string.play_ringtone_action, R.string.play_ringtone_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo STOP_RINGTONE_INFO = new ActionInfo(ActionType.STOP_RINGTONE, StopRingtoneAction.class, R.drawable.icon_notification_off, R.string.stop_ringtone_action, R.string.stop_ringtone_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo PLAY_RINGTONE_INFO = new ActionInfo(ActionType.PLAY_RINGTONE, PlayRingtoneAction.class, R.drawable.icon_notifications_active, R.string.play_ringtone_action, R.string.play_ringtone_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STOP_RINGTONE_INFO = new ActionInfo(ActionType.STOP_RINGTONE, StopRingtoneAction.class, R.drawable.icon_notifications_off, R.string.stop_ringtone_action, R.string.stop_ringtone_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo TEXT_TO_SPEECH_INFO = new ActionInfo(ActionType.TEXT_TO_SPEECH, TextToSpeechAction.class, R.drawable.icon_text_to_speech, R.string.text_to_speak_action, R.string.text_to_speak_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo SEND_NOTIFICATION_INFO = new ActionInfo(ActionType.SEND_NOTIFICATION, SendNotificationAction.class, R.drawable.icon_notification, R.string.send_notification_action, R.string.send_notification_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SEND_NOTIFICATION_INFO = new ActionInfo(ActionType.SEND_NOTIFICATION, SendNotificationAction.class, R.drawable.icon_notifications, R.string.send_notification_action, R.string.send_notification_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SEND_TOAST_INFO = new ActionInfo(ActionType.SEND_TOAST, SendToastAction.class, R.drawable.icon_toast, R.string.send_toast_action, R.string.send_toast_action_desc, 0, NormalActionCard.class);
 
-    private final static ActionInfo WRITE_TO_CLIPBOARD_INFO = new ActionInfo(ActionType.WRITE_TO_CLIPBOARD, WriteToClipboardAction.class, R.drawable.icon_copy, R.string.write_to_clipboard_action, R.string.write_to_clipboard_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo WRITE_TO_CLIPBOARD_INFO = new ActionInfo(ActionType.WRITE_TO_CLIPBOARD, WriteToClipboardAction.class, R.drawable.icon_content_copy, R.string.write_to_clipboard_action, R.string.write_to_clipboard_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo READ_FROM_CLIPBOARD_INFO = new ActionInfo(ActionType.READ_FROM_CLIPBOARD, ReadFromClipboardAction.class, R.drawable.icon_content_paste, R.string.read_from_clipboard_action, R.string.read_from_clipboard_action_desc, 0, NormalActionCard.class);
 
-    private final static ActionInfo SWITCH_SCREEN_INFO = new ActionInfo(ActionType.SWITCH_SCREEN, SwitchScreenAction.class, R.drawable.icon_phone, R.string.switch_screen_action, R.string.switch_screen_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo GET_SCREEN_STATUS_INFO = new ActionInfo(ActionType.GET_SCREEN_STATUS, GetScreenStatusAction.class, R.drawable.icon_phone, R.string.get_screen_status_action, R.string.get_screen_status_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SWITCH_SCREEN_INFO = new ActionInfo(ActionType.SWITCH_SCREEN, SwitchScreenAction.class, R.drawable.icon_mobile, R.string.switch_screen_action, R.string.switch_screen_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_SCREEN_STATUS_INFO = new ActionInfo(ActionType.GET_SCREEN_STATUS, GetScreenStatusAction.class, R.drawable.icon_mobile, R.string.get_screen_status_action, R.string.get_screen_status_action_desc, 0, NormalActionCard.class);
 
     private final static ActionInfo SWITCH_CAPTURE_INFO = new ActionInfo(ActionType.SWITCH_CAPTURE, SwitchCaptureAction.class, R.drawable.icon_screen_record, R.string.capture_switch_action, R.string.capture_switch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHECK_CAPTURE_READY_INFO = new ActionInfo(ActionType.CHECK_CAPTURE_READY, CheckCaptureReadyAction.class, R.drawable.icon_screen_record, R.string.check_capture_ready_action, R.string.check_capture_ready_action_desc, 0, NormalActionCard.class);
@@ -227,11 +227,11 @@ public class ActionInfo {
     private final static ActionInfo GET_CURRENT_APPLICATION_INFO = new ActionInfo(ActionType.GET_CURRENT_APPLICATION, GetCurrentAppAction.class, R.drawable.icon_apps, R.string.get_current_app_action, R.string.get_current_app_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHECK_IN_APPLICATION_INFO = new ActionInfo(ActionType.CHECK_IN_APPLICATION, CheckInAppAction.class, R.drawable.icon_apps, R.string.check_in_app_action, R.string.check_in_app_action_desc, 0, NormalActionCard.class);
 
-    private final static ActionInfo GET_BATTERY_STATUS_INFO = new ActionInfo(ActionType.GET_BATTERY_STATUS, GetBatteryStatusAction.class, R.drawable.icon_battery, R.string.get_battery_status_action, R.string.get_battery_status_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_BATTERY_STATUS_INFO = new ActionInfo(ActionType.GET_BATTERY_STATUS, GetBatteryStatusAction.class, R.drawable.icon_battery_android_full, R.string.get_battery_status_action, R.string.get_battery_status_action_desc, 0, NormalActionCard.class);
 
-    private final static ActionInfo GET_NETWORK_STATUS_INFO = new ActionInfo(ActionType.GET_NETWORK_STATUS, GetNetworkStatusAction.class, R.drawable.icon_network, R.string.get_network_status_action, R.string.get_network_status_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_NETWORK_STATUS_INFO = new ActionInfo(ActionType.GET_NETWORK_STATUS, GetNetworkStatusAction.class, R.drawable.icon_globe, R.string.get_network_status_action, R.string.get_network_status_action_desc, 0, NormalActionCard.class);
 
-    private final static ActionInfo GET_CURRENT_DATE_INFO = new ActionInfo(ActionType.GET_CURRENT_DATE, GetDateAction.class, R.drawable.icon_calendar, R.string.get_date_action, R.string.get_date_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_CURRENT_DATE_INFO = new ActionInfo(ActionType.GET_CURRENT_DATE, GetDateAction.class, R.drawable.icon_calendar_month, R.string.get_date_action, R.string.get_date_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_CURRENT_TIME_INFO = new ActionInfo(ActionType.GET_CURRENT_TIME, GetTimeAction.class, R.drawable.icon_schedule, R.string.get_time_action, R.string.get_time_action_desc, 0, NormalActionCard.class);
 
 
@@ -239,12 +239,12 @@ public class ActionInfo {
     private final static ActionInfo NUMBER_ADD_INFO = new ActionInfo(ActionType.NUMBER_ADD, NumberAddAction.class, R.drawable.icon_add, R.string.number_add_action, R.string.number_add_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo NUMBER_SUB_INFO = new ActionInfo(ActionType.NUMBER_SUB, NumberSubAction.class, R.drawable.icon_remove, R.string.number_subtract_action, R.string.number_subtract_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo NUMBER_MUL_INFO = new ActionInfo(ActionType.NUMBER_MUL, NumberMulAction.class, R.drawable.icon_close, R.string.number_multiply_action, R.string.number_multiply_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo NUMBER_DIV_INFO = new ActionInfo(ActionType.NUMBER_DIV, NumberDivAction.class, R.drawable.icon_divide, R.string.number_divide_action, R.string.number_divide_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo NUMBER_DIV_INFO = new ActionInfo(ActionType.NUMBER_DIV, NumberDivAction.class, R.drawable.icon_stream, R.string.number_divide_action, R.string.number_divide_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo NUMBER_MOD_INFO = new ActionInfo(ActionType.NUMBER_MOD, NumberModAction.class, R.drawable.icon_percent, R.string.number_mod_action, R.string.number_mod_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo NUMBER_ABS_INFO = new ActionInfo(ActionType.NUMBER_ABS, NumberAbsAction.class, R.drawable.icon_array, R.string.number_abs_action, R.string.number_abs_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo NUMBER_ABS_INFO = new ActionInfo(ActionType.NUMBER_ABS, NumberAbsAction.class, R.drawable.icon_data_array, R.string.number_abs_action, R.string.number_abs_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo NUMBER_EQUAL_INFO = new ActionInfo(ActionType.NUMBER_EQUAL, NumberEqualAction.class, R.drawable.icon_equal, R.string.number_equal_action, R.string.number_equal_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo NUMBER_GREATER_INFO = new ActionInfo(ActionType.NUMBER_GREATER, NumberGreaterAction.class, R.drawable.icon_arrow_right, R.string.number_greater_action, R.string.number_greater_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo NUMBER_LESS_INFO = new ActionInfo(ActionType.NUMBER_LESS, NumberLessAction.class, R.drawable.icon_arrow_left, R.string.number_less_action, R.string.number_less_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo NUMBER_GREATER_INFO = new ActionInfo(ActionType.NUMBER_GREATER, NumberGreaterAction.class, R.drawable.icon_keyboard_arrow_right, R.string.number_greater_action, R.string.number_greater_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo NUMBER_LESS_INFO = new ActionInfo(ActionType.NUMBER_LESS, NumberLessAction.class, R.drawable.icon_keyboard_arrow_left, R.string.number_less_action, R.string.number_less_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo NUMBER_RANDOM_INFO = new ActionInfo(ActionType.NUMBER_RANDOM, NumberRandomAction.class, R.drawable.icon_shuffle, R.string.number_random_action, R.string.number_random_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo NUMBER_TO_INT_INFO = new ActionInfo(ActionType.NUMBER_TO_INT, NumberToIntegerAction.class, R.drawable.icon_decimal_decrease, R.string.number_to_integer_action, R.string.number_mod_action_desc, 0, NormalActionCard.class);
 
@@ -255,41 +255,41 @@ public class ActionInfo {
 
 
     // 文本处理
-    private final static ActionInfo STRING_FROM_OBJECT_INFO = new ActionInfo(ActionType.STRING_FROM_OBJECT, StringFromObjectAction.class, R.drawable.icon_text, R.string.string_from_object_action, R.string.string_from_object_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo STRING_TO_NUMBER_INFO = new ActionInfo(ActionType.STRING_TO_NUMBER, StringToNumberAction.class, R.drawable.icon_number, R.string.string_to_number_action, R.string.string_to_number_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_FROM_OBJECT_INFO = new ActionInfo(ActionType.STRING_FROM_OBJECT, StringFromObjectAction.class, R.drawable.icon_text_fields, R.string.string_from_object_action, R.string.string_from_object_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_TO_NUMBER_INFO = new ActionInfo(ActionType.STRING_TO_NUMBER, StringToNumberAction.class, R.drawable.icon_123, R.string.string_to_number_action, R.string.string_to_number_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_APPEND_INFO = new ActionInfo(ActionType.STRING_APPEND, StringAppendAction.class, R.drawable.icon_add, R.string.string_append_action, R.string.string_append_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo STRING_SUBSTRING_INFO = new ActionInfo(ActionType.STRING_SUBSTRING, StringSubStringAction.class, R.drawable.icon_split, R.string.string_substring_action, R.string.string_substring_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo STRING_REGEX_INFO = new ActionInfo(ActionType.STRING_REGEX, StringMatchAction.class, R.drawable.icon_regular, R.string.string_match_action, R.string.string_match_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo STRING_SPLIT_INFO = new ActionInfo(ActionType.STRING_SPLIT, StringSplitAction.class, R.drawable.icon_array, R.string.string_split_action, R.string.string_split_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_SUBSTRING_INFO = new ActionInfo(ActionType.STRING_SUBSTRING, StringSubStringAction.class, R.drawable.icon_split_scene, R.string.string_substring_action, R.string.string_substring_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_REGEX_INFO = new ActionInfo(ActionType.STRING_REGEX, StringMatchAction.class, R.drawable.icon_regular_expression, R.string.string_match_action, R.string.string_match_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_SPLIT_INFO = new ActionInfo(ActionType.STRING_SPLIT, StringSplitAction.class, R.drawable.icon_data_array, R.string.string_split_action, R.string.string_split_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_EQUAL_INFO = new ActionInfo(ActionType.STRING_EQUAL, StringEqualAction.class, R.drawable.icon_equal, R.string.string_equal_action, R.string.string_equal_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo STRING_REPLACE_INFO = new ActionInfo(ActionType.STRING_REPLACE, StringReplaceAction.class, R.drawable.icon_swap, R.string.string_replace_action, R.string.string_replace_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_REPLACE_INFO = new ActionInfo(ActionType.STRING_REPLACE, StringReplaceAction.class, R.drawable.icon_swap_horiz, R.string.string_replace_action, R.string.string_replace_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_ENCODE_INFO = new ActionInfo(ActionType.STRING_ENCODE, StringEncodeAction.class, R.drawable.icon_input, R.string.string_encode_action, R.string.string_encode_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_DECODE_INFO = new ActionInfo(ActionType.STRING_DECODE, StringDecodeAction.class, R.drawable.icon_output, R.string.string_decode_action, R.string.string_decode_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_ENCRYPT_INFO = new ActionInfo(ActionType.STRING_ENCRYPT, StringEncryptAction.class, R.drawable.icon_input, R.string.string_encrypt_action, R.string.string_encrypt_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo GET_OCR_TEXT_INFO = new ActionInfo(ActionType.GET_OCR_TEXT, GetOcrTextAction.class, R.drawable.icon_ocr, R.string.get_ocr_text_action, R.string.get_ocr_text_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo IS_OCR_TEXT_EXIST_INFO = new ActionInfo(ActionType.IS_OCR_TEXT_EXIST, IsOcrTextExistAction.class, R.drawable.icon_ocr, R.string.is_ocr_text_exist_action, R.string.is_ocr_text_exist_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo FIND_OCR_TEXT_INFO = new ActionInfo(ActionType.FIND_OCR_TEXT, FindOcrTextAction.class, R.drawable.icon_ocr, R.string.find_ocr_text_action, R.string.find_ocr_text_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo PARSE_JSON_INFO = new ActionInfo(ActionType.PARSE_JSON, ParseJsonAction.class, R.drawable.icon_text, R.string.parse_json_action, R.string.parse_json_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_OCR_TEXT_INFO = new ActionInfo(ActionType.GET_OCR_TEXT, GetOcrTextAction.class, R.drawable.icon_document_scanner, R.string.get_ocr_text_action, R.string.get_ocr_text_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo IS_OCR_TEXT_EXIST_INFO = new ActionInfo(ActionType.IS_OCR_TEXT_EXIST, IsOcrTextExistAction.class, R.drawable.icon_document_scanner, R.string.is_ocr_text_exist_action, R.string.is_ocr_text_exist_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo FIND_OCR_TEXT_INFO = new ActionInfo(ActionType.FIND_OCR_TEXT, FindOcrTextAction.class, R.drawable.icon_document_scanner, R.string.find_ocr_text_action, R.string.find_ocr_text_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo PARSE_JSON_INFO = new ActionInfo(ActionType.PARSE_JSON, ParseJsonAction.class, R.drawable.icon_text_fields, R.string.parse_json_action, R.string.parse_json_action_desc, 0, NormalActionCard.class);
 
 
     // 条件判断
     private final static ActionInfo BOOLEAN_OR_INFO = new ActionInfo(ActionType.BOOLEAN_OR, BooleanOrAction.class, R.drawable.icon_repeat_one, R.string.boolean_or_action, R.string.boolean_or_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo BOOLEAN_AND_INFO = new ActionInfo(ActionType.BOOLEAN_AND, BooleanAndAction.class, R.drawable.icon_repeat, R.string.boolean_and_action, R.string.boolean_and_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo BOOLEAN_NOT_INFO = new ActionInfo(ActionType.BOOLEAN_NOT, BooleanNotAction.class, R.drawable.icon_swap, R.string.boolean_not_action, R.string.boolean_not_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo BOOLEAN_NOT_INFO = new ActionInfo(ActionType.BOOLEAN_NOT, BooleanNotAction.class, R.drawable.icon_swap_horiz, R.string.boolean_not_action, R.string.boolean_not_action_desc, 0, NormalActionCard.class);
 
 
     // 控件操作
-    private final static ActionInfo FIND_NODE_BY_PATH_INFO = new ActionInfo(ActionType.FIND_NODE, FindNodeAction.class, R.drawable.icon_widget, R.string.find_node_action, R.string.find_node_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo FIND_NODE_BY_PATH_INFO = new ActionInfo(ActionType.FIND_NODE, FindNodeAction.class, R.drawable.icon_widgets, R.string.find_node_action, R.string.find_node_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo IS_NODE_EXIST_BY_PATH_INFO = new ActionInfo(ActionType.IS_NODE_EXIST, IsNodeExistAction.class, R.drawable.icon_check, R.string.is_node_exist_action, R.string.is_node_exist_action_desc, 0, NormalActionCard.class);
 
-    private final static ActionInfo FIND_NODES_IN_AREA_INFO = new ActionInfo(ActionType.GET_NODES_IN_AREA, GetNodesInAreaAction.class, R.drawable.icon_widget, R.string.find_nodes_in_area_action, R.string.find_nodes_in_area_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo FIND_NODES_IN_AREA_INFO = new ActionInfo(ActionType.GET_NODES_IN_AREA, GetNodesInAreaAction.class, R.drawable.icon_widgets, R.string.find_nodes_in_area_action, R.string.find_nodes_in_area_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_NODE_INFO_INFO = new ActionInfo(ActionType.GET_NODE_INFO, GetNodeInfoAction.class, R.drawable.icon_info, R.string.get_node_info_action, R.string.get_node_info_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo GET_NODE_CHILDREN_INFO = new ActionInfo(ActionType.GET_NODE_CHILDREN, GetNodeChildrenAction.class, R.drawable.icon_widget, R.string.get_node_children_action, R.string.get_node_children_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo GET_NODE_PARENT_INFO = new ActionInfo(ActionType.GET_NODE_PARENT, GetNodeParentAction.class, R.drawable.icon_widget, R.string.get_node_parent_action, R.string.get_node_parent_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo GET_WINDOWS_INFO = new ActionInfo(ActionType.GET_WINDOWS, GetWindowsAction.class, R.drawable.icon_phone, R.string.get_windows_action, R.string.get_windows_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_NODE_CHILDREN_INFO = new ActionInfo(ActionType.GET_NODE_CHILDREN, GetNodeChildrenAction.class, R.drawable.icon_widgets, R.string.get_node_children_action, R.string.get_node_children_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_NODE_PARENT_INFO = new ActionInfo(ActionType.GET_NODE_PARENT, GetNodeParentAction.class, R.drawable.icon_widgets, R.string.get_node_parent_action, R.string.get_node_parent_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_WINDOWS_INFO = new ActionInfo(ActionType.GET_WINDOWS, GetWindowsAction.class, R.drawable.icon_mobile, R.string.get_windows_action, R.string.get_windows_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHECK_NODE_VALID_INFO = new ActionInfo(ActionType.CHECK_NODE_VALID, CheckNodeValidAction.class, R.drawable.icon_check, R.string.check_node_valid_action, R.string.check_node_valid_action_desc, 0, NormalActionCard.class);
 
-    private final static ActionInfo NODE_TOUCH_INFO = new ActionInfo(ActionType.NODE_TOUCH, NodeTouchAction.class, R.drawable.icon_touch, R.string.node_touch_action, R.string.node_touch_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo NODE_TOUCH_INFO = new ActionInfo(ActionType.NODE_TOUCH, NodeTouchAction.class, R.drawable.icon_touch_app, R.string.node_touch_action, R.string.node_touch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo EDITTEXT_INPUT_INFO = new ActionInfo(ActionType.EDITTEXT_INPUT, EditTextInputAction.class, R.drawable.icon_edit, R.string.edit_text_input_action, R.string.edit_text_input_action_desc, 0, NormalActionCard.class);
 
 
@@ -302,7 +302,7 @@ public class ActionInfo {
     private final static ActionInfo FIND_IMAGE_INFO = new ActionInfo(ActionType.FIND_IMAGE, FindImageAction.class, R.drawable.icon_visibility, R.string.find_image_action, R.string.find_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FIND_IMAGES_INFO = new ActionInfo(ActionType.FIND_IMAGES, FindImagesAction.class, R.drawable.icon_visibility, R.string.find_images_action, R.string.find_images_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo IS_IMAGE_EXIST_INFO = new ActionInfo(ActionType.IS_IMAGE_EXIST, IsImageExistAction.class, R.drawable.icon_check, R.string.is_image_exist_action, R.string.is_image_exist_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo TOUCH_IMAGE_INFO = new ActionInfo(ActionType.TOUCH_IMAGE, TouchImageAction.class, R.drawable.icon_touch, R.string.touch_image_action, R.string.touch_image_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo TOUCH_IMAGE_INFO = new ActionInfo(ActionType.TOUCH_IMAGE, TouchImageAction.class, R.drawable.icon_touch_app, R.string.touch_image_action, R.string.touch_image_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CREATE_QRCODE_INFO = new ActionInfo(ActionType.CREATE_QRCODE, CreateQRCodeAction.class, R.drawable.icon_qr_code, R.string.create_qrcode_action, R.string.create_qrcode_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo PARSE_QRCODE_INFO = new ActionInfo(ActionType.PARSE_QRCODE, ParseQRCodeAction.class, R.drawable.icon_qr_code_scanner, R.string.parse_qrcode_action, R.string.parse_qrcode_action_desc, 0, NormalActionCard.class);
 
@@ -310,33 +310,33 @@ public class ActionInfo {
     private final static ActionInfo FIND_COLORS_INFO = new ActionInfo(ActionType.FIND_COLORS, FindColorsAction.class, R.drawable.icon_visibility, R.string.find_colors_action, R.string.find_colors_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo IS_COLOR_EXIST_INFO = new ActionInfo(ActionType.IS_COLOR_EXIST, IsColorExistAction.class, R.drawable.icon_check, R.string.is_color_exist_action, R.string.is_color_exist_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo COLOR_EQUAL_INFO = new ActionInfo(ActionType.COLOR_EQUAL, ColorEqualAction.class, R.drawable.icon_equal, R.string.color_equal_action, R.string.color_equal_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo TOUCH_COLOR_INFO = new ActionInfo(ActionType.TOUCH_COLOR, TouchColorAction.class, R.drawable.icon_touch, R.string.touch_color_action, R.string.touch_color_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo TOUCH_COLOR_INFO = new ActionInfo(ActionType.TOUCH_COLOR, TouchColorAction.class, R.drawable.icon_touch_app, R.string.touch_color_action, R.string.touch_color_action_desc, 0, NormalActionCard.class);
 
 
     // 区域操作
-    private final static ActionInfo AREA_TO_INT_INFO = new ActionInfo(ActionType.AREA_TO_INT, AreaToIntegerAction.class, R.drawable.icon_number, R.string.area_to_integer_action, R.string.area_to_integer_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo AREA_TO_INT_INFO = new ActionInfo(ActionType.AREA_TO_INT, AreaToIntegerAction.class, R.drawable.icon_123, R.string.area_to_integer_action, R.string.area_to_integer_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo AREA_FROM_INT_INFO = new ActionInfo(ActionType.AREA_FROM_INT, AreaFromIntegerAction.class, R.drawable.icon_area, R.string.area_from_integer_action, R.string.area_from_integer_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo CHECK_AREA_CONTAIN_POS_INFO = new ActionInfo(ActionType.CHECK_AREA_CONTAIN_POS, CheckAreaContainPosAction.class, R.drawable.icon_location, R.string.check_area_contain_pos_action, R.string.check_area_contain_pos_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo CHECK_AREA_CONTAIN_POS_INFO = new ActionInfo(ActionType.CHECK_AREA_CONTAIN_POS, CheckAreaContainPosAction.class, R.drawable.icon_my_location, R.string.check_area_contain_pos_action, R.string.check_area_contain_pos_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHECK_AREA_RELATION_INFO = new ActionInfo(ActionType.CHECK_AREA_RELATION, CheckAreaRelationAction.class, R.drawable.icon_crop, R.string.check_area_relation_action, R.string.check_area_relation_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_AREA_INTERSECTION_INFO = new ActionInfo(ActionType.GET_AREA_INTERSECTION, GetAreaIntersectionAction.class, R.drawable.icon_join_inner, R.string.get_area_intersection_action, R.string.get_area_intersection_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo GET_AREA_CENTER_INFO = new ActionInfo(ActionType.GET_AREA_CENTER, GetAreaCenterAction.class, R.drawable.icon_location, R.string.get_area_center_action, R.string.get_area_center_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_AREA_CENTER_INFO = new ActionInfo(ActionType.GET_AREA_CENTER, GetAreaCenterAction.class, R.drawable.icon_my_location, R.string.get_area_center_action, R.string.get_area_center_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_AREA_RANDOM_INFO = new ActionInfo(ActionType.GET_AREA_RANDOM, GetAreaRandomAction.class, R.drawable.icon_area, R.string.get_area_random_action, R.string.get_area_random_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo PICK_AREA_INFO = new ActionInfo(ActionType.PICK_AREA, PickAreaAction.class, R.drawable.icon_area, R.string.pick_area_action, R.string.pick_area_action_desc, 0, NormalActionCard.class);
 
 
     // 位置操作
-    private final static ActionInfo POINT_TO_INT_INFO = new ActionInfo(ActionType.POINT_TO_INT, PointToIntegerAction.class, R.drawable.icon_number, R.string.point_to_integer_action, R.string.point_to_integer_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo POINT_FROM_INT_INFO = new ActionInfo(ActionType.POINT_FROM_INT, PointFromIntegerAction.class, R.drawable.icon_location, R.string.point_from_integer_action, R.string.point_from_integer_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo POINT_OFFSET_INFO = new ActionInfo(ActionType.POINT_OFFSET, PointOffsetAction.class, R.drawable.icon_location, R.string.point_offset_action, R.string.point_offset_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo POINT_TO_INT_INFO = new ActionInfo(ActionType.POINT_TO_INT, PointToIntegerAction.class, R.drawable.icon_123, R.string.point_to_integer_action, R.string.point_to_integer_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo POINT_FROM_INT_INFO = new ActionInfo(ActionType.POINT_FROM_INT, PointFromIntegerAction.class, R.drawable.icon_my_location, R.string.point_from_integer_action, R.string.point_from_integer_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo POINT_OFFSET_INFO = new ActionInfo(ActionType.POINT_OFFSET, PointOffsetAction.class, R.drawable.icon_my_location, R.string.point_offset_action, R.string.point_offset_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo POINT_TO_TOUCH_INFO = new ActionInfo(ActionType.POINT_TO_TOUCH, PointToTouchAction.class, R.drawable.icon_gesture, R.string.point_to_touch_action, R.string.point_to_touch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo TOUCH_INFO = new ActionInfo(ActionType.TOUCH, TouchAction.class, R.drawable.icon_gesture, R.string.touch_action, R.string.touch_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo TOUCH_POINT_INFO = new ActionInfo(ActionType.TOUCH_POINT, TouchPointAction.class, R.drawable.icon_touch, R.string.touch_point_action, R.string.touch_point_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo TOUCH_POINT_INFO = new ActionInfo(ActionType.TOUCH_POINT, TouchPointAction.class, R.drawable.icon_touch_app, R.string.touch_point_action, R.string.touch_point_action_desc, 0, NormalActionCard.class);
 
 
     // List操作
-    private final static ActionInfo LIST_MAKE_INFO = new ActionInfo(ActionType.LIST_MAKE, MakeListAction.class, R.drawable.icon_array, R.string.list_make_action, R.string.list_make_action_desc, 0, CreateListActionCard.class);
+    private final static ActionInfo LIST_MAKE_INFO = new ActionInfo(ActionType.LIST_MAKE, MakeListAction.class, R.drawable.icon_data_array, R.string.list_make_action, R.string.list_make_action_desc, 0, CreateListActionCard.class);
     private final static ActionInfo LIST_SIZE_INFO = new ActionInfo(ActionType.LIST_SIZE, ListSizeAction.class, R.drawable.icon_straighten, R.string.list_size_action, R.string.list_size_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo LIST_IS_EMPTY_INFO = new ActionInfo(ActionType.LIST_IS_EMPTY, ListIsEmptyAction.class, R.drawable.icon_array, R.string.list_is_empty_action, R.string.list_is_empty_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo LIST_IS_EMPTY_INFO = new ActionInfo(ActionType.LIST_IS_EMPTY, ListIsEmptyAction.class, R.drawable.icon_data_array, R.string.list_is_empty_action, R.string.list_is_empty_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_CONTAIN_INFO = new ActionInfo(ActionType.LIST_CONTAIN, ListContainAction.class, R.drawable.icon_check_circle, R.string.list_contain_action, R.string.list_contain_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_ADD_INFO = new ActionInfo(ActionType.LIST_ADD, ListAddAction.class, R.drawable.icon_add, R.string.list_add_action, R.string.list_add_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_REMOVE_INFO = new ActionInfo(ActionType.LIST_REMOVE, ListRemoveAction.class, R.drawable.icon_remove, R.string.list_remove_action, R.string.list_remove_action_desc, 0, NormalActionCard.class);
@@ -344,7 +344,7 @@ public class ActionInfo {
     private final static ActionInfo LIST_CLEAR_INFO = new ActionInfo(ActionType.LIST_CLEAR, ListClearAction.class, R.drawable.icon_delete, R.string.list_clear_action, R.string.list_clear_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_GET_INFO = new ActionInfo(ActionType.LIST_GET, ListGetAction.class, R.drawable.icon_upload, R.string.list_get_action, R.string.list_get_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_SET_INFO = new ActionInfo(ActionType.LIST_SET, ListSetAction.class, R.drawable.icon_download, R.string.list_set_action, R.string.list_set_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo LIST_INDEX_OF_INFO = new ActionInfo(ActionType.LIST_INDEX_OF, ListIndexOfAction.class, R.drawable.icon_number, R.string.list_index_of_action, R.string.list_index_of_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo LIST_INDEX_OF_INFO = new ActionInfo(ActionType.LIST_INDEX_OF, ListIndexOfAction.class, R.drawable.icon_123, R.string.list_index_of_action, R.string.list_index_of_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_FOREACH_INFO = new ActionInfo(ActionType.LIST_FOREACH, ListForeachAction.class, R.drawable.icon_repeat, R.string.list_foreach_action, R.string.list_foreach_action_desc, 0, NormalActionCard.class);
 
 
@@ -359,8 +359,8 @@ public class ActionInfo {
     private final static ActionInfo MAP_APPEND_INFO = new ActionInfo(ActionType.MAP_APPEND, MapAppendAction.class, R.drawable.icon_add, R.string.map_append_action, R.string.map_append_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo MAP_CLEAR_INFO = new ActionInfo(ActionType.MAP_CLEAR, MapClearAction.class, R.drawable.icon_delete, R.string.map_clear_action, R.string.map_clear_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo MAP_GET_INFO = new ActionInfo(ActionType.MAP_GET, MapGetAction.class, R.drawable.icon_upload, R.string.map_get_action, R.string.map_get_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo MAP_KEYS_INFO = new ActionInfo(ActionType.MAP_KEYS, MapGetKeysAction.class, R.drawable.icon_arrow_left, R.string.map_keys_action, R.string.map_keys_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo MAP_VALUES_INFO = new ActionInfo(ActionType.MAP_VALUES, MapGetValuesAction.class, R.drawable.icon_arrow_right, R.string.map_values_action, R.string.map_values_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_KEYS_INFO = new ActionInfo(ActionType.MAP_KEYS, MapGetKeysAction.class, R.drawable.icon_keyboard_arrow_left, R.string.map_keys_action, R.string.map_keys_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MAP_VALUES_INFO = new ActionInfo(ActionType.MAP_VALUES, MapGetValuesAction.class, R.drawable.icon_keyboard_arrow_right, R.string.map_values_action, R.string.map_values_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo MAP_FOREACH_INFO = new ActionInfo(ActionType.MAP_FOREACH, MapForeachAction.class, R.drawable.icon_repeat, R.string.map_foreach_action, R.string.map_foreach_action_desc, 0, NormalActionCard.class);
 
     public static ActionInfo getActionInfo(ActionType type) {

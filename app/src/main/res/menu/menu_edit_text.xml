@@ -4,7 +4,6 @@
 
     <item
         android:id="@+id/fullScreen"
-        android:icon="@drawable/icon_zoom_out"
         android:title="@string/pin_string_full_screen_edit"
         app:showAsAction="always" />
 

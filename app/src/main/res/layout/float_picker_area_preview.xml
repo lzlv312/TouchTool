@@ -30,7 +30,7 @@
                 style="@style/Theme.TouchTool.IconButton.Filled"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:icon="@drawable/icon_swap" />
+                app:icon="@drawable/icon_swap_horiz" />
 
         </LinearLayout>
 
@@ -157,7 +157,7 @@
                     style="@style/Theme.TouchTool.IconButton.Filled"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    app:icon="@drawable/icon_back" />
+                    app:icon="@drawable/icon_arrow_back" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/saveButton"
@@ -206,7 +206,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="4dp"
-                        app:icon="@drawable/icon_text" />
+                        app:icon="@drawable/icon_text_fields" />
 
                 </LinearLayout>
 

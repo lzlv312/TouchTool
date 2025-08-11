@@ -393,7 +393,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 binding.settingButton.setVisibility(View.VISIBLE);
 
                 if (task.getParent() == null) {
-                    binding.icon.setImageResource(R.drawable.icon_network);
+                    binding.icon.setImageResource(R.drawable.icon_globe);
                 }
 
                 if (task.getActions(CustomStartAction.class).isEmpty()) {
@@ -413,7 +413,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 binding.helpButton.setIconResource(R.drawable.icon_download);
 
                 if (var.getParent() == null) {
-                    binding.icon.setImageResource(R.drawable.icon_network);
+                    binding.icon.setImageResource(R.drawable.icon_globe);
                 }
 
                 binding.varBox.setVisibility(View.VISIBLE);

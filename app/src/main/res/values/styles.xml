@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.TouchTool.IconButton" parent="Widget.Material3.Button.TextButton">
         <item name="iconPadding">0dp</item>
         <item name="iconGravity">textStart</item>

@@ -60,7 +60,7 @@
         android:layout_margin="10dp"
         android:textScaleX="1"
         android:textSize="11sp"
-        app:icon="@drawable/icon_more"
+        app:icon="@drawable/icon_more_horiz"
         app:iconSize="16dp"
         app:strokeColor="?attr/colorPrimary"
         app:strokeWidth="2dp" />

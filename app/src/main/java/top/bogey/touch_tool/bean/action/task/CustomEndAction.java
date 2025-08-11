@@ -79,6 +79,10 @@ public class CustomEndAction extends Action implements DynamicPinsAction, SyncAc
         addListener(LISTENER);
     }
 
+    @Override
+    public Pin findConnectToAblePin(Pin pin) {
+        return getPins().stream().filter(p -> p.linkAble() && p.linkAble(pin.getValue())).findFirst().orElse(null);
+    }
     private static class SyncActionListener implements ActionListener {
         private Task context;
         private boolean doing = false;

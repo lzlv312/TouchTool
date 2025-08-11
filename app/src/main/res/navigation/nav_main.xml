@@ -25,7 +25,7 @@
         android:id="@+id/setting"
         android:name="top.bogey.touch_tool.ui.setting.SettingView"
         android:label="@string/setting"
-        tools:layout="@layout/view_setting" >
+        tools:layout="@layout/view_setting">
         <action
             android:id="@+id/action_setting_to_settingPlayView"
             app:destination="@id/setting_play_view" />

@@ -79,7 +79,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="4dp"
-                app:icon="@drawable/icon_visibility_half"
+                app:icon="@drawable/icon_symptoms"
                 app:iconSize="16dp" />
 
             <com.google.android.material.button.MaterialButton
@@ -87,7 +87,7 @@
                 style="@style/Theme.TouchTool.IconButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                app:icon="@drawable/icon_setting"
+                app:icon="@drawable/icon_settings"
                 app:iconSize="16dp" />
 
             <Space
@@ -110,7 +110,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="4dp"
-                app:icon="@drawable/icon_copy"
+                app:icon="@drawable/icon_content_copy"
                 app:iconSize="16dp" />
 
             <com.google.android.material.button.MaterialButton

@@ -160,7 +160,7 @@ public class PinWidgetNumber extends PinWidget<PinNumber<?>> {
                 PinDate date = (PinDate) pinBase;
                 binding.editText.setText(AppUtil.formatDate(getContext(), date.getValue(), true));
                 binding.editText.setEnabled(false);
-                binding.pickButton.setIconResource(R.drawable.icon_calendar);
+                binding.pickButton.setIconResource(R.drawable.icon_calendar_month);
                 binding.pickButton.setVisibility(VISIBLE);
                 binding.pickButton.setOnClickListener(v -> {
                     CalendarConstraints calendarConstraints = new CalendarConstraints.Builder()

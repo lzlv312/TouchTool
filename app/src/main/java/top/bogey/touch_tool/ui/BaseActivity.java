@@ -91,12 +91,6 @@ public class BaseActivity extends AppCompatActivity {
                 resultCallback.onResult(RESULT_OK, intent);
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d("BaseActivity", "onStart: " + this.getClass().getName());
 
         MainAccessibilityService.enabled.observe(this, enabled -> {
             if (MainApplication.getInstance().getService() == null) return;
@@ -108,6 +102,12 @@ public class BaseActivity extends AppCompatActivity {
                 FloatWindow.dismiss(KeepAliveFloatView.class.getName());
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("BaseActivity", "onStart: " + this.getClass().getName());
 
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service != null && service.isEnabled()) {

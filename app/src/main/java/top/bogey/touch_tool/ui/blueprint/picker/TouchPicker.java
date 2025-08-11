@@ -307,10 +307,10 @@ public class TouchPicker extends FullScreenPicker<PinTouchPath> {
 
     private void setAnchor(EAnchor anchor) {
         this.anchor = anchor;
-        binding.topLeftButton.setIconResource(anchor == EAnchor.TOP_LEFT ? R.drawable.icon_radio_checked : R.drawable.icon_radio_unchecked);
-        binding.topRightButton.setIconResource(anchor == EAnchor.TOP_RIGHT ? R.drawable.icon_radio_checked : R.drawable.icon_radio_unchecked);
-        binding.bottomLeftButton.setIconResource(anchor == EAnchor.BOTTOM_LEFT ? R.drawable.icon_radio_checked : R.drawable.icon_radio_unchecked);
-        binding.bottomRightButton.setIconResource(anchor == EAnchor.BOTTOM_RIGHT ? R.drawable.icon_radio_checked : R.drawable.icon_radio_unchecked);
+        binding.topLeftButton.setIconResource(anchor == EAnchor.TOP_LEFT ? R.drawable.icon_radio_button_checked : R.drawable.icon_radio_button_unchecked);
+        binding.topRightButton.setIconResource(anchor == EAnchor.TOP_RIGHT ? R.drawable.icon_radio_button_checked : R.drawable.icon_radio_button_unchecked);
+        binding.bottomLeftButton.setIconResource(anchor == EAnchor.BOTTOM_LEFT ? R.drawable.icon_radio_button_checked : R.drawable.icon_radio_button_unchecked);
+        binding.bottomRightButton.setIconResource(anchor == EAnchor.BOTTOM_RIGHT ? R.drawable.icon_radio_button_checked : R.drawable.icon_radio_button_unchecked);
     }
 
     private Map<Integer, Path> getPathMap() {

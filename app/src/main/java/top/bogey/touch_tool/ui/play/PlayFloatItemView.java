@@ -101,7 +101,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         binding.lineProgress.setIndeterminate(false);
         binding.circleProgress.setVisibility(View.GONE);
         binding.lineProgress.setVisibility(View.GONE);
-        binding.icon.setIconResource(R.drawable.icon_play);
+        binding.icon.setIconResource(R.drawable.icon_play_arrow);
     }
 
     private void setPlaying() {

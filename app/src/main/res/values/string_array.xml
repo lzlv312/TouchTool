@@ -279,7 +279,7 @@
         <item>FLAG_ACTIVITY_RETAIN_IN_RECENTS</item>
         <item>FLAG_ACTIVITY_LAUNCH_ADJACENT</item>
     </string-array>
-    
+
     <string-array name="activity_flag_desc">
         <item>新建任务栈(0x10000000)</item>
         <item>不保留在历史记录中(0x40000000)</item>

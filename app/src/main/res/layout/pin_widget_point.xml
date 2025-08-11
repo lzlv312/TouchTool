@@ -56,7 +56,7 @@
         android:layout_height="20dp"
         android:layout_gravity="center_vertical"
         android:layout_marginHorizontal="4dp"
-        app:icon="@drawable/icon_location"
+        app:icon="@drawable/icon_my_location"
         app:iconSize="16dp" />
 
 </LinearLayout>

@@ -71,11 +71,10 @@ public class SelectActivityDialog extends FrameLayout {
             resolveInfos = manager.queryIntentActivities(intent, PackageManager.MATCH_ALL);
             for (ResolveInfo resolveInfo : resolveInfos) {
                 ActivityInfo activityInfo = resolveInfo.activityInfo;
-                activityInfo.processName = (String) resolveInfo.loadLabel(manager);
                 activityInfoList.add(new SelectActivityInfo(
                         activityInfo,
                         activityInfo.name,
-                        activityInfo.loadLabel(manager).toString(),
+                        String.valueOf(resolveInfo.loadLabel(manager)),
                         launcherActivityName.equals(activityInfo.name)
                 ));
             }

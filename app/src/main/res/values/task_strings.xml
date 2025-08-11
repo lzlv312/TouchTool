@@ -89,6 +89,7 @@
 
     <string name="sequence_action">顺序执行</string>
     <string name="sequence_action_desc">执行针脚从左到右顺序执行</string>
+    <string name="sequence_action_complete">完成</string>
 
     <string name="random_action">随机执行</string>
     <string name="random_action_desc">从所有执行针脚中随机一个执行</string>
@@ -153,6 +154,7 @@
     <string name="open_app_action_category">分类(Category)</string>
     <string name="open_app_action_uri_data">Uri数据</string>
     <string name="open_app_action_params">参数</string>
+    <string name="open_app_action_bundle">额外信息(Bundle)</string>
 
     <string name="open_uri_scheme_action">打开链接</string>
     <string name="open_uri_scheme_action_desc">打开Uri Scheme链接</string>
@@ -479,8 +481,8 @@
     <string name="node_touch_action_long">长按</string>
     <string name="node_touch_action_else">未完成</string>
 
-    <string name="edit_text_input_action">输入文本</string>
-    <string name="edit_text_input_action_desc">对文本框控件输入文本</string>
+    <string name="edit_text_input_action">输入框输入文本</string>
+    <string name="edit_text_input_action_desc">对文本输入框输入文本</string>
     <string name="edit_text_input_action_edit_text">输入框(默认首个)</string>
     <string name="edit_text_input_action_append">追加</string>
     <string name="edit_text_input_action_enter">模拟回车</string>

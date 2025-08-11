@@ -16,7 +16,7 @@
         android:layout_marginStart="8dp"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        app:icon="@drawable/icon_zoom_in" />
+        app:icon="@drawable/icon_zoom_in_map" />
 
     <LinearLayout
         android:id="@+id/contentBox"
@@ -80,7 +80,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                app:icon="@drawable/icon_arrow_up"
+                app:icon="@drawable/icon_keyboard_arrow_up"
                 app:tint="?attr/colorPrimary" />
 
             <com.google.android.material.button.MaterialButton
@@ -90,7 +90,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                app:icon="@drawable/icon_arrow_left"
+                app:icon="@drawable/icon_keyboard_arrow_left"
                 app:tint="?attr/colorPrimary" />
 
             <com.google.android.material.button.MaterialButton
@@ -100,7 +100,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                app:icon="@drawable/icon_arrow_right"
+                app:icon="@drawable/icon_keyboard_arrow_right"
                 app:tint="?attr/colorPrimary" />
 
             <com.google.android.material.button.MaterialButton
@@ -110,7 +110,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                app:icon="@drawable/icon_arrow_down"
+                app:icon="@drawable/icon_keyboard_arrow_down"
                 app:tint="?attr/colorPrimary" />
 
         </LinearLayout>

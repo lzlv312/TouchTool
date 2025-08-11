@@ -157,7 +157,7 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
                 binding.appName.setText(context.getString(R.string.common_name));
                 binding.icon.setImageDrawable(context.getApplicationInfo().loadIcon(manager));
                 binding.activityButton.setVisibility(ViewGroup.GONE);
-                binding.getRoot().setCheckedIconResource(R.drawable.icon_radio_selected);
+                binding.getRoot().setCheckedIconResource(R.drawable.icon_check_circle);
             } else {
                 if (info.applicationInfo != null) {
                     binding.appName.setText(info.applicationInfo.loadLabel(manager));
@@ -166,7 +166,7 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
                 binding.activityButton.setVisibility(applications.isJustApp() || info.activities == null || info.activities.length == 0 ? ViewGroup.GONE : ViewGroup.VISIBLE);
 
                 PinApplication commonApp = getSelectedApp(context.getString(R.string.common_package));
-                binding.getRoot().setCheckedIconResource(commonApp == null ? R.drawable.icon_radio_selected : R.drawable.icon_radio_unselected);
+                binding.getRoot().setCheckedIconResource(commonApp == null ? R.drawable.icon_check_circle : R.drawable.icon_cancel);
             }
 
             PinApplication app = getSelectedApp(info.packageName);
@@ -174,7 +174,7 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
             binding.getRoot().setChecked(app != null);
             if (app == null || app.getActivityClasses() == null || app.getActivityClasses().isEmpty()) {
                 binding.activityButton.setText(null);
-                binding.activityButton.setIconResource(R.drawable.icon_more);
+                binding.activityButton.setIconResource(R.drawable.icon_more_horiz);
             } else {
                 binding.activityButton.setText(String.valueOf(app.getActivityClasses().size()));
                 binding.activityButton.setIcon(null);

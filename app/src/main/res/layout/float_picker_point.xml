@@ -21,7 +21,7 @@
             android:layout_marginHorizontal="8dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            app:icon="@drawable/icon_back" />
+            app:icon="@drawable/icon_arrow_back" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/saveButton"
@@ -45,8 +45,8 @@
             android:layout_width="8dp"
             android:layout_height="8dp"
             android:layout_gravity="center"
-            android:src="@drawable/icon_location"
-            android:tint="?attr/colorPrimaryLight"/>
+            android:src="@drawable/icon_my_location"
+            android:tint="?attr/colorPrimaryLight" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="3px"

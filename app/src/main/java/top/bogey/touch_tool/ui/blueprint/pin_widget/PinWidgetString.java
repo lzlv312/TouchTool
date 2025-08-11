@@ -148,7 +148,7 @@ public class PinWidgetString extends PinWidget<PinString> {
             case URL -> {
                 String url = "tt://do_action?" + InstantActivity.TASK_ID + "=" + card.getTask().getId() + "&" + InstantActivity.ACTION_ID + "=" + card.getAction().getId();
                 binding.editText.setText(url);
-                binding.pickButton.setIconResource(R.drawable.icon_copy);
+                binding.pickButton.setIconResource(R.drawable.icon_content_copy);
                 binding.pickButton.setOnClickListener(v -> AppUtil.copyToClipboard(getContext(), url));
             }
             case SHORTCUT -> {
@@ -182,7 +182,7 @@ public class PinWidgetString extends PinWidget<PinString> {
             case RINGTONE -> {
                 String value = pinBase.getValue();
                 binding.editText.setText(getRingtoneName(value));
-                binding.pickButton.setIconResource(R.drawable.icon_notification);
+                binding.pickButton.setIconResource(R.drawable.icon_notifications);
                 binding.pickButton.setOnClickListener(v -> {
                     MainActivity activity = MainApplication.getInstance().getActivity();
                     activity.launcherRingtone(value, (code, intent) -> {
@@ -231,7 +231,7 @@ public class PinWidgetString extends PinWidget<PinString> {
             case NODE_PATH -> {
                 PinNodePathString nodePath = (PinNodePathString) pinBase;
                 binding.editText.setText(String.valueOf(nodePath.getNodeInfo()));
-                binding.pickButton.setIconResource(R.drawable.icon_widget);
+                binding.pickButton.setIconResource(R.drawable.icon_widgets);
                 binding.pickButton.setOnClickListener(v -> new NodePickerPreview(getContext(), result -> {
                     nodePath.setValue(result);
                     pinView.getPin().notifyValueUpdated();
@@ -251,7 +251,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                         pinView.getPin().notifyValueUpdated();
                     }
                 });
-                binding.pickButton.setIconResource(R.drawable.icon_text);
+                binding.pickButton.setIconResource(R.drawable.icon_text_fields);
                 binding.pickButton.setOnClickListener(v -> new NodePickerPreview(getContext(), result -> {
                     nodePath.setValue(result);
                     String regex = AppUtil.formatRegex(nodePath.getValue());

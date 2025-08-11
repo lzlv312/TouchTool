@@ -37,7 +37,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginHorizontal="4dp"
-            android:src="@drawable/icon_drag"
+            android:src="@drawable/icon_drag_pan"
             app:tint="?attr/colorOutline" />
 
     </LinearLayout>

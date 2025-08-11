@@ -62,7 +62,7 @@ public class InputParamAction extends ExecuteAction {
     @Override
     public void onUnLinkedFrom(Task task, Pin origin, Pin from) {
         // 最后一条链接断开才能重置值
-        if (origin == paramPin && origin.getLinks().size() == 0) {
+        if (origin == paramPin && origin.getLinks().isEmpty()) {
             paramPin.setValue(new PinParam());
         }
         super.onUnLinkedFrom(task, origin, from);

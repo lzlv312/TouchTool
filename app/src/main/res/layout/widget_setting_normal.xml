@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:visibility="gone"
-        app:icon="@drawable/icon_arrow_right"
+        app:icon="@drawable/icon_keyboard_arrow_right"
         app:iconSize="32dp" />
 
 </LinearLayout>

@@ -10,7 +10,7 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:maxLines="2"
-        android:textSize="11sp"/>
+        android:textSize="11sp" />
 
     <com.google.android.material.materialswitch.MaterialSwitch
         android:id="@+id/enableSwitch"

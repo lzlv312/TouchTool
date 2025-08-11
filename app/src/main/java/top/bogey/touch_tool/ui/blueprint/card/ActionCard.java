@@ -131,14 +131,14 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         setExpandType(action.getExpandType());
         button.setIconResource(switch (action.getExpandType()) {
             case NONE -> R.drawable.icon_visibility_off;
-            case HALF -> R.drawable.icon_visibility_half;
+            case HALF -> R.drawable.icon_symptoms;
             case FULL -> R.drawable.icon_visibility;
         });
         button.setOnClickListener(v -> {
             expand();
             button.setIconResource(switch (action.getExpandType()) {
                 case NONE -> R.drawable.icon_visibility_off;
-                case HALF -> R.drawable.icon_visibility_half;
+                case HALF -> R.drawable.icon_symptoms;
                 case FULL -> R.drawable.icon_visibility;
             });
         });

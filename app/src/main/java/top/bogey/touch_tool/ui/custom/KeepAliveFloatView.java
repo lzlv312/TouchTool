@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.ui.custom;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Handler;
 import android.widget.FrameLayout;
@@ -19,6 +17,7 @@ import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.service.ITaskListener;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
@@ -28,26 +27,17 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindowHelper;
 public class KeepAliveFloatView extends FrameLayout implements FloatInterface, ITaskListener {
     private final Handler handler;
 
-    public static synchronized String getClipboardText() {
-        CompletableFuture<String> future = new CompletableFuture<>();
+    public static synchronized Object getClipboardData() {
+        CompletableFuture<Object> future = new CompletableFuture<>();
 
         FloatWindowHelper helper = FloatWindow.getHelper(KeepAliveFloatView.class.getName());
         if (helper != null) {
             helper.viewParent.post(() -> {
                 helper.setFocusable(true);
                 helper.viewParent.postDelayed(() -> {
-
-                    String text = null;
-                    ClipboardManager clipboard = (ClipboardManager) MainApplication.getInstance().getSystemService(Context.CLIPBOARD_SERVICE);
-                    if (clipboard.hasPrimaryClip()) {
-                        ClipData clip = clipboard.getPrimaryClip();
-                        if (clip != null && clip.getItemCount() > 0) {
-                            text = clip.getItemAt(0).coerceToText(MainApplication.getInstance()).toString();
-                        }
-                    }
-
+                    Object result = AppUtil.readFromClipboard(helper.viewParent.getContext());
                     helper.setFocusable(false);
-                    future.complete(text);
+                    future.complete(result);
                 }, 200);
             });
         }

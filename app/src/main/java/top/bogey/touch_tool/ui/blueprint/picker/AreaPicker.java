@@ -191,14 +191,14 @@ public class AreaPicker extends FullScreenPicker<Rect> {
         area.bottom = Math.min(getHeight(), area.bottom);
 
         if (area.isEmpty()) {
-            binding.fullButton.setIconResource(R.drawable.icon_zoom_out);
+            binding.fullButton.setIconResource(R.drawable.icon_zoom_out_map);
             binding.markBox.setVisibility(GONE);
             binding.moveLeft.setVisibility(GONE);
             binding.moveRight.setVisibility(GONE);
             binding.buttonBox.setX(getWidth() / 2f - binding.buttonBox.getWidth() / 2f);
             binding.buttonBox.setY(getHeight() - binding.buttonBox.getHeight() - DisplayUtil.dp2px(getContext(), 64));
         } else {
-            binding.fullButton.setIconResource(R.drawable.icon_zoom_in);
+            binding.fullButton.setIconResource(R.drawable.icon_zoom_in_map);
             int doubleOffset = (int) (offset * 2);
             binding.markBox.setVisibility(VISIBLE);
             binding.moveLeft.setVisibility(VISIBLE);

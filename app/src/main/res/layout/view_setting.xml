@@ -100,7 +100,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/app_setting_ignore_battery_desc"
-                        app:icon="@drawable/icon_battery"
+                        app:icon="@drawable/icon_battery_android_full"
                         app:title="@string/app_setting_ignore_battery" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
@@ -108,7 +108,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/app_setting_forge_service_desc"
-                        app:icon="@drawable/icon_notification"
+                        app:icon="@drawable/icon_notifications"
                         app:title="@string/app_setting_forge_service" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
@@ -116,7 +116,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/app_setting_auto_start_desc"
-                        app:icon="@drawable/icon_auto_play"
+                        app:icon="@drawable/icon_autoplay"
                         app:title="@string/app_setting_auto_start" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal
@@ -172,7 +172,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/permission_setting_notification_type_desc"
-                        app:icon="@drawable/icon_notification_active"
+                        app:icon="@drawable/icon_notifications_active"
                         app:options="@array/notification_type"
                         app:title="@string/permission_setting_notification_type" />
 
@@ -252,8 +252,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/task_setting_start_tips_desc"
-                        app:icon="@drawable/icon_notification"
+                        app:icon="@drawable/icon_notifications"
                         app:title="@string/task_setting_start_tips" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
+                        android:id="@+id/detailLogSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/task_setting_detail_log_desc"
+                        app:icon="@drawable/icon_draw"
+                        app:title="@string/task_setting_detail_log" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
+                        android:id="@+id/volumeButtonExitSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/task_setting_volume_button_exit_desc"
+                        app:icon="@drawable/icon_keyboard"
+                        app:title="@string/task_setting_volume_button_exit" />
 
                 </LinearLayout>
 
@@ -290,7 +306,7 @@
                         android:layout_height="wrap_content"
                         app:buttonVisible="arrow"
                         app:description="@string/preference_setting_manual_play_desc_1"
-                        app:icon="@drawable/icon_touch"
+                        app:icon="@drawable/icon_touch_app"
                         app:title="@string/preference_setting_manual_play" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
@@ -307,7 +323,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:description="@string/preference_setting_support_free_form_desc"
-                        app:icon="@drawable/icon_phone"
+                        app:icon="@drawable/icon_mobile"
                         app:options="@array/theme_type"
                         app:title="@string/preference_setting_support_free_form" />
 

@@ -3,13 +3,12 @@ package top.bogey.touch_tool.bean.action.system;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -93,17 +92,18 @@ public class OpenAppAction extends ExecuteAction {
     private final transient Pin categoryPin = new Pin(new PinMultiSelect(new PinString()), R.string.open_app_action_category, false, false, true);
     private final transient Pin uriPin = new Pin(new PinString(), R.string.open_app_action_uri_data, false, false, true);
     private final transient Pin paramsPin = new Pin(new PinMap(new PinString(), new PinString()), R.string.open_app_action_params, false, false, true);
+    private final transient Pin bundlePin = new Pin(new PinMap(new PinString(), new PinString()), R.string.open_app_action_bundle, false, false, true);
 
     public OpenAppAction() {
         super(ActionType.OPEN_APP);
-        addPins(appPin, flagPin, categoryPin, uriPin, paramsPin);
+        addPins(appPin, flagPin, categoryPin, uriPin, paramsPin, bundlePin);
         initFlagSelection();
         initCategorySelection();
     }
 
     public OpenAppAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(appPin, flagPin, categoryPin, uriPin, paramsPin);
+        reAddPins(appPin, flagPin, categoryPin, uriPin, paramsPin, bundlePin);
         initFlagSelection();
         initCategorySelection();
     }
@@ -125,8 +125,12 @@ public class OpenAppAction extends ExecuteAction {
         PinList category = getPinValue(runnable, categoryPin);
 
         PinMap map = getPinValue(runnable, paramsPin);
-        Map<String, String> params = new HashMap<>();
-        map.forEach((key, value) -> params.put(key.toString(), value.toString()));
+        Bundle params = new Bundle();
+        map.forEach((key, value) -> putBundle(params, key.toString(), value.toString()));
+
+        PinMap bundleMap = getPinValue(runnable, bundlePin);
+        Bundle bundle = new Bundle();
+        bundleMap.forEach((key, value) -> putBundle(bundle, key.toString(), value.toString()));
 
         PinString uri = getPinValue(runnable, uriPin);
 
@@ -148,9 +152,9 @@ public class OpenAppAction extends ExecuteAction {
             if (uri.getValue() != null && !uri.getValue().isEmpty()) {
                 intent.setData(Uri.parse(uri.getValue()));
             }
-            params.forEach(intent::putExtra);
+            intent.putExtras(params);
 
-            context.startActivity(intent);
+            context.startActivity(intent, bundle);
         }
 
         executeNext(runnable, outPin);
@@ -181,5 +185,23 @@ public class OpenAppAction extends ExecuteAction {
             PinMultiSelect.MultiSelectObject object = new PinMultiSelect.MultiSelectObject(names[i], desc[i], value);
             multiSelect.addSelectObject(object);
         }
+    }
+
+    private void putBundle(Bundle bundle, String key, String value) {
+        if (value == null || value.isEmpty()) return;
+        try {
+            int i = Integer.parseInt(value);
+            bundle.putInt(key, i);
+        } catch (NumberFormatException ignored) {
+        }
+
+        try {
+            double d = Double.parseDouble(value);
+            bundle.putDouble(key, d);
+        } catch (NumberFormatException ignored) {
+        }
+
+        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) bundle.putBoolean(key, Boolean.parseBoolean(value));
+        else bundle.putString(key, value);
     }
 }
