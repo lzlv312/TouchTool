@@ -125,7 +125,6 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
             manager = context.getPackageManager();
 
             binding.getRoot().setOnClickListener(v -> {
-                if (applications.isJustActivity()) return;
                 selectApp();
                 callback.onResult(true);
                 notifyItemChanged(getAdapterPosition());
@@ -183,7 +182,7 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
 
         private void selectApp() {
             PinApplication app = getSelectedApp(info.packageName);
-            if (app == null) {
+            if (app == null && !applications.isJustActivity()) {
                 // 单选的需要取消之前选择的
                 if (applications.isSingle()) {
                     for (PinObject value : applications) {

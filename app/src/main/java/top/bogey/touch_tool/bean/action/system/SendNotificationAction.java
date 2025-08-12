@@ -1,10 +1,12 @@
 package top.bogey.touch_tool.bean.action.system;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 
@@ -15,6 +17,7 @@ import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
@@ -23,6 +26,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.InstantActivity;
 
@@ -62,8 +66,10 @@ public class SendNotificationAction extends ExecuteAction {
         builder.setContentText(content.toString());
         if (icon.getImage() != null) {
             builder.setSmallIcon(IconCompat.createWithBitmap(icon.getImage()));
+            builder.setLargeIcon(icon.getImage());
         } else {
             builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setLargeIcon(Icon.createWithResource(context, R.mipmap.ic_launcher));
         }
         Pin linkedPin = executePin.getLinkedPin(runnable.getTask());
         if (linkedPin != null) {
@@ -78,5 +84,17 @@ public class SendNotificationAction extends ExecuteAction {
         notificationManager.notify(getId().hashCode(), builder.build());
 
         executeNext(runnable, outPin);
+    }
+
+    @Override
+    public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            String permission = Manifest.permission.POST_NOTIFICATIONS;
+            if (MainApplication.getInstance().checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                result.addResult(ActionCheckResult.ResultType.WARNING, R.string.check_need_notification_warning);
+            }
+        }
     }
 }

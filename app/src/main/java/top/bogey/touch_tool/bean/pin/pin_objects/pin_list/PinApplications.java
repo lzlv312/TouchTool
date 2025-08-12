@@ -123,7 +123,7 @@ public class PinApplications extends PinList {
     }
 
     public boolean isJustActivity() {
-        return getSubType() == PinSubType.SINGLE_ACTIVITY || getSubType() == PinSubType.SINGLE_SEND_ACTIVITY;
+        return getSubType() == PinSubType.SINGLE_ACTIVITY || getSubType() == PinSubType.SINGLE_SEND_ACTIVITY || getSubType() == PinSubType.SINGLE_SHORTCUT_ACTIVITY;
     }
 
     public boolean isShared() {

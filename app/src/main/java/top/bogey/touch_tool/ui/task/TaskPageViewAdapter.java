@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.databinding.ViewTaskPageBinding;
+import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapter.ViewHolder> {
 
@@ -75,6 +77,13 @@ public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapte
 
             adapter = new TaskPageItemRecyclerViewAdapter(taskView);
             binding.getRoot().setAdapter(adapter);
+            StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) binding.getRoot().getLayoutManager();
+            if (layoutManager == null) return;
+            if (DisplayUtil.isPortrait(binding.getRoot().getContext())) {
+                layoutManager.setSpanCount(2);
+            } else {
+                layoutManager.setSpanCount(4);
+            }
         }
 
         public void refresh(String tag) {
