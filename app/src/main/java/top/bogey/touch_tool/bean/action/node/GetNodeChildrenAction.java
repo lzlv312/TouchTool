@@ -30,7 +30,7 @@ public class GetNodeChildrenAction extends CalculateAction {
         PinNode node = getPinValue(runnable, nodePin);
         if (node == null) return;
         NodeInfo nodeInfo = node.getNodeInfo();
-        for (NodeInfo child : nodeInfo.children) {
+        for (NodeInfo child : nodeInfo.getChildren()) {
             childrenPin.getValue(PinList.class).add(new PinNode(child));
         }
     }

@@ -230,13 +230,13 @@ public class PinWidgetString extends PinWidget<PinString> {
             }
             case NODE_PATH -> {
                 PinNodePathString nodePath = (PinNodePathString) pinBase;
-                binding.editText.setText(String.valueOf(nodePath.getNodeInfo()));
+                binding.editText.setText(nodePath.getSimpleValue());
                 binding.pickButton.setIconResource(R.drawable.icon_widgets);
                 binding.pickButton.setOnClickListener(v -> new NodePickerPreview(getContext(), result -> {
                     nodePath.setValue(result);
                     pinView.getPin().notifyValueUpdated();
-                    binding.editText.setText(String.valueOf(nodePath.getNodeInfo()));
-                }, nodePath.getNodeInfo()).show());
+                    binding.editText.setText(nodePath.getSimpleValue());
+                }, nodePath.getValue()).show());
             }
             case NODE_PATH_TEXT -> {
                 PinNodePathTextString nodePath = (PinNodePathTextString) pinBase;
@@ -258,8 +258,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                     nodePath.setValue(regex);
                     pinView.getPin().notifyValueUpdated();
                     binding.editText.setText(regex);
-                }, nodePath.getNodeInfo()).show());
-
+                }, null).show());
             }
             case TASK_ID -> {
                 Task task = Saver.getInstance().getTask(card.getTask(), pinBase.getValue());

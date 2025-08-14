@@ -7,7 +7,7 @@ public interface ILazyTreeNodeData extends ITreeNodeData {
     List<Object> getChildrenFlags();
 
     @Override
-    default List<ITreeNodeData> getChildren() {
+    default List<ITreeNodeData> getChildrenData() {
         return Collections.emptyList();
     }
 }

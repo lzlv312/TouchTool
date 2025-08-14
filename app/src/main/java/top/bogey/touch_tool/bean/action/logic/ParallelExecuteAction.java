@@ -24,7 +24,6 @@ import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.log.ActionLog;
 import top.bogey.touch_tool.bean.save.log.LogInfo;
-import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskListener;
 import top.bogey.touch_tool.service.TaskRunnable;
@@ -99,7 +98,7 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
             logs.add(logInfo.getUid());
             Saver.getInstance().addLog(runnable.getStartTask().getId(), logInfo, false);
             List<LogInfo> children = new ArrayList<>();
-            for (ITreeNodeData child : logInfo.getChildren()) {
+            for (ITreeNodeData child : logInfo.getChildrenData()) {
                 LogInfo childLogInfo = (LogInfo) child;
                 children.add(childLogInfo);
             }

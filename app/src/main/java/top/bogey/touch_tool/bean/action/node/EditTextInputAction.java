@@ -58,8 +58,8 @@ public class EditTextInputAction extends ExecuteAction {
 
         String contentValue = content.getValue();
         boolean result = false;
-        if (nodeInfo != null && nodeInfo.usable && nodeInfo.nodeInfo != null && nodeInfo.nodeInfo.isFocusable() && contentValue != null) {
-            nodeInfo.nodeInfo.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
+        if (nodeInfo != null && nodeInfo.usable && nodeInfo.node != null && nodeInfo.node.isFocusable() && contentValue != null) {
+            nodeInfo.node.performAction(AccessibilityNodeInfo.ACTION_FOCUS);
 
             if (append.getValue() && nodeInfo.text != null) {
                 contentValue = nodeInfo.text + contentValue;
@@ -67,10 +67,10 @@ public class EditTextInputAction extends ExecuteAction {
 
             Bundle bundle = new Bundle();
             bundle.putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, contentValue);
-            result = nodeInfo.nodeInfo.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, bundle);
+            result = nodeInfo.node.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, bundle);
 
             if (result && enter.getValue() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                nodeInfo.nodeInfo.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_IME_ENTER.getId());
+                nodeInfo.node.performAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_IME_ENTER.getId());
             }
         }
         executeNext(runnable, result ? outPin : elsePin);

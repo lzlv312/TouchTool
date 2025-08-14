@@ -1,18 +1,15 @@
 package top.bogey.touch_tool.bean.other;
 
 import android.graphics.Bitmap;
-import android.view.accessibility.AccessibilityNodeInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import top.bogey.touch_tool.service.MainAccessibilityService;
-import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
 public class ScreenInfo {
     private Bitmap screenShot;
-    private final List<NodeInfo> rootNodes = new ArrayList<>();
+    private final List<NodeInfo> rootNodes;
 
     public ScreenInfo(MainAccessibilityService service) {
         this(service, null);
@@ -23,9 +20,7 @@ public class ScreenInfo {
             screenShot = bitmap;
             if (callback != null) callback.onResult(true);
         });
-        for (AccessibilityNodeInfo window : AppUtil.getWindows(service)) {
-            rootNodes.add(new NodeInfo(window));
-        }
+        rootNodes = NodeInfo.getWindows();
     }
 
     public Bitmap getScreenShot() {

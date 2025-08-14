@@ -4,10 +4,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -17,8 +14,8 @@ import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathTextString;
@@ -30,7 +27,6 @@ import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.custom.MarkTargetFloatView;
-import top.bogey.touch_tool.utils.AppUtil;
 
 public class FindNodeAction extends FindExecuteAction {
     private final transient Pin typePin = new NotLinkAblePin(new PinSingleSelect(R.array.find_node_type), R.string.find_node_action_type);
@@ -58,64 +54,53 @@ public class FindNodeAction extends FindExecuteAction {
         PinSingleSelect type = typePin.getValue();
         PinList nodes = nodesPin.getValue();
 
-        MainAccessibilityService service = MainApplication.getInstance().getService();
-
         switch (type.getIndex()) {
             case 0 -> {
-                List<NodeInfo> rootNodes = new ArrayList<>();
-                for (AccessibilityNodeInfo window : AppUtil.getWindows(service)) {
-                    rootNodes.add(new NodeInfo(window));
-                }
                 PinString pathString = getPinValue(runnable, pathPin);
                 PinNodePathString path = new PinNodePathString(pathString.getValue());
                 PinBoolean fullPath = getPinValue(runnable, fullPathPin);
-                NodeInfo node = path.findNode(rootNodes, fullPath.getValue());
-                if (node == null) return false;
-                nodePin.getValue(PinNode.class).setNodeInfo(node);
-                MarkTargetFloatView.showTargetArea(node.area);
+                NodeInfo nodeInfo = path.findNode(NodeInfo.getWindows(), fullPath.getValue());
+                if (nodeInfo == null) return false;
+                nodePin.getValue(PinNode.class).setNodeInfo(nodeInfo);
+                MarkTargetFloatView.showTargetArea(nodeInfo.area);
                 return true;
             }
             case 1, 2 -> {
                 PinArea area = getPinValue(runnable, areaPin);
+                MainAccessibilityService service = MainApplication.getInstance().getService();
                 AccessibilityNodeInfo root = service.getRootInActiveWindow();
                 if (root == null) return false;
                 NodeInfo nodeInfo = new NodeInfo(root);
+
                 List<NodeInfo> children;
                 if (type.getIndex() == 1) {
                     PinString text = getPinValue(runnable, textPin);
                     String value = text.getValue();
                     if (value == null || value.isEmpty()) return false;
-                    children = nodeInfo.findChildrenByText(value);
+                    children = nodeInfo.findChildrenByText(value, area.getValue());
                 } else {
                     PinString id = getPinValue(runnable, idPin);
                     String value = id.getValue();
                     if (value == null || value.isEmpty()) return false;
-                    children = nodeInfo.findChildrenById(value);
+                    children = nodeInfo.findChildrenById(value, area.getValue());
                 }
-                List<NodeInfo> childrenInArea = nodeInfo.findChildrenInArea(area.getValue());
-                Set<NodeInfo> nodeInfoSet = new HashSet<>(childrenInArea);
-                for (NodeInfo info : children) {
-                    if (nodeInfoSet.contains(info)) {
-                        nodes.add(new PinNode(info));
-                        MarkTargetFloatView.showTargetArea(info.area);
-                    }
+
+                if (children == null || children.isEmpty()) return false;
+                for (NodeInfo child : children) {
+                    nodes.add(new PinNode(child));
+                    MarkTargetFloatView.showTargetArea(child.area);
                 }
-                if (nodes.isEmpty()) return false;
                 nodePin.setValue(nodes.get(0));
                 return true;
             }
             case 3 -> {
-                List<NodeInfo> rootNodes = new ArrayList<>();
-                for (AccessibilityNodeInfo window : AppUtil.getWindows(service)) {
-                    rootNodes.add(new NodeInfo(window));
-                }
                 PinString pathString = getPinValue(runnable, pathTextPin);
                 PinNodePathTextString path = new PinNodePathTextString(pathString.getValue());
-                List<NodeInfo> findNodes = path.findNodes(rootNodes);
+                List<NodeInfo> findNodes = path.findNodes(NodeInfo.getWindows());
                 if (findNodes == null || findNodes.isEmpty()) return false;
-                for (NodeInfo findNode : findNodes) {
-                    nodes.add(new PinNode(findNode));
-                    MarkTargetFloatView.showTargetArea(findNode.area);
+                for (NodeInfo nodeInfo : findNodes) {
+                    nodes.add(new PinNode(nodeInfo));
+                    MarkTargetFloatView.showTargetArea(nodeInfo.area);
                 }
                 nodePin.setValue(nodes.get(0));
                 return true;

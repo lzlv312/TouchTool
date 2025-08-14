@@ -36,15 +36,15 @@ public class NodeTouchAction extends ExecuteAction {
             PinBoolean longTouch = getPinValue(runnable, ltPin);
             NodeInfo nodeInfo = node.getNodeInfo();
             if (nodeInfo != null) {
-                AccessibilityNodeInfo accessibilityNodeInfo = nodeInfo.findUsableParentNode();
-                if (accessibilityNodeInfo != null) {
+                NodeInfo usableParent = nodeInfo.findUsableParent();
+                if (usableParent != null) {
                     if (longTouch.getValue()) {
-                        if (accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK)) {
+                        if (usableParent.node.performAction(AccessibilityNodeInfo.ACTION_LONG_CLICK)) {
                             executeNext(runnable, outPin);
                             return;
                         }
                     } else {
-                        if (accessibilityNodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK)) {
+                        if (usableParent.node.performAction(AccessibilityNodeInfo.ACTION_CLICK)) {
                             executeNext(runnable, outPin);
                             return;
                         }

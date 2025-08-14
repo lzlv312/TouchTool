@@ -40,100 +40,12 @@
             android:orientation="vertical"
             android:paddingVertical="4dp">
 
-            <FrameLayout
-                android:id="@+id/contentBox"
-                android:layout_width="128dp"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginVertical="4dp"
-                    android:alpha="0.5"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/usableTip"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_marginHorizontal="4dp"
-                        android:layout_marginVertical="2dp"
-                        android:src="@drawable/icon_touch_app"
-                        app:tint="?attr/colorPrimary" />
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/visibleTip"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_marginHorizontal="4dp"
-                        android:layout_marginVertical="2dp"
-                        android:src="@drawable/icon_visibility"
-                        app:tint="?attr/colorPrimary" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="4dp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="2dp"
-                        android:gravity="center_vertical"
-                        android:minHeight="16dp">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/picker_node_id"
-                            android:textSize="9sp"
-                            tools:ignore="SmallSp" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/nodeIdText"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_weight="2"
-                            android:textSize="9sp"
-                            tools:ignore="SmallSp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="2dp"
-                        android:gravity="center_vertical"
-                        android:minHeight="16dp">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/picker_node_text"
-                            android:textSize="9sp"
-                            tools:ignore="SmallSp" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/nodeTextText"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_weight="2"
-                            android:textSize="9sp"
-                            tools:ignore="SmallSp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </FrameLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/pathText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="9sp"
+                tools:ignore="SmallSp" />
 
             <LinearLayout
                 android:id="@+id/testBox"

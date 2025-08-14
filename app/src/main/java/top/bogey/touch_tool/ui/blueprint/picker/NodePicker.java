@@ -12,23 +12,24 @@ import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.FloatPickerNodeBinding;
-import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
@@ -36,26 +37,44 @@ import top.bogey.touch_tool.utils.listener.TextChangedListener;
 @SuppressLint("ViewConstructor")
 public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePickerTreeAdapter.SelectNode {
     private final FloatPickerNodeBinding binding;
-    private final NodePickerTreeAdapter adapter;
+    private NodePickerTreeAdapter adapter;
 
-    private final List<NodeInfo> roots = new ArrayList<>();
+    private final List<NodeInfo> roots = NodeInfo.getWindows();
 
     private final Paint gridPaint;
     private final Paint markPaint;
     private final Paint bitmapPaint;
 
-    private NodeInfo nodeInfo;
+    private final PinNodePathString nodePath;
+    private NodeInfo nodeInfo = null;
+    private boolean realShow = false;
 
-    public NodePicker(@NonNull Context context, ResultCallback<NodeInfo> callback, NodeInfo node) {
+    public NodePicker(@NonNull Context context, ResultCallback<NodeInfo> callback, String path) {
         super(context, callback);
+
         editable = true;
-        nodeInfo = node;
+        nodePath = new PinNodePathString(path);
         binding = FloatPickerNodeBinding.inflate(LayoutInflater.from(context), this, true);
 
-        for (AccessibilityNodeInfo window : AppUtil.getWindows(service)) {
-            NodeInfo root = new NodeInfo(window);
-            roots.add(root);
-        }
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            Queue<NodeInfo> queue = new LinkedList<>(roots);
+            while (!queue.isEmpty()) {
+                NodeInfo node = queue.poll();
+                if (node != null) {
+                    queue.addAll(node.getChildren());
+                }
+            }
+
+            post(() -> {
+                adapter = new NodePickerTreeAdapter(this, roots);
+                binding.widgetRecyclerView.setAdapter(adapter);
+                if (realShow) realShow();
+                invalidate();
+            });
+
+            executor.close();
+        });
 
         gridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         gridPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -69,9 +88,6 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         bitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bitmapPaint.setFilterBitmap(true);
         bitmapPaint.setDither(true);
-
-        adapter = new NodePickerTreeAdapter(this, roots);
-        binding.widgetRecyclerView.setAdapter(adapter);
 
         binding.saveButton.setOnClickListener(v -> {
             if (callback != null) callback.onResult(nodeInfo);
@@ -99,14 +115,13 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
                 invalidate();
             }
         });
-        binding.typeGroup.check(binding.typeGroup.getChildAt(SettingSaver.getInstance().getPickNodeType()).getId());
     }
 
     @Override
     protected void realShow() {
-        PinNodePathString nodePathString = new PinNodePathString();
-        nodePathString.setValue(nodeInfo);
-        nodeInfo = nodePathString.findNode(roots);
+        realShow = true;
+        if (adapter == null) return;
+        nodeInfo = nodePath.findNode(roots, true);
         selectNode(nodeInfo);
         adapter.setSelectedNode(nodeInfo);
     }
@@ -119,7 +134,6 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         }
     }
 
-    @Override
     public void selectNode(NodeInfo nodeInfo) {
         this.nodeInfo = nodeInfo;
 
@@ -206,7 +220,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
             canvas.drawRect(area, gridPaint);
         }
 
-        for (NodeInfo child : node.children) {
+        for (NodeInfo child : node.getCacheChildren()) {
             drawNode(canvas, child);
         }
 
@@ -244,7 +258,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
 
     private NodeInfo findNodeByTop(int x, int y, boolean justUsable) {
         for (NodeInfo root : roots) {
-            List<NodeInfo> children = root.findChildrenInArea(new Rect(x, y, x, y));
+            List<NodeInfo> children = root.findChildren(new Rect(x, y, x, y));
             for (int i = children.size() - 1; i >= 0; i--) {
                 NodeInfo child = children.get(i);
                 if (!justUsable || child.usable) return child;
@@ -257,7 +271,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         Map<NodeInfo, Integer> map = new HashMap<>();
         for (int i = 0; i < roots.size(); i++) {
             NodeInfo root = roots.get(i);
-            root.findChildrenInArea(map, new Rect(x, y, x, y), (roots.size() - i) * Byte.MAX_VALUE);
+            root.mapChildrenDepth(map, new Rect(x, y, x, y), (roots.size() - i) * Byte.MAX_VALUE);
         }
 
         int depth = 0;

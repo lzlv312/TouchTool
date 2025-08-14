@@ -83,7 +83,7 @@ public class LogInfo implements ILazyTreeNodeData {
     }
 
     @Override
-    public List<ITreeNodeData> getChildren() {
+    public List<ITreeNodeData> getChildrenData() {
         return new ArrayList<>(childrenLog);
     }
 

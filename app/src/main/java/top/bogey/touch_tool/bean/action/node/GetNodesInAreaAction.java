@@ -42,7 +42,7 @@ public class GetNodesInAreaAction extends ExecuteAction {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         AccessibilityNodeInfo root = service.getRootInActiveWindow();
         NodeInfo nodeInfo = new NodeInfo(root);
-        List<NodeInfo> childrenInArea = nodeInfo.findChildrenInArea(area.getValue());
+        List<NodeInfo> childrenInArea = nodeInfo.findChildren(area.getValue());
         for (NodeInfo info : childrenInArea) {
             nodes.add(new PinNode(info));
         }

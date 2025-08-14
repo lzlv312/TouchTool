@@ -29,6 +29,6 @@ public class GetNodeParentAction extends CalculateAction {
         PinNode node = getPinValue(runnable, nodePin);
         if (node == null) return;
         NodeInfo nodeInfo = node.getNodeInfo();
-        parentNode.getValue(PinNode.class).setNodeInfo(nodeInfo.parent);
+        parentNode.getValue(PinNode.class).setNodeInfo(nodeInfo.getParent());
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 public class NormalTreeNode extends TreeNode {
     public NormalTreeNode(ITreeNodeData nodeData) {
         this.nodeData = nodeData;
-        for (ITreeNodeData child : nodeData.getChildren()) {
+        for (ITreeNodeData child : nodeData.getChildrenData()) {
             addChild(new NormalTreeNode(child));
         }
     }

@@ -92,7 +92,7 @@ public class NodePickerTreeAdapter extends TreeAdapter {
 
         TreeNode treeNode = new NormalTreeNode(node, Collections.emptyList());
 
-        for (NodeInfo child : node.children) {
+        for (NodeInfo child : node.getChildren()) {
             TreeNode tree = createTree(child, pattern);
             if (tree != null) treeNode.addChild(tree);
         }
@@ -170,7 +170,7 @@ public class NodePickerTreeAdapter extends TreeAdapter {
             binding.titleText.setTextColor(color);
 
             binding.imageView.setImageTintList(ColorStateList.valueOf(color));
-            binding.imageView.setVisibility(nodeInfo.children.isEmpty() ? View.INVISIBLE : View.VISIBLE);
+            binding.imageView.setVisibility(nodeInfo.getChildCount() == 0 ? View.INVISIBLE : View.VISIBLE);
             binding.imageView.setImageResource(node.isExpanded() ? R.drawable.icon_keyboard_arrow_up : R.drawable.icon_keyboard_arrow_down);
 
             binding.visibleButton.setIconResource(nodeInfo.visible ? R.drawable.icon_visibility : R.drawable.icon_visibility_off);

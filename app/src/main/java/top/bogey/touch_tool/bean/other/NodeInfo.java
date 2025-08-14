@@ -6,143 +6,87 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Matcher;
+import java.util.Queue;
 import java.util.regex.Pattern;
 
+import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.tree.ILazyTreeNodeData;
 import top.bogey.touch_tool.utils.tree.ITreeNodeData;
+import top.bogey.touch_tool.utils.tree.ITreeNodeDataLoader;
 
-public class NodeInfo implements ITreeNodeData {
-    public String clazz;
-    public String id;
+public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData, ITreeNodeDataLoader, ILazyTreeNodeData {
+    public final transient AccessibilityNodeInfo node;
+    private final transient List<NodeInfo> children = new ArrayList<>();
+
     public String text;
     public String desc;
     public boolean usable;
     public boolean visible;
     public Rect area;
 
-    public NodeInfo parent;
-    public int index = 0;
 
-    public final List<NodeInfo> children = new ArrayList<>();
+    public NodeInfo(AccessibilityNodeInfo node) {
+        this.node = node;
 
-    public AccessibilityNodeInfo nodeInfo = null;
-
-    public NodeInfo(String path) {
-        Pattern pattern = Pattern.compile("^([a-zA-Z0-9.]+)$");
-        // 代表没有任何额外信息的节点
-        if (pattern.matcher(path).find()) {
-            clazz = path;
-        } else {
-            pattern = Pattern.compile("^(.+?)(\\[.+])$");
-            Matcher matcher = pattern.matcher(path);
-            if (matcher.find()) {
-                clazz = matcher.group(1);
-                String detail = matcher.group(2);
-                if (detail == null) return;
-
-                String[] strings = detail.split("\\[");
-                for (String string : strings) {
-                    if (string.isEmpty()) continue;
-                    List<String> regexes = Arrays.asList("id=(.+)]", "(\\d+)]");
-                    for (int i = 0; i < regexes.size(); i++) {
-                        String regex = regexes.get(i);
-                        pattern = Pattern.compile(regex);
-                        matcher = pattern.matcher(string);
-                        if (matcher.find()) {
-                            switch (i) {
-                                case 0 -> id = matcher.group(1);
-                                case 1 -> index = Integer.parseInt(Objects.requireNonNull(matcher.group(1)));
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public NodeInfo(AccessibilityNodeInfo nodeInfo) {
-        this.nodeInfo = nodeInfo;
-
-        CharSequence className = nodeInfo.getClassName();
+        CharSequence className = node.getClassName();
         if (className != null) clazz = className.toString();
 
-        id = nodeInfo.getViewIdResourceName();
+        id = node.getViewIdResourceName();
 
-        CharSequence nodeText = nodeInfo.getText();
+        CharSequence nodeText = node.getText();
         if (nodeText != null) text = nodeText.toString();
 
-        CharSequence nodeDesc = nodeInfo.getContentDescription();
+        CharSequence nodeDesc = node.getContentDescription();
         if (nodeDesc != null) desc = nodeDesc.toString();
 
-        usable = nodeInfo.isEnabled() && (nodeInfo.isCheckable() || nodeInfo.isClickable() || nodeInfo.isLongClickable() || nodeInfo.isEditable());
-        visible = nodeInfo.isVisibleToUser();
+        usable = node.isEnabled() && (node.isCheckable() || node.isClickable() || node.isLongClickable() || node.isEditable());
+        visible = node.isVisibleToUser();
         area = new Rect();
-        nodeInfo.getBoundsInScreen(area);
+        node.getBoundsInScreen(area);
 
-        for (int i = 0; i < nodeInfo.getChildCount(); i++) {
-            AccessibilityNodeInfo child = nodeInfo.getChild(i);
+        for (int i = 0; i < node.getChildCount(); i++) {
+            children.add(null);
+        }
+    }
+
+    public int getChildCount() {
+        return node.getChildCount();
+    }
+
+    public List<NodeInfo> getChildren() {
+        List<NodeInfo> children = new ArrayList<>();
+        for (int i = 0; i < node.getChildCount(); i++) {
+            NodeInfo child = getChild(i);
+            if (child != null) children.add(child);
+        }
+        return children;
+    }
+
+    public List<NodeInfo> getCacheChildren() {
+        return children;
+    }
+
+    public NodeInfo getChild(int index) {
+        NodeInfo nodeInfo = children.get(index);
+        if (nodeInfo == null) {
+            AccessibilityNodeInfo child = node.getChild(index);
             if (child != null) {
-                NodeInfo info = new NodeInfo(child);
-                info.parent = this;
-                info.index = i + 1;
-                children.add(info);
+                nodeInfo = new NodeInfo(child);
+                nodeInfo.index = index + 1;
+                children.set(index, nodeInfo);
             }
         }
-    }
-
-    public List<NodeInfo> findChildrenById(String id) {
-        List<NodeInfo> result = new ArrayList<>();
-        for (NodeInfo child : children) {
-            if (child.id != null && child.id.contains(id)) result.add(child);
-            result.addAll(child.findChildrenById(id));
-        }
-        return result;
-    }
-
-    public List<NodeInfo> findChildrenByText(String text) {
-        List<NodeInfo> result = new ArrayList<>();
-        for (NodeInfo child : children) {
-
-            if (child.text != null && !child.text.isEmpty()) {
-                if (AppUtil.isStringContains(child.text, text)) {
-                    result.add(child);
-                }
-            }
-
-            result.addAll(child.findChildrenByText(text));
-        }
-        return result;
-    }
-
-    public List<NodeInfo> findChildrenInArea(Rect area) {
-        List<NodeInfo> result = new ArrayList<>();
-        for (NodeInfo child : children) {
-            if (Rect.intersects(area, child.area) || area.contains(child.area)) {
-                result.add(child);
-                result.addAll(child.findChildrenInArea(area));
-            }
-        }
-        return result;
-    }
-
-    public void findChildrenInArea(Map<NodeInfo, Integer> map, Rect area, int depth) {
-        for (NodeInfo child : children) {
-            if (Rect.intersects(area, child.area) || area.contains(child.area)) {
-                map.put(child, depth);
-                child.findChildrenInArea(map, area, depth + 1);
-            }
-        }
+        return nodeInfo;
     }
 
     public NodeInfo findUsableChild(int x, int y) {
-        for (int i = children.size() - 1; i >= 0; i--) {
-            NodeInfo child = children.get(i);
+        for (int i = getChildCount(); i > 0; i--) {
+            NodeInfo child = getChild(i);
             NodeInfo result = child.findUsableChild(x, y);
             if (result != null) return result;
         }
@@ -150,64 +94,133 @@ public class NodeInfo implements ITreeNodeData {
         return null;
     }
 
-    public AccessibilityNodeInfo findUsableParentNode() {
-        if (usable) return nodeInfo;
-        return parent == null ? null : parent.findUsableParentNode();
+    public NodeInfo getParent() {
+        AccessibilityNodeInfo parent = node.getParent();
+        return parent == null ? null : new NodeInfo(parent);
     }
 
-    private boolean checkId(NodeInfo node) {
-        if (id == null) return false;
-        return id.equals(node.id);
+    public NodeInfo findUsableParent() {
+        NodeInfo parent = getParent();
+        while (parent != null) {
+            if (parent.usable) return parent;
+            parent = parent.getParent();
+        }
+        return null;
     }
 
-    private boolean checkClass(NodeInfo node) {
-        return clazz.equals(node.clazz);
+    public static List<NodeInfo> getWindows() {
+        List<NodeInfo> rootNodes = new ArrayList<>();
+        for (AccessibilityNodeInfo window : AppUtil.getWindows(MainApplication.getInstance().getService())) {
+            rootNodes.add(new NodeInfo(window));
+        }
+        return rootNodes;
     }
 
-    /**
-     * 用自身的信息在节点中找到和自身差不多的
-     */
-    public NodeInfo findSelfInNode(NodeInfo node, boolean fullPath) {
-        NodeInfo result = null;
-
-        // 先根据class,id,index一起查找
-        if (index > 0 && index <= node.children.size()) {
-            NodeInfo child = node.children.get(index - 1);
-            if (checkId(child) && checkClass(child)) result = child;
+    public NodeInfo findChild(SimpleNodeInfo nodeInfo, boolean fullPath) {
+        Map<Integer, NodeInfo> children = new HashMap<>();
+        // 先根据class，id，index一起查找
+        if (nodeInfo.index > 0 && nodeInfo.index <= getChildCount()) {
+            NodeInfo child = children.computeIfAbsent(nodeInfo.index, i -> getChild(i - 1));
+            if (child != null) {
+                if (nodeInfo.matchNodeClass(child) && nodeInfo.matchNodeId(child)) return child;
+            }
         }
 
-        // 如果没找到，再根据class,id查找
-        if (result == null) {
-            for (NodeInfo child : node.children) {
-                if (checkId(child) && checkClass(child)) {
-                    result = child;
-                    break;
+        // 如果没找到，再根据class，id查找
+        for (int i = 0; i < getChildCount(); i++) {
+            NodeInfo child = children.computeIfAbsent(i, this::getChild);
+            if (child != null) {
+                if (nodeInfo.matchNodeClass(child) && nodeInfo.matchNodeId(child)) return child;
+            }
+        }
+
+        // 如果还是没找到，再根据class，index查找
+        if (nodeInfo.index > 0 && nodeInfo.index <= getChildCount()) {
+            NodeInfo child = children.computeIfAbsent(nodeInfo.index, i -> getChild(i - 1));
+            if (child != null) {
+                if (nodeInfo.matchNodeClass(child)) return child;
+            }
+        }
+
+        //带标记，却没有找到，不再继续
+        if (fullPath && (nodeInfo.index > 1 || nodeInfo.id != null)) return null;
+
+        //如果还是没找到，再根据class查找
+        for (int i = 0; i < getChildCount(); i++) {
+            NodeInfo child = children.computeIfAbsent(i, this::getChild);
+            if (child != null) {
+                if (nodeInfo.matchNodeClass(child)) return child;
+            }
+        }
+
+        return null;
+    }
+
+    public List<NodeInfo> findChildren(Rect area) {
+        List<NodeInfo> nodes = new ArrayList<>();
+        Queue<NodeInfo> queue = new LinkedList<>();
+        if (area.contains(this.area) || Rect.intersects(area, this.area)) queue.add(this);
+        while (!queue.isEmpty()) {
+            NodeInfo node = queue.poll();
+            if (node == null) continue;
+            nodes.add(node);
+            for (NodeInfo child : getChildren()) {
+                if (area.contains(child.area) || Rect.intersects(area, child.area)) {
+                    queue.add(child);
                 }
             }
         }
+        return nodes;
+    }
 
-        // 如果还是没找到，再根据class,index查找
-        if (result == null) {
-            if (index > 0 && index <= node.children.size()) {
-                NodeInfo child = node.children.get(index - 1);
-                if (checkClass(child)) result = child;
+    public void mapChildrenDepth(Map<NodeInfo, Integer> map, Rect area, int depth) {
+        for (NodeInfo child : getChildren()) {
+            if (area.contains(child.area) || Rect.intersects(area, child.area)) {
+                map.put(child, depth);
+                child.mapChildrenDepth(map, area, depth + 1);
             }
         }
+    }
 
-        // 带标记，却没有找到，不再继续
-        if (fullPath && (index > 1 || id != null)) return result;
+    public List<NodeInfo> findChildrenByText(String text, Rect area) {
+        List<NodeInfo> nodes = new ArrayList<>();
+        Queue<NodeInfo> queue = new LinkedList<>();
+        Pattern pattern = AppUtil.getPattern(text);
+        if (area.contains(this.area) || Rect.intersects(area, this.area)) queue.add(this);
+        while (!queue.isEmpty()) {
+            NodeInfo node = queue.poll();
+            if (node == null) continue;
+            if (pattern == null) {
+                if (node.text.toLowerCase().contains(text.toLowerCase())) nodes.add(node);
+            } else {
+                if (pattern.matcher(node.text).find()) nodes.add(node);
+            }
 
-        // 如果还是没找到，再根据class查找
-        if (result == null) {
-            for (NodeInfo child : node.children) {
-                if (checkClass(child)) {
-                    result = child;
-                    break;
+            for (NodeInfo child : getChildren()) {
+                if (area.contains(child.area) || Rect.intersects(area, child.area)) {
+                    queue.add(child);
                 }
             }
         }
+        return nodes;
+    }
 
-        return result;
+    public List<NodeInfo> findChildrenById(String id, Rect area) {
+        List<NodeInfo> nodes = new ArrayList<>();
+        Queue<NodeInfo> queue = new LinkedList<>();
+        if (area.contains(this.area) || Rect.intersects(area, this.area)) queue.add(this);
+        while (!queue.isEmpty()) {
+            NodeInfo node = queue.poll();
+            if (node == null) continue;
+            if (id.equals(node.id)) nodes.add(node);
+
+            for (NodeInfo child : getChildren()) {
+                if (area.contains(child.area) || Rect.intersects(area, child.area)) {
+                    queue.add(child);
+                }
+            }
+        }
+        return nodes;
     }
 
     @NonNull
@@ -229,7 +242,21 @@ public class NodeInfo implements ITreeNodeData {
     }
 
     @Override
-    public List<ITreeNodeData> getChildren() {
-        return new ArrayList<>(children);
+    public List<Object> getChildrenFlags() {
+        List<Object> flags = new ArrayList<>();
+        for (int i = 0; i < getChildCount(); i++) {
+            flags.add(i);
+        }
+        return flags;
+    }
+
+    @Override
+    public List<ITreeNodeData> getChildrenData() {
+        return new ArrayList<>(getChildren());
+    }
+
+    @Override
+    public ILazyTreeNodeData loadData(Object flag) {
+        return getChild((Integer) flag);
     }
 }

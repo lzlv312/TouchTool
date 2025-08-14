@@ -59,20 +59,23 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
         binding.recyclerView.setAdapter(adapter);
 
         binding.parentButton.setOnClickListener(v -> {
-            if (nodeInfo == null || nodeInfo.parent == null) return;
-            innerShowToast(nodeInfo.parent);
+            NodeInfo parent = nodeInfo.getParent();
+            if (parent == null) return;
+            innerShowToast(parent);
         });
         binding.childButton.setOnClickListener(v -> {
-            if (nodeInfo == null || nodeInfo.children.isEmpty()) return;
-            innerShowToast(nodeInfo.children.get(0));
+            if (nodeInfo.getChildCount() == 0) return;
+            innerShowToast(nodeInfo.getChild(0));
         });
         binding.preButton.setOnClickListener(v -> {
-            if (nodeInfo == null || nodeInfo.parent == null || nodeInfo.index <= 1) return;
-            innerShowToast(nodeInfo.parent.children.get(nodeInfo.index - 2));
+            NodeInfo parent = nodeInfo.getParent();
+            if (parent == null || nodeInfo.index <= 1) return;
+            innerShowToast(parent.getChild(nodeInfo.index - 2));
         });
         binding.nextButton.setOnClickListener(v -> {
-            if (nodeInfo == null || nodeInfo.parent == null || nodeInfo.index == nodeInfo.parent.children.size()) return;
-            innerShowToast(nodeInfo.parent.children.get(nodeInfo.index));
+            NodeInfo parent = nodeInfo.getParent();
+            if (parent == null || nodeInfo.index == parent.getChildCount()) return;
+            innerShowToast(parent.getChild(nodeInfo.index));
         });
 
         binding.closeButton.setOnClickListener(v -> dismiss());
@@ -107,10 +110,11 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
     private void innerShowToast(NodeInfo nodeInfo) {
         this.nodeInfo = nodeInfo;
         if (nodeInfo == null) return;
-        binding.parentButton.setVisibility(nodeInfo.parent == null ? INVISIBLE : VISIBLE);
-        binding.childButton.setVisibility(nodeInfo.children.isEmpty() ? INVISIBLE : VISIBLE);
-        binding.preButton.setVisibility(nodeInfo.parent == null || nodeInfo.index <= 1 ? INVISIBLE : VISIBLE);
-        binding.nextButton.setVisibility(nodeInfo.parent == null || nodeInfo.index == nodeInfo.parent.children.size() ? INVISIBLE : VISIBLE);
+        NodeInfo parent = nodeInfo.getParent();
+        binding.parentButton.setVisibility(parent == null ? INVISIBLE : VISIBLE);
+        binding.childButton.setVisibility(nodeInfo.getChildCount() == 0 ? INVISIBLE : VISIBLE);
+        binding.preButton.setVisibility(parent == null || nodeInfo.index <= 1 ? INVISIBLE : VISIBLE);
+        binding.nextButton.setVisibility(parent == null || nodeInfo.index == parent.getChildCount() ? INVISIBLE : VISIBLE);
 
         List<NodeInfoContent> contents = new ArrayList<>();
         String[] array = getResources().getStringArray(R.array.node_info_type);
@@ -129,8 +133,8 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
                         + getContext().getString(R.string.area_right) + ": " + nodeInfo.area.right + ", "
                         + getContext().getString(R.string.area_bottom) + ": " + nodeInfo.area.bottom;
                 case 9 -> nodeInfo.area.width() + " × " + nodeInfo.area.height();
-                case 10 -> nodeInfo.parent == null ? "" : nodeInfo.parent.toString();
-                case 11 -> String.valueOf(!nodeInfo.children.isEmpty());
+                case 10 -> parent == null ? "" : parent.toString();
+                case 11 -> String.valueOf(nodeInfo.getChildCount() != 0);
                 default -> "";
             };
             String copyValue = switch (i) {
@@ -141,9 +145,9 @@ public class NodeInfoFloatView extends FrameLayout implements FloatInterface {
                 }
                 case 7 -> nodeInfo.area.toString();
                 case 10 -> {
-                    if (nodeInfo.parent == null) yield "";
+                    if (parent == null) yield "";
                     PinNodePathString pathString = new PinNodePathString();
-                    pathString.setValue(nodeInfo.parent);
+                    pathString.setValue(parent);
                     yield pathString.getValue();
                 }
                 default -> content;
