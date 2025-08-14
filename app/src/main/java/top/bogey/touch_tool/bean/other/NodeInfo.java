@@ -308,6 +308,32 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         return nodes;
     }
 
+
+    public List<NodeInfo> findChildrenByDesc(String desc, Rect area) {
+        List<NodeInfo> nodes = new ArrayList<>();
+
+        Stack<NodeInfo> stack = new Stack<>();
+        Pattern pattern = AppUtil.getPattern(desc);
+        if (area.contains(this.area) || Rect.intersects(area, this.area)) stack.push(this);
+        while (!stack.isEmpty()) {
+            NodeInfo node = stack.pop();
+            if (node == null) continue;
+            if (pattern == null) {
+                if (node.desc.toLowerCase().contains(desc.toLowerCase())) nodes.add(node);
+            } else {
+                if (pattern.matcher(node.desc).find()) nodes.add(node);
+            }
+
+            for (NodeInfo child : getChildren()) {
+                if (area.contains(child.area) || Rect.intersects(area, child.area)) {
+                    stack.push(child);
+                }
+            }
+        }
+
+        return nodes;
+    }
+
     @NonNull
     @Override
     public String toString() {

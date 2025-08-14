@@ -447,6 +447,8 @@
     <string name="find_node_action_path">身份</string>
     <string name="find_node_action_full_path">精确身份</string>
     <string name="find_node_action_id">控件ID</string>
+    <string name="find_node_action_class">类名</string>
+    <string name="find_node_action_node_desc">描述</string>
     <string name="find_node_action_regex_path">正则路径</string>
 
     <string name="is_node_exist_action">控件是否存在</string>
@@ -455,6 +457,8 @@
     <string name="is_node_exist_action_path">身份</string>
     <string name="is_node_exist_action_full_path">精确身份</string>
     <string name="is_node_exist_action_id">控件ID</string>
+    <string name="is_node_exist_action_class">类名</string>
+    <string name="is_node_exist_action_node_desc">描述</string>
     <string name="is_node_exist_action_regex_path">正则路径</string>
 
     <string name="find_nodes_in_area_action">获取区域内控件</string>

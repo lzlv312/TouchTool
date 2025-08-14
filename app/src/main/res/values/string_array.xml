@@ -113,8 +113,10 @@
     <string-array name="find_node_type">
         <item>身份</item>
         <item>文本</item>
-        <item>控件ID</item>
+        <item>ID</item>
         <item>正则路径</item>
+        <item>类名</item>
+        <item>描述</item>
     </string-array>
 
     <string-array name="string_encode_type">

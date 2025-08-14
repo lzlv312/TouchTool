@@ -30,6 +30,8 @@ public class FindNodeAction extends FindExecuteAction {
     private final transient Pin fullPathPin = new PathShowablePin(new PinBoolean(true), R.string.find_node_action_full_path);
     private final transient Pin textPin = new TextShowablePin(new PinString(), R.string.pin_string);
     private final transient Pin idPin = new IdShowablePin(new PinString(), R.string.find_node_action_id);
+    private final transient Pin classPin = new ClassShowablePin(new PinString(), R.string.find_node_action_class);
+    private final transient Pin descPin = new DescShowablePin(new PinString(), R.string.find_node_action_node_desc);
     private final transient Pin areaPin = new NotAllPathShowablePin(new PinArea(), R.string.pin_area);
     private final transient Pin pathTextPin = new PathTextShowablePin(new PinNodePathTextString(), R.string.find_node_action_regex_path);
     private final transient Pin nodePin = new Pin(new PinNode(), R.string.pin_node, true);
@@ -37,12 +39,12 @@ public class FindNodeAction extends FindExecuteAction {
 
     public FindNodeAction() {
         super(ActionType.FIND_NODE);
-        reAddPins(typePin, pathPin, fullPathPin, textPin, idPin, areaPin, pathTextPin, nodePin, nodesPin);
+        reAddPins(typePin, pathPin, fullPathPin, textPin, idPin, classPin, descPin, areaPin, pathTextPin, nodePin, nodesPin);
     }
 
     public FindNodeAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(typePin, pathPin, fullPathPin, textPin, idPin, areaPin, pathTextPin, nodePin, nodesPin);
+        reAddPins(typePin, pathPin, fullPathPin, textPin, idPin, classPin, descPin, areaPin, pathTextPin, nodePin, nodesPin);
     }
 
     @Override
@@ -95,6 +97,34 @@ public class FindNodeAction extends FindExecuteAction {
                 for (NodeInfo nodeInfo : findNodes) {
                     nodes.add(new PinNode(nodeInfo));
                     MarkTargetFloatView.showTargetArea(nodeInfo.area);
+                }
+                nodePin.setValue(nodes.get(0));
+                return true;
+            }
+            case 4 -> {
+                PinArea area = getPinValue(runnable, areaPin);
+                PinString className = getPinValue(runnable, classPin);
+                NodeInfo nodeInfo = NodeInfo.getActiveWindow();
+                if (nodeInfo == null) return false;
+                List<NodeInfo> children = nodeInfo.findChildrenByClass(className.getValue(), area.getValue());
+                if (children == null || children.isEmpty()) return false;
+                for (NodeInfo child : children) {
+                    nodes.add(new PinNode(child));
+                    MarkTargetFloatView.showTargetArea(child.area);
+                }
+                nodePin.setValue(nodes.get(0));
+                return true;
+            }
+            case 5 -> {
+                PinArea area = getPinValue(runnable, areaPin);
+                PinString desc = getPinValue(runnable, descPin);
+                NodeInfo nodeInfo = NodeInfo.getActiveWindow();
+                if (nodeInfo == null) return false;
+                List<NodeInfo> children = nodeInfo.findChildrenByDesc(desc.getValue(), area.getValue());
+                if (children == null || children.isEmpty()) return false;
+                for (NodeInfo child : children) {
+                    nodes.add(new PinNode(child));
+                    MarkTargetFloatView.showTargetArea(child.area);
                 }
                 nodePin.setValue(nodes.get(0));
                 return true;
@@ -178,6 +208,30 @@ public class FindNodeAction extends FindExecuteAction {
         public boolean showAble(Task context) {
             FindNodeAction action = (FindNodeAction) context.getAction(getOwnerId());
             return action.getTypeValue() == 2;
+        }
+    }
+
+    private static class ClassShowablePin extends ShowAblePin {
+        public ClassShowablePin(PinBase value, int titleId) {
+            super(value, titleId);
+        }
+
+        @Override
+        public boolean showAble(Task context) {
+            FindNodeAction action = (FindNodeAction) context.getAction(getOwnerId());
+            return action.getTypeValue() == 4;
+        }
+    }
+
+    private static class DescShowablePin extends ShowAblePin {
+        public DescShowablePin(PinBase value, int titleId) {
+            super(value, titleId);
+        }
+
+        @Override
+        public boolean showAble(Task context) {
+            FindNodeAction action = (FindNodeAction) context.getAction(getOwnerId());
+            return action.getTypeValue() == 5;
         }
     }
 }
