@@ -7,19 +7,17 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
+import java.util.Stack;
 import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.MainApplication;
+import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.utils.AppUtil;
-import top.bogey.touch_tool.utils.tree.ILazyTreeNodeData;
 import top.bogey.touch_tool.utils.tree.ITreeNodeData;
-import top.bogey.touch_tool.utils.tree.ITreeNodeDataLoader;
 
-public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData, ITreeNodeDataLoader, ILazyTreeNodeData {
+public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
     public final transient AccessibilityNodeInfo node;
     private final transient List<NodeInfo> children = new ArrayList<>();
 
@@ -116,6 +114,13 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData, ITreeNode
         return rootNodes;
     }
 
+    public static NodeInfo getActiveWindow() {
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service == null || !service.isEnabled()) return null;
+        AccessibilityNodeInfo window = service.getRootInActiveWindow();
+        return window == null ? null : new NodeInfo(window);
+    }
+
     public NodeInfo findChild(SimpleNodeInfo nodeInfo, boolean fullPath) {
         Map<Integer, NodeInfo> children = new HashMap<>();
         // 先根据class，id，index一起查找
@@ -156,17 +161,45 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData, ITreeNode
         return null;
     }
 
+    public NodeInfo findChild(String className) {
+        Class<?> viewClazz;
+        try {
+            viewClazz = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+
+        Stack<NodeInfo> stack = new Stack<>();
+        if (area.contains(this.area) || Rect.intersects(area, this.area)) stack.push(this);
+        while (!stack.isEmpty()) {
+            NodeInfo node = stack.pop();
+            if (node == null) continue;
+            try {
+                Class<?> clazz = Class.forName(node.clazz);
+                if (viewClazz.isAssignableFrom(clazz)) return node;
+            } catch (ClassNotFoundException ignored) {
+            }
+
+            for (NodeInfo child : getChildren()) {
+                if (area.contains(child.area) || Rect.intersects(area, child.area)) {
+                    stack.push(child);
+                }
+            }
+        }
+        return null;
+    }
+
     public List<NodeInfo> findChildren(Rect area) {
         List<NodeInfo> nodes = new ArrayList<>();
-        Queue<NodeInfo> queue = new LinkedList<>();
-        if (area.contains(this.area) || Rect.intersects(area, this.area)) queue.add(this);
-        while (!queue.isEmpty()) {
-            NodeInfo node = queue.poll();
+        Stack<NodeInfo> stack = new Stack<>();
+        if (area.contains(this.area) || Rect.intersects(area, this.area)) stack.push(this);
+        while (!stack.isEmpty()) {
+            NodeInfo node = stack.pop();
             if (node == null) continue;
             nodes.add(node);
             for (NodeInfo child : getChildren()) {
                 if (area.contains(child.area) || Rect.intersects(area, child.area)) {
-                    queue.add(child);
+                    stack.push(child);
                 }
             }
         }
@@ -184,39 +217,91 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData, ITreeNode
 
     public List<NodeInfo> findChildrenByText(String text, Rect area) {
         List<NodeInfo> nodes = new ArrayList<>();
-        Queue<NodeInfo> queue = new LinkedList<>();
-        Pattern pattern = AppUtil.getPattern(text);
-        if (area.contains(this.area) || Rect.intersects(area, this.area)) queue.add(this);
-        while (!queue.isEmpty()) {
-            NodeInfo node = queue.poll();
-            if (node == null) continue;
-            if (pattern == null) {
-                if (node.text.toLowerCase().contains(text.toLowerCase())) nodes.add(node);
-            } else {
-                if (pattern.matcher(node.text).find()) nodes.add(node);
-            }
 
-            for (NodeInfo child : getChildren()) {
-                if (area.contains(child.area) || Rect.intersects(area, child.area)) {
-                    queue.add(child);
+        String regexMetaChars = ".*+?^$|\\[]{}()";
+        boolean flag = false;
+        for (char c : regexMetaChars.toCharArray()) {
+            if (text.indexOf(c) != -1) {
+                flag = true;
+                break;
+            }
+        }
+        if (flag) {
+            Stack<NodeInfo> stack = new Stack<>();
+            Pattern pattern = AppUtil.getPattern(text);
+            if (area.contains(this.area) || Rect.intersects(area, this.area)) stack.push(this);
+            while (!stack.isEmpty()) {
+                NodeInfo node = stack.pop();
+                if (node == null) continue;
+                if (pattern == null) {
+                    if (node.text.toLowerCase().contains(text.toLowerCase())) nodes.add(node);
+                } else {
+                    if (pattern.matcher(node.text).find()) nodes.add(node);
+                }
+
+                for (NodeInfo child : getChildren()) {
+                    if (area.contains(child.area) || Rect.intersects(area, child.area)) {
+                        stack.push(child);
+                    }
+                }
+            }
+        } else {
+            if (area.contains(this.area) || Rect.intersects(area, this.area)) {
+                if (this.text != null && this.text.contains(text)) nodes.add(this);
+
+                List<AccessibilityNodeInfo> list = node.findAccessibilityNodeInfosByText(text);
+                for (AccessibilityNodeInfo node : list) {
+                    NodeInfo nodeInfo = new NodeInfo(node);
+                    if (area.contains(nodeInfo.area) || Rect.intersects(area, nodeInfo.area)) {
+                        nodes.add(nodeInfo);
+                    }
                 }
             }
         }
+
         return nodes;
     }
 
     public List<NodeInfo> findChildrenById(String id, Rect area) {
         List<NodeInfo> nodes = new ArrayList<>();
-        Queue<NodeInfo> queue = new LinkedList<>();
-        if (area.contains(this.area) || Rect.intersects(area, this.area)) queue.add(this);
-        while (!queue.isEmpty()) {
-            NodeInfo node = queue.poll();
+        if (area.contains(this.area) || Rect.intersects(area, this.area)) {
+            if (id.equals(this.id)) nodes.add(this);
+
+            List<AccessibilityNodeInfo> list = node.findAccessibilityNodeInfosByViewId(id);
+            for (AccessibilityNodeInfo node : list) {
+                NodeInfo nodeInfo = new NodeInfo(node);
+                if (area.contains(nodeInfo.area) || Rect.intersects(area, nodeInfo.area)) {
+                    nodes.add(nodeInfo);
+                }
+            }
+        }
+
+        return nodes;
+    }
+
+    public List<NodeInfo> findChildrenByClass(String className, Rect area) {
+        List<NodeInfo> nodes = new ArrayList<>();
+        Class<?> viewClazz;
+        try {
+            viewClazz = Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            return nodes;
+        }
+
+        Stack<NodeInfo> stack = new Stack<>();
+        if (area.contains(this.area) || Rect.intersects(area, this.area)) stack.push(this);
+        while (!stack.isEmpty()) {
+            NodeInfo node = stack.pop();
             if (node == null) continue;
-            if (id.equals(node.id)) nodes.add(node);
+            try {
+                Class<?> clazz = Class.forName(node.clazz);
+                if (viewClazz.isAssignableFrom(clazz)) nodes.add(node);
+            } catch (ClassNotFoundException ignored) {
+            }
 
             for (NodeInfo child : getChildren()) {
                 if (area.contains(child.area) || Rect.intersects(area, child.area)) {
-                    queue.add(child);
+                    stack.push(child);
                 }
             }
         }
@@ -242,21 +327,7 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData, ITreeNode
     }
 
     @Override
-    public List<Object> getChildrenFlags() {
-        List<Object> flags = new ArrayList<>();
-        for (int i = 0; i < getChildCount(); i++) {
-            flags.add(i);
-        }
-        return flags;
-    }
-
-    @Override
     public List<ITreeNodeData> getChildrenData() {
         return new ArrayList<>(getChildren());
-    }
-
-    @Override
-    public ILazyTreeNodeData loadData(Object flag) {
-        return getChild((Integer) flag);
     }
 }

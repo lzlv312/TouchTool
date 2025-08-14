@@ -7,7 +7,6 @@ import android.widget.EditText;
 
 import com.google.gson.JsonObject;
 
-import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
@@ -18,7 +17,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
-import top.bogey.touch_tool.utils.AppUtil;
 
 public class EditTextInputAction extends ExecuteAction {
     private final transient Pin nodePin = new Pin(new PinNode(), R.string.edit_text_input_action_edit_text, false, false, true);
@@ -44,10 +42,10 @@ public class EditTextInputAction extends ExecuteAction {
             PinNode node = getPinValue(runnable, nodePin);
             nodeInfo = node.getNodeInfo();
         } else {
-            for (AccessibilityNodeInfo window : AppUtil.getWindows(MainApplication.getInstance().getService())) {
-                AccessibilityNodeInfo node = findNodeByClass(window, EditText.class);
-                if (node != null) {
-                    nodeInfo = new NodeInfo(node);
+            for (NodeInfo window : NodeInfo.getWindows()) {
+                NodeInfo child = window.findChild(EditText.class.getName());
+                if (child != null) {
+                    nodeInfo = child;
                     break;
                 }
             }
@@ -74,28 +72,5 @@ public class EditTextInputAction extends ExecuteAction {
             }
         }
         executeNext(runnable, result ? outPin : elsePin);
-    }
-
-    private AccessibilityNodeInfo findNodeByClass(AccessibilityNodeInfo nodeInfo, Class<?> clazz) {
-        if (nodeInfo == null) return null;
-        CharSequence className = nodeInfo.getClassName();
-        if (className != null) {
-            Class<?> aClass = null;
-            try {
-                aClass = Class.forName(className.toString());
-
-            } catch (ClassNotFoundException ignored) {
-            }
-
-            if (aClass != null && clazz.isAssignableFrom(aClass)) {
-                return nodeInfo;
-            }
-            for (int i = 0; i < nodeInfo.getChildCount(); i++) {
-                AccessibilityNodeInfo child = nodeInfo.getChild(i);
-                AccessibilityNodeInfo result = findNodeByClass(child, clazz);
-                if (result != null) return result;
-            }
-        }
-        return null;
     }
 }

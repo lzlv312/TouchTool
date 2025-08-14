@@ -1,22 +1,17 @@
 package top.bogey.touch_tool.bean.action.node;
 
-import android.view.accessibility.AccessibilityNodeInfo;
-
 import com.google.gson.JsonObject;
 
 import java.util.List;
 
-import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
-import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
-import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class GetNodesInAreaAction extends ExecuteAction {
@@ -39,16 +34,16 @@ public class GetNodesInAreaAction extends ExecuteAction {
         PinArea area = getPinValue(runnable, areaPin);
         PinList nodes = nodesPin.getValue();
 
-        MainAccessibilityService service = MainApplication.getInstance().getService();
-        AccessibilityNodeInfo root = service.getRootInActiveWindow();
-        NodeInfo nodeInfo = new NodeInfo(root);
-        List<NodeInfo> childrenInArea = nodeInfo.findChildren(area.getValue());
-        for (NodeInfo info : childrenInArea) {
-            nodes.add(new PinNode(info));
-        }
+        NodeInfo nodeInfo = NodeInfo.getActiveWindow();
+        if (nodeInfo != null) {
+            List<NodeInfo> childrenInArea = nodeInfo.findChildren(area.getValue());
+            for (NodeInfo info : childrenInArea) {
+                nodes.add(new PinNode(info));
+            }
 
-        if (!nodes.isEmpty()) {
-            firstNodePin.setValue(nodes.get(nodes.size() - 1));
+            if (!nodes.isEmpty()) {
+                firstNodePin.setValue(nodes.get(nodes.size() - 1));
+            }
         }
 
         executeNext(runnable, outPin);

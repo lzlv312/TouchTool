@@ -44,15 +44,7 @@ public class PinNodePathTextString extends PinNodePathString {
         for (NodeInfo nodeInfo : nodes) {
             if (pattern.matcher(nodeInfo.getPath()).find()) {
                 if (index == paths.length - 1) result.add(nodeInfo);
-                else {
-                    List<NodeInfo> children = new ArrayList<>();
-                    for (int i = 0; i < nodeInfo.getChildCount(); i++) {
-                        NodeInfo child = nodeInfo.getChild(index);
-                        if (child == null) continue;
-                        children.add(child);
-                    }
-                    result.addAll(findNodes(children, paths, index + 1));
-                }
+                else result.addAll(findNodes(nodeInfo.getChildren(), paths, index + 1));
             }
         }
         return result;

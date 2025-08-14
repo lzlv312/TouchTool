@@ -1,12 +1,9 @@
 package top.bogey.touch_tool.bean.action.node;
 
-import android.view.accessibility.AccessibilityNodeInfo;
-
 import com.google.gson.JsonObject;
 
 import java.util.List;
 
-import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
@@ -22,7 +19,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
 import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.custom.MarkTargetFloatView;
 
@@ -63,10 +59,8 @@ public class IsNodeExistAction extends CalculateAction {
             }
             case 1, 2 -> {
                 PinArea area = getPinValue(runnable, areaPin);
-                MainAccessibilityService service = MainApplication.getInstance().getService();
-                AccessibilityNodeInfo root = service.getRootInActiveWindow();
-                if (root == null) break;
-                NodeInfo nodeInfo = new NodeInfo(root);
+                NodeInfo nodeInfo = NodeInfo.getActiveWindow();
+                if (nodeInfo == null) break;
                 List<NodeInfo> children;
                 if (type.getIndex() == 1) {
                     PinString text = getPinValue(runnable, textPin);
