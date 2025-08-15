@@ -94,7 +94,19 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
 
     public NodeInfo getParent() {
         AccessibilityNodeInfo parent = node.getParent();
-        return parent == null ? null : new NodeInfo(parent);
+        if (parent == null) return null;
+        NodeInfo nodeInfo = new NodeInfo(parent);
+        AccessibilityNodeInfo grandParent = parent.getParent();
+        if (grandParent != null) {
+            for (int i = 0; i < grandParent.getChildCount(); i++) {
+                AccessibilityNodeInfo child = grandParent.getChild(i);
+                if (parent.equals(child)) {
+                    nodeInfo.index = i + 1;
+                    break;
+                }
+            }
+        }
+        return nodeInfo;
     }
 
     public NodeInfo findUsableParent() {
