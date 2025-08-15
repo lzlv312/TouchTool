@@ -290,12 +290,13 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
     }
 
     public void execute(TaskRunnable runnable, StartAction startAction, BooleanResultCallback callback) {
-        Task copy = copy();
+        Task task = this;
         Action action = startAction;
         if (!(startAction instanceof InnerStartAction)) {
-            action = copy.getAction(startAction.getId());
+            task = copy();
+            action = task.getAction(startAction.getId());
         }
-        runnable.pushStack(copy, action);
+        runnable.pushStack(task, action);
         callback.onResult(true);
         action.execute(runnable, null);
     }

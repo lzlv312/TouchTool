@@ -41,6 +41,7 @@ import top.bogey.touch_tool.service.super_user.SuperUser;
 import top.bogey.touch_tool.service.super_user.root.RootSuperUser;
 import top.bogey.touch_tool.service.super_user.shizuku.ShizukuSuperUser;
 import top.bogey.touch_tool.ui.MainActivity;
+import top.bogey.touch_tool.ui.blueprint.picker.ColorPickerPreview;
 import top.bogey.touch_tool.utils.AppUtil;
 
 public class SettingView extends Fragment {
@@ -365,6 +366,7 @@ public class SettingView extends Fragment {
 
         // 动态颜色
         binding.dynamicColorSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setDynamicColorTheme(activity, binding.dynamicColorSwitch.isChecked()));
+        binding.dynamicColorSwitch.setOnClickListener(v -> ColorPickerPreview.showPicker(result -> SettingSaver.getInstance().setDynamicColorValue(activity, result.getColor()), SettingSaver.getInstance().getDynamicColorValue()));
         binding.dynamicColorSwitch.setChecked(SettingSaver.getInstance().isDynamicColorTheme());
 
         PackageManager packageManager = activity.getPackageManager();

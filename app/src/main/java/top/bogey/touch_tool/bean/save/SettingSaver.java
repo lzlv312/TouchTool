@@ -5,9 +5,12 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
-import android.util.Log;
+import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.color.DynamicColors;
@@ -40,6 +43,7 @@ public class SettingSaver {
     private static final String MANUAL_PLAY_VIEW_POS = "MANUAL_PLAY_VIEW_POS";                          // 手动执行悬浮窗位置
     private static final String MANUAL_CHOICE_VIEW_POS = "MANUAL_CHOICE_VIEW_POS";                      // 选择执行悬浮窗位置
     private static final String PICK_NODE_TYPE = "PICK_NODE_TYPE";                                      // 选择控件方式
+    private static final String BLUEPRINT_EDITABLE = "BLUEPRINT_EDITABLE";                              // 蓝图是否可编辑
 
     private static final String LAST_GROUP = "LAST_GROUP";                                              // 上次打开的分组
     private static final String LAST_SUB_GROUP = "LAST_SUB_GROUP";                                      // 上次打开的次级分组
@@ -66,13 +70,16 @@ public class SettingSaver {
     private static final String SUPPORT_FREE_FORM = "SUPPORT_FREE_FORM";                                // 小窗支持
     private static final String NIGHT_MODE_TYPE = "NIGHT_MODE_TYPE";                                    // 深色模式
     private static final String DYNAMIC_COLOR = "DYNAMIC_COLOR";                                        // 动态颜色
+    private static final String DYNAMIC_COLOR_VALUE = "DYNAMIC_COLOR_VALUE";                            // 动态颜色值
+
 
     private static final String MANUAL_PLAY_SHOW_TYPE = "MANUAL_PLAY_SHOW_TYPE";                        // 手动执行什么时候显示
     private static final String MANUAL_PLAY_PAUSE_TYPE = "MANUAL_PLAY_PAUSE_TYPE";                      // 手动执行暂停模式
     private static final String MANUAL_PLAY_HIDE_TYPE = "MANUAL_PLAY_HIDE_TYPE";                        // 手动执行什么时候隐藏
     private static final String MANUAL_PLAY_VIEW_PADDING = "MANUAL_PLAY_VIEW_PADDING";                  // 手动执行悬浮窗偏移
-    private static final String MANUAL_PLAY_VIEW_EXPAND_SIZE = "MANUAL_PLAY_VIEW_EXPAND_SIZE";          // 手动执行悬浮窗按钮容纳文本数量
-    private static final String MANUAL_PLAY_VIEW_CLOSE_SIZE = "MANUAL_PLAY_VIEW_CLOSE_SIZE";            // 手动执行悬浮窗按钮收起时宽度
+    private static final String MANUAL_PLAY_VIEW_EXPAND_SIZE = "MANUAL_PLAY_VIEW_EXPAND_SIZE";          // 手动悬浮窗按钮容纳文本数量
+    private static final String MANUAL_PLAY_VIEW_CLOSE_SIZE = "MANUAL_PLAY_VIEW_CLOSE_SIZE";            // 手动悬浮窗按钮收起时宽度
+    private static final String MANUAL_PLAY_VIEW_BUTTON_HEIGHT = "MANUAL_PLAY_VIEW_BUTTON_HEIGHT";      // 手动执行悬浮窗按钮高度
     private static final String MANUAL_PLAY_VIEW_SINGLE_SIZE = "MANUAL_PLAY_VIEW_SINGLE_SIZE";          // 手动执行悬浮窗独立按钮宽度
 
     private static final MMKV mmkv = MMKV.defaultMMKV();
@@ -84,8 +91,54 @@ public class SettingSaver {
     }
 
     public void initColor(Application application) {
-        DynamicColors.applyToActivitiesIfAvailable(application, new DynamicColorsOptions.Builder().setPrecondition((act, theme) -> isDynamicColorTheme()).build());
-        Log.d("TAG", "initColor: ");
+        application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+
+            @Override
+            public void onActivityPreCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+                Application.ActivityLifecycleCallbacks.super.onActivityPreCreated(activity, savedInstanceState);
+                if (isDynamicColorTheme()) {
+                    DynamicColorsOptions.Builder builder = new DynamicColorsOptions.Builder();
+                    int colorValue = getDynamicColorValue();
+                    if (colorValue != Color.BLACK) builder.setContentBasedSource(colorValue);
+                    DynamicColors.applyToActivityIfAvailable(activity, builder.build());
+                }
+            }
+
+            @Override
+            public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityStarted(@NonNull Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(@NonNull Activity activity) {
+
+            }
+        });
     }
 
     // 记录
@@ -144,6 +197,14 @@ public class SettingSaver {
 
     public void setPickNodeType(int type) {
         mmkv.encode(PICK_NODE_TYPE, type);
+    }
+
+    public boolean isBlueprintEditable() {
+        return mmkv.decodeBool(BLUEPRINT_EDITABLE, true);
+    }
+
+    public void setBlueprintEditable(boolean enable) {
+        mmkv.encode(BLUEPRINT_EDITABLE, enable);
     }
 
     public String getLastGroup() {
@@ -321,6 +382,15 @@ public class SettingSaver {
         activity.recreate();
     }
 
+    public int getDynamicColorValue() {
+        return mmkv.decodeInt(DYNAMIC_COLOR_VALUE, 0);
+    }
+
+    public void setDynamicColorValue(Activity activity, int value) {
+        mmkv.encode(DYNAMIC_COLOR_VALUE, value);
+        activity.recreate();
+    }
+
     public int getManualPlayShowType() {
         return mmkv.decodeInt(MANUAL_PLAY_SHOW_TYPE, 1);
     }
@@ -367,6 +437,14 @@ public class SettingSaver {
 
     public void setManualPlayViewCloseSize(int size) {
         mmkv.encode(MANUAL_PLAY_VIEW_CLOSE_SIZE, size);
+    }
+
+    public int getManualPlayViewButtonHeight() {
+        return mmkv.decodeInt(MANUAL_PLAY_VIEW_BUTTON_HEIGHT, 1);
+    }
+
+    public void setManualPlayViewButtonHeight(int height) {
+        mmkv.encode(MANUAL_PLAY_VIEW_BUTTON_HEIGHT, height);
     }
 
     public int getManualPlayViewSingleSize() {

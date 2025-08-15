@@ -41,6 +41,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
@@ -114,9 +115,11 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     private float offsetX, offsetY;
     private float scale = 1f;
 
+    private final Map<String, ActionCard> cards = new HashMap<>();
     private Task task;
     private HistoryManager history;
-    private final Map<String, ActionCard> cards = new HashMap<>();
+
+    private boolean editable = true;
 
     public CardLayoutView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -173,6 +176,13 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
         Saver.getInstance().addListener((TaskSaveListener) this);
         Saver.getInstance().addListener((VariableSaveListener) this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Saver.getInstance().removeListener((TaskSaveListener) this);
+        Saver.getInstance().removeListener((VariableSaveListener) this);
     }
 
     public void setTask(Task task, HistoryManager history) {
@@ -331,13 +341,20 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         animator.start();
     }
 
+    public void addSelectedCard(Action action) {
+        ActionCard card = getActionCard(action);
+        if (card != null) addSelectedCard(card);
+    }
+
     private void addSelectedCard(ActionCard card) {
+        Action action = card.getAction();
+        if (action.isLocked()) return;
         selectedCards.add(card);
         card.setSelected(true);
         refreshEditView();
     }
 
-    private void cleanSelectedCards() {
+    public void cleanSelectedCards() {
         selectedCards.forEach(card -> card.setSelected(false));
         selectedCards.clear();
         refreshEditView();
@@ -386,6 +403,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         float realX = x - offsetX;
         float realY = y - offsetY;
 
+        if (!editable) return true;
+
         ActionCard card = getActionCard(realX, realY, false);
         if (card != null) {
             if (card.isEmptyPosition(x - card.getX(), y - card.getY())) {
@@ -430,24 +449,29 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
                 longTouchHandler.removeCallbacksAndMessages(null);
 
-                ActionCard card = getActionCard(realX, realY, true);
-                if (card != null) {
-                    touchState = TOUCH_CARD;
-                    touchedCard = card;
+                if (editable) {
+                    ActionCard card = getActionCard(realX, realY, true);
+                    if (card != null) {
+                        touchState = TOUCH_CARD;
+                        touchedCard = card;
 
-                    card.bringToFront();
-                    PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY());
-                    if (pinView != null) {
-                        touchState = TOUCH_PIN;
-                        touchedPin = pinView;
+                        card.bringToFront();
+                        PinView pinView = card.getLinkAblePinView(x - card.getX(), y - card.getY());
+                        if (pinView != null) {
+                            touchState = TOUCH_PIN;
+                            touchedPin = pinView;
+                        }
                     }
                 }
 
                 switch (touchState) {
-                    case TOUCH_BACKGROUND -> longTouchHandler.postDelayed(() -> {
-                        touchState = TOUCH_SELECT_AREA;
-                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                    }, LONG_TOUCH_TIME);
+                    case TOUCH_BACKGROUND -> {
+                        if (!editable) break;
+                        longTouchHandler.postDelayed(() -> {
+                            touchState = TOUCH_SELECT_AREA;
+                            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                        }, LONG_TOUCH_TIME);
+                    }
 
                     case TOUCH_PIN -> longTouchHandler.postDelayed(() -> {
                         Pin pin = touchedPin.getPin();
@@ -971,6 +995,54 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     public float getScale() {
         return scale;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
+    public List<Action> getSelectedActionsCopy() {
+        Map<String, Action> actionMap = new HashMap<>();
+        Map<String, Action> copiedActionMap = new HashMap<>();
+
+        for (ActionCard card : selectedCards) {
+            Action action = card.getAction();
+            actionMap.put(action.getId(), action);
+            Action copiedAction = action.newCopy();
+            copiedActionMap.put(copiedAction.getUid(), copiedAction);
+        }
+
+        for (ActionCard card : selectedCards) {
+            Action action = card.getAction();
+            Action copiedAction = copiedActionMap.get(action.getUid());
+            if (copiedAction == null) continue;
+            for (Pin pin : action.getPins()) {
+                if (!pin.isLinked()) continue;
+                Pin copiedPin = copiedAction.getPinByUid(pin.getUid());
+                if (copiedPin == null) continue;
+                for (Map.Entry<String, String> entry : pin.getLinks().entrySet()) {
+                    String pinId = entry.getKey();
+                    String actionId = entry.getValue();
+                    Action linkedAction = actionMap.get(actionId);
+                    if (linkedAction == null) continue;
+                    Pin linkedPin = linkedAction.getPinById(pinId);
+                    if (linkedPin == null) continue;
+                    Action linkedCopiedAction = copiedActionMap.get(linkedAction.getUid());
+                    if (linkedCopiedAction == null) continue;
+                    Pin linkedCopiedPin = linkedCopiedAction.getPinByUid(linkedPin.getUid());
+                    if (linkedCopiedPin == null) continue;
+                    copiedPin.directAddLink(linkedCopiedPin);
+                    linkedCopiedPin.directAddLink(copiedPin);
+                }
+            }
+        }
+
+        List<Action> actions = new ArrayList<>();
+        for (Action action : copiedActionMap.values()) {
+            action.setUid(UUID.randomUUID().toString());
+            actions.add(action);
+        }
+        return actions;
     }
 
     @Override

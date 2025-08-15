@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.view.LayoutInflater;
 
@@ -19,6 +21,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinColor;
 import top.bogey.touch_tool.databinding.FloatPickerColorPreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.ui.custom.TouchPathFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
@@ -29,6 +32,15 @@ import top.bogey.touch_tool.utils.listener.TextChangedListener;
 public class ColorPickerPreview extends BasePicker<PinColor.ColorInfo> {
     private final FloatPickerColorPreviewBinding binding;
     private boolean test;
+
+    public static void showPicker(ResultCallback<PinColor.ColorInfo> callback, int value) {
+        KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
+        if (keepView == null) return;
+        new Handler(Looper.getMainLooper()).post(() -> {
+            ColorPickerPreview colorPickerPreview = new ColorPickerPreview(keepView.getThemeContext(), callback, new PinColor.ColorInfo(value, 0, Integer.MAX_VALUE));
+            colorPickerPreview.show();
+        });
+    }
 
     public ColorPickerPreview(@NonNull Context context, ResultCallback<PinColor.ColorInfo> callback, PinColor.ColorInfo color) {
         super(context, callback);

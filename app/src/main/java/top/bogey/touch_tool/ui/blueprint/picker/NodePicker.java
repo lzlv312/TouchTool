@@ -48,6 +48,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
     private final PinNodePathString nodePath;
     private NodeInfo nodeInfo = null;
     private boolean realShow = false;
+    private boolean init = false;
 
     public NodePicker(@NonNull Context context, ResultCallback<NodeInfo> callback, String path) {
         super(context, callback);
@@ -66,6 +67,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
                 }
             }
 
+            init = true;
             post(() -> {
                 adapter = new NodePickerTreeAdapter(this, roots);
                 binding.widgetRecyclerView.setAdapter(adapter);
@@ -237,6 +239,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (!init) return false;
         float x = event.getX();
         float y = event.getY();
 

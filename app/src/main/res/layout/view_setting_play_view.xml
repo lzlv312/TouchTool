@@ -14,7 +14,7 @@
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/icon_arrow_back"
+            app:navigationIcon="@drawable/menu_arrow_back"
             app:title="@string/preference_setting_manual_play" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -150,7 +150,6 @@
                                         android:progress="50"
                                         android:visibility="gone"
                                         app:indicatorInset="0dp"
-                                        app:indicatorSize="28dp"
                                         app:trackCornerRadius="1dp"
                                         app:trackThickness="3dp" />
 
@@ -300,6 +299,18 @@
                         app:max="3"
                         app:min="1"
                         app:title="@string/preference_setting_manual_play_close_size"
+                        app:value="1" />
+
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSlider
+                        android:id="@+id/manualPlayHeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/preference_setting_manual_play_height_desc"
+                        app:icon="@drawable/icon_straighten"
+                        app:max="3"
+                        app:min="1"
+                        app:title="@string/preference_setting_manual_play_height"
                         app:value="1" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSlider

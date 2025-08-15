@@ -38,6 +38,7 @@ public class SequenceExecuteAction extends ExecuteAction implements DynamicPinsA
             if (runnable.isInterrupt()) break;
             executeNext(runnable, dynamicPin);
         }
+        executeNext(runnable, completePin);
     }
 
     @Override

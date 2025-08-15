@@ -29,6 +29,7 @@ public class CustomEndAction extends Action implements DynamicPinsAction, SyncAc
         super(ActionType.CUSTOM_END);
         setExpandType(ExpandType.FULL);
         addPin(justCallPin);
+        setPos(0, 30);
     }
 
     public CustomEndAction(JsonObject jsonObject) {

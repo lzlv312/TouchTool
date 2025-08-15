@@ -32,6 +32,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
 
     protected final FloatPlayItemBinding binding;
     protected int size;
+    protected int height;
 
     protected Task task;
     protected StartAction startAction;
@@ -44,6 +45,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         super(context);
         binding = FloatPlayItemBinding.inflate(LayoutInflater.from(context), this, true);
         size = SettingSaver.getInstance().getManualPlayViewExpandSize();
+        height = SettingSaver.getInstance().getManualPlayViewButtonHeight();
         int pauseType = SettingSaver.getInstance().getManualPlayPauseType();
 
         this.task = task;
@@ -72,8 +74,11 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
 
         binding.circleProgress.setVisibility(View.GONE);
         binding.lineProgress.setVisibility(View.GONE);
+        binding.circleProgress.setIndicatorSize((int) DisplayUtil.dp2px(context, 20 + 8 * Math.min(size, height)));
         DisplayUtil.setViewWidth(binding.lineProgress, (int) DisplayUtil.dp2px(context, 8 + 8 * size));
+
         DisplayUtil.setViewWidth(binding.cardLayout, (int) DisplayUtil.dp2px(context, 20 + 8 * size));
+        DisplayUtil.setViewHeight(binding.cardLayout, (int) DisplayUtil.dp2px(context, 20 + 8 * height));
     }
 
     public boolean check(Task task, StartAction startAction) {
@@ -109,8 +114,8 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
 
         binding.circleProgress.setIndeterminate(true);
         binding.lineProgress.setIndeterminate(true);
-        binding.circleProgress.setVisibility(size == 1 ? View.VISIBLE : View.GONE);
-        binding.lineProgress.setVisibility(size == 1 ? View.GONE : View.VISIBLE);
+        binding.circleProgress.setVisibility(size == height ? View.VISIBLE : View.GONE);
+        binding.lineProgress.setVisibility(size == height ? View.GONE : View.VISIBLE);
         binding.icon.setIconResource(R.drawable.icon_pause);
     }
 

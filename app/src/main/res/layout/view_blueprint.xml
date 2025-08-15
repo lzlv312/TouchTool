@@ -25,25 +25,59 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/sortButton"
-        style="?attr/floatingActionButtonSmallPrimaryStyle"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/baseToolBar"
+        style="?attr/materialCardViewFilledStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="96dp"
-        android:src="@drawable/icon_refresh"
-        tools:ignore="ContentDescription" />
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="32dp"
+        app:cardElevation="5dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="24dp"
-        android:src="@drawable/icon_add"
-        tools:ignore="ContentDescription" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
+                android:backgroundTint="@color/fill_button_background_check"
+                android:checkable="true"
+                app:icon="@drawable/icon_visibility"
+                app:iconTint="@color/button_container_check" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addButton"
+                style="@style/Theme.TouchTool.IconButton.Filled"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
+                app:icon="@drawable/icon_add"
+                app:iconSize="28dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/sortButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/icon_refresh" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/pasteButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:icon="@drawable/icon_content_paste" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/floatingToolBar"
@@ -53,6 +87,7 @@
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="32dp"
         android:visibility="gone"
+        app:cardElevation="5dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
 
         <LinearLayout
@@ -72,6 +107,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/icon_content_copy" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/copyContentButton"
+                style="@style/Theme.TouchTool.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/icon_copy" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteButton"

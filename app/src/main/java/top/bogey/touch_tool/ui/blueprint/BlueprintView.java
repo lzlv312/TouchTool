@@ -29,8 +29,10 @@ import java.util.Stack;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.StartAction;
+import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewBlueprintBinding;
 import top.bogey.touch_tool.ui.MainActivity;
@@ -42,6 +44,8 @@ import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class BlueprintView extends Fragment {
+    private final static List<Action> copyActions = new ArrayList<>();
+
     private final Stack<Task> taskStack = new Stack<>();
     private final Map<String, HistoryManager> managers = new HashMap<>();
 
@@ -74,6 +78,7 @@ public class BlueprintView extends Fragment {
         Fragment fragment = MainActivity.getCurrentFragment();
         if (fragment instanceof BlueprintView blueprintView) {
             blueprintView.binding.floatingToolBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            blueprintView.binding.baseToolBar.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -188,8 +193,61 @@ public class BlueprintView extends Fragment {
             binding.cardLayout.initCardPos(card);
         }).show());
 
-        binding.copyButton.setOnClickListener(v -> {
+        binding.sortButton.setOnClickListener(v -> {
+            Task currTask = taskStack.peek();
+            List<Action> startActions = currTask.getActions(StartAction.class);
+            List<Action> actions = currTask.getActions(CustomStartAction.class);
+            startActions.addAll(actions);
+            CardLayoutHelper.ActionArea actionArea = new CardLayoutHelper.ActionArea(binding.cardLayout, new ArrayList<>(), startActions);
+            actionArea.arrange(binding.cardLayout, new Point(), null);
+            binding.cardLayout.updateCardsPos();
+        });
 
+        binding.editButton.setOnClickListener(v -> {
+            boolean editable = !binding.editButton.isChecked();
+            SettingSaver.getInstance().setBlueprintEditable(editable);
+            binding.cardLayout.setEditable(editable);
+        });
+        binding.editButton.setChecked(!SettingSaver.getInstance().isBlueprintEditable());
+        binding.cardLayout.setEditable(SettingSaver.getInstance().isBlueprintEditable());
+
+        binding.pasteButton.setOnClickListener(v -> {
+            binding.cardLayout.cleanSelectedCards();
+            for (Action copyAction : copyActions) {
+                binding.cardLayout.addCard(copyAction);
+                binding.cardLayout.addSelectedCard(copyAction);
+            }
+            copyActions.clear();
+            binding.pasteButton.setVisibility(View.GONE);
+        });
+        binding.pasteButton.setVisibility(copyActions.isEmpty() ? View.GONE : View.VISIBLE);
+
+        binding.exchangeButton.setOnClickListener(v -> AppUtil.showEditDialog(getContext(), R.string.task_exchange_to_custom, "", result -> {
+            if (result.isEmpty()) return;
+            Task innerTask = new Task();
+            binding.cardLayout.getSelectedActionsCopy().forEach(innerTask::addAction);
+            innerTask.addAction(new CustomStartAction());
+            innerTask.addAction(new CustomEndAction());
+            innerTask.setTitle(result);
+            task.addTask(innerTask);
+            task.save();
+            pushStack(innerTask);
+        }));
+
+        binding.copyButton.setOnClickListener(v -> {
+            List<Action> selectedActions = binding.cardLayout.getSelectedActionsCopy();
+            binding.cardLayout.cleanSelectedCards();
+            selectedActions.forEach(action -> {
+                binding.cardLayout.addCard(action);
+                binding.cardLayout.addSelectedCard(action);
+            });
+        });
+
+        binding.copyContentButton.setOnClickListener(v -> {
+            copyActions.clear();
+            copyActions.addAll(binding.cardLayout.getSelectedActionsCopy());
+            binding.pasteButton.setVisibility(copyActions.isEmpty() ? View.GONE : View.VISIBLE);
+            binding.cardLayout.cleanSelectedCards();
         });
 
         binding.deleteButton.setOnClickListener(v -> {
@@ -209,15 +267,6 @@ public class BlueprintView extends Fragment {
             }
         });
 
-        binding.sortButton.setOnClickListener(v -> {
-            Task currTask = taskStack.peek();
-            List<Action> startActions = currTask.getActions(StartAction.class);
-            List<Action> actions = currTask.getActions(CustomStartAction.class);
-            startActions.addAll(actions);
-            CardLayoutHelper.ActionArea actionArea = new CardLayoutHelper.ActionArea(binding.cardLayout, new ArrayList<>(), startActions);
-            actionArea.arrange(binding.cardLayout, new Point(), null);
-            binding.cardLayout.updateCardsPos();
-        });
 
         pushStack(task);
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);

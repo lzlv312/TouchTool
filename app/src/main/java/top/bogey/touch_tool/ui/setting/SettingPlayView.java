@@ -93,6 +93,13 @@ public class SettingPlayView extends Fragment {
         });
         binding.manualPlayCloseSize.setValue(SettingSaver.getInstance().getManualPlayViewCloseSize());
 
+        // 手动执行悬浮窗按钮高度
+        binding.manualPlayHeight.setSliderOnChangeListener((slider, value, fromUser) -> {
+            SettingSaver.getInstance().setManualPlayViewButtonHeight((int) value);
+            refreshExpandView();
+        });
+        binding.manualPlayHeight.setValue(SettingSaver.getInstance().getManualPlayViewButtonHeight());
+
         // 手动执行悬浮窗独立按钮大小
         binding.manualPlaySingleSize.setSliderOnChangeListener((slider, value, fromUser) -> {
             SettingSaver.getInstance().setManualPlayViewSingleSize((int) value);
@@ -110,17 +117,22 @@ public class SettingPlayView extends Fragment {
     private void refreshExpandView() {
         int padding = SettingSaver.getInstance().getManualPlayViewPadding();
         int size = SettingSaver.getInstance().getManualPlayViewExpandSize();
+        int height = SettingSaver.getInstance().getManualPlayViewButtonHeight();
 
         DisplayUtil.setViewMargin(binding.playButtonBox, padding * UNIT_PIXEL, this.padding, padding * UNIT_PIXEL, this.padding);
         String testText = this.testText.substring(0, Math.min(this.testText.length(), size));
         binding.playTitle.setText(testText);
 
-        binding.circleProgress.setVisibility(size == 1 ? View.VISIBLE : View.GONE);
+        binding.circleProgress.setVisibility(size == height ? View.VISIBLE : View.GONE);
         binding.circleProgress.setIndeterminate(true);
-        binding.lineProgress.setVisibility(size == 1 ? View.GONE : View.VISIBLE);
+        binding.lineProgress.setVisibility(size == height ? View.GONE : View.VISIBLE);
         binding.lineProgress.setIndeterminate(true);
+
+        binding.circleProgress.setIndicatorSize((int) DisplayUtil.dp2px(requireContext(), 20 + 8 * Math.min(size, height)));
         DisplayUtil.setViewWidth(binding.lineProgress, (int) DisplayUtil.dp2px(requireContext(), 8 + 8 * size));
+
         DisplayUtil.setViewWidth(binding.playButton, (int) DisplayUtil.dp2px(requireContext(), 20 + 8 * size));
+        DisplayUtil.setViewHeight(binding.playButton, (int) DisplayUtil.dp2px(requireContext(), 20 + 8 * height));
     }
 
     private void refreshCloseView() {

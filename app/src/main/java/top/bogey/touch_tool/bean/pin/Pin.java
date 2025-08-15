@@ -124,6 +124,11 @@ public class Pin extends Identity {
         pin.addLink(task, this);
     }
 
+    public void directAddLink(Pin pin) {
+        if (isSingleLink()) links.clear();
+        links.put(pin.getId(), pin.getOwnerId());
+    }
+
     public boolean addLinks(Task task, Map<String, String> links) {
         boolean linked = false;
         for (Map.Entry<String, String> entry : links.entrySet()) {

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
@@ -104,6 +105,7 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
     protected void initCopy(MaterialButton button) {
         button.setOnClickListener(v -> {
             Action copy = action.newCopy();
+            copy.setUid(UUID.randomUUID().toString());
             ((CardLayoutView) getParent()).addCard(copy);
         });
     }
