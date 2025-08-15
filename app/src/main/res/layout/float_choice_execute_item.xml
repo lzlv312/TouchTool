@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:minWidth="48dp"
         android:minHeight="32dp"
-        android:paddingHorizontal="8dp">
+        android:paddingHorizontal="4dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/icon"

@@ -203,13 +203,13 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
                     // 类型一致但是内部类型不一致的针脚
                     if (syncPin.getValue() instanceof PinMap pinMap) {
                         PinMap dPinMap = dynamicPin.getValue();
-                        if (pinMap.getKeyType() != dPinMap.getKeyType() || pinMap.getValueType() != dPinMap.getValueType()) {
+                        if (pinMap.getKeyType().getType() != dPinMap.getKeyType().getType() || pinMap.getValueType().getType() != dPinMap.getValueType().getType()) {
                             dynamicPin.clearLinks(context);
                             dynamicPin.setValue(syncPin.getValue().copy());
                         }
                     } else if (syncPin.getValue() instanceof PinList pinList) {
                         PinList dPinList = dynamicPin.getValue();
-                        if (pinList.getValueType() != dPinList.getValueType()) {
+                        if (pinList.getValueType().getType() != dPinList.getValueType().getType()) {
                             dynamicPin.clearLinks(context);
                             dynamicPin.setValue(syncPin.getValue().copy());
                         }

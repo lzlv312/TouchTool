@@ -22,6 +22,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -944,6 +945,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     }
 
     public void checkCards() {
+        if (!Looper.getMainLooper().isCurrentThread()) return;
         int count = 0;
         for (ActionCard card : cards.values()) {
             boolean result = card.check();

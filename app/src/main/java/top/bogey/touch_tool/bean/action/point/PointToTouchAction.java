@@ -39,8 +39,8 @@ public class PointToTouchAction extends CalculateAction implements DynamicPinsAc
         reAddPins(pointPin, timePin);
         Pin pin = tmpPins.get(0);
         while (!pin.isSameClass(PinAdd.class)) {
-            reAddPin(posMorePin);
-            reAddPin(timeMorePin);
+            reAddPin(posMorePin.newCopy());
+            reAddPin(timeMorePin.newCopy());
             pin = tmpPins.get(0);
         }
         reAddPins(addPin, touchPin);

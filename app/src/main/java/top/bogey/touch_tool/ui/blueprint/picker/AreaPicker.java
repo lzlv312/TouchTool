@@ -78,6 +78,7 @@ public class AreaPicker extends FullScreenPicker<Rect> {
 
         binding.saveButton.setOnClickListener(v -> {
             area.offset(location[0], location[1]);
+            if (area.isEmpty()) area.set(rect);
             callback.onResult(area);
             dismiss();
         });

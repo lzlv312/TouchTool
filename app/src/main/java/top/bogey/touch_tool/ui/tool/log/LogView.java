@@ -155,11 +155,11 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
         float x = event.getRawX();
         float y = event.getRawY();
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            canDrag = false;
             int[] location = new int[2];
             binding.recyclerView.getLocationOnScreen(location);
             if (new RectF(location[0], location[1], location[0] + binding.recyclerView.getWidth(), location[1] + binding.recyclerView.getHeight()).contains(x, y)) {
                 FloatWindow.setDragAble(tag, false);
-                canDrag = false;
                 return super.onInterceptTouchEvent(event);
             }
 

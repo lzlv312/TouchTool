@@ -98,7 +98,7 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
     }
 
     public NodeInfo findUsableParent() {
-        NodeInfo parent = getParent();
+        NodeInfo parent = this;
         while (parent != null) {
             if (parent.usable) return parent;
             parent = parent.getParent();
@@ -174,13 +174,14 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         while (!stack.isEmpty()) {
             NodeInfo node = stack.pop();
             if (node == null) continue;
+
             try {
                 Class<?> clazz = Class.forName(node.clazz);
                 if (viewClazz.isAssignableFrom(clazz)) return node;
             } catch (ClassNotFoundException ignored) {
             }
 
-            for (NodeInfo child : getChildren()) {
+            for (NodeInfo child : node.getChildren()) {
                 if (area.contains(child.area) || Rect.intersects(area, child.area)) {
                     stack.push(child);
                 }
@@ -196,8 +197,10 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         while (!stack.isEmpty()) {
             NodeInfo node = stack.pop();
             if (node == null) continue;
+
             nodes.add(node);
-            for (NodeInfo child : getChildren()) {
+
+            for (NodeInfo child : node.getChildren()) {
                 if (area.contains(child.area) || Rect.intersects(area, child.area)) {
                     stack.push(child);
                 }
@@ -233,13 +236,16 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
             while (!stack.isEmpty()) {
                 NodeInfo node = stack.pop();
                 if (node == null) continue;
-                if (pattern == null) {
-                    if (node.text.toLowerCase().contains(text.toLowerCase())) nodes.add(node);
-                } else {
-                    if (pattern.matcher(node.text).find()) nodes.add(node);
+
+                if (node.text != null) {
+                    if (pattern == null) {
+                        if (node.text.toLowerCase().contains(text.toLowerCase())) nodes.add(node);
+                    } else {
+                        if (pattern.matcher(node.text).find()) nodes.add(node);
+                    }
                 }
 
-                for (NodeInfo child : getChildren()) {
+                for (NodeInfo child : node.getChildren()) {
                     if (area.contains(child.area) || Rect.intersects(area, child.area)) {
                         stack.push(child);
                     }
@@ -251,6 +257,7 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
 
                 List<AccessibilityNodeInfo> list = node.findAccessibilityNodeInfosByText(text);
                 for (AccessibilityNodeInfo node : list) {
+                    if (node == null) continue;
                     NodeInfo nodeInfo = new NodeInfo(node);
                     if (area.contains(nodeInfo.area) || Rect.intersects(area, nodeInfo.area)) {
                         nodes.add(nodeInfo);
@@ -268,10 +275,35 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
             if (id.equals(this.id)) nodes.add(this);
 
             List<AccessibilityNodeInfo> list = node.findAccessibilityNodeInfosByViewId(id);
-            for (AccessibilityNodeInfo node : list) {
-                NodeInfo nodeInfo = new NodeInfo(node);
-                if (area.contains(nodeInfo.area) || Rect.intersects(area, nodeInfo.area)) {
-                    nodes.add(nodeInfo);
+            if (list == null || list.isEmpty()) {
+                Stack<NodeInfo> stack = new Stack<>();
+                stack.push(this);
+                Pattern pattern = AppUtil.getPattern(id);
+                while (!stack.isEmpty()) {
+                    NodeInfo node = stack.pop();
+                    if (node == null) continue;
+
+                    if (node.id != null) {
+                        if (pattern == null) {
+                            if (node.id.toLowerCase().contains(id.toLowerCase())) nodes.add(node);
+                        } else {
+                            if (pattern.matcher(node.id).find()) nodes.add(node);
+                        }
+                    }
+
+                    for (NodeInfo child : node.getChildren()) {
+                        if (area.contains(child.area) || Rect.intersects(area, child.area)) {
+                            stack.push(child);
+                        }
+                    }
+                }
+            } else {
+                for (AccessibilityNodeInfo node : list) {
+                    if (node == null) continue;
+                    NodeInfo nodeInfo = new NodeInfo(node);
+                    if (area.contains(nodeInfo.area) || Rect.intersects(area, nodeInfo.area)) {
+                        nodes.add(nodeInfo);
+                    }
                 }
             }
         }
@@ -293,13 +325,14 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         while (!stack.isEmpty()) {
             NodeInfo node = stack.pop();
             if (node == null) continue;
+
             try {
                 Class<?> clazz = Class.forName(node.clazz);
                 if (viewClazz.isAssignableFrom(clazz)) nodes.add(node);
             } catch (ClassNotFoundException ignored) {
             }
 
-            for (NodeInfo child : getChildren()) {
+            for (NodeInfo child : node.getChildren()) {
                 if (area.contains(child.area) || Rect.intersects(area, child.area)) {
                     stack.push(child);
                 }
@@ -318,13 +351,16 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         while (!stack.isEmpty()) {
             NodeInfo node = stack.pop();
             if (node == null) continue;
-            if (pattern == null) {
-                if (node.desc.toLowerCase().contains(desc.toLowerCase())) nodes.add(node);
-            } else {
-                if (pattern.matcher(node.desc).find()) nodes.add(node);
+
+            if (node.desc != null) {
+                if (pattern == null) {
+                    if (node.desc.toLowerCase().contains(desc.toLowerCase())) nodes.add(node);
+                } else {
+                    if (pattern.matcher(node.desc).find()) nodes.add(node);
+                }
             }
 
-            for (NodeInfo child : getChildren()) {
+            for (NodeInfo child : node.getChildren()) {
                 if (area.contains(child.area) || Rect.intersects(area, child.area)) {
                     stack.push(child);
                 }
