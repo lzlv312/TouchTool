@@ -136,10 +136,7 @@ public class SettingPlayView extends Fragment {
     }
 
     private void refreshCloseView() {
-        int padding = SettingSaver.getInstance().getManualPlayViewPadding();
         int size = SettingSaver.getInstance().getManualPlayViewCloseSize();
-
-        DisplayUtil.setViewMargin(binding.dragSpace, padding * UNIT_PIXEL, this.padding, padding * UNIT_PIXEL, this.padding);
         DisplayUtil.setViewWidth(binding.dragButton, (int) DisplayUtil.dp2px(requireContext(), 8 + 8 * size));
     }
 

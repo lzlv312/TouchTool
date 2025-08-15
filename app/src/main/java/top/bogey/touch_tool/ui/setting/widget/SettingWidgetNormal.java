@@ -46,7 +46,7 @@ public class SettingWidgetNormal extends FrameLayout {
                 }
                 case 2 -> {
                     binding.button3.setVisibility(VISIBLE);
-                    yield null;
+                    yield binding.button3;
                 }
                 default -> null;
             };

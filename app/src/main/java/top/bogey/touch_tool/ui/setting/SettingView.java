@@ -339,6 +339,10 @@ public class SettingView extends Fragment {
             NavController controller = Navigation.findNavController(MainApplication.getInstance().getActivity(), R.id.conView);
             controller.navigate(SettingViewDirections.actionSettingToSettingPlayView());
         });
+        binding.manualPlaySetting.setOnButtonClickListener(v -> {
+            NavController controller = Navigation.findNavController(MainApplication.getInstance().getActivity(), R.id.conView);
+            controller.navigate(SettingViewDirections.actionSettingToSettingPlayView());
+        });
 
         // 卡片默认展开状态
         binding.cardTypeSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
