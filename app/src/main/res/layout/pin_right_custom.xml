@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="end"
@@ -43,13 +42,13 @@
             android:minWidth="48dp"
             android:paddingHorizontal="4dp"
             android:textColor="?attr/colorPrimary"
-            android:textSize="11sp" />
+            android:textSize="8sp" />
 
         <Spinner
             android:id="@+id/typeSpinner"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:background="@drawable/shape_spinner"
+            android:background="@drawable/shape_border"
             android:dropDownWidth="match_parent"
             android:gravity="center"
             android:minWidth="48dp"
@@ -66,7 +65,7 @@
             android:minWidth="48dp"
             android:paddingHorizontal="4dp"
             android:textColor="?attr/colorPrimary"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:visibility="gone" />
 
     </LinearLayout>
@@ -114,8 +113,7 @@
             android:minHeight="20dp"
             android:paddingHorizontal="8dp"
             android:paddingVertical="0dp"
-            android:textSize="9sp"
-            tools:ignore="SmallSp" />
+            android:textSize="8sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

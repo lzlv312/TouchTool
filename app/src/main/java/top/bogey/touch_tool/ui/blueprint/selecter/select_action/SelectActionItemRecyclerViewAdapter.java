@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 
 import androidx.annotation.DrawableRes;
@@ -200,6 +201,9 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                         .show();
             });
 
+            String[] array = context.getResources().getStringArray(R.array.pin_simple_type);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_spinner_item, array);
+            binding.typeSpinner.setAdapter(adapter);
             binding.typeSpinner.setOnItemSelectedListener(new SpinnerSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

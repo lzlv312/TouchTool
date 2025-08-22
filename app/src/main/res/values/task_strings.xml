@@ -108,7 +108,7 @@
     <!-- 动作-Task -->
     <string name="execute_task_action">执行任务</string>
     <string name="execute_task_action_task_id">任务</string>
-    <string name="execute_task_action_just_cal">每次计算</string>
+    <string name="execute_task_action_just_cal">无需执行针脚</string>
 
     <string name="custom_start_action">自定义开始</string>
     <string name="custom_end_action">自定义结束</string>

@@ -36,7 +36,7 @@ public class GetNodesInAreaAction extends ExecuteAction {
 
         NodeInfo nodeInfo = NodeInfo.getActiveWindow();
         if (nodeInfo != null) {
-            List<NodeInfo> childrenInArea = nodeInfo.findChildren(area.getValue());
+            List<NodeInfo> childrenInArea = nodeInfo.findChildren(area.getValue(), false);
             for (NodeInfo info : childrenInArea) {
                 nodes.add(new PinNode(info));
             }

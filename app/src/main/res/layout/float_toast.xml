@@ -14,6 +14,7 @@
         android:minWidth="32dp"
         android:paddingHorizontal="8dp"
         android:paddingVertical="4dp"
-        android:textColor="?attr/colorPrimary" />
+        android:textColor="?attr/colorPrimary"
+        android:textSize="12sp" />
 
 </com.google.android.material.card.MaterialCardView>

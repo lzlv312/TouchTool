@@ -58,7 +58,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:text="@string/app_setting"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall" />
+                        android:textSize="12sp" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/enableSwitch"
@@ -156,7 +156,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:text="@string/permission_setting"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall" />
+                        android:textSize="12sp" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
                         android:id="@+id/superUserSelect"
@@ -229,7 +229,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:text="@string/task_setting"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall" />
+                        android:textSize="12sp" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/showTouchSwitch"
@@ -298,7 +298,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:text="@string/preference_setting"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall" />
+                        android:textSize="12sp" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal
                         android:id="@+id/manualPlaySetting"

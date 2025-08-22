@@ -43,6 +43,8 @@
     <string name="remove_tips">删除之后无法撤回，确定要删除吗？</string>
     <string name="export_task">导出</string>
     <string name="export_task_tips">导出并发送</string>
+    <string name="import_task">导入</string>
+    <string name="file_name">文件名称</string>
     <string name="move_task">标签</string>
 
     <!-- 任务界面相关 -->
@@ -64,6 +66,8 @@
 
     <string name="task_export">导出任务</string>
     <string name="task_export_desc">选择需要导出的任务配置和通用自定义卡片到你选择的文件夹中</string>
+    <string name="task_export_task_reference">引用任务：</string>
+    <string name="task_export_var_reference">引用变量：</string>
 
     <string name="task_exchange_to_custom">转换为任务内自定义任务</string>
 

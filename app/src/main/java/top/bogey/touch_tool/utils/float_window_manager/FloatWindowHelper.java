@@ -171,17 +171,17 @@ public class FloatWindowHelper {
         Rect showArea = getShowArea();
         config.gravity = gravity;
         config.location = relativePoint;
-        Point garvityPoint = getGarvityPoint();
+        Point gravityPoint = getGravityPoint();
         Point offset = getAnchorOffset();
-        params.x = Math.max(showArea.left, Math.min(showArea.right, garvityPoint.x + relativePoint.x + offset.x));
-        params.y = Math.max(showArea.top, Math.min(showArea.bottom, garvityPoint.y + relativePoint.y + offset.y));
+        params.x = Math.max(showArea.left, Math.min(showArea.right, gravityPoint.x + relativePoint.x + offset.x));
+        params.y = Math.max(showArea.top, Math.min(showArea.bottom, gravityPoint.y + relativePoint.y + offset.y));
         manager.updateViewLayout(viewParent, params);
     }
 
     // 获取相对位置
     public Point getRelativePoint() {
         Point point = new Point(params.x, params.y);
-        Point garvityPoint = getGarvityPoint();
+        Point garvityPoint = getGravityPoint();
         point.offset(-garvityPoint.x, -garvityPoint.y);
         Point offset = getAnchorOffset();
         point.offset(-offset.x, -offset.y);
@@ -214,7 +214,7 @@ public class FloatWindowHelper {
     }
 
 
-    Point getGarvityPoint() {
+    Point getGravityPoint() {
         return config.gravity.getAnchorPoint();
     }
 
@@ -246,10 +246,6 @@ public class FloatWindowHelper {
         Point point = getRelativePoint();
         config.border = border;
         setRelativePoint(config.gravity, point);
-    }
-
-    public void setBorder(int left, int top, int right, int bottom) {
-        setBorder(new Rect(left, top, right, bottom));
     }
 
     public void setFocusable(boolean focusable) {

@@ -29,11 +29,11 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
-public class LogView extends FrameLayout implements FloatInterface, LogSaveListener {
+public class LogFloatView extends FrameLayout implements FloatInterface, LogSaveListener {
     private final FloatLogBinding binding;
-    private final LogViewAdapter adapter;
+    private final LogFloatViewAdapter adapter;
     private final Task task;
-    private final String tag = LogView.class.getName();
+    private final String tag = LogFloatView.class.getName();
 
     private final int minWidth, minHeight;
     private final int maxWidth, maxHeight;
@@ -46,7 +46,7 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
     private boolean expanded = true;
 
     @SuppressLint("ClickableViewAccessibility")
-    public LogView(@NonNull Context context, Task task) {
+    public LogFloatView(@NonNull Context context, Task task) {
         super(context);
         this.task = task;
 
@@ -57,7 +57,7 @@ public class LogView extends FrameLayout implements FloatInterface, LogSaveListe
         maxHeight = (int) (size.y * 0.8f);
 
         binding = FloatLogBinding.inflate(LayoutInflater.from(context), this, true);
-        adapter = new LogViewAdapter();
+        adapter = new LogFloatViewAdapter();
 
         binding.title.setText(task.getTitle());
 

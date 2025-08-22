@@ -7,8 +7,10 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.regex.Pattern;
 
@@ -83,8 +85,9 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
     }
 
     public NodeInfo findUsableChild(int x, int y) {
-        for (int i = getChildCount(); i > 0; i--) {
+        for (int i = getChildCount() - 1; i >= 0; i--) {
             NodeInfo child = getChild(i);
+            if (child ==  null) continue;
             NodeInfo result = child.findUsableChild(x, y);
             if (result != null) return result;
         }
@@ -202,19 +205,22 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         return null;
     }
 
-    public List<NodeInfo> findChildren(Rect area) {
+    public List<NodeInfo> findChildren(Rect area, boolean justUsable) {
         List<NodeInfo> nodes = new ArrayList<>();
-        Stack<NodeInfo> stack = new Stack<>();
-        if (area.contains(this.area) || Rect.intersects(area, this.area)) stack.push(this);
-        while (!stack.isEmpty()) {
-            NodeInfo node = stack.pop();
+        Queue<NodeInfo> queue = new LinkedList<>();
+        if (area.contains(this.area) || Rect.intersects(area, this.area)) queue.add(this);
+        while (!queue.isEmpty()) {
+            NodeInfo node = queue.poll();
             if (node == null) continue;
+            if (!node.visible) continue;
 
-            nodes.add(node);
+            if (node.usable || !justUsable) {
+                nodes.add(node);
+            }
 
             for (NodeInfo child : node.getChildren()) {
                 if (area.contains(child.area) || Rect.intersects(area, child.area)) {
-                    stack.push(child);
+                    queue.add(child);
                 }
             }
         }

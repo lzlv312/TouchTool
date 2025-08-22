@@ -347,7 +347,9 @@ public class PinWidgetString extends PinWidget<PinString> {
             List<String> keys = new ArrayList<>();
             if (matcher != null) {
                 while (matcher.find()) {
-                    keys.add(matcher.group(1));
+                    String key = matcher.group(1);
+                    if (keys.contains(key)) continue;
+                    keys.add(key);
                 }
             }
 

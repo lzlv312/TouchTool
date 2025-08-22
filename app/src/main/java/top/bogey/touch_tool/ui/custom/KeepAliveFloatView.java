@@ -2,6 +2,7 @@ package top.bogey.touch_tool.ui.custom;
 
 import android.content.Context;
 import android.os.Handler;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,9 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.color.DynamicColors;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
@@ -17,6 +21,7 @@ import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.service.ITaskListener;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.ui.BaseActivity;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.EAnchor;
@@ -33,16 +38,29 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, I
         FloatWindowHelper helper = FloatWindow.getHelper(KeepAliveFloatView.class.getName());
         if (helper != null) {
             helper.viewParent.post(() -> {
+                ViewTreeObserver.OnWindowFocusChangeListener listener = new ViewTreeObserver.OnWindowFocusChangeListener() {
+                    @Override
+                    public void onWindowFocusChanged(boolean hasFocus) {
+                        if (hasFocus) {
+                            Object result = AppUtil.readFromClipboard(helper.viewParent.getContext());
+                            helper.viewParent.getViewTreeObserver().removeOnWindowFocusChangeListener(this);
+                            helper.setFocusable(false);
+                            future.complete(result);
+                        }
+                    }
+                };
+                helper.viewParent.getViewTreeObserver().addOnWindowFocusChangeListener(listener);
                 helper.setFocusable(true);
-                helper.viewParent.postDelayed(() -> {
-                    Object result = AppUtil.readFromClipboard(helper.viewParent.getContext());
-                    helper.setFocusable(false);
-                    future.complete(result);
-                }, 200);
             });
+        } else {
+            return null;
         }
 
-        return future.join();
+        try {
+            return future.get(3, TimeUnit.SECONDS);
+        } catch (ExecutionException | InterruptedException | TimeoutException ignored) {
+        }
+        return null;
     }
 
     public KeepAliveFloatView(@NonNull Context context) {
@@ -119,6 +137,8 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, I
     }
 
     public Context getThemeContext() {
-        return DynamicColors.wrapContextIfAvailable(getContext());
+        Context context = getContext();
+        if (context instanceof BaseActivity) return context;
+        return DynamicColors.wrapContextIfAvailable(context);
     }
 }

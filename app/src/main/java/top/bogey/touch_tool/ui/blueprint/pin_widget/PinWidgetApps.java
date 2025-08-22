@@ -61,10 +61,6 @@ public class PinWidgetApps extends PinWidget<PinApplications> {
             PinWidgetAppItemBinding itemBinding = PinWidgetAppItemBinding.inflate(LayoutInflater.from(getContext()), binding.iconBox, true);
             itemBinding.icon.setImageDrawable(getContext().getApplicationInfo().loadIcon(manager));
             itemBinding.numberBox.setVisibility(GONE);
-//            itemBinding.getRoot().setOnClickListener(v -> {
-//                pinBase.remove(commonApplication);
-//                refreshApps();
-//            });
             count++;
 
             if (pinBase.size() == 1) return;
@@ -94,10 +90,6 @@ public class PinWidgetApps extends PinWidget<PinApplications> {
                     } else {
                         itemBinding.numberText.setText(String.valueOf(classes.size()));
                     }
-//                    itemBinding.getRoot().setOnClickListener(v -> {
-//                        pinBase.remove(value);
-//                        refreshApps();
-//                    });
                 }
 
                 count++;

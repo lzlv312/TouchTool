@@ -42,7 +42,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 tools:ignore="NestedWeights" />
 
             <com.google.android.material.button.MaterialButton
@@ -62,9 +62,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.75"
-            android:textSize="11sp"
-            android:visibility="gone"
-            tools:ignore="SmallSp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/varBox"
@@ -72,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             android:baselineAligned="false"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/keySlot"
@@ -81,16 +80,17 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_border"
-                android:gravity="center_horizontal" />
+                android:gravity="center"
+                android:textSize="12sp" />
 
             <Spinner
                 android:id="@+id/typeSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
-                android:background="@drawable/shape_spinner"
+                android:background="@drawable/shape_border"
                 android:dropDownWidth="match_parent"
-                android:entries="@array/pin_simple_type"
                 android:gravity="center_horizontal"
+                android:minWidth="48dp"
                 android:popupBackground="@drawable/shape_spinner_background"
                 android:spinnerMode="dropdown" />
 
@@ -101,7 +101,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_border"
-                android:gravity="center_horizontal"
+                android:gravity="center"
+                android:textSize="12sp"
                 android:visibility="gone" />
 
         </LinearLayout>

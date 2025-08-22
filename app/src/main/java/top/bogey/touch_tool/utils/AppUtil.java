@@ -4,7 +4,6 @@ import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.KeyguardManager;
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -51,7 +50,6 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.databinding.DialogInputTextBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
@@ -60,7 +58,7 @@ import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.callback.StringResultCallback;
 
 public class AppUtil {
-    public static final String LOG_DIR_NAME = "log";
+    public final static String LOG_DIR_NAME = "log";
     public final static String TASK_DIR_NAME = "task";
     public final static String DOCUMENT_DIR_NAME = "document";
 
@@ -71,39 +69,24 @@ public class AppUtil {
     }
 
     public static void showDialog(Context context, @StringRes int msg, BooleanResultCallback callback) {
-        new MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.dialog_title)
-                .setMessage(msg)
-                .setPositiveButton(R.string.enter, (dialog, which) -> callback.onResult(true))
-                .setNegativeButton(R.string.cancel, (dialog, which) -> callback.onResult(false))
-                .show();
+        new MaterialAlertDialogBuilder(context).setTitle(R.string.dialog_title).setMessage(msg).setPositiveButton(R.string.enter, (dialog, which) -> callback.onResult(true)).setNegativeButton(R.string.cancel, (dialog, which) -> callback.onResult(false)).show();
     }
 
     public static void showDialog(Context context, String msg, BooleanResultCallback callback) {
-        new MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.dialog_title)
-                .setMessage(msg)
-                .setPositiveButton(R.string.enter, (dialog, which) -> callback.onResult(true))
-                .setNegativeButton(R.string.cancel, (dialog, which) -> callback.onResult(false))
-                .show();
+        new MaterialAlertDialogBuilder(context).setTitle(R.string.dialog_title).setMessage(msg).setPositiveButton(R.string.enter, (dialog, which) -> callback.onResult(true)).setNegativeButton(R.string.cancel, (dialog, which) -> callback.onResult(false)).show();
     }
 
     public static void showEditDialog(Context context, @StringRes int title, CharSequence defaultValue, StringResultCallback callback) {
         DialogInputTextBinding binding = DialogInputTextBinding.inflate(LayoutInflater.from(context));
         binding.titleEdit.setText(defaultValue);
 
-        new MaterialAlertDialogBuilder(context)
-                .setTitle(title)
-                .setView(binding.getRoot())
-                .setPositiveButton(R.string.enter, (dialog, which) -> {
-                    if (binding.titleEdit.getText() == null) {
-                        callback.onResult(null);
-                    } else {
-                        callback.onResult(binding.titleEdit.getText().toString());
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+        new MaterialAlertDialogBuilder(context).setTitle(title).setView(binding.getRoot()).setPositiveButton(R.string.enter, (dialog, which) -> {
+            if (binding.titleEdit.getText() == null) {
+                callback.onResult(null);
+            } else {
+                callback.onResult(binding.titleEdit.getText().toString());
+            }
+        }).setNegativeButton(R.string.cancel, null).show();
     }
 
     public static void gotoAppDetailView(Context context) {

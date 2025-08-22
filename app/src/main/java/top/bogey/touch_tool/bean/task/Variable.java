@@ -13,6 +13,8 @@ import java.util.UUID;
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
@@ -81,6 +83,7 @@ public class Variable extends Identity implements ITagManager {
     public boolean setType(VariableType type) {
         if (type == getType()) return false;
         PinInfo pinInfo = getPinInfo();
+        if (pinInfo.getType() == PinType.APPS) return false;
         switch (type) {
             case NORMAL -> setValue((PinObject) pinInfo.newInstance());
             case LIST -> {
@@ -104,6 +107,11 @@ public class Variable extends Identity implements ITagManager {
 
     public PinInfo getKeyPinInfo() {
         if (value == null) return null;
+
+        if (value instanceof PinApplications) {
+            return PinInfo.getPinInfo(PinType.APPS);
+        }
+
         VariableType type = getType();
         switch (type) {
             case NORMAL -> {
@@ -136,17 +144,27 @@ public class Variable extends Identity implements ITagManager {
     }
 
     public void setKeyPinInfo(PinInfo pinInfo) {
-        switch (getType()) {
-            case NORMAL -> setValue((PinObject) pinInfo.newInstance());
-            case LIST -> {
-                PinList pinList = (PinList) value;
-                pinList.setValueType((PinObject) pinInfo.newInstance());
-                pinList.reset();
-            }
-            case MAP -> {
-                PinMap pinMap = (PinMap) value;
-                pinMap.setKeyType((PinObject) pinInfo.newInstance());
-                pinMap.reset();
+        if (pinInfo.getType() == PinType.APPS) {
+            setValue((PinObject) pinInfo.newInstance());
+        } else {
+            switch (getType()) {
+                case NORMAL -> setValue((PinObject) pinInfo.newInstance());
+                case LIST -> {
+                    PinList pinList;
+                    if (value instanceof PinApplications) {
+                        pinList = new PinList();
+                        setValue(pinList);
+                    } else {
+                        pinList = (PinList) value;
+                    }
+                    pinList.setValueType((PinObject) pinInfo.newInstance());
+                    pinList.reset();
+                }
+                case MAP -> {
+                    PinMap pinMap = (PinMap) value;
+                    pinMap.setKeyType((PinObject) pinInfo.newInstance());
+                    pinMap.reset();
+                }
             }
         }
     }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="24dp">
 
@@ -20,8 +19,7 @@
             android:gravity="center"
             android:inputType="numberSigned"
             android:padding="0dp"
-            android:textSize="9sp"
-            tools:ignore="SmallSp" />
+            android:textSize="8sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -40,8 +38,7 @@
             android:gravity="center"
             android:inputType="numberSigned"
             android:padding="0dp"
-            android:textSize="9sp"
-            tools:ignore="SmallSp" />
+            android:textSize="8sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,8 +57,7 @@
             android:gravity="center"
             android:inputType="numberSigned"
             android:padding="0dp"
-            android:textSize="9sp"
-            tools:ignore="SmallSp" />
+            android:textSize="8sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,8 +76,7 @@
             android:gravity="center"
             android:inputType="numberSigned"
             android:padding="0dp"
-            android:textSize="9sp"
-            tools:ignore="SmallSp" />
+            android:textSize="8sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

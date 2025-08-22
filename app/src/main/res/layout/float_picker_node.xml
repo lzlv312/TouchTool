@@ -19,7 +19,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:minWidth="24dp"
         android:textColor="?attr/colorTertiary"
-        android:textSize="11sp"
+        android:textSize="12sp"
         app:layout_anchor="@id/markBox"
         app:layout_anchorGravity="top|center_horizontal" />
 
@@ -122,8 +122,8 @@
                     android:layout_weight="1"
                     android:padding="0dp"
                     android:text="@string/picker_node_type_1"
-                    android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                     android:textColor="@color/button_container_check"
+                    android:textSize="12sp"
                     app:backgroundTint="@color/fill_button_background_check" />
 
                 <com.google.android.material.button.MaterialButton
@@ -134,8 +134,8 @@
                     android:layout_weight="1"
                     android:padding="0dp"
                     android:text="@string/picker_node_type_2"
-                    android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                     android:textColor="@color/button_container_check"
+                    android:textSize="12sp"
                     app:backgroundTint="@color/fill_button_background_check" />
 
                 <com.google.android.material.button.MaterialButton
@@ -146,8 +146,8 @@
                     android:layout_weight="1"
                     android:padding="0dp"
                     android:text="@string/picker_node_type_3"
-                    android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
                     android:textColor="@color/button_container_check"
+                    android:textSize="12sp"
                     app:backgroundTint="@color/fill_button_background_check" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>

@@ -27,7 +27,7 @@ import top.bogey.touch_tool.utils.tree.LazyTreeNode;
 import top.bogey.touch_tool.utils.tree.TreeAdapter;
 import top.bogey.touch_tool.utils.tree.TreeNode;
 
-public class LogViewAdapter extends TreeAdapter {
+public class LogFloatViewAdapter extends TreeAdapter {
     private Task task;
     private int searchIndex = -1;
 
@@ -167,7 +167,7 @@ public class LogViewAdapter extends TreeAdapter {
 
         @SuppressLint("ClickableViewAccessibility")
         public ViewHolder(@NonNull FloatLogItemBinding binding) {
-            super(LogViewAdapter.this, binding.getRoot());
+            super(LogFloatViewAdapter.this, binding.getRoot());
             this.binding = binding;
 
             binding.gotoButton.setOnClickListener(v -> {

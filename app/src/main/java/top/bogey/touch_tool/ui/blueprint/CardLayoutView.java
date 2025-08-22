@@ -91,6 +91,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     private static final long LONG_TOUCH_TIME = 300L;
 
     private final Handler longTouchHandler;
+    private final Handler doubleTouchHandler;
 
     private final float gridSize;
     private final Paint gridPaint;
@@ -104,6 +105,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     private final Map<String, String> selectedLinks = new HashMap<>();
     private PinView touchedPin;
+    private PinView lastTouchedPin;
 
     private RectF selectArea = new RectF();
     private SelectActionDialog actionDialog = null;
@@ -128,6 +130,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         setSaveFromParentEnabled(false);
 
         longTouchHandler = new Handler();
+        doubleTouchHandler = new Handler();
 
         gridSize = DisplayUtil.dp2px(context, 8);
 
@@ -275,7 +278,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         updateCardPos(card);
     }
 
-    private void updateCardPos(ActionCard card) {
+    public void updateCardPos(ActionCard card) {
         card.setScaleX(scale);
         card.setScaleY(scale);
         Action action = card.getAction();
@@ -574,8 +577,15 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                     }
 
                     case TOUCH_PIN -> {
-                        Pin pin = touchedPin.getPin();
-                        pin.clearLinks(task);
+                        doubleTouchHandler.removeCallbacksAndMessages(null);
+                        if (lastTouchedPin == touchedPin) {
+                            Pin pin = touchedPin.getPin();
+                            pin.clearLinks(task);
+                            lastTouchedPin = null;
+                        } else {
+                            lastTouchedPin = touchedPin;
+                            doubleTouchHandler.postDelayed(() -> lastTouchedPin = null, LONG_TOUCH_TIME);
+                        }
                     }
 
                     case TOUCH_DRAG_PIN, TOUCH_DRAG_LINK -> {
@@ -604,9 +614,9 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                 touchState = TOUCH_NONE;
                 lastX = 0;
                 lastY = 0;
+                invalidate();
             }
         }
-        invalidate();
         return true;
     }
 

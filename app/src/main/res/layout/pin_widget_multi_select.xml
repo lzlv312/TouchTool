@@ -12,7 +12,7 @@
         android:ellipsize="end"
         android:maxWidth="192dp"
         android:maxLines="5"
-        android:textSize="11sp" />
+        android:textSize="12sp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/pickButton"

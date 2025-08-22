@@ -15,7 +15,7 @@ import top.bogey.touch_tool.utils.EAnchor;
 
 public class FloatWindow {
     static final int FOCUSABLE = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
-    static final int NOT_FOCUSABLE = FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+    static final int NOT_FOCUSABLE = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
 
     static final String DEFAULT_TAG = "DEFAULT_TAG";
 

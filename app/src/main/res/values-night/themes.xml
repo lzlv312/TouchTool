@@ -1,6 +1,7 @@
 <resources>
 
     <style name="Theme.TouchTool" parent="Theme.TouchTool.Base">
+        <item name="android:windowLightStatusBar">false</item>
         <item name="colorPrimaryLight">?attr/colorPrimary</item>
     </style>
 

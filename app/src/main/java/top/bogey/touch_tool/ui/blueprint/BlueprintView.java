@@ -20,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,7 +40,7 @@ import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionDialog;
-import top.bogey.touch_tool.ui.tool.log.LogView;
+import top.bogey.touch_tool.ui.tool.log.LogFloatView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
@@ -131,7 +132,7 @@ public class BlueprintView extends Fragment {
                 return true;
             } else if (itemId == R.id.taskRunningLog) {
                 Task task = taskStack.peek();
-                new LogView(requireContext(), task).show();
+                new LogFloatView(requireContext(), task).show();
                 return true;
             } else if (itemId == R.id.taskDetailLog) {
                 Task task = taskStack.peek();
@@ -201,6 +202,7 @@ public class BlueprintView extends Fragment {
             CardLayoutHelper.ActionArea actionArea = new CardLayoutHelper.ActionArea(binding.cardLayout, new ArrayList<>(), startActions);
             actionArea.arrange(binding.cardLayout, new Point(), null);
             binding.cardLayout.updateCardsPos();
+            currTask.save();
         });
 
         binding.editButton.setOnClickListener(v -> {
@@ -213,8 +215,24 @@ public class BlueprintView extends Fragment {
 
         binding.pasteButton.setOnClickListener(v -> {
             binding.cardLayout.cleanSelectedCards();
+            boolean first = true;
+            int offsetX = 0, offsetY = 0;
+            copyActions.sort(Comparator.comparingInt(o -> o.getPos().y));
+
             for (Action copyAction : copyActions) {
-                binding.cardLayout.addCard(copyAction);
+                ActionCard card = binding.cardLayout.addCard(copyAction);
+                if (first) {
+                    first = false;
+                    int x = copyAction.getPos().x;
+                    int y = copyAction.getPos().y;
+                    binding.cardLayout.initCardPos(card);
+                    offsetX = card.getAction().getPos().x - x;
+                    offsetY = card.getAction().getPos().y - y;
+                } else {
+                    Point pos = copyAction.getPos();
+                    copyAction.setPos(pos.x + offsetX, pos.y + offsetY);
+                    binding.cardLayout.updateCardPos(card);
+                }
                 binding.cardLayout.addSelectedCard(copyAction);
             }
             copyActions.clear();

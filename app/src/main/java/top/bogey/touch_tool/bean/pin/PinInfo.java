@@ -125,7 +125,7 @@ public class PinInfo {
     private final static PinInfo IMAGE_INFO = new PinInfo(PinType.IMAGE, PinSubType.NORMAL, PinImage.class, NormalPinSlotView.class, R.color.ImagePinColor, 0, R.string.pin_image, PinWidgetImage.class, true, true);
     private final static PinInfo COLOR_INFO = new PinInfo(PinType.COLOR, PinSubType.NORMAL, PinColor.class, NormalPinSlotView.class, R.color.ColorPinColor, 0, R.string.pin_color, PinWidgetColor.class, true, true);
     private final static PinInfo APP_INFO = new PinInfo(PinType.APP, PinSubType.NORMAL, PinApplication.class, NormalPinSlotView.class, R.color.AppPinColor, 0, R.string.pin_app, PinWidgetApp.class, true, false);
-    private final static PinInfo APPS_INFO = new PinInfo(PinType.APPS, PinSubType.MULTI_APP, PinApplications.class, ListPinSlotView.class, R.color.AppPinColor, 0, R.string.pin_list_app, PinWidgetApps.class, true, false);
+    private final static PinInfo APPS_INFO = new PinInfo(PinType.APPS, PinSubType.MULTI_APP_WITH_ACTIVITY, PinApplications.class, ListPinSlotView.class, R.color.AppPinColor, 0, R.string.pin_list_app, PinWidgetApps.class, true, false);
 
     public static PinInfo getPinInfo(PinBase pin) {
         return getPinInfo(pin.getType(), pin.getSubType());

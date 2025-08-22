@@ -31,6 +31,15 @@ public class PinApplications extends PinList {
         super(jsonObject);
     }
 
+    @Override
+    public PinList copy() {
+        PinApplications pinApplications = new PinApplications(subType);
+        for (PinObject pinObject : values) {
+            pinApplications.values.add((PinObject) pinObject.copy());
+        }
+        return pinApplications;
+    }
+
     public List<String> getPackageNames() {
         List<String> packageNames = new ArrayList<>();
         for (PinObject value : values) {

@@ -117,6 +117,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
                 invalidate();
             }
         });
+        binding.typeGroup.check(binding.typeGroup.getChildAt(SettingSaver.getInstance().getPickNodeType()).getId());
     }
 
     @Override
@@ -261,11 +262,9 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
 
     private NodeInfo findNodeByTop(int x, int y, boolean justUsable) {
         for (NodeInfo root : roots) {
-            List<NodeInfo> children = root.findChildren(new Rect(x, y, x, y));
-            for (int i = children.size() - 1; i >= 0; i--) {
-                NodeInfo child = children.get(i);
-                if (!justUsable || child.usable) return child;
-            }
+            List<NodeInfo> children = root.findChildren(new Rect(x, y, x, y), justUsable);
+            if (children.isEmpty()) continue;
+            return children.get(children.size() - 1);
         }
         return null;
     }
@@ -280,6 +279,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         int depth = 0;
         NodeInfo node = null;
         for (Map.Entry<NodeInfo, Integer> entry : map.entrySet()) {
+            if (!entry.getKey().visible) continue;
             if (depth < entry.getValue() && (!justUsable || entry.getKey().usable)) {
                 depth = entry.getValue();
                 node = entry.getKey();

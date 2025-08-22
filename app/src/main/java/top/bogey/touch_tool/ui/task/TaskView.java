@@ -2,6 +2,7 @@ package top.bogey.touch_tool.ui.task;
 
 import static top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionItemRecyclerViewAdapter.getTipsLinearLayout;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -40,6 +41,8 @@ import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
+import top.bogey.touch_tool.ui.tool.task_manager.ExportTaskDialog;
+import top.bogey.touch_tool.ui.tool.task_manager.ImportTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
@@ -63,13 +66,24 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
             MainActivity activity = (MainActivity) requireActivity();
             if (menuItem.getItemId() == R.id.importTask) {
+                activity.launcherOpenDocument((code, intent) -> {
+                    if (code == Activity.RESULT_OK && intent != null) {
+                        ImportTaskDialog.showDialog(activity, intent.getData());
+                    }
+                }, "*/*");
 
                 return true;
             } else if (menuItem.getItemId() == R.id.exportTask) {
                 if (selecting) {
-
+                    List<Task> tasks = new ArrayList<>();
+                    selected.forEach(id -> {
+                        Task task = Saver.getInstance().getTask(id);
+                        if (task == null) return;
+                        tasks.add(task);
+                    });
+                    ExportTaskDialog.showDialog(activity, tasks);
                 } else {
-
+                    ExportTaskDialog.showDialog(activity);
                 }
                 return true;
             }
@@ -158,6 +172,14 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         });
 
         binding.exportButton.setOnClickListener(v -> {
+            List<Task> tasks = new ArrayList<>();
+            selected.forEach(id -> {
+                Task task = Saver.getInstance().getTask(id);
+                if (task == null) return;
+                tasks.add(task);
+            });
+            ExportTaskDialog.showDialog(requireContext(), tasks);
+
             unselectAll();
             hideBottomBar();
         });

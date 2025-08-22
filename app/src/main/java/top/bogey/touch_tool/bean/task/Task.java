@@ -8,9 +8,11 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 import top.bogey.touch_tool.bean.action.Action;
@@ -155,6 +157,41 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
             usages.addAll(task.getTaskUses(id));
         }
         return usages;
+    }
+
+    public Set<Task> getTaskReferences() {
+        Set<Task> tasks = new HashSet<>();
+        for (Action action : getActions(ExecuteTaskAction.class)) {
+            ExecuteTaskAction execute = (ExecuteTaskAction) action;
+            String taskId = execute.getTaskId();
+            Task task = Saver.getInstance().getTask(taskId);
+            if (task != null) tasks.add(task);
+        }
+
+        for (Task task : getTasks()) {
+            tasks.addAll(task.getTaskReferences());
+        }
+        return tasks;
+    }
+
+    public Set<Variable> getVariableReferences() {
+        Set<Variable> variables = new HashSet<>();
+        for (Action action : getActions(GetVariableAction.class)) {
+            GetVariableAction get = (GetVariableAction) action;
+            String varId = get.getVarId();
+            Variable variable = Saver.getInstance().getVar(varId);
+            if (variable != null) variables.add(variable);
+        }
+        for (Action action : getActions(SetVariableAction.class)) {
+            SetVariableAction set = (SetVariableAction) action;
+            String varId = set.getVarId();
+            Variable variable = Saver.getInstance().getVar(varId);
+            if (variable != null) variables.add(variable);
+        }
+        for (Task task : getTasks()) {
+            variables.addAll(task.getVariableReferences());
+        }
+        return variables;
     }
 
     @Override

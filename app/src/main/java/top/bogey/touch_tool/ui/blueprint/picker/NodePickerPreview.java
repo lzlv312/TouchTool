@@ -21,6 +21,7 @@ import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.custom.MarkTargetFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.StringResultCallback;
+import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 @SuppressLint("ViewConstructor")
 public class NodePickerPreview extends BasePicker<String> {
@@ -59,7 +60,9 @@ public class NodePickerPreview extends BasePicker<String> {
         binding.matchButton.setOnClickListener(v -> {
             MainAccessibilityService service = MainApplication.getInstance().getService();
             if (service != null && service.isEnabled()) {
-                service.tryGetScreenShot(result -> post(() -> {
+                FloatWindow.hide(tag);
+                postDelayed(() -> service.tryGetScreenShot(result -> post(() -> {
+                    FloatWindow.show(tag);
                     if (result != null) {
                         NodeInfo nodeInfo = nodePath.findNode(NodeInfo.getWindows(), true);
                         if (nodeInfo == null) return;
@@ -78,7 +81,7 @@ public class NodePickerPreview extends BasePicker<String> {
                         canvas.drawRect(new Rect(0, 0, rect.width(), rect.height()), paint);
                         binding.matchedImage.setImageBitmap(bitmap);
                     }
-                }));
+                })), 100);
             }
         });
 

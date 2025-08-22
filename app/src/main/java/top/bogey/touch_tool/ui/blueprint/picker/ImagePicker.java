@@ -40,6 +40,7 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
 
     private float lastX, lastY;
     private int mode = MODE_NONE;
+    private int moveMode = MODE_NONE;
 
     public ImagePicker(@NonNull Context context, ResultCallback<Bitmap> callback, Bitmap image) {
         super(context, callback);
@@ -88,10 +89,11 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
         if (action == MotionEvent.ACTION_DOWN) {
             lastX = x;
             lastY = y;
+            mode = MODE_NONE;
+            moveMode = MODE_NONE;
 
             if (area.isEmpty()) {
                 area.set((int) x, (int) y, (int) x, (int) y);
-                mode = MODE_NONE;
             } else {
                 View[] views = new View[]{binding.moveRight, binding.moveLeft, binding.markBox, binding.bottomArea, binding.topArea};
                 for (int i = 0; i < views.length; i++) {
@@ -100,7 +102,7 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
                     PointF pos = DisplayUtil.getLocationRelativeToView(view, this);
                     RectF rect = new RectF(pos.x, pos.y, pos.x + view.getWidth(), pos.y + view.getHeight());
                     if (rect.contains(x, y)) {
-                        mode = i + 1;
+                        moveMode = i + 1;
                         break;
                     }
                 }
@@ -108,6 +110,7 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
         }
 
         if (action == MotionEvent.ACTION_MOVE) {
+            mode = moveMode;
             float dx = x - lastX;
             float dy = y - lastY;
             boolean flag = true;
@@ -125,7 +128,6 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
             if (mode == MODE_MOVE) {
                 area.offset((int) dx, (int) dy);
             }
-
 
             int xOffset = (int) dx / 5;
             int yOffset = (int) dy / 5;

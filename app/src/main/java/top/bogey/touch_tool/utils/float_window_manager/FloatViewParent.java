@@ -84,7 +84,6 @@ public class FloatViewParent extends FrameLayout {
                 toDockSide();
             }
         }
-        Log.d("TAG", "onTouchEvent: " + event + ", " + config.dragging);
 
         return config.dragging || super.onTouchEvent(event);
     }
@@ -112,7 +111,6 @@ public class FloatViewParent extends FrameLayout {
                 config.dragging = true;
             }
         }
-        Log.d("TAG", "onInterceptTouchEvent: " + event + ", " + config.dragging);
 
         return config.dragging || super.onInterceptTouchEvent(event);
     }

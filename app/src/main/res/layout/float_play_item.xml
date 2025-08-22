@@ -52,6 +52,6 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textColor="?attr/colorPrimary"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
 
 </FrameLayout>

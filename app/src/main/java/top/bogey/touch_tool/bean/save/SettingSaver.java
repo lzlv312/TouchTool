@@ -21,6 +21,9 @@ import java.util.List;
 
 import top.bogey.touch_tool.service.KeepAliveService;
 import top.bogey.touch_tool.service.notification.NotificationService;
+import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
+import top.bogey.touch_tool.utils.callback.ActivityLifecycleCallback;
+import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class SettingSaver {
     private static SettingSaver instance;
@@ -91,52 +94,14 @@ public class SettingSaver {
     }
 
     public void initColor(Application application) {
-        application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+        application.registerActivityLifecycleCallbacks(new ActivityLifecycleCallback() {
 
             @Override
             public void onActivityPreCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-                Application.ActivityLifecycleCallbacks.super.onActivityPreCreated(activity, savedInstanceState);
+                super.onActivityPreCreated(activity, savedInstanceState);
                 if (isDynamicColorTheme()) {
-                    DynamicColorsOptions.Builder builder = new DynamicColorsOptions.Builder();
-                    int colorValue = getDynamicColorValue();
-                    if (colorValue != Color.BLACK) builder.setContentBasedSource(colorValue);
-                    DynamicColors.applyToActivityIfAvailable(activity, builder.build());
+                    DynamicColors.applyToActivityIfAvailable(activity, getDynamicColorOptions());
                 }
-            }
-
-            @Override
-            public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-
-            }
-
-            @Override
-            public void onActivityDestroyed(@NonNull Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityPaused(@NonNull Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityResumed(@NonNull Activity activity) {
-
-            }
-
-            @Override
-            public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
-
-            }
-
-            @Override
-            public void onActivityStarted(@NonNull Activity activity) {
-
-            }
-
-            @Override
-            public void onActivityStopped(@NonNull Activity activity) {
-
             }
         });
     }
@@ -383,12 +348,23 @@ public class SettingSaver {
     }
 
     public int getDynamicColorValue() {
-        return mmkv.decodeInt(DYNAMIC_COLOR_VALUE, 0);
+        return mmkv.decodeInt(DYNAMIC_COLOR_VALUE, Color.BLACK);
     }
 
     public void setDynamicColorValue(Activity activity, int value) {
         mmkv.encode(DYNAMIC_COLOR_VALUE, value);
         activity.recreate();
+    }
+
+    public DynamicColorsOptions getDynamicColorOptions() {
+        if (isDynamicColorTheme()) {
+            DynamicColorsOptions.Builder builder = new DynamicColorsOptions.Builder();
+            int colorValue = getDynamicColorValue();
+            if (colorValue != Color.BLACK) builder.setContentBasedSource(colorValue);
+            builder.setOnAppliedCallback(activity -> FloatWindow.dismiss(KeepAliveFloatView.class.getName()));
+            return builder.build();
+        }
+        return null;
     }
 
     public int getManualPlayShowType() {

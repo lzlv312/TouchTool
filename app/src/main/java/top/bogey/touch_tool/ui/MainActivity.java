@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,6 +15,7 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.ActivityMainBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.ui.tool.task_manager.ImportTaskDialog;
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
@@ -54,6 +57,13 @@ public class MainActivity extends BaseActivity {
         });
 
         TaskInfoSummary.getInstance().resetApps();
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
     }
 
     public void showBottomNavigation() {
@@ -68,5 +78,19 @@ public class MainActivity extends BaseActivity {
     public boolean onSupportNavigateUp() {
         NavController controller = Navigation.findNavController(this, R.id.conView);
         return controller.navigateUp() || super.onSupportNavigateUp();
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent == null) return;
+
+        Uri uri = null;
+        if (Intent.ACTION_SEND.equals(intent.getAction())) {
+            uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            uri = intent.getData();
+        }
+        if (uri != null) {
+            ImportTaskDialog.showDialog(this, uri);
+        }
     }
 }

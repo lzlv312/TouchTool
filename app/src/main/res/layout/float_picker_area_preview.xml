@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -23,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/picker_area_title"
-                android:textSize="11sp" />
+                android:textSize="12sp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/switchButton"
@@ -63,8 +62,7 @@
                         android:inputType="numberSigned"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="0dp"
-                        android:textSize="9sp"
-                        tools:ignore="SmallSp" />
+                        android:textSize="8sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,8 +89,7 @@
                             android:inputType="numberSigned"
                             android:paddingHorizontal="8dp"
                             android:paddingVertical="0dp"
-                            android:textSize="9sp"
-                            tools:ignore="SmallSp" />
+                            android:textSize="8sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,8 +114,7 @@
                             android:inputType="numberSigned"
                             android:paddingHorizontal="8dp"
                             android:paddingVertical="0dp"
-                            android:textSize="9sp"
-                            tools:ignore="SmallSp" />
+                            android:textSize="8sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -141,8 +137,7 @@
                         android:inputType="numberSigned"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="0dp"
-                        android:textSize="9sp"
-                        tools:ignore="SmallSp" />
+                        android:textSize="8sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

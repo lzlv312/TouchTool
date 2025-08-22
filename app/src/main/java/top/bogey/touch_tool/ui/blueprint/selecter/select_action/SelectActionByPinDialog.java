@@ -16,6 +16,7 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
@@ -83,12 +84,14 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                 List<Object> privateVars = new ArrayList<>();
                 for (Variable var : task.getVariables()) {
                     if (touchedPin.getValue().linkFromAble(var.getValue())) privateVars.add(var);
+                    else if (touchedPin.isSameClass(PinExecute.class)) privateVars.add(var);
                 }
                 map.put(PRIVATE, privateVars);
 
                 List<Object> publicVars = new ArrayList<>();
                 for (Variable var : Saver.getInstance().getVars()) {
                     if (touchedPin.getValue().linkFromAble(var.getValue())) publicVars.add(var);
+                    else if (touchedPin.isSameClass(PinExecute.class)) privateVars.add(var);
                 }
                 map.put(GLOBAL, publicVars);
 
@@ -97,6 +100,7 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                     List<Object> list = new ArrayList<>();
                     for (Variable var : parent.getVariables()) {
                         if (touchedPin.getValue().linkFromAble(var.getValue())) list.add(var);
+                        else if (touchedPin.isSameClass(PinExecute.class)) privateVars.add(var);
                     }
                     if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
                     parent = parent.getParent();
