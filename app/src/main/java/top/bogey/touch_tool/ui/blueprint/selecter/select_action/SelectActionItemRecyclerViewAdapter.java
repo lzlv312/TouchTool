@@ -387,8 +387,11 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
 
                 binding.copyButton.setVisibility(View.VISIBLE);
                 binding.editButton.setVisibility(View.VISIBLE);
-                Task childTask = dialog.task.findChildTask(task.getId());
-                if (task.equals(dialog.task) || childTask == null) {
+
+                Task parentTask = dialog.task.findTask(task.getId());
+                boolean isUsable = task.equals(parentTask) || task.getParent() == null;
+
+                if (task.equals(dialog.task) || dialog.task.isMyParent(task.getId())) {
                     binding.deleteButton.setVisibility(View.GONE);
                 } else {
                     binding.deleteButton.setVisibility(View.VISIBLE);
@@ -398,9 +401,11 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
 
                 if (task.getParent() == null) {
                     binding.icon.setImageResource(R.drawable.icon_globe);
+                } else {
+                    binding.icon.setImageResource(R.drawable.icon_assignment);
                 }
 
-                if (task.getActions(CustomStartAction.class).isEmpty()) {
+                if (task.getActions(CustomStartAction.class).isEmpty() || !isUsable) {
                     binding.getRoot().setEnabled(false);
                     binding.getRoot().setAlpha(0.5f);
                 }
@@ -416,8 +421,18 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
 
                 binding.helpButton.setIconResource(R.drawable.icon_download);
 
+                Variable variable = dialog.task.findVariable(var.getId());
+                boolean isUsable = var.equals(variable) || var.getParent() == null;
+
                 if (var.getParent() == null) {
                     binding.icon.setImageResource(R.drawable.icon_globe);
+                } else {
+                    binding.icon.setImageResource(R.drawable.icon_note_stack);
+                }
+
+                if (!isUsable) {
+                    binding.getRoot().setEnabled(false);
+                    binding.getRoot().setAlpha(0.5f);
                 }
 
                 binding.varBox.setVisibility(View.VISIBLE);

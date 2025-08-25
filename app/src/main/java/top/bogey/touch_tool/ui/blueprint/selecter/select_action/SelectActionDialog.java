@@ -17,9 +17,11 @@ import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Queue;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -46,6 +48,7 @@ public class SelectActionDialog extends BottomSheetDialog {
     protected final String GLOBAL = getContext().getString(R.string.select_action_group_global);
     protected final String PRIVATE = getContext().getString(R.string.select_action_group_private);
     protected final static String PARENT_PREFIX = "👨";
+    protected final static String CHILD_PREFIX = "👶";
     protected final static String TAG_PREFIX = "🔗";
     public final static String GLOBAL_FLAG = "🌍 ";
 
@@ -319,16 +322,32 @@ public class SelectActionDialog extends BottomSheetDialog {
                     }
                     parent = parent.getParent();
                 }
+
+                // 子任务
+                Queue<Task> queue = new LinkedList<>(task.getTasks());
+                while (!queue.isEmpty()) {
+                    Task poll = queue.poll();
+                    if (poll == null) continue;
+                    List<Task> tasks = poll.getTasks();
+                    if (!tasks.isEmpty()) {
+                        map.put(CHILD_PREFIX + poll.getTitle(), new ArrayList<>(tasks));
+                        subGroupMap.put(CHILD_PREFIX + poll.getTitle(), poll);
+                        queue.addAll(tasks);
+                    }
+                }
             }
             case VARIABLE -> {
+                // 私有变量
                 List<Object> privateVars = new ArrayList<>(task.getVariables());
                 map.put(PRIVATE, privateVars);
                 subGroupMap.put(PRIVATE, task);
 
+                // 全局变量
                 List<Object> publicVars = new ArrayList<>(Saver.getInstance().getVars());
                 map.put(GLOBAL, publicVars);
                 subGroupMap.put(GLOBAL, GLOBAL);
 
+                // 父级变量
                 Task parent = task.getParent();
                 while (parent != null) {
                     List<Object> list = new ArrayList<>(parent.getVariables());
@@ -337,6 +356,20 @@ public class SelectActionDialog extends BottomSheetDialog {
                         subGroupMap.put(PARENT_PREFIX + parent.getTitle(), parent);
                     }
                     parent = parent.getParent();
+                }
+
+                // 子级变量
+                Queue<Task> queue = new LinkedList<>(task.getTasks());
+                while (!queue.isEmpty()) {
+                    Task poll = queue.poll();
+                    if (poll == null) continue;
+                    List<Object> list = new ArrayList<>(poll.getVariables());
+                    if (!list.isEmpty()) {
+                        map.put(CHILD_PREFIX + poll.getTitle(), list);
+                        subGroupMap.put(CHILD_PREFIX + poll.getTitle(), poll);
+                    }
+                    List<Task> tasks = poll.getTasks();
+                    queue.addAll(tasks);
                 }
             }
         }

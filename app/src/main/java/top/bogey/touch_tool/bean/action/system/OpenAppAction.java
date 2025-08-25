@@ -199,16 +199,21 @@ public class OpenAppAction extends ExecuteAction {
         try {
             int i = Integer.parseInt(value);
             bundle.putInt(key, i);
+            return;
         } catch (NumberFormatException ignored) {
         }
 
         try {
             double d = Double.parseDouble(value);
             bundle.putDouble(key, d);
+            return;
         } catch (NumberFormatException ignored) {
         }
 
-        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) bundle.putBoolean(key, Boolean.parseBoolean(value));
-        else bundle.putString(key, value);
+        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+            bundle.putBoolean(key, Boolean.parseBoolean(value));
+            return;
+        }
+        bundle.putString(key, value);
     }
 }

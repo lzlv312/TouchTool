@@ -135,13 +135,13 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
     }
 
     @Override
-    public Task findChildTask(String id) {
-        return taskManager.findChildTask(id);
+    public Task findTask(String id) {
+        return taskManager.findTask(id);
     }
 
     @Override
-    public Task getParentTask(String id) {
-        return taskManager.getParentTask(id);
+    public boolean isMyParent(String id) {
+        return taskManager.isMyParent(id);
     }
 
     public List<Usage> getTaskUses(String id) {

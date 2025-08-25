@@ -13,12 +13,13 @@ public interface ITaskManager {
 
     List<Task> getTasks(String tag);
 
-    Task findChildTask(String id);
+    Task findTask(String id);
 
     /**
-     * 获取传入任务id的父任务对象，可用于判断自身是否是传入任务的父任务
+     * 判断传入的任务是否为我的父任务
+     *
      * @param id 任务id
-     * @return 父任务对象
+     * @return 结果
      */
-    Task getParentTask(String id);
+    boolean isMyParent(String id);
 }

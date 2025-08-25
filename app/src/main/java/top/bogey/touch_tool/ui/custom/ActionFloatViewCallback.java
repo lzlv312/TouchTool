@@ -9,11 +9,9 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindowHelper;
 
 public class ActionFloatViewCallback extends FloatBaseCallback {
     private final String tag;
-    private final boolean remember;
 
-    public ActionFloatViewCallback(String tag, boolean remember) {
+    public ActionFloatViewCallback(String tag) {
         this.tag = tag;
-        this.remember = remember;
     }
 
     @Override
@@ -25,7 +23,7 @@ public class ActionFloatViewCallback extends FloatBaseCallback {
     public void onDragEnd() {
         super.onDragEnd();
         FloatWindowHelper helper = FloatWindow.getHelper(tag);
-        if (helper != null && remember) {
+        if (helper != null) {
             Point point = helper.getRelativePoint();
             SettingSaver.getInstance().setManualChoiceViewPos(point);
         }

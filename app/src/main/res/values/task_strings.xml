@@ -69,6 +69,7 @@
     <string name="choice_action">手动选择执行</string>
     <string name="choice_action_desc">弹出选择窗口供使用者手动选择</string>
     <string name="choice_action_default">默认</string>
+    <string name="choice_action_timeout">超时(ms)</string>
     <string name="choice_action_show_anchor">屏幕锚点</string>
     <string name="choice_action_show_pos">相对锚点位置</string>
 
@@ -314,7 +315,8 @@
     <string name="string_match_action">文本正则匹配</string>
     <string name="string_match_action_desc">执行正则匹配，判断是否包含特定文本</string>
     <string name="string_match_action_match">匹配文本</string>
-    <string name="string_match_action_match_result">匹配结果</string>
+    <string name="string_match_action_match_all_result">匹配结果</string>
+    <string name="string_match_action_match_all_matchers">捕获结果</string>
 
     <string name="string_append_action">文本拼接</string>
     <string name="string_append_action_desc">将多个文本拼接成一个文本</string>
@@ -493,7 +495,7 @@
     <string name="edit_text_input_action_desc">对文本输入框输入文本</string>
     <string name="edit_text_input_action_edit_text">输入框(默认首个)</string>
     <string name="edit_text_input_action_append">追加</string>
-    <string name="edit_text_input_action_enter">模拟回车</string>
+    <string name="edit_text_input_action_enter">尝试模拟回车</string>
 
 
     <!-- 动作-Image -->

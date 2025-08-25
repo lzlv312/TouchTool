@@ -83,8 +83,8 @@ public class Pin extends Identity {
     public void sync(Pin pin) {
         setId(pin.getId());
         setUid(pin.getUid());
-        setTitle(pin.getTitle());
-        setDescription(pin.getDescription());
+        setTitle(pin.title);
+        setDescription(pin.description);
 
         // 值需要让他自己同步
         getValue().sync(pin.getValue());

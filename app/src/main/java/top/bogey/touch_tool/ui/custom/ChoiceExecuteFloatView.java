@@ -26,14 +26,23 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterface {
     private final FloatChoiceExecuteBinding binding;
     private StringResultCallback callback;
-    private boolean remember = false;
+
+    public static void showChoice(List<Choice> choices, StringResultCallback callback) {
+        KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
+        if (keepView == null) return;
+        new Handler(Looper.getMainLooper()).post(() -> {
+            Point point = SettingSaver.getInstance().getManualChoiceViewPos();
+            ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getThemeContext());
+            choiceView.show();
+            choiceView.innerShowChoice(choices, callback, EAnchor.CENTER, point);
+        });
+    }
 
     public static void showChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
             ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getThemeContext());
-            choiceView.remember = location.x == -1 && location.y == -1;
             choiceView.show();
             choiceView.innerShowChoice(choices, callback, anchor, location);
         });
@@ -50,12 +59,8 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
     }
 
     public void innerShowChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, Point location) {
-        if (remember) {
-            Point point = SettingSaver.getInstance().getManualChoiceViewPos();
-            FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), EAnchor.CENTER, point);
-        } else {
-            FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), anchor, location);
-        }
+        FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), anchor, location);
+
         this.callback = callback;
         for (Choice choice : choices) {
             FloatChoiceExecuteItemBinding itemBinding = FloatChoiceExecuteItemBinding.inflate(LayoutInflater.from(getContext()), binding.flexBox, true);
@@ -77,7 +82,7 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
                 .setTag(ChoiceExecuteFloatView.class.getName())
                 .setSpecial(true)
                 .setLocation(EAnchor.CENTER, point.x, point.y)
-                .setCallback(new ActionFloatViewCallback(ChoiceExecuteFloatView.class.getName(), remember))
+                .setCallback(new ActionFloatViewCallback(ChoiceExecuteFloatView.class.getName()))
                 .show();
     }
 

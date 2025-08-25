@@ -614,9 +614,9 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                 touchState = TOUCH_NONE;
                 lastX = 0;
                 lastY = 0;
-                invalidate();
             }
         }
+        invalidate();
         return true;
     }
 

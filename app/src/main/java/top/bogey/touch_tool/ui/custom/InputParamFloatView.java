@@ -30,17 +30,26 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 public class InputParamFloatView extends FrameLayout implements FloatInterface {
     private final FloatInputParamBinding binding;
     private BooleanResultCallback callback;
-    private boolean remember = false;
 
     private final Task task;
     private final Action action;
+
+    public static void showInputParam(PinObject object, BooleanResultCallback callback) {
+        KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
+        if (keepView == null) return;
+        new Handler(Looper.getMainLooper()).post(() -> {
+            Point point = SettingSaver.getInstance().getManualChoiceViewPos();
+            InputParamFloatView inputParamView = new InputParamFloatView(keepView.getThemeContext());
+            inputParamView.show();
+            inputParamView.innerShowToast(object, callback, EAnchor.CENTER, point);
+        });
+    }
 
     public static void showInputParam(PinObject object, BooleanResultCallback callback, EAnchor anchor, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
             InputParamFloatView inputParamView = new InputParamFloatView(keepView.getThemeContext());
-            inputParamView.remember = location.x == -1 && location.y == -1;
             inputParamView.show();
             inputParamView.innerShowToast(object, callback, anchor, location);
         });
@@ -61,12 +70,7 @@ public class InputParamFloatView extends FrameLayout implements FloatInterface {
     }
 
     private void innerShowToast(PinObject object, BooleanResultCallback callback, EAnchor anchor, Point location) {
-        if (remember) {
-            Point point = SettingSaver.getInstance().getManualChoiceViewPos();
-            FloatWindow.setLocation(InputParamFloatView.class.getName(), EAnchor.CENTER, point);
-        } else {
-            FloatWindow.setLocation(InputParamFloatView.class.getName(), anchor, location);
-        }
+        FloatWindow.setLocation(InputParamFloatView.class.getName(), anchor, location);
         this.callback = callback;
 
         action.addPin(new Pin(object));
@@ -83,7 +87,7 @@ public class InputParamFloatView extends FrameLayout implements FloatInterface {
                 .setLocation(EAnchor.CENTER, point.x, point.y)
                 .setSpecial(true)
                 .setExistEditText(true)
-                .setCallback(new ActionFloatViewCallback(InputParamFloatView.class.getName(), remember))
+                .setCallback(new ActionFloatViewCallback(InputParamFloatView.class.getName()))
                 .show();
 
         FloatBaseCallback.Block = true;

@@ -59,24 +59,21 @@ public class TaskManager implements ITaskManager {
     }
 
     @Override
-    public Task findChildTask(String id) {
+    public Task findTask(String id) {
         Task task = getTask(id);
         if (task != null) return task;
-        for (Task t : tasks) {
-            Task target = t.findChildTask(id);
-            if (target != null) return target;
-        }
+        task = parent.getParent();
+        if (task != null) return task.findTask(id);
         return null;
     }
 
     @Override
-    public Task getParentTask(String id) {
-        // 检查自身是不是他的父任务
-        Task task = getTask(id);
-        if (task != null) return parent;
-        // 检查父任务是不是它的父任务
-        task = parent.getParent();
-        if (task != null) return task.getParentTask(id);
-        return null;
+    public boolean isMyParent(String id) {
+        Task task = parent.getParent();
+        if (task != null) {
+            if (task.getId().equals(id)) return true;
+            return task.isMyParent(id);
+        }
+        return false;
     }
 }

@@ -200,11 +200,6 @@
         <item>向下取整</item>
     </string-array>
 
-    <string-array name="ocr_type">
-        <item>中文</item>
-        <item>英文</item>
-    </string-array>
-
     <string-array name="area_relation">
         <item>包含</item>
         <item>相交</item>
@@ -259,6 +254,10 @@
         <item>四倍</item>
     </string-array>
 
+    <string-array name="float_pos_type">
+        <item>记忆位置</item>
+        <item>手动选择</item>
+    </string-array>
 
     <string-array name="activity_flag" translatable="false">
         <item>FLAG_ACTIVITY_NEW_TASK *</item>

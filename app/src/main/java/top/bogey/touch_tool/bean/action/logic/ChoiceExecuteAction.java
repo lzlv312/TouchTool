@@ -12,24 +12,33 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinIconExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinPoint;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
+import top.bogey.touch_tool.bean.pin.special_pin.NotLinkAblePin;
+import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
 import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.custom.ChoiceExecuteFloatView;
 import top.bogey.touch_tool.utils.EAnchor;
+import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
     private final transient Pin inPin = new Pin(new PinExecute(), R.string.pin_execute);
     private final transient Pin outPin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
     private final static Pin morePin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
 
-    private final transient Pin anchorPin = new SingleSelectPin(new PinSingleSelect(R.array.anchor, 4), R.string.choice_action_show_anchor, false, false, true);
-    private final transient Pin posPin = new Pin(new PinPoint(-1, -1), R.string.choice_action_show_pos, false, false, true);
+
+    private final transient Pin timeoutPin = new NotLinkAblePin(new PinInteger(0), R.string.choice_action_timeout);
+    private final transient Pin posTypePin = new SingleSelectPin(new PinSingleSelect(R.array.float_pos_type, 0), R.string.pin_point, false, false, true);
+    private final transient Pin anchorPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.choice_action_show_anchor, false, false, true);
+    private final transient Pin posPin = new PosShowablePin(new PinPoint(0, 0), R.string.choice_action_show_pos, false, false, true);
 
     private final transient Pin secondPin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
     private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_execute, true);
@@ -37,12 +46,12 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
 
     public ChoiceExecuteAction() {
         super(ActionType.CHOICE_LOGIC);
-        addPins(inPin, outPin, anchorPin, posPin, secondPin, addPin, defaultPin);
+        addPins(inPin, outPin, timeoutPin, posTypePin, anchorPin, posPin, secondPin, addPin, defaultPin);
     }
 
     public ChoiceExecuteAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(inPin, outPin, anchorPin, posPin, secondPin);
+        reAddPins(inPin, outPin, timeoutPin, posTypePin, anchorPin, posPin, secondPin);
         reAddPins(morePin);
         reAddPins(addPin, defaultPin);
     }
@@ -56,15 +65,25 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
             choices.add(new ChoiceExecuteFloatView.Choice(dynamicPin.getId(), dynamicPin.getValue(PinIconExecute.class).getValue(), dynamicPin.getValue(PinIconExecute.class).getImage()));
         }
 
+        PinNumber<?> timeout = getPinValue(runnable, timeoutPin);
         AtomicReference<String> nextPinId = new AtomicReference<>();
 
-        PinSingleSelect anchor = getPinValue(runnable, anchorPin);
-        PinPoint point = getPinValue(runnable, posPin);
-        ChoiceExecuteFloatView.showChoice(choices, result -> {
-            nextPinId.set(result);
-            runnable.resume();
-        }, EAnchor.values()[anchor.getIndex()], point.getValue());
-        runnable.await();
+        if (getTypeValue() == 0) {
+            ChoiceExecuteFloatView.showChoice(choices, result -> {
+                nextPinId.set(result);
+                runnable.resume();
+            });
+        } else {
+            PinSingleSelect anchor = getPinValue(runnable, anchorPin);
+            PinPoint point = getPinValue(runnable, posPin);
+            ChoiceExecuteFloatView.showChoice(choices, result -> {
+                nextPinId.set(result);
+                runnable.resume();
+            }, EAnchor.values()[anchor.getIndex()], point.getValue());
+        }
+
+        runnable.await(timeout.intValue());
+        FloatWindow.dismiss(ChoiceExecuteFloatView.class.getName());
 
         String pinId = nextPinId.get();
         if (pinId != null) {
@@ -100,5 +119,23 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
             if (start) pins.add(pin);
         }
         return pins;
+    }
+
+    private int getTypeValue() {
+        PinSingleSelect type = posTypePin.getValue();
+        return type.getIndex();
+    }
+
+
+    private static class PosShowablePin extends ShowAblePin {
+        public PosShowablePin(PinBase value, int titleId, boolean out, boolean dynamic, boolean hide) {
+            super(value, titleId, out, dynamic, hide);
+        }
+
+        @Override
+        public boolean showAble(Task context) {
+            ChoiceExecuteAction action = (ChoiceExecuteAction) context.getAction(getOwnerId());
+            return action.getTypeValue() == 1;
+        }
     }
 }
