@@ -33,8 +33,7 @@ public class TaskReference {
 
     public int getTaskUsageTimes(Task task) {
         Integer times = tasks.getOrDefault(task, 0);
-        if (times == null) return 0;
-        return times;
+        return times == null ? 0 : times;
     }
 
     public Set<Task> getTasks() {
@@ -59,6 +58,11 @@ public class TaskReference {
 
     public boolean isUsageVariable(Variable variable) {
         return variables.containsKey(variable);
+    }
+
+    public int getVariableTimes(Variable variable) {
+        Integer times = variables.getOrDefault(variable, 0);
+        return times == null ? 0 : times;
     }
 
     public void addTaskPackage(TaskPackage taskPackage) {

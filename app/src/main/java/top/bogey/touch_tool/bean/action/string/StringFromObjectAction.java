@@ -27,6 +27,8 @@ public class StringFromObjectAction extends CalculateAction {
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
         PinObject object = getPinValue(runnable, objectPin);
-        textPin.getValue(PinString.class).setValue(object.toString());
+        String text = null;
+        if (object != null) text = object.toString();
+        textPin.getValue(PinString.class).setValue(text);
     }
 }

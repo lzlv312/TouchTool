@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.action.SyncAction;
@@ -86,5 +87,15 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
         }
         String globalFlag = variable.getParent() == null ? GLOBAL_FLAG : "";
         setTitle(MainApplication.getInstance().getString(R.string.set_value_action) + " - " + globalFlag + variable.getTitle());
+    }
+
+    @Override
+    public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
+        Variable variable = task.findVariable(varId);
+        if (variable == null) variable = Saver.getInstance().getVar(varId);
+        if (variable == null) {
+            result.addResult(ActionCheckResult.ResultType.ERROR, R.string.check_not_exist_variable_error);
+        }
     }
 }

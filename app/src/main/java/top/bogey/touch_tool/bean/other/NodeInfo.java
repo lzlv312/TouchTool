@@ -87,7 +87,7 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
     public NodeInfo findUsableChild(int x, int y) {
         for (int i = getChildCount() - 1; i >= 0; i--) {
             NodeInfo child = getChild(i);
-            if (child ==  null) continue;
+            if (child == null) continue;
             NodeInfo result = child.findUsableChild(x, y);
             if (result != null) return result;
         }
@@ -240,14 +240,30 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
         List<NodeInfo> nodes = new ArrayList<>();
 
         String regexMetaChars = ".*+?^$|\\[]{}()";
-        boolean flag = false;
+        boolean flag = true;
         for (char c : regexMetaChars.toCharArray()) {
             if (text.indexOf(c) != -1) {
-                flag = true;
+                flag = false;
                 break;
             }
         }
+
         if (flag) {
+            if (area.contains(this.area) || Rect.intersects(area, this.area)) {
+                if (this.text != null && this.text.contains(text)) nodes.add(this);
+
+                List<AccessibilityNodeInfo> list = node.findAccessibilityNodeInfosByText(text);
+                for (AccessibilityNodeInfo node : list) {
+                    if (node == null) continue;
+                    NodeInfo nodeInfo = new NodeInfo(node);
+                    if (area.contains(nodeInfo.area) || Rect.intersects(area, nodeInfo.area)) {
+                        nodes.add(nodeInfo);
+                    }
+                }
+            }
+        }
+
+        if (!flag || nodes.isEmpty()) {
             Stack<NodeInfo> stack = new Stack<>();
             Pattern pattern = AppUtil.getPattern(text);
             if (area.contains(this.area) || Rect.intersects(area, this.area)) stack.push(this);
@@ -266,19 +282,6 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
                 for (NodeInfo child : node.getChildren()) {
                     if (area.contains(child.area) || Rect.intersects(area, child.area)) {
                         stack.push(child);
-                    }
-                }
-            }
-        } else {
-            if (area.contains(this.area) || Rect.intersects(area, this.area)) {
-                if (this.text != null && this.text.contains(text)) nodes.add(this);
-
-                List<AccessibilityNodeInfo> list = node.findAccessibilityNodeInfosByText(text);
-                for (AccessibilityNodeInfo node : list) {
-                    if (node == null) continue;
-                    NodeInfo nodeInfo = new NodeInfo(node);
-                    if (area.contains(nodeInfo.area) || Rect.intersects(area, nodeInfo.area)) {
-                        nodes.add(nodeInfo);
                     }
                 }
             }
@@ -331,11 +334,10 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
 
     public List<NodeInfo> findChildrenByClass(String className, Rect area) {
         List<NodeInfo> nodes = new ArrayList<>();
-        Class<?> viewClazz;
+        Class<?> viewClazz = null;
         try {
             viewClazz = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            return nodes;
+        } catch (ClassNotFoundException ignored) {
         }
 
         Stack<NodeInfo> stack = new Stack<>();
@@ -344,10 +346,14 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
             NodeInfo node = stack.pop();
             if (node == null) continue;
 
-            try {
-                Class<?> clazz = Class.forName(node.clazz);
-                if (viewClazz.isAssignableFrom(clazz)) nodes.add(node);
-            } catch (ClassNotFoundException ignored) {
+            if (viewClazz == null) {
+                if (AppUtil.isStringContains(node.clazz, className)) nodes.add(node);
+            } else {
+                try {
+                    Class<?> clazz = Class.forName(node.clazz);
+                    if (viewClazz.isAssignableFrom(clazz)) nodes.add(node);
+                } catch (ClassNotFoundException ignored) {
+                }
             }
 
             for (NodeInfo child : node.getChildren()) {

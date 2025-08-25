@@ -109,6 +109,7 @@
     <string name="check_pin_linkable_error">针脚类型不匹配</string>
     <string name="check_need_super_user_error">需要超级用户权限</string>
     <string name="check_need_ocr_module_error">需要Ocr模型</string>
+    <string name="check_not_exist_variable_error">引用的变量不存在</string>
 
     <!-- 警告 -->
     <string name="check_need_capture_warning">需要开启录屏动作</string>

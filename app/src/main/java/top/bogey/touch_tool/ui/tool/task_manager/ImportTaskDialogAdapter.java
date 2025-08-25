@@ -120,17 +120,28 @@ public class ImportTaskDialogAdapter extends RecyclerView.Adapter<ImportTaskDial
 
             for (Variable var : taskPackage.getVariables()) {
                 Variable variable = Saver.getInstance().getVar(var.getId());
+                int times = taskReference.getVariableTimes(var);
                 ColorStateList color = ColorStateList.valueOf(DisplayUtil.getAttrColor(context, variable == null ? NORMAL_COLOR : SPECIAL_COLOR));
 
                 Chip chip = new Chip(context);
                 chip.setText(var.getTitle());
                 chip.setCheckable(true);
                 chip.setCheckedIconVisible(true);
-                chip.setChecked(taskReference.isUsageVariable(var));
+                chip.setChecked(times > 0);
                 chip.setChipIconResource(R.drawable.icon_note_stack);
                 chip.setChipIconTint(color);
                 chip.setTextColor(color);
-                chip.setOnCheckedChangeListener((buttonView, isChecked) -> chip.setChecked(taskReference.isUsageVariable(var)));
+                chip.setOnClickListener(v -> {
+                    if (times <= 1) {
+                        if (times == 0) {
+                            taskReference.addVariable(var);
+                        } else {
+                            taskReference.removeVariable(var);
+                        }
+                    } else {
+                        chip.setChecked(true);
+                    }
+                });
                 binding.referenceBox.addView(chip);
             }
 
