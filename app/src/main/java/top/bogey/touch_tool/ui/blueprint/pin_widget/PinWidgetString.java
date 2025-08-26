@@ -29,10 +29,12 @@ import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.action.number.MathExpressionAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinAutoPinString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinFileContentString;
@@ -52,10 +54,12 @@ import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.picker.NodePickerPreview;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
+import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionByAllActionDialog;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionByCustomActionDialog;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_edit_text.SelectEditTextDialog;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_icon.SelectIconDialog;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
@@ -160,7 +164,6 @@ public class PinWidgetString extends PinWidget<PinString> {
                         if (manager.isRequestPinShortcutSupported()) {
                             new SelectIconDialog(getContext(), icon -> {
                                 Intent intent = new Intent(getContext(), InstantActivity.class);
-                                intent.setAction(Intent.ACTION_VIEW);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(InstantActivity.INTENT_KEY_DO_ACTION, true);
                                 intent.putExtra(InstantActivity.TASK_ID, card.getTask().getId());
@@ -260,19 +263,27 @@ public class PinWidgetString extends PinWidget<PinString> {
                     binding.editText.setText(regex);
                 }, null).show());
             }
-            case TASK_ID -> {
+            case TASK_ID, ALL_TASK_ID -> {
                 Task task = Saver.getInstance().getTask(card.getTask(), pinBase.getValue());
                 if (task != null) binding.editText.setText(task.getTitle());
                 binding.pickButton.setIconResource(R.drawable.icon_assignment);
-                binding.pickButton.setOnClickListener(v -> new SelectActionByCustomActionDialog(getContext(), card.getTask(), action -> {
+                ResultCallback<Action> callback = action -> {
                     ExecuteTaskAction executeTaskAction = (ExecuteTaskAction) action;
                     Task executeTask = executeTaskAction.getTask(card.getTask());
                     pinBase.setValue(executeTask.getId());
                     pinView.getPin().notifyValueUpdated();
                     binding.editText.setText(executeTask.getTitle());
-                    ExecuteTaskAction cardAction = (ExecuteTaskAction) card.getAction();
-                    cardAction.sync(card.getTask(), executeTask);
-                }).show());
+                    if (card.getAction() instanceof ExecuteTaskAction executeAction) {
+                        executeAction.sync(card.getTask(), executeTask);
+                    }
+                };
+                binding.pickButton.setOnClickListener(v -> {
+                    if (pinBase.getSubType() == PinSubType.TASK_ID) {
+                        new SelectActionByCustomActionDialog(getContext(), card.getTask(), callback).show();
+                    } else {
+                        new SelectActionByAllActionDialog(getContext(), card.getTask(), callback).show();
+                    }
+                });
             }
             case FILE_CONTENT -> {
                 binding.editText.setEnabled(true);

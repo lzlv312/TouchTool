@@ -30,18 +30,18 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/dragImage"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="end|bottom"
-                android:scaleType="centerInside"
-                android:src="@drawable/icon_line_curve"
-                android:tint="?attr/colorOutlineVariant"
-                android:translationX="2dp"
-                android:translationY="2dp" />
-
         </FrameLayout>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/dragImage"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="end|bottom"
+            android:scaleType="centerInside"
+            android:src="@drawable/icon_line_curve"
+            android:tint="?attr/colorOutlineVariant"
+            android:translationX="2dp"
+            android:translationY="2dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -21,6 +21,7 @@ public class ActionMap {
                     ActionType.BATTERY_START,
                     ActionType.SCREEN_START,
                     ActionType.BLUETOOTH_START,
+                    ActionType.RECEIVED_SHARE_START,
                     ActionType.OUT_CALL_START,
                     ActionType.CUSTOM_START,
                     ActionType.CUSTOM_END
@@ -46,7 +47,8 @@ public class ActionMap {
                     ActionType.CLOSE_STICK,
                     ActionType.CLOSE_ALL_STICK,
 
-                    ActionType.INPUT_PARAM
+                    ActionType.INPUT_PARAM,
+                    ActionType.STOP_TASK
             ));
 
             case CLICK -> list.addAll(Arrays.asList(

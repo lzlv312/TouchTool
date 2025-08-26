@@ -1,4 +1,7 @@
 <resources>
+    <string name="main_activity_filter_name">导入任务</string>
+    <string name="instant_activity_filter_name">执行或触发任务</string>
+
     <string name="common_package">top.bogey.common</string>
     <string name="common_name">通用</string>
 
@@ -114,6 +117,7 @@
     <!-- 警告 -->
     <string name="check_need_capture_warning">需要开启录屏动作</string>
     <string name="check_need_notification_warning">需要开启通知权限</string>
+    <string name="check_not_global_task">非全局任务</string>
 
 
     <!-- 任务 -->

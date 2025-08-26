@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,12 +28,16 @@ import top.bogey.touch_tool.bean.action.start.BluetoothStartAction;
 import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.action.start.NetworkStartAction;
 import top.bogey.touch_tool.bean.action.start.NotificationStartAction;
+import top.bogey.touch_tool.bean.action.start.ReceivedShareStartAction;
 import top.bogey.touch_tool.bean.action.start.ScreenStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
+import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.ui.MainActivity;
+import top.bogey.touch_tool.ui.custom.ChoiceExecuteFloatView;
 import top.bogey.touch_tool.ui.play.PlayFloatView;
 import top.bogey.touch_tool.ui.play.SinglePlayView;
 import top.bogey.touch_tool.utils.AppUtil;
@@ -282,6 +287,41 @@ public class TaskInfoSummary {
         }
     }
 
+    public void tryStartShareTask(PinObject pinObject) {
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service == null || !service.isEnabled()) return;
+
+        Pin pin = new Pin(pinObject, false);
+        Map<Action, Task> tasks = new HashMap<>();
+        for (Task task : Saver.getInstance().getTasks(ReceivedShareStartAction.class)) {
+            for (Action action : task.getActions(ReceivedShareStartAction.class)) {
+                Pin connectToAblePin = action.findConnectToAblePin(pin);
+                if (connectToAblePin != null) {
+                    Task copy = task.copy();
+                    Action actionCopy = copy.getAction(action.getId());
+                    Pin pinById = actionCopy.getPinById(connectToAblePin.getId());
+                    pinById.setValue(pinObject);
+                    tasks.put(actionCopy, copy);
+                }
+            }
+        }
+        if (tasks.isEmpty()) return;
+        if (tasks.size() == 1) {
+            Action action = tasks.keySet().iterator().next();
+            Task task = tasks.get(action);
+            service.runTask(task, (StartAction) action);
+            return;
+        }
+        List<ChoiceExecuteFloatView.Choice> choices = new ArrayList<>();
+        tasks.forEach((action, task) -> choices.add(new ChoiceExecuteFloatView.Choice(action.getId(), task.getTitle() + "-" + action.getFullDescription(), null)));
+        ChoiceExecuteFloatView.showChoice(choices, result -> {
+            Action action = tasks.keySet().stream().filter(a -> a.getId().equals(result)).findFirst().orElse(null);
+            if (action == null) return;
+            Task task = tasks.get(action);
+            service.runTask(task, (StartAction) action);
+        });
+    }
+
     public void tryShowManualPlayView(boolean show) {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service == null || !service.isEnabled()) return;
@@ -357,8 +397,8 @@ public class TaskInfoSummary {
         return notification;
     }
 
-    public void setNotification(String packageName, Map<String, String> content) {
-        notification = new Notification(packageName, content);
+    public void setNotification(NotificationType type, String packageName, Map<String, String> content) {
+        notification = new Notification(type, packageName, content);
         tryStartActions(NotificationStartAction.class);
     }
 
@@ -427,7 +467,7 @@ public class TaskInfoSummary {
     public record PackageActivity(String packageName, String activityName) {
     }
 
-    public record Notification(String packageName, Map<String, String> content) {
+    public record Notification(NotificationType type, String packageName, Map<String, String> content) {
     }
 
     public record BatteryInfo(int percent, BatteryState status) {
@@ -444,4 +484,6 @@ public class TaskInfoSummary {
     public enum NotworkState {NONE, WIFI, MOBILE, VPN}
 
     public enum BatteryState {UNKNOWN, CHARGING, DISCHARGING, NOT_CHARGING, FULL}
+
+    public enum NotificationType {NOTIFICATION, TOAST}
 }

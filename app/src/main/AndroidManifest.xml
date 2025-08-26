@@ -76,7 +76,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <intent-filter>
+            <intent-filter android:label="@string/main_activity_filter_name">
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.VIEW" />
 
@@ -115,6 +115,13 @@
 
                 <data android:scheme="tt" />
                 <data android:host="do_action" />
+            </intent-filter>
+
+            <intent-filter android:label="@string/instant_activity_filter_name">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
 

@@ -1,5 +1,6 @@
 package top.bogey.touch_tool.bean.pin.pin_objects;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.gson.JsonDeserializationContext;
@@ -17,6 +18,7 @@ import top.bogey.touch_tool.bean.base.Copyable;
 import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinDouble;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.utils.GsonUtil;
 
@@ -113,8 +115,7 @@ public abstract class PinBase implements Copyable {
     }
 
     public static PinBase parseValue(Object value) {
-        if (value instanceof Map) {
-            Map<String, Object> map = (Map<String, Object>) value;
+        if (value instanceof Map<?, ?>  map) {
             PinMap pinMap = new PinMap();
             map.forEach((key, v) -> {
                 PinBase pinKey = parseValue(key);
@@ -123,7 +124,7 @@ public abstract class PinBase implements Copyable {
                     pinMap.setKeyType(getTypeValue((PinObject) pinKey));
                     pinMap.setValueType(getTypeValue((PinObject) pinValue));
                 }
-                pinMap.put(new PinString(key), (PinObject) parseValue(v));
+                pinMap.put(new PinString(String.valueOf(key)), (PinObject) parseValue(v));
             });
             return pinMap;
         } else if (value instanceof List<?> list) {
@@ -142,6 +143,10 @@ public abstract class PinBase implements Copyable {
             return new PinDouble(num.doubleValue());
         } else if (value instanceof Boolean bool) {
             return new PinBoolean(bool);
+        } else if (value instanceof Bitmap bitmap) {
+            PinImage image = new PinImage();
+            image.setImage(bitmap);
+            return image;
         } else {
             return new PinString(value.toString());
         }

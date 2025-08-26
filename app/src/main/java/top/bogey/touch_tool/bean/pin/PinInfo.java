@@ -106,6 +106,8 @@ public class PinInfo {
     private final static PinInfo NODE_PATH_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.NODE_PATH, PinNodePathString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_node_path, PinWidgetString.class, true, true);
     private final static PinInfo NODE_PATH_TEXT_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.NODE_PATH_TEXT, PinNodePathTextString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_node_path_text, PinWidgetString.class, true, true);
     private final static PinInfo TASK_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.TASK_ID, PinTaskString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_task, PinWidgetString.class, false, false);
+    private final static PinInfo ALL_TASK_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.ALL_TASK_ID, PinTaskString.class, NormalPinSlotView.class, R.color.StringPinColor, 0, R.string.pin_string_task, PinWidgetString.class, false, false);
+
     private final static PinInfo SELECT_STRING_INFO = new PinInfo(PinType.STRING, PinSubType.SINGLE_SELECT, PinSingleSelect.class, NormalPinSlotView.class, R.color.SelectPinColor, 0, R.string.pin_string_select, PinWidgetSelect.class, true, true);
 
     private final static PinInfo INTEGER_INFO = new PinInfo(PinType.NUMBER, PinSubType.INTEGER, PinInteger.class, NormalPinSlotView.class, R.color.IntegerPinColor, 0, R.string.pin_number_integer, PinWidgetNumber.class, false, true);
@@ -172,6 +174,7 @@ public class PinInfo {
                     case NODE_PATH -> info = NODE_PATH_STRING_INFO;
                     case NODE_PATH_TEXT -> info = NODE_PATH_TEXT_STRING_INFO;
                     case TASK_ID -> info = TASK_STRING_INFO;
+                    case ALL_TASK_ID -> info = ALL_TASK_STRING_INFO;
                     case SINGLE_SELECT -> info = SELECT_STRING_INFO;
                 }
             }

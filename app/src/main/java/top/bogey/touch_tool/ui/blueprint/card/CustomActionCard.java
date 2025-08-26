@@ -28,7 +28,7 @@ import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 @SuppressLint("ViewConstructor")
-public class CustomActionCard extends ActionCard {
+public class CustomActionCard extends ActionCard implements IDynamicPinCard {
     private CardCustomBinding binding;
     private CustomActionCardRecycleViewAdapter horizontalAdapter;
     private CustomActionCardRecycleViewAdapter verticalAdapter;
@@ -153,6 +153,7 @@ public class CustomActionCard extends ActionCard {
         return super.isEmptyPosition(x, y);
     }
 
+    @Override
     public void suppressLayout() {
         binding.inPinBox.suppressLayout(true);
         binding.outPinBox.suppressLayout(true);

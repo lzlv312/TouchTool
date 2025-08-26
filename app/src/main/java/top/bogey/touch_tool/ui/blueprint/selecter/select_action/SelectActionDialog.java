@@ -56,7 +56,7 @@ public class SelectActionDialog extends BottomSheetDialog {
 
     protected final DialogSelectActionBinding binding;
     protected final Task task;
-    protected final SelectActionItemRecyclerViewAdapter adapter;
+    protected SelectActionItemRecyclerViewAdapter adapter;
 
     protected GroupType groupType = GroupType.PRESET;
     protected Map<String, List<Object>> dataMap = new HashMap<>();
@@ -75,8 +75,7 @@ public class SelectActionDialog extends BottomSheetDialog {
         behavior.setDraggable(false);
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-        adapter = new SelectActionItemRecyclerViewAdapter(this, callback);
-        binding.actionsBox.setAdapter(adapter);
+        initAdapter(callback);
 
         binding.group.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
@@ -104,12 +103,14 @@ public class SelectActionDialog extends BottomSheetDialog {
         String[] groupName = getContext().getResources().getStringArray(R.array.group_type);
         String lastGroup = SettingSaver.getInstance().getLastGroup();
         int index = 0;
-        for (GroupType groupType : getGroupTypes()) {
+        GroupType[] groupTypes = getGroupTypes();
+        for (int i = 0; i < groupTypes.length; i++) {
+            GroupType groupType = groupTypes[i];
             WidgetSettingSelectButtonBinding buttonBinding = WidgetSettingSelectButtonBinding.inflate(LayoutInflater.from(getContext()), binding.group, true);
             buttonBinding.getRoot().setId(View.generateViewId());
             buttonBinding.getRoot().setText(groupName[groupType.ordinal()]);
             buttonBinding.getRoot().setTag(groupType);
-            if (lastGroup.equals(groupName[groupType.ordinal()])) index = groupType.ordinal();
+            if (lastGroup.equals(groupName[groupType.ordinal()])) index = i;
         }
         if (binding.group.getChildCount() > index) binding.group.check(binding.group.getChildAt(index).getId());
 
@@ -190,6 +191,11 @@ public class SelectActionDialog extends BottomSheetDialog {
                 layoutManager.setSpanCount(4);
             }
         }
+    }
+
+    protected void initAdapter(ResultCallback<Action> callback) {
+        adapter = new SelectActionItemRecyclerViewAdapter(this, callback);
+        binding.actionsBox.setAdapter(adapter);
     }
 
     private void showNewVariableDialog() {

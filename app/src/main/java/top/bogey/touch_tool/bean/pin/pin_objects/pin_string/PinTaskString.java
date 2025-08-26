@@ -10,6 +10,10 @@ public class PinTaskString extends PinString {
         super(PinSubType.TASK_ID);
     }
 
+    public PinTaskString(PinSubType subType) {
+        super(subType);
+    }
+
     public PinTaskString(String value) {
         super(PinSubType.TASK_ID, value);
     }

@@ -177,6 +177,7 @@ public class Saver {
     }
 
     public Task getTask(Task context, String taskId) {
+        if (context == null) return getTask(taskId);
         Task task = context.findTask(taskId);
         if (task == null) task = getTask(taskId);
         return task;

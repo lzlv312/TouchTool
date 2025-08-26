@@ -10,6 +10,7 @@ public enum ActionType {
     BATTERY_START,
     SCREEN_START,
     BLUETOOTH_START,
+    RECEIVED_SHARE_START,
     OUT_CALL_START,
     INNER_START,
 
@@ -17,6 +18,7 @@ public enum ActionType {
     CUSTOM_START,
     CUSTOM_END,
     EXECUTE_TASK,
+    STOP_TASK,
     GET_VARIABLE,
     SET_VARIABLE,
 

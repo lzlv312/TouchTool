@@ -1,8 +1,11 @@
 package top.bogey.touch_tool.ui;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,10 +15,14 @@ import top.bogey.touch_tool.bean.action.start.InnerStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class InstantActivity extends BaseActivity {
     public static final String INTENT_KEY_DO_ACTION = "INTENT_KEY_DO_ACTION";
@@ -44,25 +51,57 @@ public class InstantActivity extends BaseActivity {
         if (intent == null) return;
         setIntent(null);
 
-        Uri uri = intent.getData();
-        if (uri != null) {
-            if ("tt".equals(uri.getScheme()) && "do_action".equals(uri.getHost()) && uri.getQuery() != null) {
-                HashMap<String, String> params = new HashMap<>();
-                for (String name : uri.getQueryParameterNames()) {
-                    params.put(name, uri.getQueryParameter(name));
-                }
-                String taskId = params.remove(TASK_ID);
-                String actionId = params.remove(ACTION_ID);
-                doAction(taskId, actionId, null, params);
-            }
-        }
+        String action = intent.getAction();
 
-        boolean doAction = intent.getBooleanExtra(INTENT_KEY_DO_ACTION, false);
-        if (doAction) {
-            String taskId = intent.getStringExtra(TASK_ID);
-            String actionId = intent.getStringExtra(ACTION_ID);
-            String pinId = intent.getStringExtra(PIN_ID);
-            doAction(taskId, actionId, pinId, null);
+        if (Intent.ACTION_VIEW.equals(action)) {
+            Uri uri = intent.getData();
+            if (uri != null) {
+                String scheme = uri.getScheme();
+                if ("tt".equals(scheme)) {
+                    if ("do_action".equals(uri.getHost()) && uri.getQuery() != null) {
+                        HashMap<String, String> params = new HashMap<>();
+                        for (String name : uri.getQueryParameterNames()) {
+                            params.put(name, uri.getQueryParameter(name));
+                        }
+                        String taskId = params.remove(TASK_ID);
+                        String actionId = params.remove(ACTION_ID);
+                        doAction(taskId, actionId, null, params);
+                    }
+                }
+            }
+        } else if (Intent.ACTION_SEND.equals(action)) {
+            Object object = null;
+            Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            if (uri != null) {
+                String type = getContentResolver().getType(uri);
+                if (type != null) {
+                    if (type.startsWith("image")) {
+                        try (InputStream inputStream = getContentResolver().openInputStream(uri)) {
+                            object = BitmapFactory.decodeStream(inputStream);
+                        } catch (IOException ignored) {
+                        }
+                    } else if (type.startsWith("text")) {
+                        object = new String(AppUtil.readFile(this, uri));
+                    }
+
+                }
+            } else {
+                object = intent.getStringExtra(Intent.EXTRA_TEXT);
+            }
+            if (object != null) {
+                PinBase pinBase = PinBase.parseValue(object);
+                if (pinBase instanceof PinObject pinObject) {
+                    TaskInfoSummary.getInstance().tryStartShareTask(pinObject);
+                }
+            }
+        } else if (null == action) {
+            boolean doAction = intent.getBooleanExtra(INTENT_KEY_DO_ACTION, false);
+            if (doAction) {
+                String taskId = intent.getStringExtra(TASK_ID);
+                String actionId = intent.getStringExtra(ACTION_ID);
+                String pinId = intent.getStringExtra(PIN_ID);
+                doAction(taskId, actionId, pinId, null);
+            }
         }
     }
 
@@ -71,23 +110,28 @@ public class InstantActivity extends BaseActivity {
 
         Task task = Saver.getInstance().getTask(taskId);
         if (task == null) return;
+        Task copy = task.copy();
 
-        Action action = task.getAction(actionId);
+        Action action = copy.getAction(actionId);
         if (action == null || (action instanceof StartAction startAction && !startAction.isEnable())) return;
 
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service == null || !service.isEnabled()) return;
 
         if (action instanceof TimeStartAction timeStartAction) {
-            service.addAlarm(task, timeStartAction);
+            service.addAlarm(copy, timeStartAction);
         }
 
         if (action instanceof StartAction startAction) {
-            Task copy = task.copy();
             if (params != null) {
                 params.forEach((key, value) -> {
                     Variable var = copy.findVariableByName(key);
                     if (var != null) var.getSaveValue().cast(value);
+
+                    Pin pin = startAction.getPinByTitle(key);
+                    if (pin != null && pin.getValue() instanceof PinObject pinObject) {
+                        pinObject.cast(value);
+                    }
                 });
             }
             service.runTask(copy, startAction);

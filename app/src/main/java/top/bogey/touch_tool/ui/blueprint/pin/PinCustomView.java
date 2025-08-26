@@ -23,7 +23,7 @@ import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
-import top.bogey.touch_tool.ui.blueprint.card.CustomActionCard;
+import top.bogey.touch_tool.ui.blueprint.card.IDynamicPinCard;
 import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionVariableTypeDialog;
 import top.bogey.touch_tool.utils.listener.SpinnerSelectedListener;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
@@ -110,11 +110,12 @@ public abstract class PinCustomView extends PinView {
 
         // 抑制一下recycleView的滚动，让针脚连线能够生效
         ViewGroup slotBox = getSlotBox();
-        CustomActionCard card = (CustomActionCard) getCard();
-        slotBox.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) card.suppressLayout();
-            return false;
-        });
+        if (getCard() instanceof IDynamicPinCard dynamicPinCard) {
+            slotBox.setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) dynamicPinCard.suppressLayout();
+                return false;
+            });
+        }
     }
 
     @Override

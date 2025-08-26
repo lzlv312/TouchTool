@@ -26,6 +26,7 @@
 
     <string name="notification_start_action">收到新通知时执行</string>
     <string name="notification_start_action_match">匹配文本</string>
+    <string name="notification_start_action_type">通知类型</string>
     <string name="notification_start_action_notify_app">通知应用</string>
     <string name="notification_start_action_notify_text">通知文本</string>
     <string name="notification_start_action_notify_value">通知详情</string>
@@ -44,7 +45,11 @@
     <string name="bluetooth_start_action_device">设备名</string>
     <string name="bluetooth_start_action_state">连接或断开</string>
 
+    <string name="received_share_start_action">收到分享时执行</string>
+    <string name="received_share_start_action_desc">接受分享行为，分享的内容将自动转换为对应参数</string>
+
     <string name="out_call_start_action">外部调用</string>
+    <string name="out_call_start_action_desc">外部调用任务，能自动将传入的参数转换到任务内同名变量中去</string>
     <string name="out_call_start_action_url">链接</string>
     <string name="out_call_start_action_shortcut">快捷方式</string>
 
@@ -110,6 +115,9 @@
     <string name="execute_task_action">执行任务</string>
     <string name="execute_task_action_task_id">任务</string>
     <string name="execute_task_action_just_cal">无需执行针脚</string>
+
+    <string name="stop_task_action">停止任务</string>
+    <string name="stop_task_action_task_id">任务</string>
 
     <string name="custom_start_action">自定义开始</string>
     <string name="custom_end_action">自定义结束</string>
@@ -329,8 +337,9 @@
 
     <string name="string_split_action">文本分割</string>
     <string name="string_split_action_desc">将文本按特定字符分割为多个文本</string>
-    <string name="string_split_action_split">分割符</string>
+    <string name="string_split_action_split">分割符(支持正则)</string>
     <string name="string_split_action_empty">剔除空字符</string>
+    <string name="string_split_action_regex">正则模式</string>
 
     <string name="string_from_object_action">转换为文本</string>
     <string name="string_from_object_action_desc">将任意对象转换为文本</string>
@@ -341,8 +350,9 @@
 
     <string name="string_replace_action">文本替换</string>
     <string name="string_replace_action_desc">将文本中的特定文本替换为另一个文本</string>
-    <string name="string_replace_action_find">查找文本</string>
+    <string name="string_replace_action_find">查找文本(支持正则)</string>
     <string name="string_replace_action_replace">替换文本</string>
+    <string name="string_replace_action_regex">正则模式</string>
     <string name="string_replace_action_result">替换结果</string>
 
     <string name="string_encode_action">文本编码</string>

@@ -142,15 +142,19 @@ public class OpenAppAction extends ExecuteAction {
         Context context = MainApplication.getInstance().getService();
         Intent intent;
         if (activityClass == null) {
-            intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-            if (intent != null) intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            if (actionString == null || actionString.isEmpty()) {
+                intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+                if (intent != null) intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            } else {
+                intent = new Intent(actionString);
+                intent.setPackage(packageName);
+            }
         } else {
             intent = new Intent(Intent.ACTION_MAIN);
             intent.setClassName(packageName, activityClass);
         }
 
         if (intent != null) {
-            if (actionString != null && !actionString.isEmpty()) intent.setAction(actionString);
             intent.setFlags(flag);
             for (PinObject object : category) {
                 PinString pinString = (PinString) object;

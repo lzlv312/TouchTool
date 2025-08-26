@@ -48,12 +48,18 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
 
     private final SelectActionDialog dialog;
     private final ResultCallback<Action> callback;
+    private final boolean canSelectAll;
 
     private List<Object> data = new ArrayList<>();
 
-    public SelectActionItemRecyclerViewAdapter(SelectActionDialog dialog, ResultCallback<Action> callback) {
+    public SelectActionItemRecyclerViewAdapter(SelectActionDialog dialog, ResultCallback<Action> callback, boolean canSelectAll) {
         this.dialog = dialog;
         this.callback = callback;
+        this.canSelectAll = canSelectAll;
+    }
+
+    public SelectActionItemRecyclerViewAdapter(SelectActionDialog dialog, ResultCallback<Action> callback) {
+        this(dialog, callback, false);
     }
 
     @NonNull
@@ -405,7 +411,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                     binding.icon.setImageResource(R.drawable.icon_assignment);
                 }
 
-                if (task.getActions(CustomStartAction.class).isEmpty() || !isUsable) {
+                if (!canSelectAll && (task.getActions(CustomStartAction.class).isEmpty() || !isUsable)) {
                     binding.getRoot().setEnabled(false);
                     binding.getRoot().setAlpha(0.5f);
                 }

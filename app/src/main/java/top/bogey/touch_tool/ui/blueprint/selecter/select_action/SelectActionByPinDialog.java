@@ -81,19 +81,6 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                     if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
                     parent = parent.getParent();
                 }
-
-                // 子任务
-                Queue<Task> queue = new LinkedList<>(task.getTasks());
-                while (!queue.isEmpty()) {
-                    Task poll = queue.poll();
-                    if (poll == null) continue;
-                    List<Task> tasks = poll.getTasks();
-                    if (!tasks.isEmpty()) {
-                        map.put(CHILD_PREFIX + poll.getTitle(), new ArrayList<>(tasks));
-                        subGroupMap.put(CHILD_PREFIX + poll.getTitle(), poll);
-                        queue.addAll(tasks);
-                    }
-                }
             }
             case VARIABLE -> {
                 List<Object> privateVars = new ArrayList<>();

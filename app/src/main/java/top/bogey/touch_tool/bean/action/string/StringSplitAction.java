@@ -9,25 +9,27 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.service.TaskRunnable;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class StringSplitAction extends CalculateAction {
     private final transient Pin textPin = new Pin(new PinString(), R.string.pin_string);
     private final transient Pin separatorPin = new Pin(new PinString(), R.string.string_split_action_split);
     private final transient Pin emptyPin = new Pin(new PinBoolean(true), R.string.string_split_action_empty);
+    private final transient Pin regexPin = new Pin(new PinBoolean(true), R.string.string_split_action_regex);
     private final transient Pin resultPin = new Pin(new PinList(new PinString()), true);
 
     public StringSplitAction() {
         super(ActionType.STRING_SPLIT);
-        addPins(textPin, separatorPin, emptyPin, resultPin);
+        addPins(textPin, separatorPin, emptyPin, regexPin, resultPin);
     }
 
     public StringSplitAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(textPin, separatorPin, emptyPin, resultPin);
+        reAddPins(textPin, separatorPin, emptyPin, regexPin, resultPin);
     }
 
     @Override
@@ -37,6 +39,7 @@ public class StringSplitAction extends CalculateAction {
         PinObject text = getPinValue(runnable, textPin);
         PinObject separator = getPinValue(runnable, separatorPin);
         PinBoolean empty = getPinValue(runnable, emptyPin);
+        PinBoolean regex = getPinValue(runnable, regexPin);
 
         if (text.toString().isEmpty()) return;
 
@@ -51,7 +54,12 @@ public class StringSplitAction extends CalculateAction {
                 value.add(new PinString(s));
             });
         } else {
-            String[] split = text.toString().split(separator.toString());
+            String separatorString = separator.toString();
+            if (!regex.getValue()) {
+                separatorString = AppUtil.formatRegex(separatorString);
+            }
+
+            String[] split = text.toString().split(separatorString);
             for (String s : split) {
                 if (empty.getValue()) {
                     s = s.trim();

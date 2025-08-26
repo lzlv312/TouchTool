@@ -15,12 +15,13 @@ android {
 
     val pattern = DateTimeFormatter.ofPattern("yyMMdd_HHmm")
     val now = LocalDateTime.now().format(pattern)
+    val code = 1
 
     defaultConfig {
         applicationId = "top.bogey.touch_tool"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
+        versionCode = code
         versionName = now
 
         externalNativeBuild {
@@ -56,7 +57,7 @@ android {
         outputs.all {
             if (buildType.name == "release") {
                 val impl = this as BaseVariantOutputImpl
-                impl.outputFileName = "点击助手_$now.APK"
+                impl.outputFileName = "点击助手_$now($code).APK"
             }
         }
     }

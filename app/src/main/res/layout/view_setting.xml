@@ -173,7 +173,7 @@
                         android:layout_height="wrap_content"
                         app:description="@string/permission_setting_notification_type_desc"
                         app:icon="@drawable/icon_notifications_active"
-                        app:options="@array/notification_type"
+                        app:options="@array/notification_source_type"
                         app:title="@string/permission_setting_notification_type" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetNormal

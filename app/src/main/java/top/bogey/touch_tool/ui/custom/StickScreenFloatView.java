@@ -125,7 +125,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
                 lastY = 0;
                 int[] location = new int[2];
                 binding.dragImage.getLocationOnScreen(location);
-                if (new RectF(location[0], location[1], location[0] + binding.dragImage.getWidth() * binding.scaleBox.getScaleX(), location[1] + binding.dragImage.getHeight() * binding.scaleBox.getScaleY()).contains(x, y)) {
+                if (new RectF(location[0], location[1], location[0] + binding.dragImage.getWidth(), location[1] + binding.dragImage.getHeight()).contains(x, y)) {
                     FloatWindow.setDragAble(tag, false);
                 }
                 return true;

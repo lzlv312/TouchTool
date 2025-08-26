@@ -30,7 +30,7 @@ public class NotificationService extends NotificationListenerService {
             content.put(key, String.valueOf(value));
         }
         Log.d("TAG", "onNotificationPosted: notification = " + content);
-        TaskInfoSummary.getInstance().setNotification(packageName, content);
+        TaskInfoSummary.getInstance().setNotification(TaskInfoSummary.NotificationType.NOTIFICATION, packageName, content);
     }
 
     @Override

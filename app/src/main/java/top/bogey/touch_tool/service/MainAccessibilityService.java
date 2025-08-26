@@ -98,38 +98,43 @@ public class MainAccessibilityService extends AccessibilityService {
         if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             taskInfoSummary.enterActivity(packageName, className);
         } else if (eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
-            if (SettingSaver.getInstance().getNotificationType() != 0) return;
             Map<String, String> content = new HashMap<>();
+            List<CharSequence> textList = event.getText();
 
-            if (!className.contains(Notification.class.getSimpleName())) return;
+            if (className.contains(Notification.class.getSimpleName())) {
+                if (SettingSaver.getInstance().getNotificationType() != 0) return;
 
-            Notification notification = (Notification) event.getParcelableData();
-            if (notification != null && notification.extras != null) {
-                Bundle extras = notification.extras;
-                for (String key : extras.keySet()) {
-                    Object value = extras.get(key);
-                    content.put(key, String.valueOf(value));
-                }
-            } else if (!event.getText().isEmpty()) {
-                String s = event.getText().get(0).toString();
-                Pattern pattern = AppUtil.getPattern("^(.+?): (.+)$");
-                if (pattern != null) {
-                    Matcher matcher = pattern.matcher(s);
-                    if (matcher.find()) {
-                        content.put(Notification.EXTRA_TITLE, matcher.group(1));
-                        content.put(Notification.EXTRA_TEXT, matcher.group(2));
+                Notification notification = (Notification) event.getParcelableData();
+                if (notification != null && notification.extras != null) {
+                    Bundle extras = notification.extras;
+                    for (String key : extras.keySet()) {
+                        Object value = extras.get(key);
+                        content.put(key, String.valueOf(value));
+                    }
+                } else if (!textList.isEmpty()) {
+                    String s = textList.get(0).toString();
+                    Pattern pattern = AppUtil.getPattern("^(.+?): (.+)$");
+                    if (pattern != null) {
+                        Matcher matcher = pattern.matcher(s);
+                        if (matcher.find()) {
+                            content.put(Notification.EXTRA_TITLE, matcher.group(1));
+                            content.put(Notification.EXTRA_TEXT, matcher.group(2));
+                        }
                     }
                 }
-            }
 
-            Log.d("TAG", "onAccessibilityEvent: notification = " + content);
-            taskInfoSummary.setNotification(packageName, content);
+                taskInfoSummary.setNotification(TaskInfoSummary.NotificationType.NOTIFICATION, packageName, content);
+            } else if (className.contains(Toast.class.getSimpleName())) {
+                if (textList.isEmpty()) return;
+                String text = textList.get(0).toString();
+                content.put(Notification.EXTRA_TEXT, text);
+                taskInfoSummary.setNotification(TaskInfoSummary.NotificationType.TOAST, packageName, content);
+            }
         }
     }
 
     @Override
     public void onInterrupt() {
-
     }
 
     @Override

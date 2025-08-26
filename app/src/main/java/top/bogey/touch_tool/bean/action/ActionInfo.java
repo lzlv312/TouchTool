@@ -112,6 +112,7 @@ import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.action.start.NetworkStartAction;
 import top.bogey.touch_tool.bean.action.start.NotificationStartAction;
 import top.bogey.touch_tool.bean.action.start.OutCallStartAction;
+import top.bogey.touch_tool.bean.action.start.ReceivedShareStartAction;
 import top.bogey.touch_tool.bean.action.start.ScreenStartAction;
 import top.bogey.touch_tool.bean.action.start.TimeStartAction;
 import top.bogey.touch_tool.bean.action.string.FindOcrTextAction;
@@ -155,11 +156,13 @@ import top.bogey.touch_tool.bean.action.system.WriteToClipboardAction;
 import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
+import top.bogey.touch_tool.bean.action.task.StopTaskAction;
 import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.CreateListActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.CustomActionCard;
+import top.bogey.touch_tool.ui.blueprint.card.DynamicParamsActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.ExecuteCustomActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.NormalActionCard;
 
@@ -173,13 +176,14 @@ public class ActionInfo {
     private final static ActionInfo BATTERY_START_INFO = new ActionInfo(ActionType.BATTERY_START, BatteryStartAction.class, R.drawable.icon_battery_android_full, R.string.battery_start_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo SCREEN_START_INFO = new ActionInfo(ActionType.SCREEN_START, ScreenStartAction.class, R.drawable.icon_mobile, R.string.screen_start_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo BLUETOOTH_START_INFO = new ActionInfo(ActionType.BLUETOOTH_START, BluetoothStartAction.class, R.drawable.icon_bluetooth, R.string.bluetooth_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo OUT_CALL_START_INFO = new ActionInfo(ActionType.OUT_CALL_START, OutCallStartAction.class, R.drawable.icon_autoplay, R.string.out_call_start_action, 0, 0, NormalActionCard.class);
-
+    private final static ActionInfo RECEIVED_SHARE_START_INFO = new ActionInfo(ActionType.RECEIVED_SHARE_START, ReceivedShareStartAction.class, R.drawable.icon_share, R.string.received_share_start_action, R.string.received_share_start_action_desc, 0, DynamicParamsActionCard.class);
+    private final static ActionInfo OUT_CALL_START_INFO = new ActionInfo(ActionType.OUT_CALL_START, OutCallStartAction.class, R.drawable.icon_autoplay, R.string.out_call_start_action, R.string.out_call_start_action_desc, 0, DynamicParamsActionCard.class);
 
     // 自定义动作
     private final static ActionInfo CUSTOM_START_INFO = new ActionInfo(ActionType.CUSTOM_START, CustomStartAction.class, R.drawable.icon_output, R.string.custom_start_action, 0, 0, CustomActionCard.class);
     private final static ActionInfo CUSTOM_END_INFO = new ActionInfo(ActionType.CUSTOM_END, CustomEndAction.class, R.drawable.icon_input, R.string.custom_end_action, 0, 0, CustomActionCard.class);
     private final static ActionInfo EXECUTE_TASK_INFO = new ActionInfo(ActionType.EXECUTE_TASK, ExecuteTaskAction.class, R.drawable.icon_assignment, R.string.execute_task_action, 0, 0, ExecuteCustomActionCard.class);
+    private final static ActionInfo STOP_TASK_INFO = new ActionInfo(ActionType.STOP_TASK, StopTaskAction.class, R.drawable.icon_stop, R.string.stop_task_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo GET_VARIABLE_INFO = new ActionInfo(ActionType.GET_VARIABLE, GetVariableAction.class, R.drawable.icon_upload, R.string.get_value_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo SET_VARIABLE_INFO = new ActionInfo(ActionType.SET_VARIABLE, SetVariableAction.class, R.drawable.icon_download, R.string.set_value_action, 0, 0, NormalActionCard.class);
 
@@ -377,11 +381,13 @@ public class ActionInfo {
             case BATTERY_START -> BATTERY_START_INFO;
             case SCREEN_START -> SCREEN_START_INFO;
             case BLUETOOTH_START -> BLUETOOTH_START_INFO;
+            case RECEIVED_SHARE_START -> RECEIVED_SHARE_START_INFO;
             case OUT_CALL_START -> OUT_CALL_START_INFO;
 
             case CUSTOM_START -> CUSTOM_START_INFO;
             case CUSTOM_END -> CUSTOM_END_INFO;
             case EXECUTE_TASK -> EXECUTE_TASK_INFO;
+            case STOP_TASK -> STOP_TASK_INFO;
             case GET_VARIABLE -> GET_VARIABLE_INFO;
             case SET_VARIABLE -> SET_VARIABLE_INFO;
 
