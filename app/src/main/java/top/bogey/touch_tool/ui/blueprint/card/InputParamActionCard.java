@@ -30,7 +30,10 @@ public class InputParamActionCard extends ActionCard {
 
     @Override
     public void refreshCardInfo() {
+    }
 
+    @Override
+    public void refreshCardLockState() {
     }
 
     @Override

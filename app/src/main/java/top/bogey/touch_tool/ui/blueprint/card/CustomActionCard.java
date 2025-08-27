@@ -88,6 +88,11 @@ public class CustomActionCard extends ActionCard implements IDynamicPinCard {
     }
 
     @Override
+    public void refreshCardLockState() {
+        initLock(binding.lockButton);
+    }
+
+    @Override
     public boolean check() {
         return true;
     }

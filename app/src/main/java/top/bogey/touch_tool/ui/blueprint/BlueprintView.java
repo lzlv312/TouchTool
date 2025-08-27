@@ -80,6 +80,19 @@ public class BlueprintView extends Fragment {
         if (fragment instanceof BlueprintView blueprintView) {
             blueprintView.binding.floatingToolBar.setVisibility(show ? View.VISIBLE : View.GONE);
             blueprintView.binding.baseToolBar.setVisibility(show ? View.GONE : View.VISIBLE);
+
+            if (show) {
+                List<Action> selectedActions = blueprintView.binding.cardLayout.getSelectedActions();
+                boolean locked = false;
+                for (Action selectedAction : selectedActions) {
+                    if (selectedAction.isLocked()) {
+                        locked = true;
+                        break;
+                    }
+                }
+                blueprintView.binding.lockButton.setIconResource(locked ? R.drawable.icon_lock : R.drawable.icon_lock_open);
+                blueprintView.binding.lockButton.setChecked(locked);
+            }
         }
     }
 
@@ -199,7 +212,7 @@ public class BlueprintView extends Fragment {
             List<Action> startActions = currTask.getActions(StartAction.class);
             List<Action> actions = currTask.getActions(CustomStartAction.class);
             startActions.addAll(actions);
-            CardLayoutHelper.ActionArea actionArea = new CardLayoutHelper.ActionArea(binding.cardLayout, new ArrayList<>(), startActions);
+            CardLayoutHelper.ActionArea actionArea = new CardLayoutHelper.ActionArea(binding.cardLayout, new HashSet<>(), startActions);
             actionArea.arrange(binding.cardLayout, new Point(), null);
             binding.cardLayout.updateCardsPos();
             currTask.save();
@@ -251,6 +264,18 @@ public class BlueprintView extends Fragment {
             task.save();
             pushStack(innerTask);
         }));
+
+        binding.lockButton.setOnClickListener(v -> {
+            boolean locked = binding.lockButton.isChecked();
+            binding.lockButton.setIconResource(locked ? R.drawable.icon_lock : R.drawable.icon_lock_open);
+            binding.lockButton.setChecked(locked);
+            List<Action> selectedActions = binding.cardLayout.getSelectedActions();
+            selectedActions.forEach(action -> {
+                action.setLocked(locked);
+                ActionCard card = binding.cardLayout.getActionCard(action);
+                if (card != null) card.refreshCardLockState();
+            });
+        });
 
         binding.copyButton.setOnClickListener(v -> {
             List<Action> selectedActions = binding.cardLayout.getSelectedActionsCopy();

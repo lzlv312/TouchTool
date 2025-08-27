@@ -82,6 +82,7 @@ import top.bogey.touch_tool.bean.action.node.NodeTouchAction;
 import top.bogey.touch_tool.bean.action.normal.DelayAction;
 import top.bogey.touch_tool.bean.action.normal.InputParamAction;
 import top.bogey.touch_tool.bean.action.normal.LoggerAction;
+import top.bogey.touch_tool.bean.action.normal.MarkAreaAction;
 import top.bogey.touch_tool.bean.action.normal.StickCloseAction;
 import top.bogey.touch_tool.bean.action.normal.StickCloseAllAction;
 import top.bogey.touch_tool.bean.action.normal.StickScreenAction;
@@ -207,6 +208,7 @@ public class ActionInfo {
     private final static ActionInfo CLOSE_STICK_INFO = new ActionInfo(ActionType.CLOSE_STICK, StickCloseAction.class, R.drawable.icon_note_stack, R.string.stick_close_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo CLOSE_ALL_STICK_INFO = new ActionInfo(ActionType.CLOSE_ALL_STICK, StickCloseAllAction.class, R.drawable.icon_note_stack, R.string.stick_close_all_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo INPUT_PARAM_INFO = new ActionInfo(ActionType.INPUT_PARAM, InputParamAction.class, R.drawable.icon_edit, R.string.input_param_action, R.string.input_param_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo MARK_AREA_INFO = new ActionInfo(ActionType.MARK_AREA, MarkAreaAction.class, R.drawable.icon_area, R.string.mark_area_action, R.string.mark_area_action_desc, 0, NormalActionCard.class);
 
 
     // 系统动作
@@ -408,6 +410,7 @@ public class ActionInfo {
             case CLOSE_STICK -> CLOSE_STICK_INFO;
             case CLOSE_ALL_STICK -> CLOSE_ALL_STICK_INFO;
             case INPUT_PARAM -> INPUT_PARAM_INFO;
+            case MARK_AREA -> MARK_AREA_INFO;
 
 
             case OPEN_APP -> OPEN_APP_INFO;

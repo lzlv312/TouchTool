@@ -49,7 +49,7 @@ public class PinWidgetSelect extends PinWidget<PinSingleSelect> {
     @Override
     protected void initCustom() {
         binding.editTextBox.setVisibility(VISIBLE);
-        binding.editText.setText(pinBase.getValue());
+        binding.editText.setText(pinBase.getOptionsString());
         binding.editText.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {

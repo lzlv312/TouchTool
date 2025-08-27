@@ -350,8 +350,6 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     }
 
     private void addSelectedCard(ActionCard card) {
-        Action action = card.getAction();
-        if (action.isLocked()) return;
         selectedCards.add(card);
         card.setSelected(true);
         refreshEditView();
@@ -545,6 +543,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
                         selectedCards.forEach(card -> {
                             Action action = card.getAction();
+                            if (action.isLocked()) return;
                             Point pos = action.getPos();
                             if (dx != 0) pos.x += dx;
                             if (dy != 0) pos.y += dy;
@@ -1009,6 +1008,14 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     public void setEditable(boolean editable) {
         this.editable = editable;
+    }
+
+    public List<Action> getSelectedActions() {
+        List<Action> actions = new ArrayList<>();
+        for (ActionCard card : selectedCards) {
+            actions.add(card.getAction());
+        }
+        return actions;
     }
 
     public List<Action> getSelectedActionsCopy() {

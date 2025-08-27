@@ -45,6 +45,11 @@ public class DelayActionCard extends ActionCard {
     }
 
     @Override
+    public void refreshCardLockState() {
+        initLock(binding.lockButton);
+    }
+
+    @Override
     public boolean check() {
         return true;
     }

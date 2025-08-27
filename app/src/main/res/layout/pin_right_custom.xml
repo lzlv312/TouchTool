@@ -65,7 +65,7 @@
             android:minWidth="48dp"
             android:paddingHorizontal="4dp"
             android:textColor="?attr/colorPrimary"
-            android:textSize="12sp"
+            android:textSize="8sp"
             android:visibility="gone" />
 
     </LinearLayout>

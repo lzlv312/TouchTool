@@ -297,6 +297,54 @@
                         android:layout_marginStart="56dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
+                        android:text="@string/blueprint_setting"
+                        android:textSize="12sp" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
+                        android:id="@+id/cardTypeSelect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/blueprint_setting_card_default_desc"
+                        app:icon="@drawable/icon_visibility"
+                        app:options="@array/card_default_type"
+                        app:title="@string/blueprint_setting_card_default" />
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSlider
+                        android:id="@+id/arrangeCardOffset"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/blueprint_setting_arrange_card_offset_desc"
+                        app:icon="@drawable/icon_straighten"
+                        app:max="5"
+                        app:min="1"
+                        app:title="@string/blueprint_setting_arrange_card_offset"
+                        app:value="1" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginStart="56dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:text="@string/preference_setting"
                         android:textSize="12sp" />
 
@@ -308,15 +356,6 @@
                         app:description="@string/preference_setting_manual_play_desc_1"
                         app:icon="@drawable/icon_touch_app"
                         app:title="@string/preference_setting_manual_play" />
-
-                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSelect
-                        android:id="@+id/cardTypeSelect"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:description="@string/preference_setting_card_default_desc"
-                        app:icon="@drawable/icon_visibility"
-                        app:options="@array/card_default_type"
-                        app:title="@string/preference_setting_card_default" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSwitch
                         android:id="@+id/supportFreeFormSwitch"

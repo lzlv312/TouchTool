@@ -70,6 +70,8 @@ public class SettingSaver {
     private static final String VOLUME_BUTTON_EXIT = "VOLUME_BUTTON_EXIT";                              // 音量键退出
 
     private static final String DEFAULT_CARD_TYPE = "DEFAULT_CARD_TYPE";                                // 默认卡片展开类型
+    private static final String ARRANGE_CARD_OFFSET = "ARRANGE_CARD_OFFSET";                            // 卡片整理时的间隔
+
     private static final String SUPPORT_FREE_FORM = "SUPPORT_FREE_FORM";                                // 小窗支持
     private static final String NIGHT_MODE_TYPE = "NIGHT_MODE_TYPE";                                    // 深色模式
     private static final String DYNAMIC_COLOR = "DYNAMIC_COLOR";                                        // 动态颜色
@@ -320,6 +322,15 @@ public class SettingSaver {
     public void setDefaultCardExpandType(int type) {
         mmkv.encode(DEFAULT_CARD_TYPE, type);
     }
+
+    public int getArrangeCardOffset() {
+        return mmkv.decodeInt(ARRANGE_CARD_OFFSET, 2);
+    }
+
+    public void setArrangeCardOffset(int offset) {
+        mmkv.encode(ARRANGE_CARD_OFFSET, offset);
+    }
+
 
     public boolean isSupportFreeForm() {
         return mmkv.decodeBool(SUPPORT_FREE_FORM, false);

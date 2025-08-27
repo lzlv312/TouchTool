@@ -43,6 +43,7 @@ public class MapForeachAction extends MapExecuteAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         if (pin == inPin) {
+            isBreak = false;
             PinMap map = getPinValue(runnable, mapPin);
             for (Map.Entry<PinObject, PinObject> entry : map.entrySet()) {
                 if (runnable.isInterrupt()) return;

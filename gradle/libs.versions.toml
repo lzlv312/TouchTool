@@ -6,7 +6,7 @@ nav = "2.9.3"
 flexbox = "3.0.0"
 
 gson = "2.13.1"
-mmkv = "2.2.2"
+mmkv = "2.2.3"
 shizuku = "13.1.5"
 exp4j = "0.4.8"
 

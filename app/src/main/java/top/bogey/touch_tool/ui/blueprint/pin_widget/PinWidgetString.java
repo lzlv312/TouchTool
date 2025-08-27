@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -43,6 +44,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathTextStrin
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinRingtoneString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinShortcutString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleLineString;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinTaskString;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinUrlString;

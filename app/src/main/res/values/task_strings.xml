@@ -156,6 +156,9 @@
     <string name="input_param_action_desc">手动输入任务运行需要的参数</string>
     <string name="input_param_action_param">参数</string>
 
+    <string name="mark_area_action">标记区域</string>
+    <string name="mark_area_action_desc">手动标记目标区域</string>
+
     <!-- 动作-System -->
     <string name="open_app_action">打开应用</string>
     <string name="open_app_action_desc">打开选定的应用</string>

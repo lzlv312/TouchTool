@@ -334,16 +334,6 @@ public class SettingView extends Fragment {
         binding.volumeButtonExitSwitch.setChecked(SettingSaver.getInstance().isVolumeButtonExit());
 
 
-        // 手动执行悬浮窗
-        binding.manualPlaySetting.setOnClickListener(v -> {
-            NavController controller = Navigation.findNavController(MainApplication.getInstance().getActivity(), R.id.conView);
-            controller.navigate(SettingViewDirections.actionSettingToSettingPlayView());
-        });
-        binding.manualPlaySetting.setOnButtonClickListener(v -> {
-            NavController controller = Navigation.findNavController(MainApplication.getInstance().getActivity(), R.id.conView);
-            controller.navigate(SettingViewDirections.actionSettingToSettingPlayView());
-        });
-
         // 卡片默认展开状态
         binding.cardTypeSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
@@ -353,6 +343,21 @@ public class SettingView extends Fragment {
             }
         });
         binding.cardTypeSelect.checkIndex(SettingSaver.getInstance().getDefaultCardExpandType());
+
+        // 卡片整理时的间隔
+        binding.arrangeCardOffset.setSliderOnChangeListener((slider, value, fromUser) -> SettingSaver.getInstance().setArrangeCardOffset((int) value));
+        binding.arrangeCardOffset.setValue(SettingSaver.getInstance().getArrangeCardOffset());
+
+
+        // 手动执行悬浮窗
+        binding.manualPlaySetting.setOnClickListener(v -> {
+            NavController controller = Navigation.findNavController(MainApplication.getInstance().getActivity(), R.id.conView);
+            controller.navigate(SettingViewDirections.actionSettingToSettingPlayView());
+        });
+        binding.manualPlaySetting.setOnButtonClickListener(v -> {
+            NavController controller = Navigation.findNavController(MainApplication.getInstance().getActivity(), R.id.conView);
+            controller.navigate(SettingViewDirections.actionSettingToSettingPlayView());
+        });
 
         // 小窗优化
         binding.supportFreeFormSwitch.setOnSwitchClickListener(v -> SettingSaver.getInstance().setSupportFreeForm(binding.supportFreeFormSwitch.isChecked()));

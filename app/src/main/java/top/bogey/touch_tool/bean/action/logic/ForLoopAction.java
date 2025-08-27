@@ -34,6 +34,7 @@ public class ForLoopAction extends ExecuteAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         if (pin == inPin) {
+            isBreak = false;
             PinNumber<?> start = getPinValue(runnable, startPin);
             PinNumber<?> end = getPinValue(runnable, endPin);
             PinNumber<?> step = getPinValue(runnable, stepPin);

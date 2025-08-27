@@ -41,6 +41,7 @@ public class ListForeachAction extends ListExecuteAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         if (pin == inPin) {
+            isBreak = false;
             PinList list = getPinValue(runnable, listPin);
             for (int i = 0; i < list.size(); i++) {
                 if (runnable.isInterrupt()) return;

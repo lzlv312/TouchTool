@@ -50,6 +50,11 @@ public class NormalActionCard extends ActionCard {
     }
 
     @Override
+    public void refreshCardLockState() {
+        initLock(binding.lockButton);
+    }
+
+    @Override
     public boolean check() {
         ActionCheckResult result = new ActionCheckResult();
         action.check(result, task);

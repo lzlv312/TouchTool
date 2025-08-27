@@ -65,6 +65,8 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
 
     public abstract void refreshCardInfo();
 
+    public abstract void refreshCardLockState();
+
     protected void initCardInfo(ShapeableImageView icon, MaterialTextView title, MaterialTextView des) {
         if (icon != null) {
             ActionInfo info = ActionInfo.getActionInfo(action.getType());
@@ -112,20 +114,12 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
 
     protected void initLock(MaterialButton button) {
         button.setIconResource(action.isLocked() ? R.drawable.icon_lock : R.drawable.icon_lock_open);
-        if (action.isLocked()) {
-            setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceContainerHighest));
-        } else {
-            setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant));
-        }
+        button.setChecked(action.isLocked());
 
         button.setOnClickListener(v -> {
             action.setLocked(!action.isLocked());
             button.setIconResource(action.isLocked() ? R.drawable.icon_lock : R.drawable.icon_lock_open);
-            if (action.isLocked()) {
-                setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceContainerHighest));
-            } else {
-                setCardBackgroundColor(DisplayUtil.getAttrColor(getContext(), com.google.android.material.R.attr.colorSurfaceVariant));
-            }
+            button.setChecked(action.isLocked());
         });
     }
 

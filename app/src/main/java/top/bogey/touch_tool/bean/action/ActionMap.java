@@ -48,7 +48,8 @@ public class ActionMap {
                     ActionType.CLOSE_ALL_STICK,
 
                     ActionType.INPUT_PARAM,
-                    ActionType.STOP_TASK
+                    ActionType.STOP_TASK,
+                    ActionType.MARK_AREA
             ));
 
             case CLICK -> list.addAll(Arrays.asList(

@@ -29,6 +29,7 @@ public class WhileLoopAction extends ExecuteAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         if (pin == inPin) {
+            isBreak = false;
             PinBoolean condition = getPinValue(runnable, conditionPin);
             while (condition.getValue()) {
                 if (isBreak || runnable.isInterrupt()) break;

@@ -41,6 +41,7 @@ public enum ActionType {
     CLOSE_ALL_STICK,
 
     INPUT_PARAM,
+    MARK_AREA,
 
     // 系统动作
     OPEN_APP,
