@@ -10,10 +10,10 @@ import java.util.List;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.service.TaskRunnable;
 
@@ -60,6 +60,13 @@ public class ListForeachAction extends ListExecuteAction {
     public void onExecuteNext(TaskRunnable runnable, Pin pin) {
         if (pin == completePin) {
             super.onExecuteNext(runnable, pin);
+        }
+    }
+
+    @Override
+    public void resetReturnValue(TaskRunnable runnable, Pin pin) {
+        if (pin == inPin) {
+            super.resetReturnValue(runnable, pin);
         }
     }
 

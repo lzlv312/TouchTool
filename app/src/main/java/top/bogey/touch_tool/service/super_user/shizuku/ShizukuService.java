@@ -14,7 +14,6 @@ import top.bogey.touch_tool.service.super_user.CmdResult;
 
 public class ShizukuService extends IShizukuService.Stub {
     private final static String EXIT_MARKER = "EXIT_MARKER";
-    private Context context;
 
     private Process process = null;
     private BufferedWriter cmdWriter = null;
@@ -35,7 +34,6 @@ public class ShizukuService extends IShizukuService.Stub {
     @Keep
     public ShizukuService(Context context) {
         this();
-        this.context = context;
     }
 
     @Override

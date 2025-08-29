@@ -16,6 +16,7 @@ import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.save.log.ActionLog;
+import top.bogey.touch_tool.bean.save.log.DateTimeLog;
 import top.bogey.touch_tool.bean.save.log.LogInfo;
 import top.bogey.touch_tool.bean.save.log.NormalLog;
 import top.bogey.touch_tool.bean.task.Task;
@@ -74,6 +75,7 @@ public class TaskRunnable implements Runnable {
         while (!logStack.isEmpty()) {
             addLog(logStack.pop(), 0);
         }
+        addLog(new LogInfo(new DateTimeLog()), 0);
 
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onFinish(this));
         interrupt = true;

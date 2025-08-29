@@ -256,11 +256,9 @@ public class ActionInfo {
     private final static ActionInfo NUMBER_GREATER_INFO = new ActionInfo(ActionType.NUMBER_GREATER, NumberGreaterAction.class, R.drawable.icon_keyboard_arrow_right, R.string.number_greater_action, R.string.number_greater_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo NUMBER_LESS_INFO = new ActionInfo(ActionType.NUMBER_LESS, NumberLessAction.class, R.drawable.icon_keyboard_arrow_left, R.string.number_less_action, R.string.number_less_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo NUMBER_RANDOM_INFO = new ActionInfo(ActionType.NUMBER_RANDOM, NumberRandomAction.class, R.drawable.icon_shuffle, R.string.number_random_action, R.string.number_random_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo NUMBER_TO_INT_INFO = new ActionInfo(ActionType.NUMBER_TO_INT, NumberToIntegerAction.class, R.drawable.icon_decimal_decrease, R.string.number_to_integer_action, R.string.number_mod_action_desc, 0, NormalActionCard.class);
-
+    private final static ActionInfo NUMBER_TO_INT_INFO = new ActionInfo(ActionType.NUMBER_TO_INT, NumberToIntegerAction.class, R.drawable.icon_decimal_decrease, R.string.number_to_integer_action, R.string.number_to_integer_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHECK_NUMBER_IN_VALUE_AREA_INFO = new ActionInfo(ActionType.CHECK_NUMBER_IN_VALUE_AREA, CheckNumberInValueArea.class, R.drawable.icon_straighten, R.string.check_number_in_value_area_action, R.string.check_number_in_value_area_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo NUMBER_TO_VALUE_AREA_INFO = new ActionInfo(ActionType.NUMBER_TO_VALUE_AREA, NumberToValueArea.class, R.drawable.icon_straighten, R.string.number_to_value_area_action, R.string.number_to_value_area_action_desc, 0, NormalActionCard.class);
-
     private final static ActionInfo MATH_EXPRESSION_INFO = new ActionInfo(ActionType.MATH_EXPRESSION, MathExpressionAction.class, R.drawable.icon_function, R.string.math_expression_action, R.string.math_expression_action_desc, 0, NormalActionCard.class);
 
 

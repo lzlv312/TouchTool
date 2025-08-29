@@ -25,9 +25,6 @@
         android:hint="@string/pin_string_select_hint"
         android:minWidth="108dp"
         android:visibility="gone"
-        app:endIconDrawable="@drawable/icon_check_circle"
-        app:endIconMinSize="8dp"
-        app:endIconMode="custom"
         app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
 

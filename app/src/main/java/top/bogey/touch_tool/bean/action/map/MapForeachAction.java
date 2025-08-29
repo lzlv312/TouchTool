@@ -65,6 +65,13 @@ public class MapForeachAction extends MapExecuteAction {
         }
     }
 
+    @Override
+    public void resetReturnValue(TaskRunnable runnable, Pin pin) {
+        if (pin == inPin) {
+            super.resetReturnValue(runnable, pin);
+        }
+    }
+
     @NonNull
     @Override
     public List<Pin> getDynamicTypePins() {

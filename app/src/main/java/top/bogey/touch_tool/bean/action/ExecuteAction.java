@@ -36,7 +36,7 @@ public abstract class ExecuteAction extends Action {
     }
 
     @Override
-    public final void resetReturnValue(TaskRunnable runnable, Pin pin) {
+    public void resetReturnValue(TaskRunnable runnable, Pin pin) {
         if (!pin.isOut() && pin.isSameClass(PinExecute.class)) {
             for (Pin p : getPins()) {
                 if (p.isOut()) {

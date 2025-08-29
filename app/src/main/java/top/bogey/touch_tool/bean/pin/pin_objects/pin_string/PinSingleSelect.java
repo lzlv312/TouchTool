@@ -12,7 +12,6 @@ import java.util.List;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.utils.GsonUtil;
 
 public class PinSingleSelect extends PinString {

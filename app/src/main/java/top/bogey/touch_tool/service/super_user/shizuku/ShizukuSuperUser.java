@@ -13,6 +13,7 @@ import androidx.annotation.Keep;
 import java.util.concurrent.atomic.AtomicReference;
 
 import rikka.shizuku.Shizuku;
+import rikka.shizuku.ShizukuRemoteProcess;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.service.super_user.CmdResult;
 import top.bogey.touch_tool.service.super_user.ISuperUser;
@@ -113,7 +114,6 @@ public class ShizukuSuperUser implements ISuperUser {
             }
         }
     }
-
 
     private void requestShizukuPermission() {
         if (!isValid()) {

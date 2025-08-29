@@ -291,11 +291,10 @@ public class TaskInfoSummary {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service == null || !service.isEnabled()) return;
 
-        Pin pin = new Pin(pinObject, false);
         Map<Action, Task> tasks = new HashMap<>();
         for (Task task : Saver.getInstance().getTasks(ReceivedShareStartAction.class)) {
             for (Action action : task.getActions(ReceivedShareStartAction.class)) {
-                Pin connectToAblePin = action.findConnectToAblePin(pin);
+                Pin connectToAblePin = action.getPins().stream().filter(p -> p.isSameClass(pinObject.getClass()) && p.isOut()).findFirst().orElse(null);
                 if (connectToAblePin != null) {
                     Task copy = task.copy();
                     Action actionCopy = copy.getAction(action.getId());
@@ -313,7 +312,7 @@ public class TaskInfoSummary {
             return;
         }
         List<ChoiceExecuteFloatView.Choice> choices = new ArrayList<>();
-        tasks.forEach((action, task) -> choices.add(new ChoiceExecuteFloatView.Choice(action.getId(), task.getTitle() + "-" + action.getFullDescription(), null)));
+        tasks.forEach((action, task) -> choices.add(new ChoiceExecuteFloatView.Choice(action.getId(), task.getTitle(), null)));
         ChoiceExecuteFloatView.showChoice(choices, result -> {
             Action action = tasks.keySet().stream().filter(a -> a.getId().equals(result)).findFirst().orElse(null);
             if (action == null) return;

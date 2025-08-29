@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.ui.tool.log;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,12 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.log.ActionLog;
+import top.bogey.touch_tool.bean.save.log.DateTimeLog;
 import top.bogey.touch_tool.bean.save.log.Log;
 import top.bogey.touch_tool.bean.save.log.LogInfo;
 import top.bogey.touch_tool.bean.save.log.LogSave;
 import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.databinding.FloatLogItem2Binding;
 import top.bogey.touch_tool.databinding.FloatLogItemBinding;
 import top.bogey.touch_tool.ui.blueprint.BlueprintView;
 import top.bogey.touch_tool.utils.AppUtil;
@@ -34,7 +37,20 @@ public class LogFloatViewAdapter extends TreeAdapter {
     @NonNull
     @Override
     public TreeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(FloatLogItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        return switch (viewType) {
+            case 2 -> new ViewHolder(FloatLogItem2Binding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            default -> new ViewHolder(FloatLogItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        };
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        TreeNode treeNode = treeNodes.get(position);
+        LogInfo logInfo = (LogInfo) treeNode.getData();
+        if (logInfo == null) return 0;
+        if (logInfo.getLogObject() instanceof ActionLog) return 1;
+        if (logInfo.getLogObject() instanceof DateTimeLog) return 2;
+        return 0;
     }
 
     public void setLogSave(LogSave logSave) {
@@ -163,11 +179,14 @@ public class LogFloatViewAdapter extends TreeAdapter {
     }
 
     public class ViewHolder extends TreeAdapter.ViewHolder {
-        private final FloatLogItemBinding binding;
+        private final Context context;
+        private FloatLogItemBinding binding;
+        private FloatLogItem2Binding binding2;
 
         @SuppressLint("ClickableViewAccessibility")
         public ViewHolder(@NonNull FloatLogItemBinding binding) {
             super(LogFloatViewAdapter.this, binding.getRoot());
+            context = binding.getRoot().getContext();
             this.binding = binding;
 
             binding.gotoButton.setOnClickListener(v -> {
@@ -195,49 +214,64 @@ public class LogFloatViewAdapter extends TreeAdapter {
             });
         }
 
+        public ViewHolder(@NonNull FloatLogItem2Binding binding) {
+            super(LogFloatViewAdapter.this, binding.getRoot());
+            context = binding.getRoot().getContext();
+            this.binding2 = binding;
+        }
+
         @SuppressLint("SetTextI18n")
         public void refresh(TreeNode node) {
             super.refresh(node);
-            this.node = null;
-            binding.title.setText(null);
-            binding.time.setText(null);
-            binding.icon.setVisibility(View.GONE);
-            binding.copyButton.setVisibility(View.INVISIBLE);
-            binding.gotoButton.setVisibility(View.GONE);
 
             LogInfo logInfo = (LogInfo) node.getData();
             if (logInfo == null) return;
+
             Log log = logInfo.getLogObject();
-            Action action = null;
-            ActionLog actionLog = null;
-            if (log instanceof ActionLog) {
-                actionLog = (ActionLog) log;
-                action = task.getAction(actionLog.getActionId());
-            }
             this.node = node;
 
-            binding.icon.setVisibility(View.VISIBLE);
-            binding.gotoButton.setVisibility(View.VISIBLE);
+            if (binding != null) {
+                binding.title.setText(null);
+                binding.time.setText(null);
+                binding.icon.setVisibility(View.GONE);
+                binding.copyButton.setVisibility(View.INVISIBLE);
+                binding.gotoButton.setVisibility(View.GONE);
 
-            if (actionLog == null || actionLog.getIndex() == -1) {
-                binding.copyButton.setIconResource(R.drawable.icon_content_copy);
-                binding.copyButton.setVisibility(View.VISIBLE);
-                binding.title.setText(":" + logInfo.getLog());
-            } else {
-                binding.copyButton.setIconResource(node.isExpanded() ? R.drawable.icon_keyboard_arrow_down : R.drawable.icon_keyboard_arrow_right);
-                int size = logInfo.getChildrenFlags().size();
-                binding.copyButton.setVisibility(size == 0 ? View.INVISIBLE : View.VISIBLE);
-                binding.title.setText(logInfo.getLog());
+                Action action = null;
+                ActionLog actionLog = null;
+                if (log instanceof ActionLog) {
+                    actionLog = (ActionLog) log;
+                    action = task.getAction(actionLog.getActionId());
+                }
+
+                binding.icon.setVisibility(View.VISIBLE);
+                binding.gotoButton.setVisibility(View.VISIBLE);
+
+                if (actionLog == null || actionLog.getIndex() == -1) {
+                    binding.copyButton.setIconResource(R.drawable.icon_content_copy);
+                    binding.copyButton.setVisibility(View.VISIBLE);
+                    binding.title.setText(":" + logInfo.getLog());
+                } else {
+                    binding.copyButton.setIconResource(node.isExpanded() ? R.drawable.icon_keyboard_arrow_down : R.drawable.icon_keyboard_arrow_right);
+                    int size = logInfo.getChildrenFlags().size();
+                    binding.copyButton.setVisibility(size == 0 ? View.INVISIBLE : View.VISIBLE);
+                    binding.title.setText(logInfo.getLog());
+                }
+
+                binding.gotoButton.setVisibility(action == null ? View.GONE : View.VISIBLE);
+                binding.time.setText(logInfo.getTime(context));
+                binding.icon.setImageResource(actionLog != null && actionLog.isExecute() ? R.drawable.icon_shuffle : R.drawable.icon_equal);
+
+                if (searchIndex == getAdapterPosition()) {
+                    binding.getRoot().setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorTertiaryContainer));
+                } else {
+                    binding.getRoot().setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceContainerHighest));
+                }
             }
 
-            binding.gotoButton.setVisibility(action == null ? View.GONE : View.VISIBLE);
-            binding.time.setText(logInfo.getTime(context));
-            binding.icon.setImageResource(actionLog != null && actionLog.isExecute() ? R.drawable.icon_shuffle : R.drawable.icon_equal);
 
-            if (searchIndex == getAdapterPosition()) {
-                binding.getRoot().setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorTertiaryContainer));
-            } else {
-                binding.getRoot().setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceContainerHighest));
+            if (binding2 != null) {
+                binding2.title.setText(logInfo.getLog());
             }
         }
     }

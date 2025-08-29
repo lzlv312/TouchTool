@@ -40,6 +40,7 @@ public abstract class Log {
             switch (type) {
                 case NORMAL -> log = new NormalLog(jsonObject);
                 case ACTION -> log = new ActionLog(jsonObject);
+                case DATE_TIME -> log = new DateTimeLog(jsonObject);
             }
             return log;
         }

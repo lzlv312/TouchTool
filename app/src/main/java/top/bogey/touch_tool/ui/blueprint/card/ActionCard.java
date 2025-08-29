@@ -61,6 +61,12 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
         action.addListener(this);
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        action.removeListener(this);
+    }
+
     public abstract void init();
 
     public abstract void refreshCardInfo();

@@ -151,6 +151,13 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
 
             Rect area = new Rect(nodeInfo.area);
             area.offset(-location[0], -location[1]);
+
+            // 限制区域在屏幕内
+            area.left = Math.max(0, area.left);
+            area.right = Math.min(getWidth(), area.right);
+            area.top = Math.max(0, area.top);
+            area.bottom = Math.min(getHeight(), area.bottom);
+
             DisplayUtil.setViewWidth(binding.markBox, area.width());
             DisplayUtil.setViewHeight(binding.markBox, area.height());
             binding.markBox.setX(area.left);

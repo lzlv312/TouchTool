@@ -59,7 +59,7 @@ public class PinWidgetSelect extends PinWidget<PinSingleSelect> {
                 } else {
                     String value = s.toString();
                     String[] split = value.split("[,，]");
-                    pinBase.setOptions(Arrays.asList(split));
+                    pinBase.setOptions(new ArrayList<>(Arrays.asList(split)));
                 }
                 adapter.clear();
                 adapter.addAll(pinBase.getOptions());
