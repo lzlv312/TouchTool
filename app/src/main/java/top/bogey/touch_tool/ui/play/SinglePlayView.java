@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 import top.bogey.touch_tool.MainApplication;
-import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.ManualStartAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.save.SettingSaver;
@@ -85,7 +84,8 @@ public class SinglePlayView extends PlayFloatItemView implements FloatInterface 
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setTag(tag)
                 .setLayout(this)
-                .setLocation(action.getAnchor(), action.getShowPos().x, action.getShowPos().y)
+                .setAnchor(action.getAnchor())
+                .setLocation(action.getGravity(), action.getShowPos().x, action.getShowPos().y)
                 .setDragAble(!action.isLock())
                 .setSpecial(true)
                 .show();
@@ -94,9 +94,5 @@ public class SinglePlayView extends PlayFloatItemView implements FloatInterface 
     @Override
     public void dismiss() {
         FloatWindow.dismiss(tag);
-    }
-
-    public Action getStartAction() {
-        return startAction;
     }
 }

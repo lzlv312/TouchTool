@@ -19,11 +19,16 @@ import java.util.Set;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.start.ManualStartAction;
+import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatPlayBinding;
+import top.bogey.touch_tool.service.ITaskListener;
+import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskInfoSummary;
+import top.bogey.touch_tool.service.TaskRunnable;
 import top.bogey.touch_tool.ui.blueprint.picker.FloatBaseCallback;
 import top.bogey.touch_tool.ui.custom.KeepAliveFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
@@ -33,7 +38,7 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatInterface;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindowHelper;
 
-public class PlayFloatView extends FrameLayout implements FloatInterface {
+public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskListener {
     public static final int UNIT_PIXEL = 5;
 
     private static String HIDE_PACKAGE = null;
@@ -102,6 +107,16 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
                 if (childCount == 0) dismiss();
             }
         });
+
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service != null) service.addListener(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        MainAccessibilityService service = MainApplication.getInstance().getService();
+        if (service != null) service.removeListener(this);
     }
 
     public PlayFloatView(Context context, List<TaskInfoSummary.ManualExecuteInfo> actions) {
@@ -244,6 +259,54 @@ public class PlayFloatView extends FrameLayout implements FloatInterface {
 
             default -> dismiss();
         }
+    }
+
+    @Override
+    public void onStart(TaskRunnable runnable) {
+        if (!SettingSaver.getInstance().getManualPlayingHideType()) return;
+        post(() -> {
+            StartAction startAction = runnable.getStartAction();
+            if (startAction instanceof ManualStartAction manualStartAction) {
+                if (!manualStartAction.isSingleShow()) {
+                    Task task = runnable.getStartTask();
+                    int count = binding.buttonBox.getChildCount();
+                    for (int i = 0; i < count; i++) {
+                        PlayFloatItemView view = (PlayFloatItemView) binding.buttonBox.getChildAt(i);
+                        if (manualStartAction.getId().equals(view.getStartAction().getId()) && task.getId().equals(view.getTask().getId())) {
+                            continue;
+                        }
+                        view.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onExecute(TaskRunnable runnable, Action action, int progress) {
+
+    }
+
+    @Override
+    public void onCalculate(TaskRunnable runnable, Action action) {
+
+    }
+
+    @Override
+    public void onFinish(TaskRunnable runnable) {
+        if (!SettingSaver.getInstance().getManualPlayingHideType()) return;
+        post(() -> {
+            StartAction startAction = runnable.getStartAction();
+            if (startAction instanceof ManualStartAction manualStartAction) {
+                if (!manualStartAction.isSingleShow()) {
+                    int count = binding.buttonBox.getChildCount();
+                    for (int i = 0; i < count; i++) {
+                        PlayFloatItemView view = (PlayFloatItemView) binding.buttonBox.getChildAt(i);
+                        view.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
     }
 
     private static class PlayFloatCallback extends FloatBaseCallback {

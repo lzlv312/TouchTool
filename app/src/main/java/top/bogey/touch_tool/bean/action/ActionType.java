@@ -4,6 +4,7 @@ public enum ActionType {
     // 开始
     MANUAL_START,
     APPLICATION_START,
+    APPLICATION_QUIT_START,
     TIME_START,
     NOTIFICATION_START,
     NETWORK_START,
@@ -131,6 +132,7 @@ public enum ActionType {
 
     NODE_TOUCH,
     EDITTEXT_INPUT,
+    EDITTEXT_PASTE,
 
     // 图片
     GET_IMAGE,
@@ -167,6 +169,7 @@ public enum ActionType {
     POINT_TO_INT,
     POINT_OFFSET,
     POINT_TO_TOUCH,
+    POINTS_TO_TOUCH,
     TOUCH,
     TOUCH_POINT,
 

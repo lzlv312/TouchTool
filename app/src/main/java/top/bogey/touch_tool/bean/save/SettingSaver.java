@@ -81,6 +81,7 @@ public class SettingSaver {
     private static final String MANUAL_PLAY_SHOW_TYPE = "MANUAL_PLAY_SHOW_TYPE";                        // 手动执行什么时候显示
     private static final String MANUAL_PLAY_PAUSE_TYPE = "MANUAL_PLAY_PAUSE_TYPE";                      // 手动执行暂停模式
     private static final String MANUAL_PLAY_HIDE_TYPE = "MANUAL_PLAY_HIDE_TYPE";                        // 手动执行什么时候隐藏
+    private static final String MANUAL_PLAYING_HIDE_TYPE = "MANUAL_PLAYING_HIDE_TYPE";                  // 手动执行中隐藏模式
     private static final String MANUAL_PLAY_VIEW_PADDING = "MANUAL_PLAY_VIEW_PADDING";                  // 手动执行悬浮窗偏移
     private static final String MANUAL_PLAY_VIEW_EXPAND_SIZE = "MANUAL_PLAY_VIEW_EXPAND_SIZE";          // 手动悬浮窗按钮容纳文本数量
     private static final String MANUAL_PLAY_VIEW_CLOSE_SIZE = "MANUAL_PLAY_VIEW_CLOSE_SIZE";            // 手动悬浮窗按钮收起时宽度
@@ -400,6 +401,15 @@ public class SettingSaver {
 
     public void setManualPlayHideType(int type) {
         mmkv.encode(MANUAL_PLAY_HIDE_TYPE, type);
+    }
+
+
+    public boolean getManualPlayingHideType() {
+        return mmkv.decodeBool(MANUAL_PLAY_HIDE_TYPE, false);
+    }
+
+    public void setManualPlayingHideType(boolean enable) {
+        mmkv.encode(MANUAL_PLAY_HIDE_TYPE, enable);
     }
 
     public int getManualPlayViewPadding() {

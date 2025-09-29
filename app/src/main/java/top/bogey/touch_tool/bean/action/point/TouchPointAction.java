@@ -48,6 +48,7 @@ public class TouchPointAction extends ExecuteAction implements SyncAction {
         sync(runnable.getTask());
         PinPoint point = getPinValue(runnable, touchPin);
         PinValueArea time = getPinValue(runnable, timePin);
+        int timeValue = time.getRandomValue();
         PinNumber<?> offset = getPinValue(runnable, offsetPin);
         PinSingleSelect type = getPinValue(runnable, typePin);
 
@@ -57,12 +58,13 @@ public class TouchPointAction extends ExecuteAction implements SyncAction {
 
         if (type.getIndex() == 0) {
             MainAccessibilityService service = MainApplication.getInstance().getService();
-            service.runGesture(x, y, time.getRandomValue(), null);
+            service.runGesture(x, y, timeValue, null);
         } else {
             if (SuperUser.getInstance().isValid()) {
                 SuperUser.getInstance().runCommand(String.format("input tap %d %d", x, y));
             }
         }
+        runnable.sleep(timeValue);
         TouchPathFloatView.showGesture(x, y);
 
         executeNext(runnable, outPin);

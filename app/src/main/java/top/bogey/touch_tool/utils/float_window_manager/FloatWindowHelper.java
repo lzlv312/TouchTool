@@ -75,7 +75,7 @@ public class FloatWindowHelper {
     }
 
     void onLayoutCreated() {
-        setRelativePoint(config.gravity, config.location);
+        setRelativePoint(config.anchor, config.gravity, config.location);
         isPortrait = DisplayUtil.isPortrait(context);
 
         if (config.callback != null) config.callback.onCreate();
@@ -85,7 +85,7 @@ public class FloatWindowHelper {
             boolean portrait = DisplayUtil.isPortrait(context);
             if (isPortrait == null || portrait == isPortrait) return;
             isPortrait = portrait;
-            setRelativePoint(config.gravity, config.location);
+            setRelativePoint(config.anchor, config.gravity, config.location);
         });
 
         initEditText(viewParent);
@@ -167,8 +167,9 @@ public class FloatWindowHelper {
     }
 
     // 设置窗口位置
-    void setRelativePoint(EAnchor gravity, Point relativePoint) {
+    void setRelativePoint(EAnchor anchor, EAnchor gravity, Point relativePoint) {
         Rect showArea = getShowArea();
+        config.anchor = anchor;
         config.gravity = gravity;
         config.location = relativePoint;
         Point gravityPoint = getGravityPoint();
@@ -245,7 +246,7 @@ public class FloatWindowHelper {
     public void setBorder(Rect border) {
         Point point = getRelativePoint();
         config.border = border;
-        setRelativePoint(config.gravity, point);
+        setRelativePoint(config.anchor, config.gravity, point);
     }
 
     public void setFocusable(boolean focusable) {

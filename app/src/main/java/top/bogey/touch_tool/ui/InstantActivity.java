@@ -94,7 +94,7 @@ public class InstantActivity extends BaseActivity {
                     TaskInfoSummary.getInstance().tryStartShareTask(pinObject);
                 }
             }
-        } else if (null == action) {
+        } else if (INTENT_KEY_DO_ACTION.equals(action)) {
             boolean doAction = intent.getBooleanExtra(INTENT_KEY_DO_ACTION, false);
             if (doAction) {
                 String taskId = intent.getStringExtra(TASK_ID);

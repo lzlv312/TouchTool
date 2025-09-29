@@ -224,6 +224,20 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         return variableManager.findVariableByName(name);
     }
 
+    // 清理任务内私有信息
+    public void cleanPrivateInfo() {
+        // 清理变量存档
+        for (Variable variable : getVariables()) {
+            variable.setSaveValue((PinObject) variable.getValue().copy());
+        }
+        // 清理标签
+        tagManager.setTags(new ArrayList<>());
+
+        for (Task task : getTasks()) {
+            task.cleanPrivateInfo();
+        }
+    }
+
     public List<Usage> getVariableUses(String id) {
         List<Usage> usages = new ArrayList<>();
         boolean flag = true;

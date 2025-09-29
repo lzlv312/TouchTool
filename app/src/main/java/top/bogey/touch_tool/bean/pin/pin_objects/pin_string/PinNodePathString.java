@@ -60,8 +60,14 @@ public class PinNodePathString extends PinString {
 
     public void setValue(NodeInfo nodeInfo) {
         StringBuilder builder = new StringBuilder();
+        int index = 0;
         while (nodeInfo != null) {
             builder.insert(0, nodeInfo + "\n");
+            index++;
+            if (index > Byte.MAX_VALUE) {
+                setValue((String) null);
+                return;
+            }
             nodeInfo = nodeInfo.getParent();
         }
         setValue(builder.toString().trim());

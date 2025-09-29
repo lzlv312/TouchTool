@@ -23,12 +23,15 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Stack;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.normal.LoggerAction;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
@@ -61,10 +64,17 @@ public class BlueprintView extends Fragment {
         }
     }
 
-    public static void tryFocusAction(Action action) {
+    public static void tryFocusAction(Task task, Action action) {
+        if (task == null || action == null) return;
+
         Fragment fragment = MainActivity.getCurrentFragment();
         if (fragment instanceof BlueprintView blueprintView) {
-            blueprintView.binding.cardLayout.focusCard(action.getId());
+            if (!task.equals(blueprintView.taskStack.peek())) {
+                blueprintView.pushStack(task);
+                blueprintView.binding.getRoot().postDelayed(() -> blueprintView.binding.cardLayout.focusCard(action.getId()), 100);
+            } else {
+                blueprintView.binding.cardLayout.focusCard(action.getId());
+            }
         }
     }
 
@@ -147,6 +157,20 @@ public class BlueprintView extends Fragment {
                 Task task = taskStack.peek();
                 new LogFloatView(requireContext(), task).show();
                 return true;
+            } else if (itemId == R.id.taskRunningLogSwitch) {
+                Task task = taskStack.peek();
+                Queue<Task> queue = new LinkedList<>();
+                queue.add(task);
+                while (!queue.isEmpty()) {
+                    Task pool = queue.poll();
+                    if (pool == null) continue;
+                    for (Action action : pool.getActions(LoggerAction.class)) {
+                        LoggerAction logger = (LoggerAction) action;
+                        logger.switchLog();
+                    }
+                    queue.addAll(pool.getTasks());
+                }
+                task.save();
             } else if (itemId == R.id.taskDetailLog) {
                 Task task = taskStack.peek();
                 task.toggleFlag(Task.FLAG_DEBUG);

@@ -43,14 +43,14 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
     private float minScale, maxScale;
     private boolean dragging = false;
 
-    public static String showStick(PinObject object, EAnchor anchor, Point location) {
+    public static String showStick(PinObject object, EAnchor anchor, EAnchor gravity, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return null;
         String tag = UUID.randomUUID().toString();
         new Handler(Looper.getMainLooper()).post(() -> {
             StickScreenFloatView stickView = new StickScreenFloatView(keepView.getThemeContext(), tag);
             stickView.show();
-            stickView.innerShowStick(object, anchor, location);
+            stickView.innerShowStick(object, anchor, gravity, location);
         });
         return tag;
     }
@@ -88,7 +88,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
         }
     }
 
-    private void innerShowStick(PinObject object, EAnchor anchor, Point location) {
+    private void innerShowStick(PinObject object, EAnchor anchor, EAnchor gravity, Point location) {
         if (object instanceof PinImage pinImage) {
             binding.image.setImageBitmap(pinImage.getImage());
             binding.saveButton.setOnClickListener(v -> {
@@ -111,7 +111,7 @@ public class StickScreenFloatView extends FrameLayout implements FloatInterface 
             binding.saveButton.setIconResource(R.drawable.icon_content_copy);
             binding.saveButton.setOnClickListener(v -> AppUtil.copyToClipboard(getContext(), object.toString()));
         }
-        post(() -> FloatWindow.setLocation(tag, anchor, location));
+        post(() -> FloatWindow.setLocation(tag, anchor, gravity, location));
     }
 
     @SuppressLint("ClickableViewAccessibility")

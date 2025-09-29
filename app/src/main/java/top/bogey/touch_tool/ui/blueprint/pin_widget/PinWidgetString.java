@@ -166,6 +166,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                         if (manager.isRequestPinShortcutSupported()) {
                             new SelectIconDialog(getContext(), icon -> {
                                 Intent intent = new Intent(getContext(), InstantActivity.class);
+                                intent.setAction(InstantActivity.INTENT_KEY_DO_ACTION);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra(InstantActivity.INTENT_KEY_DO_ACTION, true);
                                 intent.putExtra(InstantActivity.TASK_ID, card.getTask().getId());
@@ -198,8 +199,8 @@ public class PinWidgetString extends PinWidget<PinString> {
                                 pinBase.setValue(null);
                                 pinView.getPin().notifyValueUpdated();
                             } else {
-                                binding.editText.setText(getRingtoneName(uri.getPath()));
-                                pinBase.setValue(uri.getPath());
+                                binding.editText.setText(getRingtoneName(uri.toString()));
+                                pinBase.setValue(uri.toString());
                                 pinView.getPin().notifyValueUpdated();
                             }
                         }

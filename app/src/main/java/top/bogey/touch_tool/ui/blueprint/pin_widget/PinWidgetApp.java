@@ -85,9 +85,9 @@ public class PinWidgetApp extends PinWidget<PinApplication> {
         } else {
             itemBinding.numberText.setText(String.valueOf(classes.size()));
         }
-//        itemBinding.getRoot().setOnClickListener(v -> {
-//            applications.clear();
-//            refreshApps();
-//        });
+        itemBinding.getRoot().setOnClickListener(v -> {
+            applications.clear();
+            refreshApps();
+        });
     }
 }

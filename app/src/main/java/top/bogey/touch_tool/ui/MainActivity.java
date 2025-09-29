@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity {
 
     private void handleIntent(Intent intent) {
         if (intent == null) return;
+        setIntent(null);
 
         Uri uri = null;
         if (Intent.ACTION_SEND.equals(intent.getAction())) {

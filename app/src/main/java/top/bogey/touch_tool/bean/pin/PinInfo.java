@@ -230,12 +230,6 @@ public class PinInfo {
         return pinInfo != null && pinInfo.isCaseAble();
     }
 
-    public static String getPinTypeTitle(PinType type) {
-        String[] strings = MainApplication.getInstance().getResources().getStringArray(R.array.pin_type);
-        if (type.ordinal() < strings.length) return strings[type.ordinal()];
-        return "";
-    }
-
     //-------------------------------------------------------------------------------------------------
 
     private final PinType type;

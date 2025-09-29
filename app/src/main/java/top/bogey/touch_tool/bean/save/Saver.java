@@ -304,7 +304,7 @@ public class Saver {
     public void addLog(String key, LogInfo log, boolean autoUid) {
         LogSave logSave = getLogSave(key);
         logSave.addLog(log, autoUid);
-        Log.d("TAG", "addLog: " + key + " " + log + " " + autoUid);
+        Log.d("TAG", "addLog: " + key + " " + log.getLog() + " " + autoUid);
         if (autoUid) logListeners.stream().filter(Objects::nonNull).forEach(v -> v.onNewLog(logSave, log));
     }
 

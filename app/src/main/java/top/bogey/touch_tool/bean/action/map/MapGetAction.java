@@ -37,7 +37,7 @@ public class MapGetAction extends MapCalculateAction {
     public void calculate(TaskRunnable runnable, Pin pin) {
         PinMap map = getPinValue(runnable, mapPin);
         PinObject key = getPinValue(runnable, keyPin);
-        resultPin.setValue(map.get(key));
+        resultPin.setValue(returnValue(map.get(key)));
     }
 
     @NonNull

@@ -12,9 +12,9 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.DynamicPinsAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class MakeListAction extends ListCalculateAction implements DynamicPinsAction {
@@ -32,6 +32,12 @@ public class MakeListAction extends ListCalculateAction implements DynamicPinsAc
         super(jsonObject);
         reAddPins(morePin, false);
         reAddPins(addPin, listPin);
+
+        // 添加针脚的默认对象类型要符合列表
+        PinObject valueType = listPin.getValue(PinList.class).getValueType();
+        ArrayList<Pin> list = new ArrayList<>();
+        list.add(new Pin(valueType.copy(), R.string.pin_object));
+        addPin.getValue(PinAdd.class).setPins(list);
     }
 
     @Override

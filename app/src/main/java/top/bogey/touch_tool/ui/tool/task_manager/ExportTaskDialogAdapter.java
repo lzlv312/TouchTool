@@ -12,9 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.databinding.DialogTaskManagerItemBinding;
@@ -38,7 +41,21 @@ public class ExportTaskDialogAdapter extends RecyclerView.Adapter<ExportTaskDial
     }
 
     public TaskRecord getTaskRecord() {
-        return new TaskRecord(taskReference.getTasks(), taskReference.getVariables());
+        Set<Task> tasks = new HashSet<>();
+        for (Task task : taskReference.getTasks()) {
+            Task copy = task.copy();
+            copy.cleanPrivateInfo();
+            tasks.add(copy);
+        }
+
+        Set<Variable> variables = new HashSet<>();
+        for (Variable variable : taskReference.getVariables()) {
+            Variable copy = variable.copy();
+            copy.setSaveValue((PinObject) copy.getValue().copy());
+            variables.add(copy);
+        }
+
+        return new TaskRecord(tasks, variables);
     }
 
     @Override

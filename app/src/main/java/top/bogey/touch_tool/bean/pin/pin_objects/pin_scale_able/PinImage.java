@@ -6,10 +6,14 @@ import android.util.Base64;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
@@ -19,6 +23,7 @@ import top.bogey.touch_tool.utils.GsonUtil;
 
 public class PinImage extends PinScaleAble<String> {
     private transient Bitmap image;
+    private transient boolean serialized = true;
 
     public PinImage() {
         super(PinType.IMAGE);
@@ -67,15 +72,12 @@ public class PinImage extends PinScaleAble<String> {
 
     public void setImage(Bitmap image) {
         this.image = image;
-        if (image == null) return;
-
-        try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
-            image.compress(Bitmap.CompressFormat.WEBP, 100, stream);
-            byte[] bytes = stream.toByteArray();
-            value = Base64.encodeToString(bytes, Base64.NO_WRAP);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (image == null) {
+            value = null;
+            serialized = true;
+            return;
         }
+        serialized = false;
     }
 
     @Override
@@ -94,6 +96,20 @@ public class PinImage extends PinScaleAble<String> {
     }
 
     @Override
+    public String getValue() {
+        if (!serialized) {
+            try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
+                image.compress(Bitmap.CompressFormat.WEBP, 100, stream);
+                byte[] bytes = stream.toByteArray();
+                value = Base64.encodeToString(bytes, Base64.NO_WRAP);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return super.getValue();
+    }
+
+    @Override
     public String getValue(EAnchor anchor) {
         return getValue();
     }
@@ -101,5 +117,18 @@ public class PinImage extends PinScaleAble<String> {
     @Override
     public void setValue(EAnchor anchor, String value) {
         setValue(value);
+    }
+
+    public static class PinImageSerializer implements JsonSerializer<PinImage> {
+        @Override
+        public JsonElement serialize(PinImage src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("type", src.getType().name());
+            jsonObject.addProperty("subType", src.getSubType().name());
+            jsonObject.addProperty("screen", src.getScreen());
+            jsonObject.addProperty("anchor", src.getAnchor().name());
+            jsonObject.addProperty("value", src.getValue());
+            return jsonObject;
+        }
     }
 }

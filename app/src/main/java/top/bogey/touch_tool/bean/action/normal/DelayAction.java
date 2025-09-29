@@ -10,7 +10,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinValueArea;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class DelayAction extends ExecuteAction {
-    private final transient Pin delay = new Pin(new PinValueArea(200, 200), R.string.delay_action_time);
+    private final transient Pin delay = new Pin(new PinValueArea(300, 300), R.string.delay_action_time);
 
     public DelayAction() {
         super(ActionType.DELAY);

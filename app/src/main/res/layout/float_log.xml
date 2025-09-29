@@ -121,7 +121,7 @@
                     android:layout_margin="8dp"
                     android:clipToPadding="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/float_log_item" />
+                    tools:listitem="@layout/float_log_normal_item" />
 
             </com.google.android.material.card.MaterialCardView>
 

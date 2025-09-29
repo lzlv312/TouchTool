@@ -34,17 +34,17 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
             Point point = SettingSaver.getInstance().getManualChoiceViewPos();
             ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getThemeContext());
             choiceView.show();
-            choiceView.innerShowChoice(choices, callback, EAnchor.CENTER, point);
+            choiceView.innerShowChoice(choices, callback, EAnchor.CENTER, EAnchor.CENTER, point);
         });
     }
 
-    public static void showChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, Point location) {
+    public static void showChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
             ChoiceExecuteFloatView choiceView = new ChoiceExecuteFloatView(keepView.getThemeContext());
             choiceView.show();
-            choiceView.innerShowChoice(choices, callback, anchor, location);
+            choiceView.innerShowChoice(choices, callback, anchor, gravity, location);
         });
     }
 
@@ -58,8 +58,8 @@ public class ChoiceExecuteFloatView extends FrameLayout implements FloatInterfac
         });
     }
 
-    public void innerShowChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, Point location) {
-        FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), anchor, location);
+    public void innerShowChoice(List<Choice> choices, StringResultCallback callback, EAnchor anchor, EAnchor gravity, Point location) {
+        FloatWindow.setLocation(ChoiceExecuteFloatView.class.getName(), anchor, gravity, location);
 
         this.callback = callback;
         for (Choice choice : choices) {

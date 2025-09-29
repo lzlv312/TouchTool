@@ -583,7 +583,19 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                             lastTouchedPin = null;
                         } else {
                             lastTouchedPin = touchedPin;
-                            doubleTouchHandler.postDelayed(() -> lastTouchedPin = null, LONG_TOUCH_TIME);
+                            doubleTouchHandler.postDelayed(() -> {
+                                if (lastTouchedPin != null) {
+                                    Pin pin = lastTouchedPin.getPin();
+                                    Pin linkedPin = pin.getLinkedPin(task);
+                                    if (linkedPin != null) {
+                                        Action action = task.getAction(linkedPin.getOwnerId());
+                                        if (action != null) {
+                                            focusCard(action.getId());
+                                        }
+                                    }
+                                }
+                                lastTouchedPin = null;
+                            }, LONG_TOUCH_TIME);
                         }
                     }
 

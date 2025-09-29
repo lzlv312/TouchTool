@@ -28,8 +28,8 @@ public class CheckInAppAction extends CalculateAction {
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
-        PinApplications app = getPinValue(runnable, appPin);
+        PinApplications apps = PinApplications.convertAppList(getPinValue(runnable, appPin));
         PinApplication checkApp = getPinValue(runnable, checkAppPin);
-        resultPin.getValue(PinBoolean.class).setValue(app.contains(checkApp));
+        resultPin.getValue(PinBoolean.class).setValue(apps.contains(checkApp));
     }
 }

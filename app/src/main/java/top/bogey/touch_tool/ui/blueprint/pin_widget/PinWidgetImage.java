@@ -50,6 +50,11 @@ public class PinWidgetImage extends PinWidget<PinImage> {
 
             new MaterialAlertDialogBuilder(getContext())
                     .setPositiveButton(R.string.enter, null)
+                    .setNegativeButton(R.string.clear, (dialog, which) -> {
+                        pinBase.setImage(null);
+                        pinView.getPin().notifyValueUpdated();
+                        binding.image.setImageBitmap(null);
+                    })
                     .setView(view)
                     .show();
 

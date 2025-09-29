@@ -226,11 +226,9 @@ public class AppUtil {
             if (clip != null && clip.getItemCount() > 0) {
                 ClipDescription description = clip.getDescription();
                 ClipData.Item item = clip.getItemAt(0);
-                if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) || description.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
                     CharSequence text = item.getText();
                     if (text != null) result = text.toString();
-                } else if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
-                    result = item.getHtmlText();
                 } else {
                     Uri uri = item.getUri();
                     if (uri != null) {
@@ -461,10 +459,16 @@ public class AppUtil {
         }
     }
 
+
     public static void saveImage(Context context, Bitmap image) {
+        String fileName = "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true);
+        saveImage(context, image, fileName);
+    }
+
+    public static void saveImage(Context context, Bitmap image, String fileName) {
         if (image == null) return;
 
-        String fileName = "Picture_" + formatDateTime(context, System.currentTimeMillis(), false, true) + ".jpg";
+        fileName = fileName + ".jpg";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ContentValues contentValues = new ContentValues();

@@ -71,6 +71,7 @@ import top.bogey.touch_tool.bean.action.map.MapSetAction;
 import top.bogey.touch_tool.bean.action.map.MapSizeAction;
 import top.bogey.touch_tool.bean.action.node.CheckNodeValidAction;
 import top.bogey.touch_tool.bean.action.node.EditTextInputAction;
+import top.bogey.touch_tool.bean.action.node.EditTextPasteAction;
 import top.bogey.touch_tool.bean.action.node.FindNodeAction;
 import top.bogey.touch_tool.bean.action.node.GetNodeChildrenAction;
 import top.bogey.touch_tool.bean.action.node.GetNodeInfoAction;
@@ -104,8 +105,10 @@ import top.bogey.touch_tool.bean.action.point.PointFromIntegerAction;
 import top.bogey.touch_tool.bean.action.point.PointOffsetAction;
 import top.bogey.touch_tool.bean.action.point.PointToIntegerAction;
 import top.bogey.touch_tool.bean.action.point.PointToTouchAction;
+import top.bogey.touch_tool.bean.action.point.PointsToTouchAction;
 import top.bogey.touch_tool.bean.action.point.TouchAction;
 import top.bogey.touch_tool.bean.action.point.TouchPointAction;
+import top.bogey.touch_tool.bean.action.start.ApplicationQuitStartAction;
 import top.bogey.touch_tool.bean.action.start.ApplicationStartAction;
 import top.bogey.touch_tool.bean.action.start.BatteryStartAction;
 import top.bogey.touch_tool.bean.action.start.BluetoothStartAction;
@@ -171,6 +174,7 @@ public class ActionInfo {
     // 开始动作
     private final static ActionInfo MANUAL_START_INFO = new ActionInfo(ActionType.MANUAL_START, ManualStartAction.class, R.drawable.icon_waving_hand, R.string.manual_start_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo APPLICATION_START_INFO = new ActionInfo(ActionType.APPLICATION_START, ApplicationStartAction.class, R.drawable.icon_widgets, R.string.application_start_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo APPLICATION_QUIT_START_INFO = new ActionInfo(ActionType.APPLICATION_QUIT_START, ApplicationQuitStartAction.class, R.drawable.icon_output, R.string.application_quit_start_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo TIME_START_INFO = new ActionInfo(ActionType.TIME_START, TimeStartAction.class, R.drawable.icon_timer, R.string.time_start_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo NOTIFICATION_START_INFO = new ActionInfo(ActionType.NOTIFICATION_START, NotificationStartAction.class, R.drawable.icon_notifications, R.string.notification_start_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo NETWORK_START_INFO = new ActionInfo(ActionType.NETWORK_START, NetworkStartAction.class, R.drawable.icon_globe, R.string.network_start_action, 0, 0, NormalActionCard.class);
@@ -299,6 +303,7 @@ public class ActionInfo {
 
     private final static ActionInfo NODE_TOUCH_INFO = new ActionInfo(ActionType.NODE_TOUCH, NodeTouchAction.class, R.drawable.icon_touch_app, R.string.node_touch_action, R.string.node_touch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo EDITTEXT_INPUT_INFO = new ActionInfo(ActionType.EDITTEXT_INPUT, EditTextInputAction.class, R.drawable.icon_edit, R.string.edit_text_input_action, R.string.edit_text_input_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo EDITTEXT_PASTE_INFO = new ActionInfo(ActionType.EDITTEXT_PASTE, EditTextPasteAction.class, R.drawable.icon_content_paste, R.string.edit_text_paste_action, R.string.edit_text_paste_action_desc, 0, NormalActionCard.class);
 
 
     // 图片与颜色操作
@@ -337,6 +342,7 @@ public class ActionInfo {
     private final static ActionInfo POINT_FROM_INT_INFO = new ActionInfo(ActionType.POINT_FROM_INT, PointFromIntegerAction.class, R.drawable.icon_my_location, R.string.point_from_integer_action, R.string.point_from_integer_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo POINT_OFFSET_INFO = new ActionInfo(ActionType.POINT_OFFSET, PointOffsetAction.class, R.drawable.icon_my_location, R.string.point_offset_action, R.string.point_offset_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo POINT_TO_TOUCH_INFO = new ActionInfo(ActionType.POINT_TO_TOUCH, PointToTouchAction.class, R.drawable.icon_gesture, R.string.point_to_touch_action, R.string.point_to_touch_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo POINTS_TO_TOUCH_INFO = new ActionInfo(ActionType.POINTS_TO_TOUCH, PointsToTouchAction.class, R.drawable.icon_gesture, R.string.points_to_touch_action, R.string.points_to_touch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo TOUCH_INFO = new ActionInfo(ActionType.TOUCH, TouchAction.class, R.drawable.icon_gesture, R.string.touch_action, R.string.touch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo TOUCH_POINT_INFO = new ActionInfo(ActionType.TOUCH_POINT, TouchPointAction.class, R.drawable.icon_touch_app, R.string.touch_point_action, R.string.touch_point_action_desc, 0, NormalActionCard.class);
 
@@ -375,6 +381,7 @@ public class ActionInfo {
         return switch (type) {
             case MANUAL_START -> MANUAL_START_INFO;
             case APPLICATION_START -> APPLICATION_START_INFO;
+            case APPLICATION_QUIT_START -> APPLICATION_QUIT_START_INFO;
             case TIME_START -> TIME_START_INFO;
             case NOTIFICATION_START -> NOTIFICATION_START_INFO;
             case NETWORK_START -> NETWORK_START_INFO;
@@ -495,6 +502,7 @@ public class ActionInfo {
 
             case NODE_TOUCH -> NODE_TOUCH_INFO;
             case EDITTEXT_INPUT -> EDITTEXT_INPUT_INFO;
+            case EDITTEXT_PASTE -> EDITTEXT_PASTE_INFO;
 
 
             case GET_IMAGE -> GET_IMAGE_INFO;
@@ -531,6 +539,7 @@ public class ActionInfo {
             case POINT_TO_INT -> POINT_TO_INT_INFO;
             case POINT_OFFSET -> POINT_OFFSET_INFO;
             case POINT_TO_TOUCH -> POINT_TO_TOUCH_INFO;
+            case POINTS_TO_TOUCH -> POINTS_TO_TOUCH_INFO;
             case TOUCH -> TOUCH_INFO;
             case TOUCH_POINT -> TOUCH_POINT_INFO;
 

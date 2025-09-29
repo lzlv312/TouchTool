@@ -81,6 +81,7 @@ public class TouchImageAction extends ExecuteAction implements SyncAction {
 
     @Override
     public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
         if (!useAccPin.getValue(PinBoolean.class).getValue()) {
             List<Action> actions = task.getActions(SwitchCaptureAction.class);
             if (actions.isEmpty()) {

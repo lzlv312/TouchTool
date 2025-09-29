@@ -29,8 +29,11 @@ public class ManualStartAction extends StartAction {
     private final transient Pin appsPin = new NotLinkAblePin(new PinApplications(PinSubType.MULTI_APP_WITH_ACTIVITY, MainApplication.getInstance().getString(R.string.common_package)), R.string.pin_app);
     private final transient Pin showTypePin = new NotLinkAblePin(new PinSingleSelect(R.array.manual_action_show_type), R.string.manual_start_action_type, false, false, true);
     private final transient Pin expandPin = new NormalShowablePin(new PinBoolean(), R.string.manual_start_action_expand, false, false, true);
-    private final transient Pin anchorPin = new SingleShowablePin(new PinSingleSelect(R.array.anchor, 0), R.string.manual_start_action_anchor, false, false, true);
-    private final transient Pin showPosPin = new SingleShowablePin(new PinPoint(), R.string.manual_start_action_pos, false, false, true);
+
+    private final transient Pin anchorPin = new SingleShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.window_anchor, false, false, true);
+    private final transient Pin gravityPin = new SingleShowablePin(new PinSingleSelect(R.array.anchor, 0), R.string.screen_anchor, false, false, true);
+    private final transient Pin showPosPin = new SingleShowablePin(new PinPoint(), R.string.screen_anchor_pos, false, false, true);
+
     private final transient Pin lockPin = new SingleShowablePin(new PinBoolean(), R.string.manual_start_action_lock, false, false, true);
     private final transient Pin appPin = new Pin(new PinApplication(), R.string.manual_start_action_app, true);
 
@@ -38,12 +41,12 @@ public class ManualStartAction extends StartAction {
         super(ActionType.MANUAL_START);
         Point size = DisplayUtil.getScreenSize(MainApplication.getInstance());
         showPosPin.getValue(PinPoint.class).setValue(new Point(size.x / 2, size.y / 2));
-        addPins(appsPin, showTypePin, expandPin, showPosPin, anchorPin, lockPin, appPin);
+        addPins(appsPin, showTypePin, expandPin, showPosPin, anchorPin, gravityPin, lockPin, appPin);
     }
 
     public ManualStartAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(appsPin, showTypePin, expandPin, showPosPin, anchorPin, lockPin, appPin);
+        reAddPins(appsPin, showTypePin, expandPin, showPosPin, anchorPin, gravityPin, lockPin, appPin);
     }
 
     @Override
@@ -79,6 +82,10 @@ public class ManualStartAction extends StartAction {
 
     public EAnchor getAnchor() {
         return EAnchor.values()[anchorPin.getValue(PinSingleSelect.class).getIndex()];
+    }
+
+    public EAnchor getGravity() {
+        return EAnchor.values()[gravityPin.getValue(PinSingleSelect.class).getIndex()];
     }
 
     public Point getShowPos() {

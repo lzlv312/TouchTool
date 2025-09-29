@@ -46,7 +46,7 @@ public class ListForeachAction extends ListExecuteAction {
             for (int i = 0; i < list.size(); i++) {
                 if (runnable.isInterrupt()) return;
                 if (isBreak) break;
-                elementPin.setValue(list.get(i));
+                elementPin.setValue(returnValue(list.get(i)));
                 indexPin.getValue(PinInteger.class).setValue(i + 1);
                 executeNext(runnable, outPin);
             }

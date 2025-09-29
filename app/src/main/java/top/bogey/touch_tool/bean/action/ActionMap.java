@@ -15,6 +15,7 @@ public class ActionMap {
             case START -> list.addAll(Arrays.asList(
                     ActionType.MANUAL_START,
                     ActionType.APPLICATION_START,
+                    ActionType.APPLICATION_QUIT_START,
                     ActionType.TIME_START,
                     ActionType.NOTIFICATION_START,
                     ActionType.NETWORK_START,
@@ -148,7 +149,8 @@ public class ActionMap {
                     ActionType.CHECK_NODE_VALID,
 
                     ActionType.NODE_TOUCH,
-                    ActionType.EDITTEXT_INPUT
+                    ActionType.EDITTEXT_INPUT,
+                    ActionType.EDITTEXT_PASTE
             ));
 
             case IMAGE -> list.addAll(Arrays.asList(
@@ -186,6 +188,7 @@ public class ActionMap {
                     ActionType.POINT_TO_INT,
                     ActionType.POINT_OFFSET,
                     ActionType.POINT_TO_TOUCH,
+                    ActionType.POINTS_TO_TOUCH,
                     ActionType.TOUCH,
                     ActionType.TOUCH_POINT
             ));

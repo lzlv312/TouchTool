@@ -16,6 +16,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 
@@ -39,6 +40,14 @@ public class MakeMapAction extends MapCalculateAction implements DynamicPinsActi
             pin = tmpPins.get(0);
         }
         reAddPins(addPin, mapPin);
+
+        // 添加针脚的默认对象类型要符合列表
+        PinObject keyType = mapPin.getValue(PinMap.class).getKeyType();
+        PinObject valueType = mapPin.getValue(PinMap.class).getValueType();
+        ArrayList<Pin> list = new ArrayList<>();
+        list.add(new Pin(keyType.copy(), R.string.map_action_key));
+        list.add(new Pin(valueType.copy(), R.string.map_action_value));
+        addPin.getValue(PinAdd.class).setPins(list);
     }
 
     @Override

@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.card.MaterialCardView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -20,9 +22,11 @@ import top.bogey.touch_tool.bean.save.log.DateTimeLog;
 import top.bogey.touch_tool.bean.save.log.Log;
 import top.bogey.touch_tool.bean.save.log.LogInfo;
 import top.bogey.touch_tool.bean.save.log.LogSave;
+import top.bogey.touch_tool.bean.save.log.NormalLog;
 import top.bogey.touch_tool.bean.task.Task;
-import top.bogey.touch_tool.databinding.FloatLogItem2Binding;
-import top.bogey.touch_tool.databinding.FloatLogItemBinding;
+import top.bogey.touch_tool.databinding.FloatLogActionItemBinding;
+import top.bogey.touch_tool.databinding.FloatLogDateTimeItemBinding;
+import top.bogey.touch_tool.databinding.FloatLogNormalItemBinding;
 import top.bogey.touch_tool.ui.blueprint.BlueprintView;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
@@ -38,8 +42,9 @@ public class LogFloatViewAdapter extends TreeAdapter {
     @Override
     public TreeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return switch (viewType) {
-            case 2 -> new ViewHolder(FloatLogItem2Binding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-            default -> new ViewHolder(FloatLogItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            case 1 -> new ViewHolder(FloatLogActionItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            case 2 -> new ViewHolder(FloatLogDateTimeItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            default -> new ViewHolder(FloatLogNormalItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         };
     }
 
@@ -180,14 +185,26 @@ public class LogFloatViewAdapter extends TreeAdapter {
 
     public class ViewHolder extends TreeAdapter.ViewHolder {
         private final Context context;
-        private FloatLogItemBinding binding;
-        private FloatLogItem2Binding binding2;
+        private FloatLogNormalItemBinding normalBinding;
+        private FloatLogActionItemBinding actionBinding;
+        private FloatLogDateTimeItemBinding dateTimeBinding;
 
-        @SuppressLint("ClickableViewAccessibility")
-        public ViewHolder(@NonNull FloatLogItemBinding binding) {
+        public ViewHolder(@NonNull FloatLogNormalItemBinding binding) {
             super(LogFloatViewAdapter.this, binding.getRoot());
             context = binding.getRoot().getContext();
-            this.binding = binding;
+            this.normalBinding = binding;
+
+            binding.copyButton.setOnClickListener(v -> {
+                LogInfo logInfo = (LogInfo) node.getData();
+                if (logInfo == null) return;
+                AppUtil.copyToClipboard(context, logInfo.getLog());
+            });
+        }
+
+        public ViewHolder(@NonNull FloatLogActionItemBinding binding) {
+            super(LogFloatViewAdapter.this, binding.getRoot());
+            context = binding.getRoot().getContext();
+            this.actionBinding = binding;
 
             binding.gotoButton.setOnClickListener(v -> {
                 if (node == null) return;
@@ -195,29 +212,25 @@ public class LogFloatViewAdapter extends TreeAdapter {
                 if (logInfo == null) return;
                 Log log = logInfo.getLogObject();
                 if (log instanceof ActionLog actionLog) {
-                    BlueprintView.tryFocusAction(task.getAction(actionLog.getActionId()));
+                    Action action = null;
+                    Task currTask = Saver.getInstance().getTask(task, actionLog.getTaskId());
+                    if (currTask != null) {
+                        action = currTask.getAction(actionLog.getActionId());
+                    }
+                    BlueprintView.tryFocusAction(currTask, action);
                     if (searchIndex != -1) notifyItemChanged(searchIndex);
                     searchIndex = getAdapterPosition();
                     notifyItemChanged(searchIndex);
                 }
             });
 
-            binding.copyButton.setOnClickListener(v -> {
-                LogInfo logInfo = (LogInfo) node.getData();
-                if (logInfo == null) return;
-                Log log = logInfo.getLogObject();
-                if (!(log instanceof ActionLog actionLog) || actionLog.getIndex() == -1) {
-                    AppUtil.copyToClipboard(context, logInfo.getLog());
-                } else {
-                    switchNodeExpand(node);
-                }
-            });
+            binding.expandButton.setOnClickListener(v -> switchNodeExpand(node));
         }
 
-        public ViewHolder(@NonNull FloatLogItem2Binding binding) {
+        public ViewHolder(@NonNull FloatLogDateTimeItemBinding binding) {
             super(LogFloatViewAdapter.this, binding.getRoot());
             context = binding.getRoot().getContext();
-            this.binding2 = binding;
+            this.dateTimeBinding = binding;
         }
 
         @SuppressLint("SetTextI18n")
@@ -230,48 +243,36 @@ public class LogFloatViewAdapter extends TreeAdapter {
             Log log = logInfo.getLogObject();
             this.node = node;
 
-            if (binding != null) {
-                binding.title.setText(null);
-                binding.time.setText(null);
-                binding.icon.setVisibility(View.GONE);
-                binding.copyButton.setVisibility(View.INVISIBLE);
-                binding.gotoButton.setVisibility(View.GONE);
-
-                Action action = null;
-                ActionLog actionLog = null;
-                if (log instanceof ActionLog) {
-                    actionLog = (ActionLog) log;
-                    action = task.getAction(actionLog.getActionId());
-                }
-
-                binding.icon.setVisibility(View.VISIBLE);
-                binding.gotoButton.setVisibility(View.VISIBLE);
-
-                if (actionLog == null || actionLog.getIndex() == -1) {
-                    binding.copyButton.setIconResource(R.drawable.icon_content_copy);
-                    binding.copyButton.setVisibility(View.VISIBLE);
-                    binding.title.setText(":" + logInfo.getLog());
-                } else {
-                    binding.copyButton.setIconResource(node.isExpanded() ? R.drawable.icon_keyboard_arrow_down : R.drawable.icon_keyboard_arrow_right);
-                    int size = logInfo.getChildrenFlags().size();
-                    binding.copyButton.setVisibility(size == 0 ? View.INVISIBLE : View.VISIBLE);
-                    binding.title.setText(logInfo.getLog());
-                }
-
-                binding.gotoButton.setVisibility(action == null ? View.GONE : View.VISIBLE);
-                binding.time.setText(logInfo.getTime(context));
-                binding.icon.setImageResource(actionLog != null && actionLog.isExecute() ? R.drawable.icon_shuffle : R.drawable.icon_equal);
-
-                if (searchIndex == getAdapterPosition()) {
-                    binding.getRoot().setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorTertiaryContainer));
-                } else {
-                    binding.getRoot().setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceContainerHighest));
-                }
+            if (log instanceof NormalLog normalLog && normalBinding != null) {
+                normalBinding.title.setText(normalLog.getLog());
+                normalBinding.time.setText(logInfo.getTime(context));
             }
 
+            if (log instanceof ActionLog actionLog && actionBinding != null) {
+                Action action = null;
+                Task currTask = Saver.getInstance().getTask(task, actionLog.getTaskId());
+                if (currTask != null) {
+                    action = currTask.getAction(actionLog.getActionId());
+                }
+                actionBinding.gotoButton.setVisibility(action != null ? View.VISIBLE : View.GONE);
+                int size = logInfo.getChildrenFlags().size();
+                actionBinding.expandButton.setVisibility(size > 0 ? View.VISIBLE : View.INVISIBLE);
+                actionBinding.expandButton.setIconResource(node.isExpanded() ? R.drawable.icon_keyboard_arrow_down : R.drawable.icon_keyboard_arrow_right);
+                actionBinding.title.setText(actionLog.getLog());
+                actionBinding.time.setText(logInfo.getTime(context));
+                actionBinding.icon.setImageResource(actionLog.isExecute() ? R.drawable.icon_shuffle : R.drawable.icon_equal);
+            }
 
-            if (binding2 != null) {
-                binding2.title.setText(logInfo.getLog());
+            if (log instanceof DateTimeLog dateTimeLog && dateTimeBinding != null) {
+                dateTimeBinding.title.setText(dateTimeLog.getLog());
+            }
+
+            if (itemView instanceof MaterialCardView cardView) {
+                if (searchIndex == getAdapterPosition()) {
+                    cardView.setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorTertiaryContainer));
+                } else {
+                    cardView.setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceContainerHighest));
+                }
             }
         }
     }

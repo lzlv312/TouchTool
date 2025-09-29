@@ -54,7 +54,7 @@ public class PinObject extends PinBase {
     public boolean linkToAble(PinBase pin) {
         if (getType().getGroup() == pin.getType().getGroup()) {
             if (isDynamic() || pin.isDynamic()) return true;
-            return super.linkFromAble(pin);
+            return super.linkToAble(pin);
         }
         return false;
     }

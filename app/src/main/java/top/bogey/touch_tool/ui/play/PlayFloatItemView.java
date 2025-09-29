@@ -152,6 +152,14 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         return description;
     }
 
+    public Task getTask() {
+        return task;
+    }
+
+    public StartAction getStartAction() {
+        return startAction;
+    }
+
     @Override
     public void onStart(TaskRunnable runnable) {
         this.runnable = runnable;

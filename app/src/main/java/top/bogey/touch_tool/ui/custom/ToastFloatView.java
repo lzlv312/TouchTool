@@ -23,7 +23,7 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
     private final FloatToastBinding binding;
     private final Handler handler;
 
-    public static void showToast(String msg, EAnchor anchor, Point pos) {
+    public static void showToast(String msg, EAnchor anchor, EAnchor gravity, Point pos) {
         KeepAliveFloatView keepView = (KeepAliveFloatView) FloatWindow.getView(KeepAliveFloatView.class.getName());
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
@@ -32,7 +32,7 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
                 toastView = new ToastFloatView(keepView.getThemeContext());
                 toastView.show();
             }
-            toastView.innerShowToast(msg, anchor, pos);
+            toastView.innerShowToast(msg, anchor, gravity, pos);
         });
     }
 
@@ -42,9 +42,9 @@ public class ToastFloatView extends FrameLayout implements FloatInterface {
         handler = new Handler();
     }
 
-    private void innerShowToast(String msg, EAnchor anchor, Point pos) {
+    private void innerShowToast(String msg, EAnchor anchor, EAnchor gravity, Point pos) {
         binding.title.setText(msg);
-        post(() -> FloatWindow.setLocation(ToastFloatView.class.getName(), anchor, pos));
+        post(() -> FloatWindow.setLocation(ToastFloatView.class.getName(), anchor, gravity, pos));
         handler.removeCallbacksAndMessages(null);
         handler.postDelayed(this::dismiss, 1500);
     }

@@ -34,6 +34,13 @@ public class StopTaskAction extends ExecuteAction {
         MainAccessibilityService service = MainApplication.getInstance().getService();
         Task task = getTask();
         if (task != null) service.stopTask(task);
+        else {
+            String taskId = taskPin.getValue(PinTaskString.class).getValue();
+            if (taskId == null || taskId.isEmpty()) {
+                service.stopTask(runnable.getStartTask());
+                return;
+            }
+        }
         executeNext(runnable, outPin);
     }
 
@@ -44,6 +51,11 @@ public class StopTaskAction extends ExecuteAction {
 
     @Override
     public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
+        String taskId = taskPin.getValue(PinTaskString.class).getValue();
+        if (taskId == null || taskId.isEmpty()) {
+            return;
+        }
         Task selectTask = getTask();
         if (selectTask == null) result.addResult(ActionCheckResult.ResultType.WARNING, R.string.check_not_global_task);
     }

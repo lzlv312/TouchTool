@@ -84,6 +84,7 @@ public class CustomEndAction extends Action implements DynamicPinsAction, SyncAc
     public Pin findConnectToAblePin(Pin pin) {
         return getPins().stream().filter(p -> p.linkAble() && p.linkAble(pin.getValue())).findFirst().orElse(null);
     }
+
     private static class SyncActionListener implements ActionListener {
         private Task context;
         private boolean doing = false;
@@ -131,6 +132,11 @@ public class CustomEndAction extends Action implements DynamicPinsAction, SyncAc
                 if (pinByUid == null) continue;
                 pinByUid.setTitle(pin.getTitle());
                 if (!pinByUid.isSameClass(pin)) pinByUid.setValue(pin.getValue().copy());
+
+                // 仅执行针脚同步
+                if (pinByUid.getTitleId() == R.string.execute_task_action_just_cal) {
+                    pinByUid.setValue(pin.getValue().copy());
+                }
             }
             doing = false;
         }

@@ -75,7 +75,7 @@ public class TaskRunnable implements Runnable {
         while (!logStack.isEmpty()) {
             addLog(logStack.pop(), 0);
         }
-        addLog(new LogInfo(new DateTimeLog()), 0);
+        if (!logList.isEmpty()) addLog(new LogInfo(new DateTimeLog()), 0);
 
         listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onFinish(this));
         interrupt = true;
@@ -160,7 +160,7 @@ public class TaskRunnable implements Runnable {
 
     public void addDebugLog(Action action, int stackOption) {
         if (action instanceof InnerStartAction) return;
-        if (debug) addLog(new LogInfo(new ActionLog(progress + 1, action, stackOption != 0)), stackOption);
+        if (debug) addLog(new LogInfo(new ActionLog(progress + 1, getTask(), action, stackOption != 0)), stackOption);
     }
 
     public List<LogInfo> getLogList() {

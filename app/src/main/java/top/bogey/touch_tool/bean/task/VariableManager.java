@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+
 public class VariableManager implements IVariableManager {
     private transient Task parent;
     private final List<Variable> vars = new ArrayList<>();

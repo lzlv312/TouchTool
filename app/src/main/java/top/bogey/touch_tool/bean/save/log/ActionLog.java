@@ -13,19 +13,22 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
+import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.utils.GsonUtil;
 
 public class ActionLog extends Log {
     private final int index;
 
+    private final String taskId;
     private final String actionId;
     private final boolean execute;
     private final Map<String, PinObject> values = new HashMap<>();
 
-    public ActionLog(int index, Action action, boolean execute) {
+    public ActionLog(int index, Task task, Action action, boolean execute) {
         super(LogType.ACTION);
         this.index = index;
         this.execute = execute;
+        taskId = task.getId();
         actionId = action.getId();
 
         for (Pin pin : action.getPins()) {
@@ -51,6 +54,7 @@ public class ActionLog extends Log {
         super(jsonObject);
         index = GsonUtil.getAsInt(jsonObject, "index", -1);
 
+        taskId = GsonUtil.getAsString(jsonObject, "taskId", "");
         actionId = GsonUtil.getAsString(jsonObject, "actionId", "");
         execute = GsonUtil.getAsBoolean(jsonObject, "execute", true);
         values.putAll(GsonUtil.getAsObject(jsonObject, "values", TypeToken.getParameterized(HashMap.class, String.class, PinObject.class).getType(), new HashMap<>()));
@@ -58,6 +62,10 @@ public class ActionLog extends Log {
 
     public int getIndex() {
         return index;
+    }
+
+    public String getTaskId() {
+        return taskId;
     }
 
     public String getActionId() {

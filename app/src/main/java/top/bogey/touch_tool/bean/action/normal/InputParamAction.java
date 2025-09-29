@@ -21,18 +21,19 @@ import top.bogey.touch_tool.utils.EAnchor;
 public class InputParamAction extends ExecuteAction {
     private final transient Pin paramPin = new Pin(new PinParam(), R.string.input_param_action_param, true);
     private final transient Pin posTypePin = new NotLinkAblePin(new PinSingleSelect(R.array.float_pos_type, 0), R.string.pin_point, false, false, true);
-    private final transient Pin anchorPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.log_action_show_anchor, false, false, true);
-    private final transient Pin showPosPin = new PosShowablePin(new PinPoint(0, 0), R.string.log_action_show_pos, false, false, true);
+    private final transient Pin anchorPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.window_anchor, false, false, true);
+    private final transient Pin gravityPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.screen_anchor, false, false, true);
+    private final transient Pin showPosPin = new PosShowablePin(new PinPoint(0, 0), R.string.screen_anchor_pos, false, false, true);
 
     public InputParamAction() {
         super(ActionType.INPUT_PARAM);
-        addPins(paramPin, posTypePin, anchorPin, showPosPin);
+        addPins(paramPin, posTypePin, anchorPin, gravityPin, showPosPin);
     }
 
     public InputParamAction(JsonObject jsonObject) {
         super(jsonObject);
         reAddPin(paramPin, true);
-        reAddPins(posTypePin, anchorPin, showPosPin);
+        reAddPins(posTypePin, anchorPin, gravityPin, showPosPin);
     }
 
     @Override
@@ -48,8 +49,9 @@ public class InputParamAction extends ExecuteAction {
                 InputParamFloatView.showInputParam(object, result -> runnable.resume());
             } else {
                 PinSingleSelect anchor = getPinValue(runnable, anchorPin);
+                PinSingleSelect gravity = getPinValue(runnable, gravityPin);
                 PinPoint showPos = getPinValue(runnable, showPosPin);
-                InputParamFloatView.showInputParam(object, result -> runnable.resume(), EAnchor.values()[anchor.getIndex()], showPos.getValue());
+                InputParamFloatView.showInputParam(object, result -> runnable.resume(), EAnchor.values()[anchor.getIndex()], EAnchor.values()[gravity.getIndex()], showPos.getValue());
             }
             runnable.await();
             executeNext(runnable, outPin);

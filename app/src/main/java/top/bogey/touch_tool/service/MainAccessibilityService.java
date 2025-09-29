@@ -22,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -228,19 +229,16 @@ public class MainAccessibilityService extends AccessibilityService {
 
         runnable.addListener(new TaskListener() {
             @Override
-            public void onStart(TaskRunnable runnable) {
-                StartAction startAction = runnable.getStartAction();
-                if (startAction.getRestartType() == StartAction.RestartType.RESTART) {
-                    stopTask(runnable.getStartTask());
-                }
-                tasks.add(runnable);
-            }
-
-            @Override
             public void onFinish(TaskRunnable runnable) {
                 tasks.remove(runnable);
             }
         });
+        
+        // 直接加入到任务列表。如果在开始里加入，需要等待线程启动，当同时有多条开始进来时，重入策略会失效
+        if (startAction.getRestartType() == StartAction.RestartType.RESTART) {
+            stopTask(runnable.getStartTask());
+        }
+        tasks.add(runnable);
 
         listeners.stream().filter(Objects::nonNull).forEach(runnable::addListener);
         Future<?> future = taskService.submit(runnable);
@@ -484,11 +482,11 @@ public class MainAccessibilityService extends AccessibilityService {
     // 截图 ----------------------------------------------------------------------------- start
     private Bitmap lastScreenShot;
 
-    public Bitmap getScreenShotByCapture() {
+    public synchronized Bitmap getScreenShotByCapture() {
         return captureBinder != null ? captureBinder.getScreenShot() : lastScreenShot;
     }
 
-    public boolean getScreenByAccessibility(BitmapResultCallback callback) {
+    public synchronized boolean getScreenByAccessibility(BitmapResultCallback callback) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             ExecutorService executorService = Executors.newSingleThreadExecutor();
             takeScreenshot(0, executorService, new TakeScreenshotCallback() {
@@ -693,19 +691,22 @@ public class MainAccessibilityService extends AccessibilityService {
     // 播放声音 ----------------------------------------------------------------------------- start
     private final Map<String, MediaPlayer> playerMap = new HashMap<>();
 
-    public void playSound(String path) {
+    public void playSound(String path, int index) {
         stopSound(path);
         try {
             MediaPlayer mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(MainApplication.getInstance(), Uri.parse(path));
+            mediaPlayer.setDataSource(this, Uri.parse(path));
             mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(index == 0 ? AudioAttributes.USAGE_MEDIA : AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                    .setContentType(index == 0 ? AudioAttributes.CONTENT_TYPE_MUSIC : AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build());
-            mediaPlayer.setOnPreparedListener(MediaPlayer::start);
-            mediaPlayer.setOnCompletionListener(mp -> stopSound(path));
+            mediaPlayer.setOnPreparedListener(mp -> {
+                playerMap.put(path, mp);
+                mp.start();
+                int duration = mp.getDuration();
+                new Handler(Looper.getMainLooper()).postDelayed(() -> stopSound(path), duration);
+            });
             mediaPlayer.prepareAsync();
-            playerMap.put(path, mediaPlayer);
         } catch (Exception e) {
             e.printStackTrace();
         }

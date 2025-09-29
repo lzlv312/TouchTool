@@ -120,8 +120,13 @@ public class Pin extends Identity {
     }
 
     public void mutualAddLink(Task task, Pin pin) {
-        addLink(task, pin);
-        pin.addLink(task, this);
+        if (isSingleLink()) {
+            addLink(task, pin);
+            pin.addLink(task, this);
+        } else {
+            pin.addLink(task, this);
+            addLink(task, pin);
+        }
     }
 
     public void directAddLink(Pin pin) {

@@ -9,6 +9,7 @@
     <string name="dialog_title">提示</string>
     <string name="enter">确定</string>
     <string name="cancel">取消</string>
+    <string name="clear">清除</string>
     <string name="save">保存</string>
     <string name="close">关闭</string>
     <string name="copy">复制</string>
@@ -81,6 +82,7 @@
 
     <!-- 蓝图界面相关 -->
     <string name="task_running_log">任务日志</string>
+    <string name="task_running_log_switch">任务日志切换</string>
     <string name="task_running_log_clear">清除日志</string>
     <string name="task_running_detail_log">记录日志细节</string>
     <string name="task_capture">任务截图</string>
@@ -344,6 +346,9 @@
 
     <string name="preference_setting_manual_play_hide">隐藏悬浮窗</string>
     <string name="preference_setting_manual_play_hide_desc">设置长按悬浮窗展开收起按钮默认隐藏规则</string>
+
+    <string name="preference_setting_manual_playing_hide">执行时隐藏</string>
+    <string name="preference_setting_manual_playing_hide_desc">设置任务运行时是否隐藏其他执行按钮</string>
 
     <string name="preference_setting_manual_play_reset">重置位置</string>
     <string name="preference_setting_manual_play_reset_desc">重置手动执行悬浮窗位置</string>

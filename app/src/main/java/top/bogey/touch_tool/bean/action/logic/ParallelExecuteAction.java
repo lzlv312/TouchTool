@@ -73,7 +73,7 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
                 public void onFinish(TaskRunnable run) {
                     List<LogInfo> logList = run.getLogList();
                     List<String> logs = saveLogs(runnable, logList);
-                    LogInfo logInfo = new LogInfo(new ActionLog(runnable.getProgress() + 1, ParallelExecuteAction.this, true));
+                    LogInfo logInfo = new LogInfo(new ActionLog(runnable.getProgress() + 1, runnable.getTask(), ParallelExecuteAction.this, true));
                     logInfo.setChildren(logs);
                     runnable.addLog(logInfo, 0);
                     latch.countDown();

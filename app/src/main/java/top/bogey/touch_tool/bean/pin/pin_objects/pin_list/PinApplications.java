@@ -7,12 +7,21 @@ import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_application.PinApplication;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 
 public class PinApplications extends PinList {
+
+    public static PinApplications convertAppList(PinList pinList) {
+        if (pinList instanceof PinApplications) return (PinApplications) pinList;
+        PinApplications applications = new PinApplications();
+        if (!pinList.getValueType().getClass().equals(PinApplication.class)) return applications;
+        applications.addAll(pinList);
+        return applications;
+    }
 
     public PinApplications() {
         super(PinType.APPS, PinSubType.MULTI_APP_WITH_ACTIVITY, new PinApplication());

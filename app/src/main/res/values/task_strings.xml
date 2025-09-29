@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="window_anchor">悬浮窗锚点</string>
+    <string name="screen_anchor">屏幕锚点</string>
+    <string name="screen_anchor_pos">窗相对屏位置</string>
+
     <!-- 动作-Start -->
     <string name="start_action_enable">启用</string>
-    <string name="start_action_restart">任务重入</string>
+    <string name="start_action_restart">重入策略</string>
     <string name="start_action_break">中断条件</string>
 
     <string name="manual_start_action">手动执行</string>
     <string name="manual_start_action_app">触发界面</string>
     <string name="manual_start_action_type">显示模式</string>
     <string name="manual_start_action_expand">自动展开</string>
-    <string name="manual_start_action_anchor">屏幕锚点</string>
-    <string name="manual_start_action_pos">相对锚点位置</string>
     <string name="manual_start_action_lock">锁定位置</string>
 
     <string name="application_start_action">进应用或界面时执行</string>
     <string name="application_start_action_break">自动中断</string>
     <string name="application_start_action_app">触发界面</string>
+
+    <string name="application_quit_start_action">退出应用时执行</string>
+    <string name="application_quit_start_action_app">触发界面</string>
 
     <string name="time_start_action">定时执行</string>
     <string name="time_start_action_date">日期</string>
@@ -75,8 +80,6 @@
     <string name="choice_action_desc">弹出选择窗口供使用者手动选择</string>
     <string name="choice_action_default">默认</string>
     <string name="choice_action_timeout">超时(ms)</string>
-    <string name="choice_action_show_anchor">屏幕锚点</string>
-    <string name="choice_action_show_pos">相对锚点位置</string>
 
     <string name="for_loop_action">循环执行…次</string>
     <string name="for_loop_action_desc">循环多次执行节点</string>
@@ -117,16 +120,16 @@
     <string name="execute_task_action_just_cal">无需执行针脚</string>
 
     <string name="stop_task_action">停止任务</string>
-    <string name="stop_task_action_task_id">任务</string>
+    <string name="stop_task_action_task_id">任务(默认当前)</string>
 
     <string name="custom_start_action">自定义开始</string>
     <string name="custom_end_action">自定义结束</string>
     <string name="custom_pin_name">针脚名</string>
     <string name="custom_action_single_error">这张卡不能重复添加</string>
 
-    <string name="set_value_action">设置变量</string>
+    <string name="set_value_action">设置%s</string>
     <string name="set_value_action_save">保存值</string>
-    <string name="get_value_action">获取变量</string>
+    <string name="get_value_action">获取%s</string>
 
     <!-- 动作-Normal -->
     <string name="delay_action">延时</string>
@@ -138,13 +141,9 @@
     <string name="log_action_desc">输出日志到日志界面</string>
     <string name="log_action_text">日志</string>
     <string name="log_action_show">弹出提示</string>
-    <string name="log_action_show_anchor">屏幕锚点</string>
-    <string name="log_action_show_pos">相对锚点位置</string>
     <string name="log_action_save">保存日志</string>
 
     <string name="stick_screen_action">贴图到屏幕上</string>
-    <string name="stick_screen_action_anchor">屏幕锚点</string>
-    <string name="stick_screen_action_pos">相对锚点位置</string>
     <string name="stick_screen_action_id">标志</string>
 
     <string name="stick_close_action">关闭贴图</string>
@@ -189,6 +188,7 @@
     <string name="play_ringtone_action">播放铃声</string>
     <string name="play_ringtone_action_desc">播放选定的铃声</string>
     <string name="play_ringtone_action_ringtone">铃声</string>
+    <string name="play_ringtone_action_usage">通道</string>
 
     <string name="stop_ringtone_action">停止铃声</string>
     <string name="stop_ringtone_action_desc">停止播放铃声</string>
@@ -430,6 +430,10 @@
     <string name="point_to_touch_action_desc">将位置转换为手势</string>
     <string name="point_to_touch_action_time">触摸时间(ms)</string>
 
+    <string name="points_to_touch_action">位置列表转为手势</string>
+    <string name="points_to_touch_action_desc">将位置列表转换为手势</string>
+    <string name="points_to_touch_action_time">触摸总时间(ms)</string>
+
     <string name="touch_action">执行手势</string>
     <string name="touch_action_desc">执行指定手势</string>
     <string name="touch_action_time">手势速度</string>
@@ -510,6 +514,11 @@
     <string name="edit_text_input_action_append">追加</string>
     <string name="edit_text_input_action_enter">尝试模拟回车</string>
 
+    <string name="edit_text_paste_action">输入框粘贴</string>
+    <string name="edit_text_paste_action_desc">对文本输入框粘贴文本</string>
+    <string name="edit_text_paste_action_edit_text">输入框(默认首个)</string>
+    <string name="edit_text_paste_action_enter">尝试模拟回车</string>
+
 
     <!-- 动作-Image -->
     <string name="pin_area_first">首个区域</string>
@@ -531,6 +540,7 @@
 
     <string name="save_image_action">保存图片</string>
     <string name="save_image_action_desc">静默保存图片到图片文件夹</string>
+    <string name="save_image_action_name">文件名</string>
 
     <string name="find_image_action">识别图片区域位置</string>
     <string name="find_image_action_desc">识别目标图片在图片中的位置</string>

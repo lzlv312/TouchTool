@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.action.start.ApplicationQuitStartAction;
 import top.bogey.touch_tool.bean.action.start.ApplicationStartAction;
 import top.bogey.touch_tool.bean.action.start.BatteryStartAction;
 import top.bogey.touch_tool.bean.action.start.BluetoothStartAction;
@@ -63,6 +64,7 @@ public class TaskInfoSummary {
     private final List<String> ocrApps = new ArrayList<>();
 
     private PackageActivity packageActivity;
+    private PackageActivity lastPackageActivity;
     private Notification notification;
     private BatteryInfo batteryInfo;
     private BluetoothInfo bluetoothInfo;
@@ -110,10 +112,10 @@ public class TaskInfoSummary {
                 if (keyword == null || keyword.isEmpty()) {
                     packages.add(info);
                 } else {
-                    if (info.packageName.toLowerCase().contains(keyword.toLowerCase())) packages.add(info);
+                    if (AppUtil.isStringContains(info.packageName.toLowerCase(), keyword.toLowerCase())) packages.add(info);
                     else {
                         String appName = info.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString();
-                        if (appName.toLowerCase().contains(keyword.toLowerCase())) packages.add(info);
+                        if (AppUtil.isStringContains(appName.toLowerCase(), keyword.toLowerCase())) packages.add(info);
                     }
                 }
             }
@@ -136,10 +138,10 @@ public class TaskInfoSummary {
                 if (keyword == null || keyword.isEmpty()) {
                     packages.add(info);
                 } else {
-                    if (info.packageName.toLowerCase().contains(keyword.toLowerCase())) packages.add(info);
+                    if (AppUtil.isStringContains(info.packageName.toLowerCase(), keyword.toLowerCase())) packages.add(info);
                     else {
                         String appName = info.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString();
-                        if (appName.toLowerCase().contains(keyword.toLowerCase())) packages.add(info);
+                        if (AppUtil.isStringContains(appName.toLowerCase(), keyword.toLowerCase())) packages.add(info);
                     }
                 }
             }
@@ -250,10 +252,10 @@ public class TaskInfoSummary {
                 if (keyword == null || keyword.isEmpty()) {
                     shortcutApps.add(info);
                 } else {
-                    if (info.packageName.toLowerCase().contains(keyword.toLowerCase())) shortcutApps.add(info);
+                    if (AppUtil.isStringContains(info.packageName.toLowerCase(), keyword.toLowerCase())) shortcutApps.add(info);
                     else {
                         String appName = info.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString();
-                        if (appName.toLowerCase().contains(keyword.toLowerCase())) shortcutApps.add(info);
+                        if (AppUtil.isStringContains(appName.toLowerCase(), keyword.toLowerCase())) shortcutApps.add(info);
                     }
                 }
             }
@@ -373,6 +375,9 @@ public class TaskInfoSummary {
                 }
             } else {
                 if (setPackageActivity(packageName, activityName)) {
+                    if (lastPackageActivity != null && !packageActivity.packageName.equals(lastPackageActivity.packageName)) {
+                        tryStartActions(ApplicationQuitStartAction.class);
+                    }
                     tryStartActions(ApplicationStartAction.class);
                     tryShowManualPlayView(true);
                 }
@@ -384,10 +389,15 @@ public class TaskInfoSummary {
         return packageActivity;
     }
 
+    public PackageActivity getLastPackageActivity() {
+        return lastPackageActivity;
+    }
+
     public boolean setPackageActivity(String packageName, String activityName) {
         if (packageName == null || activityName == null) return false;
         if (packageName.isEmpty() || activityName.isEmpty()) return false;
         if (packageActivity != null && packageActivity.packageName.equals(packageName) && packageActivity.activityName.equals(activityName)) return false;
+        lastPackageActivity = packageActivity;
         packageActivity = new PackageActivity(packageName, activityName);
         return true;
     }

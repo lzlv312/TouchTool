@@ -37,8 +37,10 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
 
     private final transient Pin timeoutPin = new NotLinkAblePin(new PinInteger(0), R.string.choice_action_timeout);
     private final transient Pin posTypePin = new SingleSelectPin(new PinSingleSelect(R.array.float_pos_type, 0), R.string.pin_point, false, false, true);
-    private final transient Pin anchorPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.choice_action_show_anchor, false, false, true);
-    private final transient Pin posPin = new PosShowablePin(new PinPoint(0, 0), R.string.choice_action_show_pos, false, false, true);
+
+    private final transient Pin anchorPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.window_anchor, false, false, true);
+    private final transient Pin gravityPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.screen_anchor, false, false, true);
+    private final transient Pin posPin = new PosShowablePin(new PinPoint(0, 0), R.string.screen_anchor_pos, false, false, true);
 
     private final transient Pin secondPin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
     private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_execute, true);
@@ -46,12 +48,12 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
 
     public ChoiceExecuteAction() {
         super(ActionType.CHOICE_LOGIC);
-        addPins(inPin, outPin, timeoutPin, posTypePin, anchorPin, posPin, secondPin, addPin, defaultPin);
+        addPins(inPin, outPin, timeoutPin, posTypePin, anchorPin, gravityPin, posPin, secondPin, addPin, defaultPin);
     }
 
     public ChoiceExecuteAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(inPin, outPin, timeoutPin, posTypePin, anchorPin, posPin, secondPin);
+        reAddPins(inPin, outPin, timeoutPin, posTypePin, anchorPin, gravityPin, posPin, secondPin);
         reAddPins(morePin);
         reAddPins(addPin, defaultPin);
     }
@@ -75,11 +77,12 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
             });
         } else {
             PinSingleSelect anchor = getPinValue(runnable, anchorPin);
+            PinSingleSelect gravity = getPinValue(runnable, gravityPin);
             PinPoint point = getPinValue(runnable, posPin);
             ChoiceExecuteFloatView.showChoice(choices, result -> {
                 nextPinId.set(result);
                 runnable.resume();
-            }, EAnchor.values()[anchor.getIndex()], point.getValue());
+            }, EAnchor.values()[anchor.getIndex()], EAnchor.values()[gravity.getIndex()], point.getValue());
         }
 
         runnable.await(timeout.intValue());

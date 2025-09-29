@@ -13,6 +13,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinMultiSelect;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinImage;
 import top.bogey.touch_tool.bean.save.log.Log;
 import top.bogey.touch_tool.bean.save.log.LogInfo;
 import top.bogey.touch_tool.bean.task.Task;
@@ -24,12 +25,13 @@ public class GsonUtil {
             .registerTypeAdapter(Variable.class, new Variable.VariableDeserialize())
             .registerTypeAdapter(Action.class, new Action.ActionDeserializer())
             .registerTypeAdapter(Pin.class, new Pin.PinDeserialize())
-            .registerTypeAdapter(PinBase.class, new PinBase.PinBaseDeserializer())
 
+            .registerTypeAdapter(PinBase.class, new PinBase.PinBaseDeserializer())
             .registerTypeAdapter(PinList.class, new PinList.PinListSerializer())
             .registerTypeAdapter(PinApplications.class, new PinList.PinListSerializer())
             .registerTypeAdapter(PinMultiSelect.class, new PinList.PinListSerializer())
             .registerTypeAdapter(PinMap.class, new PinMap.PinMapSerializer())
+            .registerTypeAdapter(PinImage.class, new PinImage.PinImageSerializer())
 
             .registerTypeAdapter(LogInfo.class, new LogInfo.LogInfoDeserialize())
             .registerTypeAdapter(Log.class, new Log.LogDeserialize())

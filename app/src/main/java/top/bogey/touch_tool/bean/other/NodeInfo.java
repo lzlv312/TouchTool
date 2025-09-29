@@ -72,6 +72,7 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
     }
 
     public NodeInfo getChild(int index) {
+        if (children.isEmpty()) return null;
         NodeInfo nodeInfo = children.get(index);
         if (nodeInfo == null) {
             AccessibilityNodeInfo child = node.getChild(index);

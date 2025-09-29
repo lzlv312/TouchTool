@@ -30,6 +30,7 @@ import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.FloatPickerNodeBinding;
+import top.bogey.touch_tool.ui.custom.NodeInfoFloatView;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
@@ -101,6 +102,25 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         binding.detailButton.setOnClickListener(v -> sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
         binding.backButton.setOnClickListener(v -> dismiss());
+
+        binding.upButton.setOnClickListener(v -> {
+            if (nodeInfo != null) {
+                NodeInfo node = nodeInfo.getParent();
+                if (node != null) selectNode(node);
+            }
+        });
+
+        binding.downButton.setOnClickListener(v -> {
+            if (nodeInfo != null) {
+                NodeInfo node = nodeInfo.getChild(0);
+                if (node != null) selectNode(node);
+            }
+        });
+
+        binding.infoButton.setOnClickListener(v -> {
+            if (nodeInfo == null) return;
+            NodeInfoFloatView.showInfo(nodeInfo, this::selectNode);
+        });
 
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override

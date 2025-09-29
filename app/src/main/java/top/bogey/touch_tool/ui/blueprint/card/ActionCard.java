@@ -254,8 +254,13 @@ public abstract class ActionCard extends MaterialCardView implements ActionListe
             float width = pinView.getWidth() * scale;
             float height = pinView.getHeight() * scale;
 
-            // 左右的针脚取32dp的宽度
-            if (!pinView.getPin().isVertical()) {
+            if (pinView.getPin().isVertical()) {
+                // 上下的针脚取24dp的高度
+                float offset = DisplayUtil.dp2px(getContext(), 24 * scale);
+                if (pinView.getPin().isOut()) py = py + height - offset;
+                height = offset;
+            } else {
+                // 左右的针脚取32dp的宽度
                 float offset = DisplayUtil.dp2px(getContext(), 32 * scale);
                 if (pinView.getPin().isOut()) px = px + width - offset;
                 width = offset;

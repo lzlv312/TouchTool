@@ -29,26 +29,6 @@
         <item>字典</item>
     </string-array>
 
-    <string-array name="pin_type">
-        <item>无</item>
-        <item>执行</item>
-        <item>添加</item>
-        <item>对象</item>
-        <item>数组</item>
-        <item>字典</item>
-        <item>文本</item>
-        <item>数值</item>
-        <item>条件</item>
-        <item>值域</item>
-        <item>位置</item>
-        <item>区域</item>
-        <item>手势</item>
-        <item>控件</item>
-        <item>图片</item>
-        <item>颜色</item>
-        <item>应用</item>
-    </string-array>
-
     <string-array name="pin_sub_type">
         <item>普通</item>
         <item>链接</item>
@@ -181,7 +161,7 @@
     <string-array name="restart_type">
         <item>重新执行</item>
         <item>放弃执行</item>
-        <item>新的执行</item>
+        <item>并行执行</item>
     </string-array>
 
     <string-array name="manual_action_show_type">
@@ -192,6 +172,11 @@
     <string-array name="share_type">
         <item>文字</item>
         <item>文件</item>
+    </string-array>
+
+    <string-array name="media_usage">
+        <item>音频</item>
+        <item>铃声</item>
     </string-array>
 
     <string-array name="to_int_type">

@@ -118,11 +118,11 @@ public class FloatWindow {
         return null;
     }
 
-    public static void setLocation(String tag, EAnchor gravity, Point location) {
+    public static void setLocation(String tag, EAnchor anchor, EAnchor gravity, Point location) {
         tag = checkTag(tag);
         FloatWindowHelper helper = getHelper(tag);
         if (helper != null) {
-            helper.setRelativePoint(gravity, location);
+            helper.setRelativePoint(anchor, gravity, location);
         }
     }
 

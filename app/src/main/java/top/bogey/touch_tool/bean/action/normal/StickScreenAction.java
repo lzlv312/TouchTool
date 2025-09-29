@@ -17,28 +17,32 @@ import top.bogey.touch_tool.utils.EAnchor;
 
 public class StickScreenAction extends ExecuteAction {
     private final transient Pin valuePin = new Pin(new PinString(), R.string.pin_object);
-    private final transient Pin anchorPin = new SingleSelectPin(new PinSingleSelect(R.array.anchor, 4), R.string.stick_screen_action_anchor, false, false, true);
-    private final transient Pin showPosPin = new Pin(new PinPoint(), R.string.stick_screen_action_pos, false, false, true);
+
+    private final transient Pin anchorPin = new SingleSelectPin(new PinSingleSelect(R.array.anchor, 4), R.string.window_anchor, false, false, true);
+    private final transient Pin gravityPin = new SingleSelectPin(new PinSingleSelect(R.array.anchor, 4), R.string.screen_anchor, false, false, true);
+    private final transient Pin showPosPin = new Pin(new PinPoint(), R.string.screen_anchor_pos, false, false, true);
+
     private final transient Pin idPin = new Pin(new PinString(), R.string.stick_screen_action_id, true);
 
     public StickScreenAction() {
         super(ActionType.STICK);
-        addPins(valuePin, anchorPin, showPosPin, idPin);
+        addPins(valuePin, anchorPin, gravityPin, showPosPin, idPin);
     }
 
     public StickScreenAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(valuePin, anchorPin, showPosPin, idPin);
+        reAddPins(valuePin, anchorPin, gravityPin, showPosPin, idPin);
     }
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         PinObject value = getPinValue(runnable, valuePin);
         PinSingleSelect anchor = getPinValue(runnable, anchorPin);
+        PinSingleSelect gravity = getPinValue(runnable, gravityPin);
         PinPoint showPos = getPinValue(runnable, showPosPin);
         PinString id = idPin.getValue();
 
-        String tag = StickScreenFloatView.showStick(value, EAnchor.values()[anchor.getIndex()], showPos.getValue());
+        String tag = StickScreenFloatView.showStick(value, EAnchor.values()[anchor.getIndex()], EAnchor.values()[gravity.getIndex()], showPos.getValue());
         id.setValue(tag);
 
         executeNext(runnable, outPin);

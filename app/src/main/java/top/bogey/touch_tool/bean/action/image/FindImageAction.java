@@ -68,6 +68,7 @@ public class FindImageAction extends FindExecuteAction {
 
     @Override
     public void check(ActionCheckResult result, Task task) {
+        super.check(result, task);
         if (!sourcePin.isLinked()) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
                 List<Action> actions = task.getActions(SwitchCaptureAction.class);

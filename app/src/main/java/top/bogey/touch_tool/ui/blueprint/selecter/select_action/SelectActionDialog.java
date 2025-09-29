@@ -27,6 +27,8 @@ import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionMap;
+import top.bogey.touch_tool.bean.action.task.CustomEndAction;
+import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinString;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.SettingSaver;
@@ -223,7 +225,13 @@ public class SelectActionDialog extends BottomSheetDialog {
             if (result) {
                 View view = binding.subGroup.findViewById(binding.subGroup.getCheckedButtonId());
                 String tag = (String) view.getTag();
-                if (PRIVATE.equals(tag)) task.addTask(newTask);
+                if (PRIVATE.equals(tag)) {
+                    task.addTask(newTask);
+                    newTask.addAction(new CustomStartAction());
+                    CustomEndAction customEndAction = new CustomEndAction();
+                    customEndAction.setPos(0, 30);
+                    newTask.addAction(customEndAction);
+                }
                 newTask.save();
                 dataList.add(0, newTask);
                 adapter.notifyItemInserted(0);
