@@ -81,11 +81,12 @@ public class SinglePlayView extends PlayFloatItemView implements FloatInterface 
     @Override
     public void show() {
         ManualStartAction action = (ManualStartAction) startAction;
+        int statusBarHeight = DisplayUtil.getStatusBarHeight(null, null);
         FloatWindow.with(MainApplication.getInstance().getService())
                 .setTag(tag)
                 .setLayout(this)
                 .setAnchor(action.getAnchor())
-                .setLocation(action.getGravity(), action.getShowPos().x, action.getShowPos().y)
+                .setLocation(action.getGravity(), action.getShowPos().x, action.getShowPos().y - statusBarHeight)
                 .setDragAble(!action.isLock())
                 .setSpecial(true)
                 .show();

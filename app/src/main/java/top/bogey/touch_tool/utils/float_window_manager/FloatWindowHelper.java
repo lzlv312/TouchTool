@@ -85,6 +85,7 @@ public class FloatWindowHelper {
             boolean portrait = DisplayUtil.isPortrait(context);
             if (isPortrait == null || portrait == isPortrait) return;
             isPortrait = portrait;
+            DisplayUtil.resetStatusBarHeight();
             setRelativePoint(config.anchor, config.gravity, config.location);
             if (config.callback != null) config.callback.onRotate();
         });

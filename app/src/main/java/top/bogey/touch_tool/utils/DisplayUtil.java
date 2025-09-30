@@ -116,6 +116,10 @@ public class DisplayUtil {
         return statusHeight;
     }
 
+    public static void resetStatusBarHeight() {
+        statusHeight = -1;
+    }
+
     // 不用getLocationOnScreen，因为这种方法没有考虑缩放
     public static PointF getLocationRelativeToView(View view, View relativeView) {
         PointF pointF = new PointF(view.getX(), view.getY());
