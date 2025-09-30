@@ -55,6 +55,7 @@
     <!-- 任务界面相关 -->
     <string name="title">标题</string>
     <string name="des">描述</string>
+    <string name="creator">创建者</string>
     <string name="tag">标签</string>
     <string name="copy_title">%s_复制</string>
     <string name="force_delete">强制删除</string>
@@ -224,6 +225,13 @@
     <string name="device_not_support_lock">当前设备不支持调用锁屏功能</string>
     <string name="device_not_support_snap">当前设备不支持调用系统截图</string>
     <string name="device_not_support_shortcut">当前设备不支持创建快捷方式</string>
+
+
+    <!-- 工具 -->
+    <string name="capture_service">屏幕录制</string>
+    <string name="package_activity">应用信息</string>
+    <string name="node_picker">控件信息</string>
+
 
     <!-- 设置 -->
     <string name="setting_need_notification_desc">前台服务和录屏服务需要发送通知，请授予应用发送通知的权限</string>

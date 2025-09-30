@@ -48,7 +48,7 @@ public class NodePickerPreview extends BasePicker<String> {
         binding.backButton.setOnClickListener(v -> dismiss());
 
         binding.saveButton.setOnClickListener(v -> {
-            callback.onResult(nodePath.getValue());
+            if (callback != null) callback.onResult(nodePath.getValue());
             dismiss();
         });
 

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,11 +43,11 @@ import top.bogey.touch_tool.ui.custom.ChoiceExecuteFloatView;
 import top.bogey.touch_tool.ui.play.PlayFloatView;
 import top.bogey.touch_tool.ui.play.SinglePlayView;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.callback.ResultCallback;
 
 public class TaskInfoSummary {
     public static final String OCR_SERVICE_ACTION = "top.bogey.ocr.OcrService";
     private static final String XMLNS_ANDROID = "http://schemas.android.com/apk/res/android";
-    private static final int PACKAGE_FLAGS = PackageManager.MATCH_UNINSTALLED_PACKAGES | PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_ALL;
 
     private static TaskInfoSummary instance;
 
@@ -65,6 +66,8 @@ public class TaskInfoSummary {
 
     private PackageActivity packageActivity;
     private PackageActivity lastPackageActivity;
+    private List<ResultCallback<PackageActivity>> packageActivityListeners = new ArrayList<>();
+
     private Notification notification;
     private BatteryInfo batteryInfo;
     private BluetoothInfo bluetoothInfo;
@@ -399,7 +402,16 @@ public class TaskInfoSummary {
         if (packageActivity != null && packageActivity.packageName.equals(packageName) && packageActivity.activityName.equals(activityName)) return false;
         lastPackageActivity = packageActivity;
         packageActivity = new PackageActivity(packageName, activityName);
+        packageActivityListeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onResult(packageActivity));
         return true;
+    }
+
+    public void addPackageActivityListener(ResultCallback<PackageActivity> listener) {
+        packageActivityListeners.add(listener);
+    }
+
+    public void removePackageActivityListener(ResultCallback<PackageActivity> listener) {
+        packageActivityListeners.remove(listener);
     }
 
     public Notification getNotification() {
