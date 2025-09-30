@@ -3,12 +3,16 @@ package top.bogey.touch_tool.ui.tool.task_manager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
+import android.text.Editable;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.Saver;
@@ -17,6 +21,7 @@ import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.databinding.DialogTaskManagerBinding;
 import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.GsonUtil;
+import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
 public class ImportTaskDialog extends FrameLayout {
@@ -45,12 +50,45 @@ public class ImportTaskDialog extends FrameLayout {
 
     private final ImportTaskDialogAdapter adapter;
 
+
     public ImportTaskDialog(@NonNull Context context, TaskRecord taskRecord) {
         super(context);
         DialogTaskManagerBinding binding = DialogTaskManagerBinding.inflate(LayoutInflater.from(context), this, true);
 
-        adapter = new ImportTaskDialogAdapter(taskRecord);
+        List<TaskPackage> taskPackages = new ArrayList<>();
+        for (Task task : taskRecord.tasks()) {
+            TaskPackage taskPackage = new TaskPackage(taskRecord, task);
+            taskPackages.add(taskPackage);
+        }
+
+        adapter = new ImportTaskDialogAdapter(taskPackages);
         binding.selectionBox.setAdapter(adapter);
+
+        binding.searchEdit.addTextChangedListener(new TextChangedListener() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                String searchString = s.toString();
+                if (searchString.isEmpty()) {
+                    adapter.refreshTaskPackages(taskPackages);
+                } else {
+                    List<TaskPackage> searchTasks = new ArrayList<>();
+                    for (TaskPackage taskPackage : taskPackages) {
+                        if (AppUtil.isStringContains(taskPackage.getTitle(), searchString)) searchTasks.add(taskPackage);
+                    }
+                    adapter.refreshTaskPackages(searchTasks);
+                }
+            }
+        });
+
+        binding.selectAllButton.setOnClickListener(v -> {
+            if (binding.selectAllButton.isChecked()) {
+                adapter.selectAll();
+            } else {
+                adapter.unselectAll();
+            }
+        });
+        TaskRecord record = adapter.getTaskRecord();
+        binding.selectAllButton.setChecked(record.tasks().size() == taskRecord.tasks().size() && record.variables().size() == taskRecord.variables().size());
     }
 
     public void importTask() {

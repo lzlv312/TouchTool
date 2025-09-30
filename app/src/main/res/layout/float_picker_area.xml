@@ -35,6 +35,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_gravity="start|top"
+            app:tint="?attr/colorPrimary"
             app:srcCompat="@drawable/icon_drag_left_top" />
 
         <ImageView
@@ -42,6 +43,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_gravity="bottom|end"
+            app:tint="?attr/colorPrimary"
             app:srcCompat="@drawable/icon_drag_right_bottom" />
     </FrameLayout>
 

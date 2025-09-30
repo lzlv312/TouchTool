@@ -57,6 +57,6 @@ public class StopTaskAction extends ExecuteAction {
             return;
         }
         Task selectTask = getTask();
-        if (selectTask == null) result.addResult(ActionCheckResult.ResultType.WARNING, R.string.check_not_global_task);
+        if (selectTask == null) result.addResult(ActionCheckResult.ResultType.WARNING, R.string.check_not_global_task_warning);
     }
 }

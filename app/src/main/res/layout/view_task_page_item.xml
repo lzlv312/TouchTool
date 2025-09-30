@@ -77,9 +77,9 @@
                 android:id="@+id/taskDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:alpha="0.75"
                 android:paddingHorizontal="8dp"
                 android:textSize="12sp"
-                android:alpha="0.75"
                 android:visibility="gone" />
 
             <LinearLayout

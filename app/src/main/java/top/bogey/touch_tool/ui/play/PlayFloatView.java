@@ -232,6 +232,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
                 .setTag(PlayFloatView.class.getName())
                 .setLayout(this)
                 .setDockSide(FloatDockSide.HORIZONTAL)
+                .setAnchor(EAnchor.TOP_LEFT)
                 .setLocation(EAnchor.CENTER_RIGHT, pos.x, pos.y)
                 .setCallback(new PlayFloatCallback())
                 .setSpecial(true)
@@ -342,6 +343,15 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
                     view.refreshExpand(SettingSaver.getInstance().getManualPlayViewState());
                     view.refreshCorner(false);
                 }
+            }
+        }
+
+        @Override
+        public void onRotate() {
+            super.onRotate();
+            View view = FloatWindow.getView(PlayFloatView.class.getName());
+            if (view instanceof PlayFloatView playFloatView) {
+                playFloatView.postDelayed(() -> playFloatView.refreshCorner(false), 100);
             }
         }
     }

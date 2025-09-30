@@ -75,6 +75,15 @@ public class ExportTaskDialog extends FrameLayout {
             }
         });
 
+        binding.selectAllButton.setOnClickListener(v -> {
+            if (binding.selectAllButton.isChecked()) {
+                adapter.selectAll();
+            } else {
+                adapter.unselectAll();
+            }
+        });
+        binding.selectAllButton.setChecked(selectAll);
+
         adapter.refreshTasks(tasks);
         if (selectAll) adapter.selectAll();
     }

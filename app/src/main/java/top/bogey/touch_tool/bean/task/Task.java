@@ -1,5 +1,7 @@
 package top.bogey.touch_tool.bean.task;
 
+import android.graphics.Point;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -146,13 +148,16 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
 
     public List<Usage> getTaskUses(String id) {
         List<Usage> usages = new ArrayList<>();
+        List<Point> points = new ArrayList<>();
         for (Action action : getActions(ExecuteTaskAction.class)) {
             ExecuteTaskAction execute = (ExecuteTaskAction) action;
             String taskId = execute.getTaskId();
             if (id.equals(taskId)) {
-                usages.add(new Usage(this, action.getPos()));
+                points.add(action.getPos());
             }
         }
+        if (!points.isEmpty()) usages.add(new Usage(this, points));
+
         for (Task task : getTasks()) {
             usages.addAll(task.getTaskUses(id));
         }
@@ -224,40 +229,55 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
         return variableManager.findVariableByName(name);
     }
 
-    // 清理任务内私有信息
-    public void cleanPrivateInfo() {
+    // 清理变量存档
+    public void cleanVariableSave() {
         // 清理变量存档
         for (Variable variable : getVariables()) {
             variable.setSaveValue((PinObject) variable.getValue().copy());
         }
-        // 清理标签
-        tagManager.setTags(new ArrayList<>());
 
         for (Task task : getTasks()) {
-            task.cleanPrivateInfo();
+            task.cleanVariableSave();
+        }
+    }
+
+    // 清理无效标签
+    public void cleanInvalidTag() {
+        List<String> allTags = Saver.getInstance().getAllTags();
+        for (String tag : new ArrayList<>(getTags())) {
+            if (allTags.contains(tag)) continue;
+            removeTag(tag);
+        }
+
+        for (Variable variable : getVariables()) {
+            for (String tag : new ArrayList<>(variable.getTags())) {
+                if (allTags.contains(tag)) continue;
+                variable.removeTag(tag);
+            }
+        }
+
+        for (Task task : getTasks()) {
+            task.cleanInvalidTag();
         }
     }
 
     public List<Usage> getVariableUses(String id) {
         List<Usage> usages = new ArrayList<>();
-        boolean flag = true;
+        List<Point> points = new ArrayList<>();
         for (Action action : getActions(GetVariableAction.class)) {
             GetVariableAction get = (GetVariableAction) action;
             if (id.equals(get.getVarId())) {
-                usages.add(new Usage(this, action.getPos()));
-                flag = false;
-                break;
+                points.add(action.getPos());
             }
         }
-        if (flag) {
-            for (Action action : getActions(SetVariableAction.class)) {
-                SetVariableAction set = (SetVariableAction) action;
-                if (id.equals(set.getVarId())) {
-                    usages.add(new Usage(this, action.getPos()));
-                    break;
-                }
+
+        for (Action action : getActions(SetVariableAction.class)) {
+            SetVariableAction set = (SetVariableAction) action;
+            if (id.equals(set.getVarId())) {
+                points.add(action.getPos());
             }
         }
+        if (!points.isEmpty()) usages.add(new Usage(this, points));
 
         for (Task task : getTasks()) {
             usages.addAll(task.getVariableUses(id));

@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.ui.blueprint.selecter.select_action;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,7 +131,9 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             builder.insert(0, task.getTitle()).insert(0, " > ");
             task = task.getParent();
         }
-        builder.append(" (").append(usage.pos().x).append(",").append(usage.pos().y).append(")");
+        for (Point point : usage.points()) {
+            builder.append(" (").append(point.x).append(",").append(point.y).append(")");
+        }
         return builder.toString().substring(1);
     }
 
@@ -148,12 +151,14 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         usages.forEach(usage -> {
             MaterialTextView title = new MaterialTextView(context);
+            title.setTextSize(12);
             title.setText(usage.task().getTitle());
             linearLayout.addView(title);
 
             MaterialTextView path = new MaterialTextView(context);
-            path.setTextSize(11);
+            path.setTextSize(8);
             path.setText(getUsageTitlePath(usage));
+            path.setSingleLine(false);
             linearLayout.addView(path);
 
             MaterialDivider div = new MaterialDivider(context);

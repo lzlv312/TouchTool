@@ -92,6 +92,9 @@ public class TouchPathFloatView extends AppCompatImageView implements FloatInter
         canvas = new Canvas(bitmap);
         canvas.translate(PADDING - gestureArea.left, PADDING - gestureArea.top);
         setImageBitmap(bitmap);
+
+        int statusBarHeight = DisplayUtil.getStatusBarHeight(null, null);
+        gestureArea.offset(0, -statusBarHeight);
     }
 
     @Override

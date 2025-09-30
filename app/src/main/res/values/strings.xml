@@ -13,6 +13,7 @@
     <string name="save">保存</string>
     <string name="close">关闭</string>
     <string name="copy">复制</string>
+    <string name="copy_and_join">复制并加群</string>
 
     <!-- 复制 -->
     <string name="copy_tips">已复制</string>
@@ -67,6 +68,7 @@
 
     <string name="task_import">导入任务</string>
     <string name="task_import_desc">从你选择的文件中选择需要导入的任务配置和通用自定义卡片</string>
+    <string name="task_import_error_tips">将覆盖本地任务“%s”</string>
 
     <string name="task_export">导出任务</string>
     <string name="task_export_desc">选择需要导出的任务配置和通用自定义卡片到你选择的文件夹中</string>
@@ -110,6 +112,7 @@
 
     <!-- 错误 -->
     <string name="card_check_error_tips">存在%d个问题卡片</string>
+    <string name="running_error_tips">检测到应用出现崩溃，是否加入QQ群去上报错误？</string>
 
     <string name="check_pin_linkable_error">针脚类型不匹配</string>
     <string name="check_need_super_user_error">需要超级用户权限</string>
@@ -119,7 +122,7 @@
     <!-- 警告 -->
     <string name="check_need_capture_warning">需要开启录屏动作</string>
     <string name="check_need_notification_warning">需要开启通知权限</string>
-    <string name="check_not_global_task">非全局任务</string>
+    <string name="check_not_global_task_warning">非全局任务</string>
 
 
     <!-- 任务 -->
@@ -232,7 +235,10 @@
     <string name="setting_execute_shell">执行指令</string>
 
     <string name="setting_help_doc">帮助文档</string>
+    <string name="setting_help_doc_url">1</string>
     <string name="setting_help_video">视频教程</string>
+    <string name="setting_help_video_url">2</string>
+    <string name="setting_qq_group_url">https://jq.qq.com/?_wv=1027&amp;k=c1HOe3Gk</string>
 
     <!-- 设置-应用设置 -->
     <string name="app_setting">应用设置</string>

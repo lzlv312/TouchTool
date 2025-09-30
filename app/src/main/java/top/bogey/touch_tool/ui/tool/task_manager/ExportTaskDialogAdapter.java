@@ -44,7 +44,7 @@ public class ExportTaskDialogAdapter extends RecyclerView.Adapter<ExportTaskDial
         Set<Task> tasks = new HashSet<>();
         for (Task task : taskReference.getTasks()) {
             Task copy = task.copy();
-            copy.cleanPrivateInfo();
+            copy.cleanVariableSave();
             tasks.add(copy);
         }
 
@@ -66,6 +66,13 @@ public class ExportTaskDialogAdapter extends RecyclerView.Adapter<ExportTaskDial
     public void selectAll() {
         for (TaskPackage aPackage : taskPackages) {
             taskReference.addTaskPackage(aPackage);
+        }
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
+    public void unselectAll() {
+        for (TaskPackage aPackage : taskPackages) {
+            taskReference.removeTaskPackage(aPackage);
         }
         notifyItemRangeChanged(0, getItemCount());
     }

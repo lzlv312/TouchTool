@@ -86,9 +86,35 @@ public class FloatWindowHelper {
             if (isPortrait == null || portrait == isPortrait) return;
             isPortrait = portrait;
             setRelativePoint(config.anchor, config.gravity, config.location);
+            if (config.callback != null) config.callback.onRotate();
         });
 
         initEditText(viewParent);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    void initEditText(View view) {
+        if (config.existEditText) {
+            if (view instanceof ViewGroup viewGroup) {
+                for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                    initEditText(viewGroup.getChildAt(i));
+                }
+            } else if (view instanceof EditText editText) {
+                editText.setOnTouchListener((v, event) -> {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        params.flags = FloatWindow.FOCUSABLE | config.flag;
+                        manager.updateViewLayout(viewParent, params);
+
+                        new Handler().postDelayed(() -> {
+                            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                            if (inputMethodManager != null)
+                                inputMethodManager.showSoftInput(editText, 0);
+                        }, 100);
+                    }
+                    return false;
+                });
+            }
+        }
     }
 
     void showFloatWindow() {
@@ -189,31 +215,11 @@ public class FloatWindowHelper {
         return point;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    void initEditText(View view) {
-        if (config.existEditText) {
-            if (view instanceof ViewGroup viewGroup) {
-                for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                    initEditText(viewGroup.getChildAt(i));
-                }
-            } else if (view instanceof EditText editText) {
-                editText.setOnTouchListener((v, event) -> {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        params.flags = FloatWindow.FOCUSABLE | config.flag;
-                        manager.updateViewLayout(viewParent, params);
-
-                        new Handler().postDelayed(() -> {
-                            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            if (inputMethodManager != null)
-                                inputMethodManager.showSoftInput(editText, 0);
-                        }, 100);
-                    }
-                    return false;
-                });
-            }
-        }
+    Point getAnchorOffset() {
+        int width = viewParent.getWidth();
+        int height = viewParent.getHeight();
+        return config.anchor.getAnchorOffset(width, height);
     }
-
 
     Point getGravityPoint() {
         return config.gravity.getAnchorPoint();
@@ -223,9 +229,7 @@ public class FloatWindowHelper {
         Point size = DisplayUtil.getScreenSize(context);
         int statusBar = DisplayUtil.getStatusBarHeight(viewParent, params);
 
-        Rect showArea;
-        if (DisplayUtil.isPortrait(context)) showArea = new Rect(0, 0, size.x, size.y - statusBar);
-        else showArea = new Rect(0, 0, size.x - statusBar, size.y);
+        Rect showArea = new Rect(0, 0, size.x, size.y - statusBar);
         showArea.left += config.border.left;
         showArea.top += config.border.top;
         showArea.right -= config.border.right;
@@ -237,21 +241,15 @@ public class FloatWindowHelper {
         return showArea;
     }
 
-    Point getAnchorOffset() {
-        int width = viewParent.getWidth();
-        int height = viewParent.getHeight();
-        return config.anchor.getAnchorOffset(width, height);
-    }
-
     public void setBorder(Rect border) {
         Point point = getRelativePoint();
         config.border = border;
         setRelativePoint(config.anchor, config.gravity, point);
     }
 
-    public void setFocusable(boolean focusable) {
+    public void setFocusable(boolean focusable, boolean withIM) {
         if (focusable) {
-            params.flags = FloatWindow.FOCUSABLE | config.flag;
+            params.flags = (withIM ? FloatWindow.FOCUSABLE : FloatWindow.FOCUSABLE_NOT_IM) | config.flag;
         } else {
             params.flags = FloatWindow.NOT_FOCUSABLE | config.flag;
         }

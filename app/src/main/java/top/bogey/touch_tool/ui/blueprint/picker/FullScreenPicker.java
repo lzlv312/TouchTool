@@ -2,6 +2,7 @@ package top.bogey.touch_tool.ui.blueprint.picker;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.bean.other.ScreenInfo;
 import top.bogey.touch_tool.service.MainAccessibilityService;
+import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
@@ -30,6 +32,10 @@ public abstract class FullScreenPicker<T> extends BasePicker<T> {
 
     private void onShow() {
         postDelayed(() -> screenInfo = new ScreenInfo(service, result -> post(() -> {
+            Bitmap bitmap = screenInfo.getScreenShot();
+            if (bitmap != null) {
+                screenInfo.setScreenShot(DisplayUtil.safeClipBitmap(bitmap, location[0], location[1], getWidth(), getHeight()));
+            }
             FloatWindow.show(tag);
             realShow();
         })), 300);

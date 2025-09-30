@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.Saver;
@@ -26,15 +28,13 @@ public class ImportTaskDialogAdapter extends RecyclerView.Adapter<ImportTaskDial
     private final List<TaskPackage> taskPackages = new ArrayList<>();
     private final TaskReference taskReference = new TaskReference();
 
-    public ImportTaskDialogAdapter(TaskRecord taskRecord) {
-        for (Task task : taskRecord.tasks()) {
-            TaskPackage taskPackage = new TaskPackage(taskRecord, task);
-            taskPackages.add(taskPackage);
-
+    public ImportTaskDialogAdapter(List<TaskPackage> taskPackages) {
+        this.taskPackages.addAll(taskPackages);
+        for (TaskPackage taskPackage : taskPackages) {
             Task savedTask = Saver.getInstance().getTask(taskPackage.getTask().getId());
             if (savedTask == null) taskReference.addTaskPackage(taskPackage);
         }
-        AppUtil.chineseSort(taskPackages, TaskPackage::getTitle);
+        AppUtil.chineseSort(this.taskPackages, TaskPackage::getTitle);
     }
 
     @NonNull
@@ -55,7 +55,44 @@ public class ImportTaskDialogAdapter extends RecyclerView.Adapter<ImportTaskDial
     }
 
     public TaskRecord getTaskRecord() {
-        return new TaskRecord(taskReference.getTasks(), taskReference.getVariables());
+        Set<Task> tasks = new HashSet<>();
+        for (Task task : taskReference.getTasks()) {
+            task.cleanInvalidTag();
+            tasks.add(task);
+        }
+
+        List<String> allTags = Saver.getInstance().getAllTags();
+        Set<Variable> variables = new HashSet<>();
+        for (Variable variable : taskReference.getVariables()) {
+            for (String tag : new ArrayList<>(variable.getTags())) {
+                if (allTags.contains(tag)) continue;
+                variable.removeTag(tag);
+            }
+            variables.add(variable);
+        }
+
+        return new TaskRecord(tasks, variables);
+    }
+
+    public void selectAll() {
+        for (TaskPackage aPackage : taskPackages) {
+            taskReference.addTaskPackage(aPackage);
+        }
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
+    public void unselectAll() {
+        for (TaskPackage aPackage : taskPackages) {
+            taskReference.removeTaskPackage(aPackage);
+        }
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
+    public void refreshTaskPackages(List<TaskPackage> newTasks) {
+        taskPackages.clear();
+        taskPackages.addAll(newTasks);
+        AppUtil.chineseSort(taskPackages, TaskPackage::getTitle);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -85,28 +122,35 @@ public class ImportTaskDialogAdapter extends RecyclerView.Adapter<ImportTaskDial
             binding.title.setText(taskPackage.getTitle());
             binding.description.setVisibility((taskPackage.getDescription() == null || taskPackage.getDescription().isEmpty()) ? View.GONE : View.VISIBLE);
             binding.description.setText(taskPackage.getDescription());
+            binding.errorText.setVisibility(View.GONE);
 
+            int times = taskReference.getTaskUsageTimes(taskPackage.getTask());
+            binding.getRoot().setChecked(times > 0);
+            binding.getRoot().setEnabled(times <= 1);
+            binding.getRoot().setChecked(times > 0);
             Task savedTask = Saver.getInstance().getTask(taskPackage.getTask().getId());
-            binding.existTips.setVisibility(savedTask == null ? View.GONE : View.VISIBLE);
-            binding.title.setTextColor(DisplayUtil.getAttrColor(context, savedTask == null ? NORMAL_COLOR : SPECIAL_COLOR));
+            if (savedTask != null && times > 0) {
+                binding.errorText.setVisibility(View.VISIBLE);
+                binding.errorText.setText(context.getString(R.string.task_import_error_tips, savedTask.getTitle()));
+            }
 
             binding.referenceCard.setVisibility(taskPackage.isEmpty() ? View.GONE : View.VISIBLE);
             binding.referenceBox.removeAllViews();
             for (TaskPackage aPackage : taskPackage.getTaskPackages()) {
                 savedTask = Saver.getInstance().getTask(aPackage.getTask().getId());
 
-                int times = taskReference.getTaskUsageTimes(aPackage.getTask());
-                ColorStateList color = ColorStateList.valueOf(DisplayUtil.getAttrColor(context, savedTask == null ? NORMAL_COLOR : SPECIAL_COLOR));
+                int usageTimes = taskReference.getTaskUsageTimes(aPackage.getTask());
+                ColorStateList color = ColorStateList.valueOf(DisplayUtil.getAttrColor(context, savedTask == null || usageTimes == 0 ? NORMAL_COLOR : SPECIAL_COLOR));
                 Chip chip = new Chip(context);
                 chip.setText(aPackage.getTitle());
                 chip.setCheckable(true);
                 chip.setCheckedIconVisible(true);
-                chip.setChecked(times > 0);
+                chip.setChecked(usageTimes > 0);
                 chip.setChipIconResource(R.drawable.icon_assignment);
                 chip.setChipIconTint(color);
                 chip.setTextColor(color);
                 chip.setOnClickListener(v -> {
-                    if (times <= 1) {
+                    if (usageTimes <= 1) {
                         if (!taskReference.removeTaskPackage(aPackage)) {
                             taskReference.addTaskPackage(aPackage);
                         }
@@ -120,20 +164,20 @@ public class ImportTaskDialogAdapter extends RecyclerView.Adapter<ImportTaskDial
 
             for (Variable var : taskPackage.getVariables()) {
                 Variable variable = Saver.getInstance().getVar(var.getId());
-                int times = taskReference.getVariableTimes(var);
-                ColorStateList color = ColorStateList.valueOf(DisplayUtil.getAttrColor(context, variable == null ? NORMAL_COLOR : SPECIAL_COLOR));
+                int usageTimes = taskReference.getVariableTimes(var);
+                ColorStateList color = ColorStateList.valueOf(DisplayUtil.getAttrColor(context, variable == null || usageTimes == 0 ? NORMAL_COLOR : SPECIAL_COLOR));
 
                 Chip chip = new Chip(context);
                 chip.setText(var.getTitle());
                 chip.setCheckable(true);
                 chip.setCheckedIconVisible(true);
-                chip.setChecked(times > 0);
+                chip.setChecked(usageTimes > 0);
                 chip.setChipIconResource(R.drawable.icon_note_stack);
                 chip.setChipIconTint(color);
                 chip.setTextColor(color);
                 chip.setOnClickListener(v -> {
-                    if (times <= 1) {
-                        if (times == 0) {
+                    if (usageTimes <= 1) {
+                        if (usageTimes == 0) {
                             taskReference.addVariable(var);
                         } else {
                             taskReference.removeVariable(var);
@@ -144,11 +188,6 @@ public class ImportTaskDialogAdapter extends RecyclerView.Adapter<ImportTaskDial
                 });
                 binding.referenceBox.addView(chip);
             }
-
-            int times = taskReference.getTaskUsageTimes(taskPackage.getTask());
-            binding.getRoot().setChecked(times > 0);
-            binding.getRoot().setEnabled(times <= 1);
-            binding.getRoot().setChecked(times > 0);
         }
     }
 }

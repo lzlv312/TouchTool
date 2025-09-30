@@ -10,12 +10,15 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.SettingSaver;
 import top.bogey.touch_tool.databinding.ActivityMainBinding;
 import top.bogey.touch_tool.service.TaskInfoSummary;
 import top.bogey.touch_tool.ui.tool.task_manager.ImportTaskDialog;
+import top.bogey.touch_tool.utils.AppUtil;
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
@@ -55,6 +58,25 @@ public class MainActivity extends BaseActivity {
                 hideBottomNavigation();
             }
         });
+
+        String runningError = SettingSaver.getInstance().getRunningError();
+        if (runningError != null && !runningError.isEmpty()) {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.dialog_title)
+                    .setMessage(R.string.running_error_tips)
+                    .setPositiveButton(R.string.copy_and_join, (dialog, which) -> {
+                        AppUtil.copyToClipboard(this, runningError, true);
+                        AppUtil.gotoUrl(this, getString(R.string.setting_qq_group_url));
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.copy, (dialog, which) -> {
+                        AppUtil.copyToClipboard(this, runningError, true);
+                        dialog.dismiss();
+                    })
+                    .setNeutralButton(R.string.cancel, null)
+                    .show();
+            SettingSaver.getInstance().setRunningError(null);
+        }
 
         TaskInfoSummary.getInstance().resetApps();
         handleIntent(getIntent());

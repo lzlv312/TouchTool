@@ -44,13 +44,13 @@ public class KeepAliveFloatView extends FrameLayout implements FloatInterface, I
                         if (hasFocus) {
                             Object result = AppUtil.readFromClipboard(helper.viewParent.getContext());
                             helper.viewParent.getViewTreeObserver().removeOnWindowFocusChangeListener(this);
-                            helper.setFocusable(false);
+                            helper.setFocusable(false, false);
                             future.complete(result);
                         }
                     }
                 };
                 helper.viewParent.getViewTreeObserver().addOnWindowFocusChangeListener(listener);
-                helper.setFocusable(true);
+                helper.setFocusable(true, false);
             });
         } else {
             return null;

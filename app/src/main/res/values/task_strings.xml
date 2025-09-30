@@ -245,6 +245,7 @@
 
     <string name="get_current_app_action">获取当前应用</string>
     <string name="get_current_app_action_desc">获取当前运行的应用与界面</string>
+    <string name="get_current_app_action_app_name">应用名称</string>
 
     <string name="check_in_app_action">是否在应用内</string>
     <string name="check_in_app_action_desc">判断待测应用或界面是否被包含</string>

@@ -67,6 +67,11 @@ public class FloatBaseCallback implements FloatCallback {
     }
 
     @Override
+    public void onRotate() {
+        Log.d(TAG, "onRotate: ");
+    }
+
+    @Override
     public boolean onTouch(MotionEvent event) {
         return false;
     }

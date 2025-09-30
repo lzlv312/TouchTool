@@ -371,7 +371,7 @@ public class TaskInfoSummary {
         if (isActivityClass(packageName, activityName)) {
             if (packageName.equals(MainApplication.getInstance().getPackageName())) {
                 if (setPackageActivity(packageName, activityName)) {
-                    tryShowManualPlayView(!activityName.equals(MainActivity.class.getName()));
+                    tryShowManualPlayView(false);
                 }
             } else {
                 if (setPackageActivity(packageName, activityName)) {

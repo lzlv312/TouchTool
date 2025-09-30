@@ -15,5 +15,7 @@ public interface FloatCallback {
 
     void onDragEnd();
 
+    void onRotate();
+
     boolean onTouch(MotionEvent event);
 }

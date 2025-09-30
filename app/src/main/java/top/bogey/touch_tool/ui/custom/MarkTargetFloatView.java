@@ -44,6 +44,9 @@ public class MarkTargetFloatView extends AppCompatImageView implements FloatInte
         if (keepView == null) return;
         new Handler(Looper.getMainLooper()).post(() -> {
             MarkTargetFloatView floatView = new MarkTargetFloatView(keepView.getThemeContext());
+            int height = DisplayUtil.getStatusBarHeight(null, null);
+            targetArea.offset(0, -height);
+
             floatView.innerShowTargetArea(targetArea);
             floatView.show();
         });

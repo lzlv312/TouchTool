@@ -18,13 +18,17 @@ public class ScreenInfo {
     public ScreenInfo(MainAccessibilityService service, BooleanResultCallback callback) {
         service.tryGetScreenShot(bitmap -> {
             screenShot = bitmap;
-            if (callback != null) callback.onResult(true);
+            if (callback != null) callback.onResult(bitmap != null);
         });
         rootNodes = NodeInfo.getWindows();
     }
 
     public Bitmap getScreenShot() {
         return screenShot;
+    }
+
+    public void setScreenShot(Bitmap screenShot) {
+        this.screenShot = screenShot;
     }
 
     public List<NodeInfo> getRootNodes() {
