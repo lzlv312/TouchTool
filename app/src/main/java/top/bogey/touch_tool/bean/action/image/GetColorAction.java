@@ -46,7 +46,7 @@ public class GetColorAction extends CalculateAction {
             bitmap = source.getImage();
         } else {
             MainAccessibilityService service = MainApplication.getInstance().getService();
-            bitmap = service.tryGetScreenShotSync();
+            bitmap = service.tryGetScreenShot();
         }
         PinPoint pos = getPinValue(runnable, posPin);
         Point point = pos.getValue();

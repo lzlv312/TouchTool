@@ -13,7 +13,9 @@ public interface ITaskManager {
 
     List<Task> getTasks(String tag);
 
-    Task findTask(String id);
+    Task upFindTask(String id);
+
+    Task downFindTask(String id);
 
     /**
      * 判断传入的任务是否为我的父任务

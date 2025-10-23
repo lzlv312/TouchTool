@@ -47,6 +47,8 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
     private final FloatPlayBinding binding;
     private final int padding = SettingSaver.getInstance().getManualPlayViewPadding() * UNIT_PIXEL;
 
+    private int runningTaskCount = 0;
+
     public static void showActions(List<TaskInfoSummary.ManualExecuteInfo> actions) {
         TaskInfoSummary.PackageActivity packageActivity = TaskInfoSummary.getInstance().getPackageActivity();
         if (packageActivity != null && packageActivity.packageName().equals(HIDE_PACKAGE)) return;
@@ -153,6 +155,7 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
             if (action.isExpand()) expand = true;
             if (already.contains(action)) continue;
             PlayFloatItemView itemView = new PlayFloatItemView(getContext(), task, action);
+            itemView.setVisibility(isHideNotRunningPlayItem() ? View.GONE : View.VISIBLE);
             binding.buttonBox.addView(itemView);
         }
         if (expand) refreshExpand(true);
@@ -207,6 +210,27 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
     private void toDockSide() {
         FloatWindowHelper helper = FloatWindow.getHelper(PlayFloatView.class.getName());
         if (helper != null) helper.viewParent.toDockSide();
+    }
+
+    private void refreshPlayButton() {
+        post(() -> {
+            MainAccessibilityService service = MainApplication.getInstance().getService();
+            if (service != null && service.isEnabled()) {
+                int count = binding.buttonBox.getChildCount();
+                for (int i = 0; i < count; i++) {
+                    PlayFloatItemView view = (PlayFloatItemView) binding.buttonBox.getChildAt(i);
+                    if (service.isTaskRunning(view.task, view.startAction)) {
+                        view.setVisibility(VISIBLE);
+                    } else {
+                        view.setVisibility(isHideNotRunningPlayItem() ? GONE : VISIBLE);
+                    }
+                }
+            }
+        });
+    }
+
+    private boolean isHideNotRunningPlayItem() {
+        return SettingSaver.getInstance().getManualPlayingHideType() && runningTaskCount > 0;
     }
 
     private boolean inLeft() {
@@ -264,23 +288,13 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
 
     @Override
     public void onStart(TaskRunnable runnable) {
-        if (!SettingSaver.getInstance().getManualPlayingHideType()) return;
-        post(() -> {
-            StartAction startAction = runnable.getStartAction();
-            if (startAction instanceof ManualStartAction manualStartAction) {
-                if (!manualStartAction.isSingleShow()) {
-                    Task task = runnable.getStartTask();
-                    int count = binding.buttonBox.getChildCount();
-                    for (int i = 0; i < count; i++) {
-                        PlayFloatItemView view = (PlayFloatItemView) binding.buttonBox.getChildAt(i);
-                        if (manualStartAction.getId().equals(view.getStartAction().getId()) && task.getId().equals(view.getTask().getId())) {
-                            continue;
-                        }
-                        view.setVisibility(View.GONE);
-                    }
-                }
+        StartAction startAction = runnable.getStartAction();
+        if (startAction instanceof ManualStartAction manualStartAction) {
+            if (!manualStartAction.isSingleShow()) {
+                runningTaskCount++;
+                refreshPlayButton();
             }
-        });
+        }
     }
 
     @Override
@@ -295,19 +309,13 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
 
     @Override
     public void onFinish(TaskRunnable runnable) {
-        if (!SettingSaver.getInstance().getManualPlayingHideType()) return;
-        post(() -> {
-            StartAction startAction = runnable.getStartAction();
-            if (startAction instanceof ManualStartAction manualStartAction) {
-                if (!manualStartAction.isSingleShow()) {
-                    int count = binding.buttonBox.getChildCount();
-                    for (int i = 0; i < count; i++) {
-                        PlayFloatItemView view = (PlayFloatItemView) binding.buttonBox.getChildAt(i);
-                        view.setVisibility(View.VISIBLE);
-                    }
-                }
+        StartAction startAction = runnable.getStartAction();
+        if (startAction instanceof ManualStartAction manualStartAction) {
+            if (!manualStartAction.isSingleShow()) {
+                runningTaskCount--;
+                refreshPlayButton();
             }
-        });
+        }
     }
 
     private static class PlayFloatCallback extends FloatBaseCallback {

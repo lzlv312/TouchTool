@@ -12,6 +12,7 @@ import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_scale_able.PinArea;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
@@ -54,8 +55,8 @@ public class FindNodeAction extends FindExecuteAction {
 
         switch (type.getIndex()) {
             case 0 -> {
-                PinString pathString = getPinValue(runnable, pathPin);
-                PinNodePathString path = new PinNodePathString(pathString.getValue());
+                PinObject pathString = getPinValue(runnable, pathPin);
+                PinNodePathString path = new PinNodePathString(pathString.toString());
                 PinBoolean fullPath = getPinValue(runnable, fullPathPin);
                 NodeInfo nodeInfo = path.findNode(NodeInfo.getWindows(), fullPath.getValue());
                 if (nodeInfo == null) return false;
@@ -70,14 +71,14 @@ public class FindNodeAction extends FindExecuteAction {
 
                 List<NodeInfo> children;
                 if (type.getIndex() == 1) {
-                    PinString text = getPinValue(runnable, textPin);
-                    String value = text.getValue();
-                    if (value == null || value.isEmpty()) return false;
+                    PinObject text = getPinValue(runnable, textPin);
+                    String value = text.toString();
+                    if (value.isEmpty()) return false;
                     children = nodeInfo.findChildrenByText(value, area.getValue());
                 } else {
-                    PinString id = getPinValue(runnable, idPin);
-                    String value = id.getValue();
-                    if (value == null || value.isEmpty()) return false;
+                    PinObject id = getPinValue(runnable, idPin);
+                    String value = id.toString();
+                    if (value.isEmpty()) return false;
                     children = nodeInfo.findChildrenById(value, area.getValue());
                 }
 
@@ -90,8 +91,8 @@ public class FindNodeAction extends FindExecuteAction {
                 return true;
             }
             case 3 -> {
-                PinString pathString = getPinValue(runnable, pathTextPin);
-                PinNodePathTextString path = new PinNodePathTextString(pathString.getValue());
+                PinObject pathString = getPinValue(runnable, pathTextPin);
+                PinNodePathTextString path = new PinNodePathTextString(pathString.toString());
                 List<NodeInfo> findNodes = path.findNodes(NodeInfo.getWindows());
                 if (findNodes == null || findNodes.isEmpty()) return false;
                 for (NodeInfo nodeInfo : findNodes) {
@@ -103,10 +104,10 @@ public class FindNodeAction extends FindExecuteAction {
             }
             case 4 -> {
                 PinArea area = getPinValue(runnable, areaPin);
-                PinString className = getPinValue(runnable, classPin);
+                PinObject className = getPinValue(runnable, classPin);
                 NodeInfo nodeInfo = NodeInfo.getActiveWindow();
                 if (nodeInfo == null) return false;
-                List<NodeInfo> children = nodeInfo.findChildrenByClass(className.getValue(), area.getValue());
+                List<NodeInfo> children = nodeInfo.findChildrenByClass(className.toString(), area.getValue());
                 if (children == null || children.isEmpty()) return false;
                 for (NodeInfo child : children) {
                     nodes.add(new PinNode(child));
@@ -117,10 +118,10 @@ public class FindNodeAction extends FindExecuteAction {
             }
             case 5 -> {
                 PinArea area = getPinValue(runnable, areaPin);
-                PinString desc = getPinValue(runnable, descPin);
+                PinObject desc = getPinValue(runnable, descPin);
                 NodeInfo nodeInfo = NodeInfo.getActiveWindow();
                 if (nodeInfo == null) return false;
-                List<NodeInfo> children = nodeInfo.findChildrenByDesc(desc.getValue(), area.getValue());
+                List<NodeInfo> children = nodeInfo.findChildrenByDesc(desc.toString(), area.getValue());
                 if (children == null || children.isEmpty()) return false;
                 for (NodeInfo child : children) {
                     nodes.add(new PinNode(child));

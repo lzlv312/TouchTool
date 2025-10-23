@@ -179,8 +179,9 @@ public class BlueprintView extends Fragment {
                 return true;
             } else if (itemId == R.id.taskCapture) {
                 Bitmap bitmap = binding.cardLayout.takeTaskCapture();
+                Bitmap safeBitmap = DisplayUtil.safeScaleBitmap(bitmap, 2048, 2048);
                 ShapeableImageView imageView = new ShapeableImageView(requireContext());
-                imageView.setImageBitmap(bitmap);
+                imageView.setImageBitmap(safeBitmap);
 
                 new MaterialAlertDialogBuilder(requireContext())
                         .setTitle(R.string.task_capture)

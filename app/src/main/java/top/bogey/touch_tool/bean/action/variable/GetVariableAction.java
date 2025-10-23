@@ -46,7 +46,7 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
         Task task = runnable.getTask();
-        Variable var = task.findVariable(varId);
+        Variable var = task.upFindVariable(varId);
         if (var == null) var = Saver.getInstance().getVar(varId);
         if (var == null || varPin == null) return;
         varPin.setValue(returnValue(var.getSaveValue()));
@@ -63,7 +63,7 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
 
     @Override
     public void sync(Task context) {
-        Variable variable = context.findVariable(varId);
+        Variable variable = context.upFindVariable(varId);
         if (variable == null) variable = Saver.getInstance().getVar(varId);
         if (variable == null) return;
         if (varPin == null) return;
@@ -79,7 +79,7 @@ public class GetVariableAction extends CalculateAction implements SyncAction {
     @Override
     public void check(ActionCheckResult result, Task task) {
         super.check(result, task);
-        Variable variable = task.findVariable(varId);
+        Variable variable = task.upFindVariable(varId);
         if (variable == null) variable = Saver.getInstance().getVar(varId);
         if (variable == null) {
             result.addResult(ActionCheckResult.ResultType.ERROR, R.string.check_not_exist_variable_error);

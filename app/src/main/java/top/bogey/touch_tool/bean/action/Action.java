@@ -270,7 +270,7 @@ public abstract class Action extends Identity implements PinListener {
 
     // 控件、列表和集合类型返回引用，其他类型返回拷贝
     protected <T extends PinObject> T returnValue(T value) {
-        if (value instanceof PinList || value instanceof PinMap || value instanceof PinNode) return value;
+        if (value instanceof PinList || value instanceof PinMap) return value;
         return (T) value.copy();
     }
 

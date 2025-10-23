@@ -137,8 +137,13 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
     }
 
     @Override
-    public Task findTask(String id) {
-        return taskManager.findTask(id);
+    public Task upFindTask(String id) {
+        return taskManager.upFindTask(id);
+    }
+
+    @Override
+    public Task downFindTask(String id) {
+        return taskManager.downFindTask(id);
     }
 
     @Override
@@ -220,8 +225,13 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
     }
 
     @Override
-    public Variable findVariable(String id) {
-        return variableManager.findVariable(id);
+    public Variable upFindVariable(String id) {
+        return variableManager.upFindVariable(id);
+    }
+
+    @Override
+    public Variable downFindVariable(String id) {
+        return variableManager.downFindVariable(id);
     }
 
     @Override

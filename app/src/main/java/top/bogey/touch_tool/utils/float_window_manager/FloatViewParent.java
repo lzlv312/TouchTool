@@ -6,7 +6,6 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
@@ -116,6 +115,8 @@ public class FloatViewParent extends FrameLayout {
     }
 
     public void toDockSide() {
+        if (!isCreated) return;
+
         if (config.side != FloatDockSide.DEFAULT) {
             showArea = helper.getShowArea();
 
@@ -163,7 +164,11 @@ public class FloatViewParent extends FrameLayout {
                 } else {
                     helper.params.x = (int) animation.getAnimatedValue();
                 }
-                helper.manager.updateViewLayout(this, helper.params);
+                try {
+                    helper.manager.updateViewLayout(this, helper.params);
+                } catch (Exception ignored) {
+                    animator.cancel();
+                }
             });
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override

@@ -40,6 +40,7 @@ public class GetNodeInfoAction extends CalculateAction {
         PinNode node = getPinValue(runnable, nodePin);
         if (node == null) return;
         NodeInfo nodeInfo = node.getNodeInfo();
+        if (nodeInfo == null) return;
         clazzPin.getValue(PinString.class).setValue(nodeInfo.clazz);
         idPin.getValue(PinString.class).setValue(nodeInfo.id);
         textPin.getValue(PinString.class).setValue(nodeInfo.text);

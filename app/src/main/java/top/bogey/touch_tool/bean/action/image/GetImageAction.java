@@ -51,23 +51,17 @@ public class GetImageAction extends ExecuteAction implements SyncAction {
         Rect areaRect = area.getValue();
         MainAccessibilityService service = MainApplication.getInstance().getService();
 
+        Bitmap bitmap;
         if (useAcc.getValue()) {
-            boolean pause = service.getScreenByAccessibility(bitmap -> {
-                Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, areaRect.left, areaRect.top, areaRect.width(), areaRect.height());
-                if (clipBitmap != null) {
-                    imagePin.getValue(PinImage.class).setImage(clipBitmap);
-                    posPin.getValue(PinPoint.class).setValue(areaRect.left, areaRect.top);
-                }
-                runnable.resume();
-            });
-            if (pause) runnable.await();
+            bitmap = service.getScreenShotByAccessibility();
         } else {
-            Bitmap bitmap = service.getScreenShotByCapture();
-            Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, areaRect.left, areaRect.top, areaRect.width(), areaRect.height());
-            if (clipBitmap != null) {
-                imagePin.getValue(PinImage.class).setImage(clipBitmap);
-                posPin.getValue(PinPoint.class).setValue(areaRect.left, areaRect.top);
-            }
+            bitmap = service.getScreenShotByCapture();
+        }
+
+        Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, areaRect.left, areaRect.top, areaRect.width(), areaRect.height());
+        if (clipBitmap != null) {
+            imagePin.getValue(PinImage.class).setImage(clipBitmap);
+            posPin.getValue(PinPoint.class).setValue(areaRect.left, areaRect.top);
         }
 
         executeNext(runnable, outPin);

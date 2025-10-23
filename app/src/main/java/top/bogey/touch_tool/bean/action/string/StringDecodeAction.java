@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;

@@ -2,7 +2,6 @@ package top.bogey.touch_tool.bean.save;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.tencent.mmkv.MMKV;
 
@@ -178,7 +177,7 @@ public class Saver {
 
     public Task getTask(Task context, String taskId) {
         if (context == null) return getTask(taskId);
-        Task task = context.findTask(taskId);
+        Task task = context.downFindTask(taskId);
         if (task == null) task = getTask(taskId);
         return task;
     }
@@ -304,7 +303,6 @@ public class Saver {
     public void addLog(String key, LogInfo log, boolean autoUid) {
         LogSave logSave = getLogSave(key);
         logSave.addLog(log, autoUid);
-        Log.d("TAG", "addLog: " + key + " " + log.getLog() + " " + autoUid);
         if (autoUid) logListeners.stream().filter(Objects::nonNull).forEach(v -> v.onNewLog(logSave, log));
     }
 

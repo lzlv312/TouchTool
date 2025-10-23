@@ -10,19 +10,23 @@
     <string name="start_action_break">中断条件</string>
 
     <string name="manual_start_action">手动执行</string>
+    <string name="manual_start_action_desc">在选中应用内显示执行悬浮窗</string>
     <string name="manual_start_action_app">触发界面</string>
     <string name="manual_start_action_type">显示模式</string>
     <string name="manual_start_action_expand">自动展开</string>
     <string name="manual_start_action_lock">锁定位置</string>
 
     <string name="application_start_action">进应用或界面时执行</string>
+    <string name="application_start_action_desc">进入对应应用或界面时自动执行</string>
     <string name="application_start_action_break">自动中断</string>
     <string name="application_start_action_app">触发界面</string>
 
     <string name="application_quit_start_action">退出应用时执行</string>
+    <string name="application_quit_start_action_desc">退出对应应用时自动执行</string>
     <string name="application_quit_start_action_app">触发界面</string>
 
     <string name="time_start_action">定时执行</string>
+    <string name="time_start_action_desc">在设定的时间执行</string>
     <string name="time_start_action_date">日期</string>
     <string name="time_start_action_time">时间</string>
     <string name="time_start_action_periodic">间隔</string>
@@ -30,6 +34,7 @@
     <string name="time_start_action_set_tips">已设置定时任务，下次开始时间为: %s</string>
 
     <string name="notification_start_action">收到新通知时执行</string>
+    <string name="notification_start_action_desc">收到新通知或Toast时执行</string>
     <string name="notification_start_action_match">匹配文本</string>
     <string name="notification_start_action_type">通知类型</string>
     <string name="notification_start_action_notify_app">通知应用</string>
@@ -37,16 +42,20 @@
     <string name="notification_start_action_notify_value">通知详情</string>
 
     <string name="network_start_action">网络状态变更时执行</string>
+    <string name="network_start_action_desc">WIFI、数据、VPN变更时执行</string>
     <string name="network_start_action_state">网络</string>
 
     <string name="battery_start_action">电池状态变更时执行</string>
+    <string name="battery_start_action_desc">电量变更或充电变更时执行</string>
     <string name="battery_start_action_state">状态</string>
     <string name="battery_start_action_value">电量</string>
 
     <string name="screen_start_action">屏幕状态变更时执行</string>
+    <string name="screen_start_action_desc">屏幕亮起关闭解锁时执行</string>
     <string name="screen_start_action_state">状态</string>
 
     <string name="bluetooth_start_action">蓝牙连接变更时执行</string>
+    <string name="bluetooth_start_action_desc">蓝牙设备连接或断开时执行</string>
     <string name="bluetooth_start_action_device">设备名</string>
     <string name="bluetooth_start_action_state">连接或断开</string>
 
@@ -120,10 +129,13 @@
     <string name="execute_task_action_just_cal">无需执行针脚</string>
 
     <string name="stop_task_action">停止任务</string>
+    <string name="stop_task_action_desc">停止对应任务</string>
     <string name="stop_task_action_task_id">任务(默认当前)</string>
 
     <string name="custom_start_action">自定义开始</string>
+    <string name="custom_start_action_desc">任务内有自定义开始才能被其他任务调用</string>
     <string name="custom_end_action">自定义结束</string>
+    <string name="custom_end_action_desc">返回自定义任务结果</string>
     <string name="custom_pin_name">针脚名</string>
     <string name="custom_action_single_error">这张卡不能重复添加</string>
 
@@ -144,12 +156,15 @@
     <string name="log_action_save">保存日志</string>
 
     <string name="stick_screen_action">贴图到屏幕上</string>
+    <string name="stick_screen_action_desc">将针脚内容贴到屏幕上</string>
     <string name="stick_screen_action_id">标志</string>
 
     <string name="stick_close_action">关闭贴图</string>
+    <string name="stick_close_action_desc">关闭对应贴图</string>
     <string name="stick_close_action_id">标志</string>
 
     <string name="stick_close_all_action">关闭所有贴图</string>
+    <string name="stick_close_all_action_desc">关闭屏幕所有贴图</string>
 
     <string name="input_param_action">手动输入参数</string>
     <string name="input_param_action_desc">手动输入任务运行需要的参数</string>
@@ -157,6 +172,9 @@
 
     <string name="mark_area_action">标记区域</string>
     <string name="mark_area_action_desc">手动标记目标区域</string>
+
+    <string name="show_text_action">区域备注</string>
+    <string name="show_text_action_desc">对一片区域内的卡片进行备注</string>
 
     <!-- 动作-System -->
     <string name="open_app_action">打开应用</string>

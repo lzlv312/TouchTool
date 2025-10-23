@@ -37,6 +37,7 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
     private final float offset;
     private final Paint bitmapPaint;
     private final Paint markPaint;
+    private final Paint markLinePaint;
 
     private float lastX, lastY;
     private int mode = MODE_NONE;
@@ -55,6 +56,11 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
         bitmapPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bitmapPaint.setFilterBitmap(true);
         bitmapPaint.setDither(true);
+
+        markLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        markLinePaint.setStyle(Paint.Style.STROKE);
+        markLinePaint.setStrokeWidth(1);
+        markLinePaint.setColor(DisplayUtil.getAttrColor(context, R.attr.colorPrimaryLight));
 
         binding.backButton.setOnClickListener(v -> {
             callback.onResult(null);
@@ -241,6 +247,7 @@ public class ImagePicker extends FullScreenPicker<Bitmap> {
         super.dispatchDraw(canvas);
         canvas.drawRect(area, markPaint);
         canvas.restore();
+        canvas.drawRect(area, markLinePaint);
 
         drawChild(canvas, binding.buttonBox, getDrawingTime());
 

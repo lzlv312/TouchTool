@@ -11,8 +11,8 @@ import java.util.List;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class MapGetKeysAction extends MapCalculateAction {
@@ -34,6 +34,11 @@ public class MapGetKeysAction extends MapCalculateAction {
         PinMap map = getPinValue(runnable, mapPin);
         PinList list = keysPin.getValue();
         list.addAll(map.keySet());
+    }
+
+    @Override
+    public void resetReturnValue(TaskRunnable runnable, Pin pin) {
+        keysPin.setValue(new PinList());
     }
 
     @NonNull

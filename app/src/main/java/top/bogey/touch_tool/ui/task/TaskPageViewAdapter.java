@@ -57,16 +57,30 @@ public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapte
 
     public void setTags(List<String> tags) {
         search = false;
+        int oldSize = this.tags.size();
+        int newSize = tags.size();
         this.tags.clear();
         this.tags.addAll(tags);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, Math.min(oldSize, newSize));
+        if (oldSize < newSize) {
+            notifyItemRangeInserted(oldSize, newSize - oldSize);
+        } else if (oldSize > newSize) {
+            notifyItemRangeRemoved(newSize, oldSize - newSize);
+        }
     }
 
     public void search(String name) {
         search = true;
+        int oldSize = this.tags.size();
+        int newSize = 1;
         tags.clear();
         tags.add(name);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, Math.min(oldSize, newSize));
+        if (oldSize < newSize) {
+            notifyItemRangeInserted(oldSize, newSize - oldSize);
+        } else if (oldSize > newSize) {
+            notifyItemRangeRemoved(newSize, oldSize - newSize);
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

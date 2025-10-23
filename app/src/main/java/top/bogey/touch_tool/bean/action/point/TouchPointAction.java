@@ -64,8 +64,8 @@ public class TouchPointAction extends ExecuteAction implements SyncAction {
                 SuperUser.getInstance().runCommand(String.format("input tap %d %d", x, y));
             }
         }
-        runnable.sleep(timeValue);
         TouchPathFloatView.showGesture(x, y);
+        runnable.sleep(timeValue);
 
         executeNext(runnable, outPin);
     }

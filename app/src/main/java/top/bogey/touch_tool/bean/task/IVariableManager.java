@@ -11,7 +11,9 @@ public interface IVariableManager {
 
     List<Variable> getVariables();
 
-    Variable findVariable(String id);
+    Variable upFindVariable(String id);
+
+    Variable downFindVariable(String id);
 
     Variable findVariableByName(String name);
 }

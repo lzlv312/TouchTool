@@ -59,11 +59,22 @@ public class TaskManager implements ITaskManager {
     }
 
     @Override
-    public Task findTask(String id) {
+    public Task upFindTask(String id) {
         Task task = getTask(id);
         if (task != null) return task;
         task = parent.getParent();
-        if (task != null) return task.findTask(id);
+        if (task != null) return task.upFindTask(id);
+        return null;
+    }
+
+    @Override
+    public Task downFindTask(String id) {
+        Task task = getTask(id);
+        if (task != null) return task;
+        for (Task t : tasks) {
+            task = t.downFindTask(id);
+            if (task != null) return task;
+        }
         return null;
     }
 

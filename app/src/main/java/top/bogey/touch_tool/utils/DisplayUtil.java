@@ -200,6 +200,13 @@ public class DisplayUtil {
         return Bitmap.createBitmap(bitmap, 0, 0, srcWidth, srcHeight, matrix, true);
     }
 
+    public static Bitmap safeScaleBitmap(Bitmap bitmap, int maxWidth, int maxHeight) {
+        final int srcWidth = bitmap.getWidth();
+        final int srcHeight = bitmap.getHeight();
+        if (srcWidth <= maxWidth && srcHeight <= maxHeight) return bitmap;
+        return createScaledBitmap(bitmap, maxWidth, maxHeight);
+    }
+
     public static Bitmap safeClipBitmap(Bitmap bitmap, int x, int y, int width, int height) {
         Rect area = safeClipBitmapArea(bitmap, x, y, width, height);
         if (area == null) return null;

@@ -291,17 +291,17 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
 
     @Override
     public void onCreate(Task task) {
-        resetTags();
+        AppUtil.runOnUiThread(this::resetTags);
     }
 
     @Override
     public void onUpdate(Task task) {
-        resetTags();
+        AppUtil.runOnUiThread(this::resetTags);
     }
 
     @Override
     public void onRemove(Task task) {
-        resetTags();
+        AppUtil.runOnUiThread(this::resetTags);
     }
 
     @Override

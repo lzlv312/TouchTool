@@ -7,8 +7,8 @@ import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.other.NodeInfo;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class GetNodeChildrenAction extends CalculateAction {
@@ -30,6 +30,7 @@ public class GetNodeChildrenAction extends CalculateAction {
         PinNode node = getPinValue(runnable, nodePin);
         if (node == null) return;
         NodeInfo nodeInfo = node.getNodeInfo();
+        if (nodeInfo == null) return;
         for (NodeInfo child : nodeInfo.getChildren()) {
             childrenPin.getValue(PinList.class).add(new PinNode(child));
         }

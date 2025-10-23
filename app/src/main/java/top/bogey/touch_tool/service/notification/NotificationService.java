@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -29,7 +28,6 @@ public class NotificationService extends NotificationListenerService {
             Object value = extras.get(key);
             content.put(key, String.valueOf(value));
         }
-        Log.d("TAG", "onNotificationPosted: notification = " + content);
         TaskInfoSummary.getInstance().setNotification(TaskInfoSummary.NotificationType.NOTIFICATION, packageName, content);
     }
 

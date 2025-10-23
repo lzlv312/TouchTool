@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.bean.save.log;
 
-import android.util.Log;
-
 import com.tencent.mmkv.MMKV;
 
 import top.bogey.touch_tool.utils.GsonUtil;
@@ -81,7 +79,6 @@ public class LogSave implements ITreeNodeDataLoader {
 
     @Override
     public ILazyTreeNodeData loadData(Object flag) {
-        Log.d("TAG", "loadData: " + flag);
         return getLog(String.valueOf(flag));
     }
 }

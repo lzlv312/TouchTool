@@ -84,6 +84,7 @@ import top.bogey.touch_tool.bean.action.normal.DelayAction;
 import top.bogey.touch_tool.bean.action.normal.InputParamAction;
 import top.bogey.touch_tool.bean.action.normal.LoggerAction;
 import top.bogey.touch_tool.bean.action.normal.MarkAreaAction;
+import top.bogey.touch_tool.bean.action.normal.ShowTextAction;
 import top.bogey.touch_tool.bean.action.normal.StickCloseAction;
 import top.bogey.touch_tool.bean.action.normal.StickCloseAllAction;
 import top.bogey.touch_tool.bean.action.normal.StickScreenAction;
@@ -169,26 +170,27 @@ import top.bogey.touch_tool.ui.blueprint.card.CustomActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.DynamicParamsActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.ExecuteCustomActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.NormalActionCard;
+import top.bogey.touch_tool.ui.blueprint.card.ShowTextActionCard;
 
 public class ActionInfo {
     // 开始动作
-    private final static ActionInfo MANUAL_START_INFO = new ActionInfo(ActionType.MANUAL_START, ManualStartAction.class, R.drawable.icon_waving_hand, R.string.manual_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo APPLICATION_START_INFO = new ActionInfo(ActionType.APPLICATION_START, ApplicationStartAction.class, R.drawable.icon_widgets, R.string.application_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo APPLICATION_QUIT_START_INFO = new ActionInfo(ActionType.APPLICATION_QUIT_START, ApplicationQuitStartAction.class, R.drawable.icon_output, R.string.application_quit_start_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo MANUAL_START_INFO = new ActionInfo(ActionType.MANUAL_START, ManualStartAction.class, R.drawable.icon_waving_hand, R.string.manual_start_action, R.string.manual_start_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo APPLICATION_START_INFO = new ActionInfo(ActionType.APPLICATION_START, ApplicationStartAction.class, R.drawable.icon_widgets, R.string.application_start_action, R.string.application_start_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo APPLICATION_QUIT_START_INFO = new ActionInfo(ActionType.APPLICATION_QUIT_START, ApplicationQuitStartAction.class, R.drawable.icon_output, R.string.application_quit_start_action, R.string.application_quit_start_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo TIME_START_INFO = new ActionInfo(ActionType.TIME_START, TimeStartAction.class, R.drawable.icon_timer, R.string.time_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo NOTIFICATION_START_INFO = new ActionInfo(ActionType.NOTIFICATION_START, NotificationStartAction.class, R.drawable.icon_notifications, R.string.notification_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo NETWORK_START_INFO = new ActionInfo(ActionType.NETWORK_START, NetworkStartAction.class, R.drawable.icon_globe, R.string.network_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo BATTERY_START_INFO = new ActionInfo(ActionType.BATTERY_START, BatteryStartAction.class, R.drawable.icon_battery_android_full, R.string.battery_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo SCREEN_START_INFO = new ActionInfo(ActionType.SCREEN_START, ScreenStartAction.class, R.drawable.icon_mobile, R.string.screen_start_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo BLUETOOTH_START_INFO = new ActionInfo(ActionType.BLUETOOTH_START, BluetoothStartAction.class, R.drawable.icon_bluetooth, R.string.bluetooth_start_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo NOTIFICATION_START_INFO = new ActionInfo(ActionType.NOTIFICATION_START, NotificationStartAction.class, R.drawable.icon_notifications, R.string.notification_start_action, R.string.notification_start_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo NETWORK_START_INFO = new ActionInfo(ActionType.NETWORK_START, NetworkStartAction.class, R.drawable.icon_globe, R.string.network_start_action, R.string.network_start_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo BATTERY_START_INFO = new ActionInfo(ActionType.BATTERY_START, BatteryStartAction.class, R.drawable.icon_battery_android_full, R.string.battery_start_action, R.string.battery_start_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SCREEN_START_INFO = new ActionInfo(ActionType.SCREEN_START, ScreenStartAction.class, R.drawable.icon_mobile, R.string.screen_start_action, R.string.screen_start_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo BLUETOOTH_START_INFO = new ActionInfo(ActionType.BLUETOOTH_START, BluetoothStartAction.class, R.drawable.icon_bluetooth, R.string.bluetooth_start_action, R.string.bluetooth_start_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo RECEIVED_SHARE_START_INFO = new ActionInfo(ActionType.RECEIVED_SHARE_START, ReceivedShareStartAction.class, R.drawable.icon_share, R.string.received_share_start_action, R.string.received_share_start_action_desc, 0, DynamicParamsActionCard.class);
     private final static ActionInfo OUT_CALL_START_INFO = new ActionInfo(ActionType.OUT_CALL_START, OutCallStartAction.class, R.drawable.icon_autoplay, R.string.out_call_start_action, R.string.out_call_start_action_desc, 0, DynamicParamsActionCard.class);
 
     // 自定义动作
-    private final static ActionInfo CUSTOM_START_INFO = new ActionInfo(ActionType.CUSTOM_START, CustomStartAction.class, R.drawable.icon_output, R.string.custom_start_action, 0, 0, CustomActionCard.class);
-    private final static ActionInfo CUSTOM_END_INFO = new ActionInfo(ActionType.CUSTOM_END, CustomEndAction.class, R.drawable.icon_input, R.string.custom_end_action, 0, 0, CustomActionCard.class);
+    private final static ActionInfo CUSTOM_START_INFO = new ActionInfo(ActionType.CUSTOM_START, CustomStartAction.class, R.drawable.icon_output, R.string.custom_start_action, R.string.custom_start_action_desc, 0, CustomActionCard.class);
+    private final static ActionInfo CUSTOM_END_INFO = new ActionInfo(ActionType.CUSTOM_END, CustomEndAction.class, R.drawable.icon_input, R.string.custom_end_action, R.string.custom_end_action_desc, 0, CustomActionCard.class);
     private final static ActionInfo EXECUTE_TASK_INFO = new ActionInfo(ActionType.EXECUTE_TASK, ExecuteTaskAction.class, R.drawable.icon_assignment, R.string.execute_task_action, 0, 0, ExecuteCustomActionCard.class);
-    private final static ActionInfo STOP_TASK_INFO = new ActionInfo(ActionType.STOP_TASK, StopTaskAction.class, R.drawable.icon_stop, R.string.stop_task_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo STOP_TASK_INFO = new ActionInfo(ActionType.STOP_TASK, StopTaskAction.class, R.drawable.icon_stop, R.string.stop_task_action, R.string.stop_task_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_VARIABLE_INFO = new ActionInfo(ActionType.GET_VARIABLE, GetVariableAction.class, R.drawable.icon_upload, R.string.get_value_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo SET_VARIABLE_INFO = new ActionInfo(ActionType.SET_VARIABLE, SetVariableAction.class, R.drawable.icon_download, R.string.set_value_action, 0, 0, NormalActionCard.class);
 
@@ -208,11 +210,12 @@ public class ActionInfo {
     // 通用动作
     private final static ActionInfo DELAY_INFO = new ActionInfo(ActionType.DELAY, DelayAction.class, R.drawable.icon_schedule, R.string.delay_action, R.string.delay_action_desc, R.string.delay_action_help, NormalActionCard.class);
     private final static ActionInfo LOG_INFO = new ActionInfo(ActionType.LOG, LoggerAction.class, R.drawable.icon_draw, R.string.log_action, R.string.log_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo STICK_INFO = new ActionInfo(ActionType.STICK, StickScreenAction.class, R.drawable.icon_note_stack, R.string.stick_screen_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo CLOSE_STICK_INFO = new ActionInfo(ActionType.CLOSE_STICK, StickCloseAction.class, R.drawable.icon_note_stack, R.string.stick_close_action, 0, 0, NormalActionCard.class);
-    private final static ActionInfo CLOSE_ALL_STICK_INFO = new ActionInfo(ActionType.CLOSE_ALL_STICK, StickCloseAllAction.class, R.drawable.icon_note_stack, R.string.stick_close_all_action, 0, 0, NormalActionCard.class);
+    private final static ActionInfo STICK_INFO = new ActionInfo(ActionType.STICK, StickScreenAction.class, R.drawable.icon_note_stack, R.string.stick_screen_action, R.string.stick_screen_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo CLOSE_STICK_INFO = new ActionInfo(ActionType.CLOSE_STICK, StickCloseAction.class, R.drawable.icon_note_stack, R.string.stick_close_action, R.string.stick_close_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo CLOSE_ALL_STICK_INFO = new ActionInfo(ActionType.CLOSE_ALL_STICK, StickCloseAllAction.class, R.drawable.icon_note_stack, R.string.stick_close_all_action, R.string.stick_close_all_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo INPUT_PARAM_INFO = new ActionInfo(ActionType.INPUT_PARAM, InputParamAction.class, R.drawable.icon_edit, R.string.input_param_action, R.string.input_param_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo MARK_AREA_INFO = new ActionInfo(ActionType.MARK_AREA, MarkAreaAction.class, R.drawable.icon_area, R.string.mark_area_action, R.string.mark_area_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SHOW_TEXT_INFO = new ActionInfo(ActionType.SHOW_TEXT, ShowTextAction.class, R.drawable.icon_edit, R.string.show_text_action, R.string.show_text_action_desc, 0, ShowTextActionCard.class);
 
 
     // 系统动作
@@ -416,6 +419,7 @@ public class ActionInfo {
             case CLOSE_ALL_STICK -> CLOSE_ALL_STICK_INFO;
             case INPUT_PARAM -> INPUT_PARAM_INFO;
             case MARK_AREA -> MARK_AREA_INFO;
+            case SHOW_TEXT -> SHOW_TEXT_INFO;
 
 
             case OPEN_APP -> OPEN_APP_INFO;

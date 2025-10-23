@@ -11,6 +11,7 @@ import java.util.List;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
@@ -20,10 +21,11 @@ public class MapGetAction extends MapCalculateAction {
     private final transient Pin mapPin = new Pin(new PinMap());
     private final transient Pin keyPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_key);
     private final transient Pin resultPin = new Pin(new PinObject(PinSubType.DYNAMIC), R.string.map_action_value, true);
+    private final transient Pin existPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
 
     public MapGetAction() {
         super(ActionType.MAP_GET);
-        addPins(mapPin, keyPin, resultPin);
+        addPins(mapPin, keyPin, resultPin, existPin);
     }
 
     public MapGetAction(JsonObject jsonObject) {
@@ -31,13 +33,18 @@ public class MapGetAction extends MapCalculateAction {
         reAddPin(mapPin);
         reAddPin(keyPin, true);
         reAddPin(resultPin, true);
+        reAddPin(existPin);
     }
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
         PinMap map = getPinValue(runnable, mapPin);
         PinObject key = getPinValue(runnable, keyPin);
-        resultPin.setValue(returnValue(map.get(key)));
+        PinObject object = map.get(key);
+        if (object != null) {
+            existPin.getValue(PinBoolean.class).setValue(true);
+            resultPin.setValue(returnValue(object));
+        }
     }
 
     @NonNull

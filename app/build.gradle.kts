@@ -10,8 +10,8 @@ plugins {
 android {
     namespace = "top.bogey.touch_tool"
     compileSdk = 36
-    ndkVersion = "29.0.13599879 rc2"
-    buildToolsVersion = "36.0.0"
+    ndkVersion = "29.0.14206865"
+    buildToolsVersion = "36.1.0"
 
     val pattern = DateTimeFormatter.ofPattern("yyMMdd_HHmm")
     val now = LocalDateTime.now().format(pattern)
@@ -42,14 +42,12 @@ android {
         debug {
             applicationIdSuffix = ".debug"
             resValue("string", "app_name", "点击助手Debug")
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
 
         release {
             isMinifyEnabled = false
             isShrinkResources = false
             resValue("string", "app_name", "点击助手")
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
@@ -63,14 +61,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
-            version = "4.0.2"
+            version = "4.1.2"
         }
     }
 
@@ -96,5 +94,6 @@ dependencies {
     implementation(libs.shizuku.provider)
 
     implementation(libs.exp4j)
-    implementation(libs.zxing.lite)
+    implementation(libs.zxinglite)
+    implementation(libs.tinypinyin)
 }

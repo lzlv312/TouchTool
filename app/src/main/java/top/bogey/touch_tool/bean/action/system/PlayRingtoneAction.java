@@ -1,7 +1,5 @@
 package top.bogey.touch_tool.bean.action.system;
 
-import android.media.AudioAttributes;
-
 import com.google.gson.JsonObject;
 
 import top.bogey.touch_tool.MainApplication;

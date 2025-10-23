@@ -20,6 +20,8 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -32,6 +34,7 @@ import android.widget.Toast;
 import androidx.annotation.StringRes;
 import androidx.core.content.FileProvider;
 
+import com.github.promeg.pinyinhelper.Pinyin;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.ByteArrayOutputStream;
@@ -66,6 +69,16 @@ public class AppUtil {
     public static boolean isRelease(Context context) {
         ApplicationInfo info = context.getApplicationInfo();
         return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0;
+    }
+
+    public static void runOnUiThread(Runnable runnable) {
+        if (runnable != null) {
+            if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
+                runnable.run();
+            } else {
+                new Handler(Looper.getMainLooper()).post(runnable);
+            }
+        }
     }
 
     public static void showDialog(Context context, @StringRes int msg, BooleanResultCallback callback) {
@@ -289,6 +302,24 @@ public class AppUtil {
             Matcher matcher = pattern.matcher(str);
             return matcher.find();
         }
+    }
+
+    public static boolean isStringContainsWithPinyin(String str, String value) {
+        if (isStringContains(str, value)) return true;
+        return isPinyinContains(str, value);
+    }
+
+    public static boolean isPinyinContains(String str, String value) {
+        String pinyin = Pinyin.toPinyin(str, ",");
+        if (pinyin == null) return false;
+        pinyin = pinyin.toLowerCase();
+        value = value.toLowerCase();
+        if (isStringContains(pinyin, value)) return true;
+        StringBuilder builder = new StringBuilder();
+        for (String s : pinyin.split(",")) {
+            builder.append(s.charAt(0));
+        }
+        return isStringContains(builder.toString(), value);
     }
 
     public static String formatDate(Context context, long time, boolean ignoreYear) {

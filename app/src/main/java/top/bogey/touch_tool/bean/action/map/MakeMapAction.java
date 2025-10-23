@@ -16,7 +16,6 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
 
@@ -52,6 +51,11 @@ public class MakeMapAction extends MapCalculateAction implements DynamicPinsActi
 
     @Override
     protected void handleUnLinkFrom(Pin origin) {
+    }
+
+    @Override
+    public void resetReturnValue(TaskRunnable runnable, Pin pin) {
+        mapPin.setValue(new PinMap());
     }
 
     @Override

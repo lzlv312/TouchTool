@@ -56,6 +56,7 @@ import top.bogey.touch_tool.bean.save.variable.VariableSaveListener;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
+import top.bogey.touch_tool.ui.blueprint.card.ShowTextActionCard;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryManager;
 import top.bogey.touch_tool.ui.blueprint.history.HistoryStep;
 import top.bogey.touch_tool.ui.blueprint.history.IHistoryOwner;
@@ -297,7 +298,10 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     }
 
     public void updateCardsPos() {
-        cards.values().forEach(this::updateCardPos);
+        cards.values().forEach(card -> {
+            updateCardPos(card);
+            if (card instanceof ShowTextActionCard) card.bringToFront();
+        });
     }
 
     public ActionCard getActionCard(Action action) {
@@ -828,6 +832,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         float gridSize = getScaleGridSize();
         drawBackground(canvas, offsetX, offsetY, gridSize);
 
+
+
         CornerPathEffect cornerPathEffect = new CornerPathEffect(gridSize * CORNER_OFFSET_SCALE / 2);
         linkPaint.setPathEffect(cornerPathEffect);
 
@@ -991,6 +997,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     public void checkCards() {
         if (!Looper.getMainLooper().isCurrentThread()) return;
+
         int count = 0;
         for (ActionCard card : cards.values()) {
             boolean result = card.check();
@@ -1001,6 +1008,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     }
 
     public void syncCards() {
+        if (!Looper.getMainLooper().isCurrentThread()) return;
+
         for (ActionCard card : cards.values()) {
             Action action = card.getAction();
             if (action instanceof SyncAction syncAction) {
@@ -1259,5 +1268,4 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
             }
         });
     }
-
 }

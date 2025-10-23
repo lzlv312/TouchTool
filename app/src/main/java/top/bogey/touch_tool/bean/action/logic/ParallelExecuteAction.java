@@ -59,10 +59,17 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
         PinNumber<?> timeout = getPinValue(runnable, timeoutPin);
 
         MainAccessibilityService service = MainApplication.getInstance().getService();
-        CountDownLatch latch = new CountDownLatch(count.intValue() > 0 ? count.intValue() : 1);
-        List<TaskRunnable> runnableList = new ArrayList<>();
+
+        List<Pin> validPins = new ArrayList<>();
         for (Pin dynamicPin : getDynamicPins()) {
             if (!dynamicPin.isLinked()) continue;
+            validPins.add(dynamicPin);
+        }
+
+        CountDownLatch latch = new CountDownLatch(validPins.size());
+        int countValue = count.intValue();
+        List<TaskRunnable> runnableList = new ArrayList<>();
+        for (Pin dynamicPin : validPins) {
             TaskRunnable taskRunnable = service.runTask(runnable.getTask(), new InnerStartAction(dynamicPin), new TaskListener() {
                 @Override
                 public void onExecute(TaskRunnable run, Action action, int progress) {
@@ -77,14 +84,17 @@ public class ParallelExecuteAction extends ExecuteAction implements DynamicPinsA
                     logInfo.setChildren(logs);
                     runnable.addLog(logInfo, 0);
                     latch.countDown();
+
+                    if (countValue <= latch.getCount()) {
+                        runnableList.forEach(TaskRunnable::stop);
+                        resultPin.getValue(PinBoolean.class).setValue(true);
+                    }
                 }
             });
             runnableList.add(taskRunnable);
         }
         try {
-            boolean result = latch.await(timeout.intValue(), TimeUnit.MILLISECONDS);
-            runnableList.forEach(TaskRunnable::stop);
-            resultPin.getValue(PinBoolean.class).setValue(result);
+            latch.await(timeout.intValue(), TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
             resultPin.getValue(PinBoolean.class).setValue(false);

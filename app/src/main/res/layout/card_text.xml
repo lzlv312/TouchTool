@@ -9,13 +9,13 @@
         android:layout_height="48dp"
         android:layout_gravity="top|center"
         android:alpha="0.1"
-        app:srcCompat="@drawable/icon_schedule"
+        app:srcCompat="@drawable/icon_edit"
         app:tint="?attr/colorSecondary" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:minWidth="96dp"
         android:orientation="vertical">
 
@@ -25,14 +25,10 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical">
 
-            <LinearLayout
-                android:id="@+id/topBox"
+            <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:paddingHorizontal="4dp" />
+                android:layout_weight="1" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"
@@ -69,50 +65,47 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/pinBox"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textBox"
+            style="?attr/textInputFilledStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false">
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="4dp"
+            app:boxBackgroundColor="?attr/colorTertiary"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
 
-            <LinearLayout
-                android:id="@+id/inBox"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textEdit"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical" />
+                android:paddingHorizontal="4dp"
+                android:paddingVertical="0dp"
+                android:textColor="?attr/colorOnTertiary" />
 
-            <LinearLayout
-                android:id="@+id/outBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:orientation="vertical" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/bottomBox"
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Material3.CardView.Filled"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:gravity="bottom"
-            android:orientation="horizontal"
-            android:paddingHorizontal="4dp" />
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:alpha="0.5" />
 
     </LinearLayout>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/position"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="4dp"
-        android:alpha="0.1"
-        android:singleLine="true"
-        android:textColor="?attr/colorSecondary"
-        android:textSize="16sp" />
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/dragImage"
+        style="@style/Theme.TouchTool.IconButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="end|bottom"
+        android:scaleType="centerInside"
+        android:src="@drawable/icon_line_curve"
+        android:tint="?attr/colorOutlineVariant"
+        android:translationX="2dp"
+        android:translationY="2dp" />
 
 </FrameLayout>

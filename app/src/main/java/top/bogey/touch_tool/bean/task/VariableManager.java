@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
-
 public class VariableManager implements IVariableManager {
     private transient Task parent;
     private final List<Variable> vars = new ArrayList<>();
@@ -64,11 +62,22 @@ public class VariableManager implements IVariableManager {
     }
 
     @Override
-    public Variable findVariable(String id) {
+    public Variable upFindVariable(String id) {
         Variable var = getVariable(id);
         if (var != null) return var;
         Task task = parent.getParent();
-        if (task != null) return task.findVariable(id);
+        if (task != null) return task.upFindVariable(id);
+        return null;
+    }
+
+    @Override
+    public Variable downFindVariable(String id) {
+        Variable var = getVariable(id);
+        if (var != null) return var;
+        for (Task task : parent.getTasks()) {
+            var = task.downFindVariable(id);
+            if (var != null) return var;
+        }
         return null;
     }
 

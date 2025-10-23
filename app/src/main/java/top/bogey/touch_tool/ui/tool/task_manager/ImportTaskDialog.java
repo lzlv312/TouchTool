@@ -87,8 +87,13 @@ public class ImportTaskDialog extends FrameLayout {
                 adapter.unselectAll();
             }
         });
+
         TaskRecord record = adapter.getTaskRecord();
-        binding.selectAllButton.setChecked(record.tasks().size() == taskRecord.tasks().size() && record.variables().size() == taskRecord.variables().size());
+        if (record.tasks() != null && record.variables() != null) {
+            binding.selectAllButton.setChecked(record.tasks().size() == taskRecord.tasks().size() && record.variables().size() == taskRecord.variables().size());
+        } else {
+            binding.selectAllButton.setChecked(false);
+        }
     }
 
     public void importTask() {

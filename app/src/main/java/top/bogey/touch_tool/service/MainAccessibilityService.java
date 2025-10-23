@@ -25,7 +25,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
@@ -67,7 +66,6 @@ import top.bogey.touch_tool.service.super_user.SuperUser;
 import top.bogey.touch_tool.ui.InstantActivity;
 import top.bogey.touch_tool.ui.PermissionActivity;
 import top.bogey.touch_tool.utils.AppUtil;
-import top.bogey.touch_tool.utils.callback.BitmapResultCallback;
 import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 import top.bogey.touch_tool.utils.callback.ResultCallback;
 import top.bogey.touch_tool.utils.thread.TaskQueue;
@@ -87,7 +85,6 @@ public class MainAccessibilityService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if (event == null) return;
-        Log.d("TAG", "onAccessibilityEvent: " + event);
 
         if (event.getClassName() == null) return;
 
@@ -233,7 +230,7 @@ public class MainAccessibilityService extends AccessibilityService {
                 tasks.remove(runnable);
             }
         });
-        
+
         // 直接加入到任务列表。如果在开始里加入，需要等待线程启动，当同时有多条开始进来时，重入策略会失效
         if (startAction.getRestartType() == StartAction.RestartType.RESTART) {
             stopTask(runnable.getStartTask());
@@ -248,12 +245,14 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public boolean isTaskRunning(Task task) {
         if (task == null) return false;
-        return getTaskRunnable(task.getId(), null) != null;
+        TaskRunnable runnable = getTaskRunnable(task.getId(), null);
+        return runnable != null && !runnable.isInterrupt();
     }
 
     public boolean isTaskRunning(Task task, Action action) {
         if (task == null || action == null) return false;
-        return getTaskRunnable(task.getId(), action.getId()) != null;
+        TaskRunnable runnable = getTaskRunnable(task.getId(), action.getId());
+        return runnable != null && !runnable.isInterrupt();
     }
 
     public TaskRunnable getTaskRunnable(String taskId, String actionId) {
@@ -480,14 +479,13 @@ public class MainAccessibilityService extends AccessibilityService {
     // 录屏 ----------------------------------------------------------------------------- end
 
     // 截图 ----------------------------------------------------------------------------- start
-    private Bitmap lastScreenShot;
-
     public synchronized Bitmap getScreenShotByCapture() {
-        return captureBinder != null ? captureBinder.getScreenShot() : lastScreenShot;
+        return captureBinder != null ? captureBinder.getScreenShot() : null;
     }
 
-    public synchronized boolean getScreenByAccessibility(BitmapResultCallback callback) {
+    public synchronized Bitmap getScreenShotByAccessibility() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            CompletableFuture<Bitmap> future = new CompletableFuture<>();
             ExecutorService executorService = Executors.newSingleThreadExecutor();
             takeScreenshot(0, executorService, new TakeScreenshotCallback() {
                 @Override
@@ -495,53 +493,37 @@ public class MainAccessibilityService extends AccessibilityService {
                     try (HardwareBuffer hardwareBuffer = screenshot.getHardwareBuffer()) {
                         Bitmap bitmap = Bitmap.wrapHardwareBuffer(hardwareBuffer, screenshot.getColorSpace());
                         if (bitmap != null) {
-                            lastScreenShot = bitmap.copy(Bitmap.Config.ARGB_8888, false);
+                            Bitmap copy = bitmap.copy(Bitmap.Config.ARGB_8888, false);
                             bitmap.recycle();
-                            callback.onResult(lastScreenShot);
+                            future.complete(copy);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        callback.onResult(lastScreenShot);
+                        future.complete(null);
                     }
                 }
 
                 @Override
                 public void onFailure(int errorCode) {
-                    callback.onResult(lastScreenShot);
+                    future.complete(null);
                 }
             });
-            return true;
+            return future.join();
         } else {
-            callback.onResult(lastScreenShot);
-            return false;
+            return null;
         }
     }
 
-    public void tryGetScreenShot(BitmapResultCallback callback) {
+    public Bitmap tryGetScreenShot() {
         if (isCaptureEnabled()) {
-            callback.onResult(getScreenShotByCapture());
-            return;
+            return getScreenShotByCapture();
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            getScreenByAccessibility(callback);
-        } else {
-            startCapture(result -> {
-                if (result) {
-                    Bitmap bm = getScreenShotByCapture();
-                    if (bm != null) callback.onResult(bm);
-                    else callback.onResult(lastScreenShot);
-                } else {
-                    callback.onResult(lastScreenShot);
-                }
-            });
+            return getScreenShotByAccessibility();
         }
-    }
 
-    public Bitmap tryGetScreenShotSync() {
-        CompletableFuture<Bitmap> future = new CompletableFuture<>();
-        tryGetScreenShot(future::complete);
-        return future.join();
+        return null;
     }
 
     // 截图 ----------------------------------------------------------------------------- end

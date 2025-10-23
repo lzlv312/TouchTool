@@ -6,10 +6,8 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionInfo;
@@ -83,6 +81,7 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                 }
             }
             case VARIABLE -> {
+                // 私有变量
                 List<Object> privateVars = new ArrayList<>();
                 for (Variable var : task.getVariables()) {
                     if (touchedPin.getValue().linkFromAble(var.getValue())) privateVars.add(var);
@@ -90,19 +89,21 @@ public class SelectActionByPinDialog extends SelectActionDialog {
                 }
                 map.put(PRIVATE, privateVars);
 
+                // 全局变量
                 List<Object> publicVars = new ArrayList<>();
                 for (Variable var : Saver.getInstance().getVars()) {
                     if (touchedPin.getValue().linkFromAble(var.getValue())) publicVars.add(var);
-                    else if (touchedPin.isSameClass(PinExecute.class)) privateVars.add(var);
+                    else if (touchedPin.isSameClass(PinExecute.class)) publicVars.add(var);
                 }
                 map.put(GLOBAL, publicVars);
 
+                // 父级变量
                 Task parent = task.getParent();
                 while (parent != null) {
                     List<Object> list = new ArrayList<>();
                     for (Variable var : parent.getVariables()) {
                         if (touchedPin.getValue().linkFromAble(var.getValue())) list.add(var);
-                        else if (touchedPin.isSameClass(PinExecute.class)) privateVars.add(var);
+                        else if (touchedPin.isSameClass(PinExecute.class)) list.add(var);
                     }
                     if (!list.isEmpty()) map.put(PARENT_PREFIX + parent.getTitle(), list);
                     parent = parent.getParent();

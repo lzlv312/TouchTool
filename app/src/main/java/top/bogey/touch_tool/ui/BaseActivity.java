@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,6 +24,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.accessibility.selecttospeak.SelectToSpeakService;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -292,8 +297,13 @@ public class BaseActivity extends AppCompatActivity {
         if (AppUtil.isAccessibilityServiceEnabled(this)) return;
 
         // 没有开启去开启
+        String serviceName = String.format("%s/%s", getPackageName(), SelectToSpeakService.class.getName());
         String enabledService = Settings.Secure.getString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-        Settings.Secure.putString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, String.format("%s:%s/%s", enabledService, getPackageName(), SelectToSpeakService.class.getName()));
+        if (enabledService == null) enabledService = "";
+        Set<String> services = new HashSet<>(Arrays.asList(enabledService.split(":")));
+        services.add(serviceName);
+        enabledService = TextUtils.join(":", services);
+        Settings.Secure.putString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, enabledService);
         Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, 1);
     }
 
@@ -301,14 +311,15 @@ public class BaseActivity extends AppCompatActivity {
         // 是否有权限去重启无障碍服务
         if (checkSelfPermission(Manifest.permission.WRITE_SECURE_SETTINGS) != PackageManager.PERMISSION_GRANTED) return false;
 
-        // 看一下服务有没有开启
-        if (AppUtil.isAccessibilityServiceEnabled(this)) {
-            // 开启去关闭
-            String enabledService = Settings.Secure.getString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-            String replace = enabledService.replaceFirst(String.format(":?%s/%s", getPackageName(), SelectToSpeakService.class.getName()), "");
-            Settings.Secure.putString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, replace);
-            Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, 1);
-        }
+        // 开启去关闭
+        String serviceName = String.format("%s/%s", getPackageName(), SelectToSpeakService.class.getName());
+        String enabledService = Settings.Secure.getString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+        if (enabledService == null) enabledService = "";
+        Set<String> services = new HashSet<>(Arrays.asList(enabledService.split(":")));
+        services.remove(serviceName);
+        enabledService = TextUtils.join(":", services);
+        Settings.Secure.putString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, enabledService);
+        Settings.Secure.putInt(getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, 1);
         return true;
     }
 }

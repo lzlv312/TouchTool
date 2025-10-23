@@ -399,7 +399,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 binding.copyButton.setVisibility(View.VISIBLE);
                 binding.editButton.setVisibility(View.VISIBLE);
 
-                Task parentTask = dialog.task.findTask(task.getId());
+                Task parentTask = dialog.task.upFindTask(task.getId());
                 boolean isUsable = task.equals(parentTask) || task.getParent() == null;
 
                 if (task.equals(dialog.task) || dialog.task.isMyParent(task.getId())) {
@@ -432,7 +432,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
 
                 binding.helpButton.setIconResource(R.drawable.icon_download);
 
-                Variable variable = dialog.task.findVariable(var.getId());
+                Variable variable = dialog.task.upFindVariable(var.getId());
                 boolean isUsable = var.equals(variable) || var.getParent() == null;
 
                 if (var.getParent() == null) {

@@ -11,8 +11,8 @@ import java.util.List;
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
+import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.service.TaskRunnable;
 
 public class MapGetValuesAction extends MapCalculateAction {
@@ -27,6 +27,11 @@ public class MapGetValuesAction extends MapCalculateAction {
     public MapGetValuesAction(JsonObject jsonObject) {
         super(jsonObject);
         reAddPins(mapPin, values);
+    }
+
+    @Override
+    public void resetReturnValue(TaskRunnable runnable, Pin pin) {
+        values.setValue(new PinList());
     }
 
     @Override

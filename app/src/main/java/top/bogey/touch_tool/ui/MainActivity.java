@@ -35,6 +35,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MainApplication.getInstance().setActivity(this);
+        TaskInfoSummary.getInstance().resetApps();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
@@ -78,7 +79,6 @@ public class MainActivity extends BaseActivity {
             SettingSaver.getInstance().setRunningError(null);
         }
 
-        TaskInfoSummary.getInstance().resetApps();
         handleIntent(getIntent());
     }
 

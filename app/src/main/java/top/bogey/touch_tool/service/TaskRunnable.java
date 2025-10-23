@@ -75,10 +75,10 @@ public class TaskRunnable implements Runnable {
         while (!logStack.isEmpty()) {
             addLog(logStack.pop(), 0);
         }
-        if (!logList.isEmpty()) addLog(new LogInfo(new DateTimeLog()), 0);
+        if (!logList.isEmpty() && !(startAction instanceof InnerStartAction)) addLog(new LogInfo(new DateTimeLog()), 0);
 
-        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onFinish(this));
         interrupt = true;
+        listeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onFinish(this));
     }
 
     private synchronized void checkStatus() {

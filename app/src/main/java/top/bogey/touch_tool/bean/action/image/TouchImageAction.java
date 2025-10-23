@@ -53,7 +53,7 @@ public class TouchImageAction extends ExecuteAction implements SyncAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         MainAccessibilityService service = MainApplication.getInstance().getService();
-        Bitmap bitmap = service.tryGetScreenShotSync();
+        Bitmap bitmap = service.tryGetScreenShot();
 
         PinImage template = getPinValue(runnable, templatePin);
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);

@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -163,6 +164,8 @@ public class SelectActionDialog extends BottomSheetDialog {
             } else {
                 binding.searchBox.setVisibility(View.VISIBLE);
                 binding.searchEdit.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(binding.searchEdit, InputMethodManager.SHOW_IMPLICIT);
             }
         });
 

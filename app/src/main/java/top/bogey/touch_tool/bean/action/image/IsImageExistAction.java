@@ -51,7 +51,7 @@ public class IsImageExistAction extends CalculateAction {
             bitmap = source.getImage();
         } else {
             MainAccessibilityService service = MainApplication.getInstance().getService();
-            bitmap = service.tryGetScreenShotSync();
+            bitmap = service.tryGetScreenShot();
         }
         PinImage template = getPinValue(runnable, templatePin);
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);

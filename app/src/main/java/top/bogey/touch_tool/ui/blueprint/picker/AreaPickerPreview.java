@@ -86,20 +86,19 @@ public class AreaPickerPreview extends BasePicker<Rect> {
             List<String> ocrApps = TaskInfoSummary.getInstance().getOcrApps();
             if (position < ocrApps.size()) {
                 MainAccessibilityService service = MainApplication.getInstance().getService();
-                service.tryGetScreenShot(bitmap -> {
-                    if (bitmap != null) {
-                        Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, area.left, area.top, area.width(), area.height());
-                        service.runOcr(ocrApps.get(position), clipBitmap, result -> {
-                            StringBuilder builder = new StringBuilder();
-                            int value = (int) binding.timeSlider.getValue();
-                            for (OcrResult ocrResult : result) {
-                                if (ocrResult.getSimilar() < value) continue;
-                                builder.append(ocrResult.getText()).append("\n");
-                            }
-                            post(() -> Toast.makeText(context, builder.toString().trim(), Toast.LENGTH_SHORT).show());
-                        });
-                    }
-                });
+                Bitmap bitmap = service.tryGetScreenShot();
+                if (bitmap != null) {
+                    Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, area.left, area.top, area.width(), area.height());
+                    service.runOcr(ocrApps.get(position), clipBitmap, result -> {
+                        StringBuilder builder = new StringBuilder();
+                        int value = (int) binding.timeSlider.getValue();
+                        for (OcrResult ocrResult : result) {
+                            if (ocrResult.getSimilar() < value) continue;
+                            builder.append(ocrResult.getText()).append("\n");
+                        }
+                        post(() -> Toast.makeText(context, builder.toString().trim(), Toast.LENGTH_SHORT).show());
+                    });
+                }
             }
         });
 

@@ -43,6 +43,7 @@ public enum ActionType {
 
     INPUT_PARAM,
     MARK_AREA,
+    SHOW_TEXT,
 
     // 系统动作
     OPEN_APP,

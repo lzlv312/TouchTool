@@ -118,7 +118,7 @@ public class TaskInfoSummary {
                     if (AppUtil.isStringContains(info.packageName.toLowerCase(), keyword.toLowerCase())) packages.add(info);
                     else {
                         String appName = info.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString();
-                        if (AppUtil.isStringContains(appName.toLowerCase(), keyword.toLowerCase())) packages.add(info);
+                        if (AppUtil.isStringContainsWithPinyin(appName.toLowerCase(), keyword.toLowerCase())) packages.add(info);
                     }
                 }
             }
@@ -144,7 +144,7 @@ public class TaskInfoSummary {
                     if (AppUtil.isStringContains(info.packageName.toLowerCase(), keyword.toLowerCase())) packages.add(info);
                     else {
                         String appName = info.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString();
-                        if (AppUtil.isStringContains(appName.toLowerCase(), keyword.toLowerCase())) packages.add(info);
+                        if (AppUtil.isStringContainsWithPinyin(appName.toLowerCase(), keyword.toLowerCase())) packages.add(info);
                     }
                 }
             }
@@ -258,7 +258,7 @@ public class TaskInfoSummary {
                     if (AppUtil.isStringContains(info.packageName.toLowerCase(), keyword.toLowerCase())) shortcutApps.add(info);
                     else {
                         String appName = info.applicationInfo.loadLabel(MainApplication.getInstance().getPackageManager()).toString();
-                        if (AppUtil.isStringContains(appName.toLowerCase(), keyword.toLowerCase())) shortcutApps.add(info);
+                        if (AppUtil.isStringContainsWithPinyin(appName.toLowerCase(), keyword.toLowerCase())) shortcutApps.add(info);
                     }
                 }
             }

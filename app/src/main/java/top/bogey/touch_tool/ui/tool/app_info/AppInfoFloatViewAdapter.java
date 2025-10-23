@@ -46,7 +46,7 @@ public class AppInfoFloatViewAdapter extends TreeAdapter {
                 binding.title.setText(info.getName());
                 binding.activityName.setText(info.getActivityName());
                 binding.activityName.setVisibility(View.VISIBLE);
-                binding.expandButton.setOnClickListener(null);
+                binding.expandButton.setOnClickListener(v -> switchNodeExpand(node));
                 binding.expandButton.setIconResource(node.isExpanded() ? R.drawable.icon_keyboard_arrow_down : R.drawable.icon_keyboard_arrow_right);
             } else if (node.getData() instanceof ObjectTreeNodeData data) {
                 binding.title.setText(data.toString());

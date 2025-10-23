@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import java.util.Objects;
 
 import top.bogey.touch_tool.bean.other.NodeInfo;
+import top.bogey.touch_tool.utils.GsonUtil;
 
 public class PinNode extends PinObject {
     private transient NodeInfo nodeInfo;
@@ -35,6 +36,19 @@ public class PinNode extends PinObject {
         if (value instanceof PinNode pinNode) {
             nodeInfo = pinNode.nodeInfo;
         }
+    }
+
+    @Override
+    public PinBase copy() {
+        PinNode pinNode = new PinNode();
+        if (nodeInfo != null) {
+            if (nodeInfo.node != null) {
+                pinNode.nodeInfo = new NodeInfo(nodeInfo.node);
+            } else {
+                pinNode.nodeInfo = GsonUtil.copy(nodeInfo, NodeInfo.class);
+            }
+        }
+        return pinNode;
     }
 
     @NonNull

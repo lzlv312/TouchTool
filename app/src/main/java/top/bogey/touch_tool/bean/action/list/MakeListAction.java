@@ -52,6 +52,11 @@ public class MakeListAction extends ListCalculateAction implements DynamicPinsAc
         }
     }
 
+    @Override
+    public void resetReturnValue(TaskRunnable runnable, Pin pin) {
+        listPin.setValue(new PinList());
+    }
+
     @NonNull
     @Override
     public List<Pin> getDynamicTypePins() {

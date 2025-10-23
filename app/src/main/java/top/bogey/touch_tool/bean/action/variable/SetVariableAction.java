@@ -51,17 +51,18 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         Task task = runnable.getTask();
-        Variable var = task.findVariable(varId);
+        Variable var = task.upFindVariable(varId);
         if (var == null) var = Saver.getInstance().getVar(varId);
         if (var != null && varPin != null) {
             PinObject value = getPinValue(runnable, varPin);
             var.setSaveValue(value);
+
             // 保存变量，需要找到原始任务来保存
             if (savePin.getValue(PinBoolean.class).getValue()) {
                 Task startTask = runnable.getStartTask();
                 Task saveTask = Saver.getInstance().getTask(startTask.getId());
                 if (saveTask == null) saveTask = task;
-                Variable variable = saveTask.findVariable(varId);
+                Variable variable = saveTask.downFindVariable(varId);
                 if (variable == null) variable = Saver.getInstance().getVar(varId);
                 if (variable != null) {
                     variable.setSaveValue(value);
@@ -78,7 +79,7 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
 
     @Override
     public void sync(Task context) {
-        Variable variable = context.findVariable(varId);
+        Variable variable = context.upFindVariable(varId);
         if (variable == null) variable = Saver.getInstance().getVar(varId);
         if (variable == null) return;
         if (varPin == null) return;
@@ -94,7 +95,7 @@ public class SetVariableAction extends ExecuteAction implements SyncAction {
     @Override
     public void check(ActionCheckResult result, Task task) {
         super.check(result, task);
-        Variable variable = task.findVariable(varId);
+        Variable variable = task.upFindVariable(varId);
         if (variable == null) variable = Saver.getInstance().getVar(varId);
         if (variable == null) {
             result.addResult(ActionCheckResult.ResultType.ERROR, R.string.check_not_exist_variable_error);

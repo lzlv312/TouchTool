@@ -1,6 +1,7 @@
 package top.bogey.touch_tool.ui.blueprint.picker;
 
 import android.content.res.ColorStateList;
+import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -182,6 +183,11 @@ public class NodePickerTreeAdapter extends TreeAdapter {
             if (nodeInfo.text != null && !nodeInfo.text.isEmpty()) builder.append(nodeInfo.text).append(" | ");
             builder.append(nodeInfo);
             return builder.toString();
+        }
+
+        @Override
+        public Rect getPadding() {
+            return new Rect(node.getDepth() * padding / 2, 0, 0, padding / 4);
         }
     }
 }

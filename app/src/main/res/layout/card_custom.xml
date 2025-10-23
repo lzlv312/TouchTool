@@ -101,7 +101,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:icon="@drawable/icon_graph_2"
-                app:iconSize="18dp" />
+                app:iconSize="16dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"

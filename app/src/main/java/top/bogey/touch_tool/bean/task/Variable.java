@@ -13,11 +13,11 @@ import java.util.UUID;
 import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinApplications;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.utils.GsonUtil;
 

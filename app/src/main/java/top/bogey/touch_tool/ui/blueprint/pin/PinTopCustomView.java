@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import com.google.android.material.button.MaterialButton;
 
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.databinding.PinLeftCustomBinding;
 import top.bogey.touch_tool.databinding.PinTopCustomBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 

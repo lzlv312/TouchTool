@@ -50,7 +50,7 @@ public class IsColorExistAction extends CalculateAction {
             bitmap = source.getImage();
         } else {
             MainAccessibilityService service = MainApplication.getInstance().getService();
-            bitmap = service.tryGetScreenShotSync();
+            bitmap = service.tryGetScreenShot();
         }
         PinColor template = getPinValue(runnable, templatePin);
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);

@@ -53,7 +53,7 @@ public class FindColorsAction extends FindExecuteAction {
             bitmap = source.getImage();
         } else {
             MainAccessibilityService service = MainApplication.getInstance().getService();
-            bitmap = service.tryGetScreenShotSync();
+            bitmap = service.tryGetScreenShot();
         }
         PinColor template = getPinValue(runnable, templatePin);
         PinNumber<?> similarity = getPinValue(runnable, similarityPin);
