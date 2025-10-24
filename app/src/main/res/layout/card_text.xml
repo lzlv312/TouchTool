@@ -7,7 +7,7 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_gravity="top|center"
+        android:layout_gravity="center_horizontal"
         android:alpha="0.1"
         app:srcCompat="@drawable/icon_edit"
         app:tint="?attr/colorSecondary" />
@@ -15,15 +15,15 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:minWidth="96dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButtonGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical">
+            android:gravity="end"
+            android:paddingHorizontal="8dp"
+            android:spacing="0dp">
 
             <Space
                 android:layout_width="0dp"
@@ -32,58 +32,49 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="2dp"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_check"
                 android:checkable="true"
                 app:icon="@drawable/icon_lock_open"
-                app:iconSize="16dp"
                 app:iconTint="@color/button_container_check" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/copyButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="4dp"
-                app:icon="@drawable/icon_content_copy"
-                app:iconSize="16dp" />
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/icon_content_copy" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/removeButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="4dp"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_error_check"
                 android:checkable="true"
                 app:icon="@drawable/icon_delete"
-                app:iconSize="16dp"
                 app:iconTint="@color/button_container_check" />
 
-        </LinearLayout>
+        </com.google.android.material.button.MaterialButtonGroup>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textBox"
-            style="?attr/textInputFilledStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="4dp"
-            android:layout_marginTop="4dp"
-            app:boxBackgroundColor="?attr/colorTertiary"
+            app:boxBackgroundColor="?attr/colorTertiaryContainer"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.None">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="4dp"
-                android:paddingVertical="0dp"
-                android:textColor="?attr/colorOnTertiary" />
+                android:paddingHorizontal="8dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:textColor="?attr/colorOnTertiaryContainer" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,7 +82,7 @@
             style="@style/Widget.Material3.CardView.Filled"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp"
+            android:layout_margin="8dp"
             android:alpha="0.5" />
 
     </LinearLayout>

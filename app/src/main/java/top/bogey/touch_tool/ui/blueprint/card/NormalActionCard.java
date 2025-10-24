@@ -11,6 +11,7 @@ import com.google.android.material.button.MaterialButton;
 import java.util.Arrays;
 import java.util.List;
 
+import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.pin.Pin;
@@ -62,7 +63,7 @@ public class NormalActionCard extends ActionCard {
         if (importantResult != null) {
             binding.errorText.setVisibility(VISIBLE);
             binding.errorText.setText(importantResult.msg());
-            binding.errorText.setBackgroundColor(DisplayUtil.getAttrColor(getContext(), importantResult.type() == ActionCheckResult.ResultType.ERROR ? com.google.android.material.R.attr.colorError : com.google.android.material.R.attr.colorTertiary));
+            binding.errorText.setBackgroundColor(DisplayUtil.getAttrColor(getContext(), importantResult.type() == ActionCheckResult.ResultType.ERROR ? androidx.appcompat.R.attr.colorPrimary : com.google.android.material.R.attr.colorTertiary));
             binding.errorText.setTextColor(DisplayUtil.getAttrColor(getContext(), importantResult.type() == ActionCheckResult.ResultType.ERROR ? com.google.android.material.R.attr.colorOnError : com.google.android.material.R.attr.colorOnTertiary));
         } else {
             binding.errorText.setVisibility(GONE);

@@ -195,54 +195,54 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             this.binding = binding;
             context = binding.getRoot().getContext();
 
-            binding.keySlot.setOnClickListener(v -> {
-                SelectActionVariableTypeDialog dialog = new SelectActionVariableTypeDialog(context);
-                new MaterialAlertDialogBuilder(context)
-                        .setView(dialog)
-                        .setPositiveButton(R.string.enter, (view, which) -> {
-                            PinInfo pinInfo = dialog.getSelected();
-                            binding.keySlot.setText(pinInfo.getTitle());
-                            int index = getAdapterPosition();
-                            Variable var = (Variable) data.get(index);
-                            var.setKeyPinInfo(pinInfo);
-                            var.save();
-                            notifyItemChanged(index);
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
-            });
-
-            String[] array = context.getResources().getStringArray(R.array.pin_simple_type);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_spinner_item, array);
-            binding.typeSpinner.setAdapter(adapter);
-            binding.typeSpinner.setOnItemSelectedListener(new SpinnerSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    int index = getAdapterPosition();
-                    Variable var = (Variable) data.get(index);
-                    if (var.setType(Variable.VariableType.values()[position])) {
-                        var.save();
-                        notifyItemChanged(index);
-                    }
-                }
-            });
-
-            binding.valueSlot.setOnClickListener(v -> {
-                SelectActionVariableTypeDialog dialog = new SelectActionVariableTypeDialog(context);
-                new MaterialAlertDialogBuilder(context)
-                        .setView(dialog)
-                        .setPositiveButton(R.string.enter, (view, which) -> {
-                            PinInfo pinInfo = dialog.getSelected();
-                            binding.keySlot.setText(pinInfo.getTitle());
-                            int index = getAdapterPosition();
-                            Variable var = (Variable) data.get(index);
-                            var.setValuePinInfo(pinInfo);
-                            var.save();
-                            notifyItemChanged(index);
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
-            });
+//            binding.keySlot.setOnClickListener(v -> {
+//                SelectActionVariableTypeDialog dialog = new SelectActionVariableTypeDialog(context);
+//                new MaterialAlertDialogBuilder(context)
+//                        .setView(dialog)
+//                        .setPositiveButton(R.string.enter, (view, which) -> {
+//                            PinInfo pinInfo = dialog.getSelected();
+//                            binding.keySlot.setText(pinInfo.getTitle());
+//                            int index = getAdapterPosition();
+//                            Variable var = (Variable) data.get(index);
+//                            var.setKeyPinInfo(pinInfo);
+//                            var.save();
+//                            notifyItemChanged(index);
+//                        })
+//                        .setNegativeButton(R.string.cancel, null)
+//                        .show();
+//            });
+//
+//            String[] array = context.getResources().getStringArray(R.array.pin_simple_type);
+//            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_spinner_item, array);
+//            binding.typeSpinner.setAdapter(adapter);
+//            binding.typeSpinner.setOnItemSelectedListener(new SpinnerSelectedListener() {
+//                @Override
+//                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                    int index = getAdapterPosition();
+//                    Variable var = (Variable) data.get(index);
+//                    if (var.setType(Variable.VariableType.values()[position])) {
+//                        var.save();
+//                        notifyItemChanged(index);
+//                    }
+//                }
+//            });
+//
+//            binding.valueSlot.setOnClickListener(v -> {
+//                SelectActionVariableTypeDialog dialog = new SelectActionVariableTypeDialog(context);
+//                new MaterialAlertDialogBuilder(context)
+//                        .setView(dialog)
+//                        .setPositiveButton(R.string.enter, (view, which) -> {
+//                            PinInfo pinInfo = dialog.getSelected();
+//                            binding.keySlot.setText(pinInfo.getTitle());
+//                            int index = getAdapterPosition();
+//                            Variable var = (Variable) data.get(index);
+//                            var.setValuePinInfo(pinInfo);
+//                            var.save();
+//                            notifyItemChanged(index);
+//                        })
+//                        .setNegativeButton(R.string.cancel, null)
+//                        .show();
+//            });
 
             binding.editButton.setOnClickListener(v -> {
                 int index = getAdapterPosition();
@@ -447,16 +447,16 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 }
 
                 binding.varBox.setVisibility(View.VISIBLE);
-                PinInfo pinInfo = var.getKeyPinInfo();
-                if (pinInfo != null) {
-                    binding.keySlot.setText(pinInfo.getTitle());
-                }
-                binding.typeSpinner.setSelection(var.getType().ordinal());
-                binding.valueSlot.setVisibility(var.getType() == Variable.VariableType.MAP ? View.VISIBLE : View.GONE);
-                pinInfo = var.getValuePinInfo();
-                if (pinInfo != null) {
-                    binding.valueSlot.setText(pinInfo.getTitle());
-                }
+//                PinInfo pinInfo = var.getKeyPinInfo();
+//                if (pinInfo != null) {
+//                    binding.keySlot.setText(pinInfo.getTitle());
+//                }
+//                binding.typeSpinner.setSelection(var.getType().ordinal());
+//                binding.valueSlot.setVisibility(var.getType() == Variable.VariableType.MAP ? View.VISIBLE : View.GONE);
+//                pinInfo = var.getValuePinInfo();
+//                if (pinInfo != null) {
+//                    binding.valueSlot.setText(pinInfo.getTitle());
+//                }
             }
         }
 

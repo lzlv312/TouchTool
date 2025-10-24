@@ -22,7 +22,7 @@
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:endIconMode="clear_text"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
             app:startIconDrawable="@drawable/icon_search">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -35,6 +35,7 @@
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/group"
+            style="@style/Widget.Material3.MaterialButtonGroup.Connected"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
@@ -49,11 +50,12 @@
             android:orientation="horizontal">
 
             <androidx.core.widget.NestedScrollView
-                android:layout_width="96dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/subGroup"
+                    style="@style/Widget.Material3.MaterialButtonGroup.Connected"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="8dp"
@@ -73,7 +75,6 @@
                 android:scrollbars="none"
                 app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
                 app:spanCount="2"
-                tools:itemCount="20"
                 tools:listitem="@layout/dialog_select_action_item" />
 
         </LinearLayout>

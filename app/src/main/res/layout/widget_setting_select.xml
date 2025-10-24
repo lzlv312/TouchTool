@@ -36,6 +36,7 @@
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/group"
+            style="@style/Widget.Material3.MaterialButtonGroup.Connected"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:selectionRequired="true"

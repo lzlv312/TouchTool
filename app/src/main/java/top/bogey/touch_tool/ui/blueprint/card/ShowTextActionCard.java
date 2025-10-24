@@ -159,16 +159,6 @@ public class ShowTextActionCard extends ActionCard {
             if (new RectF(px, py, px + width, py + height).contains(x, y)) return false;
         }
 
-        // 检查是否在linearLayout区域，如果是则为空位置（允许拖拽）
-        PointF linearLayoutPoint = DisplayUtil.getLocationRelativeToView(binding.linearLayout, this);
-        float linearLayoutPx = linearLayoutPoint.x * scale;
-        float linearLayoutPy = linearLayoutPoint.y * scale;
-        float linearLayoutWidth = binding.linearLayout.getWidth() * scale;
-        float linearLayoutHeight = binding.linearLayout.getHeight() * scale;
-        if (new RectF(linearLayoutPx, linearLayoutPy, linearLayoutPx + linearLayoutWidth, linearLayoutPy + linearLayoutHeight).contains(x, y)) {
-            return true;
-        }
-
         return super.isEmptyPosition(x, y);
     }
 

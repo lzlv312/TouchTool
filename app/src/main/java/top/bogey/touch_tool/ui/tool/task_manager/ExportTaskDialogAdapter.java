@@ -126,7 +126,7 @@ public class ExportTaskDialogAdapter extends RecyclerView.Adapter<ExportTaskDial
                 chip.setCheckedIconVisible(true);
                 chip.setChecked(taskReference.isUsageTask(aPackage.getTask()));
                 chip.setChipIconResource(R.drawable.icon_assignment);
-                chip.setChipIconTint(ColorStateList.valueOf(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimary)));
+                chip.setChipIconTint(ColorStateList.valueOf(DisplayUtil.getAttrColor(context, androidx.appcompat.R.attr.colorPrimary)));
                 chip.setOnClickListener(v -> chip.setChecked(taskReference.isUsageTask(aPackage.getTask())));
                 binding.referenceBox.addView(chip);
             }
@@ -138,7 +138,7 @@ public class ExportTaskDialogAdapter extends RecyclerView.Adapter<ExportTaskDial
                 chip.setCheckedIconVisible(true);
                 chip.setChecked(taskReference.isUsageVariable(var));
                 chip.setChipIconResource(R.drawable.icon_note_stack);
-                chip.setChipIconTint(ColorStateList.valueOf(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorPrimary)));
+                chip.setChipIconTint(ColorStateList.valueOf(DisplayUtil.getAttrColor(context, androidx.appcompat.R.attr.colorPrimary)));
                 chip.setOnClickListener(v -> chip.setChecked(taskReference.isUsageVariable(var)));
                 binding.referenceBox.addView(chip);
             }

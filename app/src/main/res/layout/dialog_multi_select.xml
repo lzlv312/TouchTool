@@ -16,7 +16,7 @@
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:endIconMode="clear_text"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
         app:startIconDrawable="@drawable/icon_search">
 
         <com.google.android.material.textfield.TextInputEditText

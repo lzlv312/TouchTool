@@ -102,48 +102,58 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/selectAllButton"
-                    style="@style/Theme.TouchTool.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/select_all"
-                    app:icon="@drawable/icon_check" />
+                    app:icon="@drawable/icon_check"
+                    app:iconGravity="textTop"
+                    app:iconSize="24dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/deleteButton"
-                    style="@style/Theme.TouchTool.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/remove_task"
-                    app:icon="@drawable/icon_delete" />
+                    app:icon="@drawable/icon_delete"
+                    app:iconGravity="textTop"
+                    app:iconSize="24dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/exportButton"
-                    style="@style/Theme.TouchTool.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/export_task"
-                    app:icon="@drawable/icon_upload" />
+                    app:icon="@drawable/icon_upload"
+                    app:iconGravity="textTop"
+                    app:iconSize="24dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/copyButton"
-                    style="@style/Theme.TouchTool.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/copy"
-                    app:icon="@drawable/icon_content_copy" />
+                    app:icon="@drawable/icon_content_copy"
+                    app:iconGravity="textTop"
+                    app:iconSize="24dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/moveButton"
-                    style="@style/Theme.TouchTool.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/move_task"
-                    app:icon="@drawable/icon_tag" />
+                    app:icon="@drawable/icon_tag"
+                    app:iconGravity="textTop"
+                    app:iconSize="24dp" />
 
             </LinearLayout>
 

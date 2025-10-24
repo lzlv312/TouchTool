@@ -96,8 +96,8 @@ public class ImportTaskDialogAdapter extends RecyclerView.Adapter<ImportTaskDial
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private final static int NORMAL_COLOR = com.google.android.material.R.attr.colorPrimary;
-        private final static int SPECIAL_COLOR = com.google.android.material.R.attr.colorError;
+        private final static int NORMAL_COLOR = androidx.appcompat.R.attr.colorPrimary;
+        private final static int SPECIAL_COLOR = androidx.appcompat.R.attr.colorError;
 
         private final Context context;
         private final DialogTaskManagerItemBinding binding;

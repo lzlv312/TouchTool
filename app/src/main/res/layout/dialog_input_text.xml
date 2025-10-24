@@ -7,11 +7,10 @@
     android:paddingVertical="8dp">
 
     <com.google.android.material.textfield.TextInputLayout
-        style="?attr/textInputOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:endIconMode="clear_text"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/titleEdit"

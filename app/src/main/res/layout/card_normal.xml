@@ -17,7 +17,6 @@
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="96dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -29,52 +28,50 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:gravity="center_vertical">
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="8dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
                 android:layout_weight="1"
                 android:lines="1"
-                android:textSize="12sp" />
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/editButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:icon="@drawable/icon_edit"
-                app:iconSize="16dp" />
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/icon_edit" />
 
         </LinearLayout>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/des"
             android:layout_width="match_parent"
-            android:layout_height="16dp"
+            android:layout_height="wrap_content"
             android:background="?attr/colorTertiaryContainer"
             android:gravity="center"
-            android:paddingHorizontal="4dp"
+            android:paddingHorizontal="8dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textColor="?attr/colorOnTertiaryContainer"
-            android:textSize="12sp"
             android:visibility="gone" />
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButtonGroup
             android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical">
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:spacing="0dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/expandButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:icon="@drawable/icon_symptoms"
-                app:iconSize="16dp" />
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/icon_symptoms" />
 
             <Space
                 android:layout_width="0dp"
@@ -84,38 +81,32 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="2dp"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_check"
                 android:checkable="true"
                 app:icon="@drawable/icon_lock_open"
-                app:iconSize="16dp"
                 app:iconTint="@color/button_container_check" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/copyButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="4dp"
-                app:icon="@drawable/icon_content_copy"
-                app:iconSize="16dp" />
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/icon_content_copy" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/removeButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="4dp"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_error_check"
                 android:checkable="true"
                 app:icon="@drawable/icon_delete"
-                app:iconSize="16dp"
                 app:iconTint="@color/button_container_check" />
 
-        </LinearLayout>
+        </com.google.android.material.button.MaterialButtonGroup>
 
         <LinearLayout
             android:id="@+id/pinBox"
@@ -147,10 +138,10 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/errorText"
             android:layout_width="match_parent"
-            android:layout_height="16dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingHorizontal="4dp"
-            android:textSize="12sp"
+            android:paddingHorizontal="8dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:visibility="gone" />
 
         <LinearLayout
@@ -169,10 +160,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="4dp"
+        android:layout_margin="8dp"
         android:alpha="0.1"
         android:singleLine="true"
-        android:textColor="?attr/colorSecondary"
-        android:textSize="16sp" />
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        android:textColor="?attr/colorSecondary" />
 
 </FrameLayout>
