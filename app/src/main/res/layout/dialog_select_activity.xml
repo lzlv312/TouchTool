@@ -9,20 +9,18 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/searchBox"
-        style="?attr/textInputFilledStyle"
+        style="?attr/textInputOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/select_app_search_activity"
-        app:boxStrokeWidth="0dp"
-        app:boxStrokeWidthFocused="0dp"
         app:endIconMode="clear_text"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
         app:startIconDrawable="@drawable/icon_search">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/searchEdit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>

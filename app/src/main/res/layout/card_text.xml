@@ -22,19 +22,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:paddingHorizontal="8dp"
             android:spacing="0dp">
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="?attr/iconButton"
                 android:backgroundTint="@color/fill_button_background_check"
                 android:checkable="true"
                 app:icon="@drawable/icon_lock_open"
@@ -42,16 +34,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/copyButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="?attr/iconButton"
                 app:icon="@drawable/icon_content_copy" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/removeButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="?attr/iconButton"
                 android:backgroundTint="@color/fill_button_background_error_check"
                 android:checkable="true"
                 app:icon="@drawable/icon_delete"
@@ -89,14 +77,13 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/dragImage"
-        style="@style/Theme.TouchTool.IconButton"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="?attr/iconButtonSize"
+        android:layout_height="?attr/iconButtonSize"
         android:layout_gravity="end|bottom"
         android:scaleType="centerInside"
         android:src="@drawable/icon_line_curve"
         android:tint="?attr/colorOutlineVariant"
-        android:translationX="2dp"
-        android:translationY="2dp" />
+        android:translationX="4dp"
+        android:translationY="4dp" />
 
 </FrameLayout>

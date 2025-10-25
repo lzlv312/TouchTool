@@ -22,13 +22,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/picker_area_title"
-                android:textSize="12sp" />
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/switchButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_swap_horiz" />
 
         </LinearLayout>
@@ -36,108 +34,97 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="4dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/contentBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:baselineAligned="false"
+                android:gravity="center_vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="40dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
                     android:clipChildren="false"
                     android:hint="@string/area_top"
-                    app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/topEdit"
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
+                        android:layout_height="?attr/iconButtonSize"
                         android:gravity="center"
                         android:inputType="numberSigned"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="0dp"
-                        android:textSize="8sp" />
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:hint="@string/area_left"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/leftEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/iconButtonSize"
+                        android:gravity="center"
+                        android:inputType="numberSigned"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="0dp"
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:baselineAligned="false"
-                    android:gravity="center_vertical">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content"
-                        android:clipChildren="false"
-                        android:hint="@string/area_left"
-                        app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/leftEdit"
-                            android:layout_width="match_parent"
-                            android:layout_height="20dp"
-                            android:gravity="center"
-                            android:inputType="numberSigned"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="0dp"
-                            android:textSize="8sp" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content"
-                        android:clipChildren="false"
-                        android:hint="@string/area_right"
-                        app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/rightEdit"
-                            android:layout_width="match_parent"
-                            android:layout_height="20dp"
-                            android:gravity="center"
-                            android:inputType="numberSigned"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="0dp"
-                            android:textSize="8sp" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="40dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
                     android:clipChildren="false"
-                    android:hint="@string/area_bottom"
-                    app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
+                    android:hint="@string/area_right"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/bottomEdit"
+                        android:id="@+id/rightEdit"
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
+                        android:layout_height="?attr/iconButtonSize"
                         android:gravity="center"
                         android:inputType="numberSigned"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="0dp"
-                        android:textSize="8sp" />
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:hint="@string/area_bottom"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/bottomEdit"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/iconButtonSize"
+                        android:gravity="center"
+                        android:inputType="numberSigned"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="0dp"
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -150,84 +137,63 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <LinearLayout
+                <com.google.android.material.button.MaterialButtonGroup
+                    style="@style/Widget.Material3.MaterialButtonGroup.Connected"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:spacing="0dp">
 
-                    <Spinner
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/spinner"
-                        android:layout_width="0dp"
-                        android:layout_height="24dp"
+                        style="?attr/iconButtonOutlined"
                         android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:background="@drawable/shape_spinner"
-                        android:dropDownWidth="wrap_content"
-                        android:gravity="center"
-                        android:minWidth="48dp"
-                        android:popupBackground="@drawable/shape_spinner_background"
-                        android:spinnerMode="dropdown" />
+                        android:layout_weight="1" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/testButton"
-                        style="@style/Theme.TouchTool.IconButton.Filled"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="4dp"
+                        style="?attr/iconButtonFilled"
                         app:icon="@drawable/icon_text_fields" />
 
-                </LinearLayout>
+                </com.google.android.material.button.MaterialButtonGroup>
 
-                <FrameLayout
-                    android:layout_width="128dp"
-                    android:layout_height="24dp"
-                    android:layout_marginVertical="4dp">
-
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/timeSlider"
-                        android:layout_width="156dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:stepSize="1"
-                        android:value="60"
-                        android:valueFrom="1"
-                        android:valueTo="100"
-                        app:thumbHeight="24dp"
-                        app:trackColorInactive="?attr/colorSurface" />
-
-                </FrameLayout>
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/timeSlider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:stepSize="1"
+                    android:value="60"
+                    android:valueFrom="1"
+                    android:valueTo="100"
+                    app:thumbHeight="?attr/iconButtonSize"
+                    app:trackColorInactive="?attr/colorSurface" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButtonGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:gravity="center"
+            android:spacing="2dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/backButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_arrow_back" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginHorizontal="8dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_save" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pickerButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_area" />
 
-        </LinearLayout>
+        </com.google.android.material.button.MaterialButtonGroup>
 
     </LinearLayout>
 

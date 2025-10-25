@@ -10,14 +10,14 @@
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:gravity="center_vertical"
-        android:minHeight="24dp">
+        android:minHeight="?attr/iconButtonSize">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
             android:layout_width="64dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="12sp" />
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="1dp"
@@ -29,16 +29,12 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:layout_weight="1"
-            android:textSize="12sp" />
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/copyButton"
-            style="@style/Theme.TouchTool.IconButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            app:icon="@drawable/icon_content_copy"
-            app:tint="?attr/colorPrimary" />
+            style="?attr/iconButton"
+            app:icon="@drawable/icon_content_copy" />
 
     </LinearLayout>
 

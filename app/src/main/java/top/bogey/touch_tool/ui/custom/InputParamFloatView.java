@@ -59,10 +59,10 @@ public class InputParamFloatView extends FrameLayout implements FloatInterface {
         super(context);
         binding = FloatInputParamBinding.inflate(LayoutInflater.from(context), this, true);
 
-        binding.confirmButton.setOnClickListener(v -> {
-            if (callback != null) callback.onResult(true);
-            dismiss();
-        });
+//        binding.confirmButton.setOnClickListener(v -> {
+//            if (callback != null) callback.onResult(true);
+//            dismiss();
+//        });
 
         task = new Task();
         action = new InputParamTemplateAction();

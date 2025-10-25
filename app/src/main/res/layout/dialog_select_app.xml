@@ -8,8 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingHorizontal="8dp">
+        android:orientation="vertical">
 
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
             android:layout_width="match_parent"
@@ -19,10 +18,10 @@
             android:id="@+id/editBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="4dp"
             android:hint="@string/select_app_search"
+            android:paddingHorizontal="8dp"
             app:endIconMode="clear_text"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
             app:startIconDrawable="@drawable/icon_search">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -37,6 +36,7 @@
             android:id="@+id/appIconBox"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:clipToPadding="false"

@@ -29,22 +29,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="8dp"
             android:gravity="center_vertical">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:lines="1"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/editButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="?attr/iconButton"
                 app:icon="@drawable/icon_edit" />
 
         </LinearLayout>
@@ -64,21 +62,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:paddingHorizontal="8dp"
             android:spacing="0dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/addButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="?attr/iconButton"
                 app:icon="@drawable/icon_add" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="?attr/iconButton"
                 android:backgroundTint="@color/fill_button_background_check"
                 android:checkable="true"
                 app:icon="@drawable/icon_lock_open"
@@ -86,9 +79,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/removeButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="?attr/iconButton"
                 android:backgroundTint="@color/fill_button_background_error_check"
                 android:checkable="true"
                 app:icon="@drawable/icon_delete"

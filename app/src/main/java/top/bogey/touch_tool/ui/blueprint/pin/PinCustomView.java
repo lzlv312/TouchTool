@@ -6,31 +6,33 @@ import android.graphics.PointF;
 import android.text.Editable;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ListPopupWindow;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.IDynamicPinCard;
-import top.bogey.touch_tool.ui.blueprint.selecter.select_action.SelectActionVariableTypeDialog;
 import top.bogey.touch_tool.utils.DisplayUtil;
-import top.bogey.touch_tool.utils.listener.SpinnerSelectedListener;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
 public abstract class PinCustomView extends PinView {
+    private final static Map<PinType, List<PinInfo>> PIN_INFO_MAP = PinInfo.getCustomPinInfoMap();
+    private final static int[] ICON_ARRAY = new int[]{R.drawable.icon_remove, R.drawable.icon_data_array, R.drawable.icon_map};
     private final Variable variable;
 
     public PinCustomView(@NonNull Context context, ActionCard card, Pin pin) {
@@ -46,52 +48,66 @@ public abstract class PinCustomView extends PinView {
     @Override
     protected void init() {
         super.init();
-        TextView keyTypeView = getKeyTypeView();
+        MaterialButton keyTypeView = getKeyTypeView();
         if (keyTypeView != null) {
-            keyTypeView.setOnClickListener(v -> {
-                SelectActionVariableTypeDialog dialog = new SelectActionVariableTypeDialog(getContext());
-                new MaterialAlertDialogBuilder(getContext())
-                        .setView(dialog)
-                        .setPositiveButton(R.string.enter, (view, which) -> {
-                            PinInfo pinInfo = dialog.getSelected();
-                            keyTypeView.setText(pinInfo.getTitle());
-                            variable.setKeyPinInfo(pinInfo);
-                            pin.setValue(variable.getValue().copy());
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
+            ListPopupWindow popup = new ListPopupWindow(getContext());
+            List<PinInfo> pinInfoList = new ArrayList<>();
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.widget_spinner_item);
+            PIN_INFO_MAP.forEach((pinType, infoList) -> infoList.forEach(info -> {
+                adapter.add(info.getTitle());
+                pinInfoList.add(info);
+            }));
+            popup.setAdapter(adapter);
+            popup.setAnchorView(keyTypeView);
+            popup.setModal(true);
+            popup.setOnItemClickListener((parent, view, position, id) -> {
+                PinInfo pinInfo = pinInfoList.get(position);
+                keyTypeView.setText(pinInfo.getTitle());
+                variable.setKeyPinInfo(pinInfo);
+                pin.setValue(variable.getValue().copy());
+                popup.dismiss();
             });
+            popup.show();
         }
 
-        TextView valueTypeView = getValueTypeView();
+        MaterialButton valueTypeView = getValueTypeView();
         if (valueTypeView != null) {
-            valueTypeView.setOnClickListener(v -> {
-                SelectActionVariableTypeDialog dialog = new SelectActionVariableTypeDialog(getContext());
-                new MaterialAlertDialogBuilder(getContext())
-                        .setView(dialog)
-                        .setPositiveButton(R.string.enter, (view, which) -> {
-                            PinInfo pinInfo = dialog.getSelected();
-                            valueTypeView.setText(pinInfo.getTitle());
-                            variable.setValuePinInfo(pinInfo);
-                            pin.setValue(variable.getValue().copy());
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
+            ListPopupWindow popup = new ListPopupWindow(getContext());
+            List<PinInfo> pinInfoList = new ArrayList<>();
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.widget_spinner_item);
+            PIN_INFO_MAP.forEach((pinType, infoList) -> infoList.forEach(info -> {
+                adapter.add(info.getTitle());
+                pinInfoList.add(info);
+            }));
+            popup.setAdapter(adapter);
+            popup.setAnchorView(valueTypeView);
+            popup.setModal(true);
+            popup.setOnItemClickListener((parent, view, position, id) -> {
+                PinInfo pinInfo = pinInfoList.get(position);
+                valueTypeView.setText(pinInfo.getTitle());
+                variable.setValuePinInfo(pinInfo);
+                pin.setValue(variable.getValue().copy());
+                popup.dismiss();
             });
+            popup.show();
         }
 
-        Spinner typeSpinner = getTypeSpinner();
-        if (typeSpinner != null) {
-            typeSpinner.setOnItemSelectedListener(new SpinnerSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    Variable.VariableType type = Variable.VariableType.values()[position];
-                    if (variable.getType() == type) return;
-                    variable.setType(type);
-                    pin.setValue(variable.getValue().copy());
-                    refreshPin();
-                }
+        MaterialButton typeView = getTypeView();
+        if (typeView != null) {
+            ListPopupWindow popup = new ListPopupWindow(getContext());
+            String[] array = getContext().getResources().getStringArray(R.array.pin_simple_type);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.widget_spinner_item, array);
+            popup.setAdapter(adapter);
+            popup.setAnchorView(typeView);
+            popup.setModal(true);
+            popup.setOnItemClickListener((parent, view, position, id) -> {
+                typeView.setIconResource(ICON_ARRAY[position]);
+                variable.setType(Variable.VariableType.values()[position]);
+                pin.setValue(variable.getValue().copy());
+                refreshPin();
+                popup.dismiss();
             });
+            popup.show();
         }
 
         EditText editText = getTitleEdit();
@@ -108,15 +124,6 @@ public abstract class PinCustomView extends PinView {
             pin.setHide(!pin.isHide());
             visibleButton.setIconResource(pin.isHide() ? R.drawable.icon_visibility_off : R.drawable.icon_visibility);
         });
-
-//        // 抑制一下recycleView的滚动，让针脚连线能够生效
-//        ViewGroup slotBox = getSlotBox();
-//        if (getCard() instanceof IDynamicPinCard dynamicPinCard) {
-//            slotBox.setOnTouchListener((v, event) -> {
-//                if (event.getAction() == MotionEvent.ACTION_DOWN) dynamicPinCard.suppressLayout();
-//                return false;
-//            });
-//        }
     }
 
     @Override
@@ -142,23 +149,19 @@ public abstract class PinCustomView extends PinView {
             editText.setText(pin.getTitle());
         }
 
-        TextView keyTypeView = getKeyTypeView();
+        MaterialButton keyTypeView = getKeyTypeView();
         if (keyTypeView != null) {
             PinInfo keyPinInfo = variable.getKeyPinInfo();
             if (keyPinInfo != null) keyTypeView.setText(keyPinInfo.getTitle());
         }
 
-        Spinner typeSpinner = getTypeSpinner();
-        if (typeSpinner != null) {
-            String[] array = getResources().getStringArray(R.array.pin_simple_type);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.pin_widget_select_item, array);
-            typeSpinner.setAdapter(adapter);
-            typeSpinner.setSelection(variable.getType().ordinal());
+        MaterialButton typeView = getTypeView();
+        if (typeView != null) {
+            typeView.setIconResource(ICON_ARRAY[variable.getType().ordinal()]);
         }
 
-        TextView valueTypeView = getValueTypeView();
+        MaterialButton valueTypeView = getValueTypeView();
         if (valueTypeView != null) {
-
             valueTypeView.setVisibility(variable.getType() == Variable.VariableType.MAP ? View.VISIBLE : View.GONE);
             PinInfo valuePinInfo = variable.getValuePinInfo();
             if (valuePinInfo != null) valueTypeView.setText(valuePinInfo.getTitle());
@@ -170,11 +173,11 @@ public abstract class PinCustomView extends PinView {
         super.refreshPin();
     }
 
-    public abstract TextView getKeyTypeView();
+    public abstract MaterialButton getKeyTypeView();
 
-    public abstract TextView getValueTypeView();
+    public abstract MaterialButton getValueTypeView();
 
-    public abstract Spinner getTypeSpinner();
+    public abstract MaterialButton getTypeView();
 
     public abstract EditText getTitleEdit();
 

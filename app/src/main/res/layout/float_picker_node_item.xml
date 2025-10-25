@@ -10,23 +10,20 @@
         android:id="@+id/contentBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:padding="4dp">
+        android:layout_gravity="center_vertical">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="?attr/iconButtonSize"
+            android:layout_height="?attr/iconButtonSize"
+            android:padding="?attr/iconButtonPadding"
             app:srcCompat="@drawable/icon_keyboard_arrow_down"
             app:tint="?attr/colorPrimary" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/visibleButton"
-            style="@style/Theme.TouchTool.IconButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            app:icon="@drawable/icon_visibility"
-            app:tint="?attr/colorPrimary" />
+            style="?attr/iconButton"
+            app:icon="@drawable/icon_visibility" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/titleText"
@@ -36,16 +33,12 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textSize="8sp" />
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/infoButton"
-            style="@style/Theme.TouchTool.IconButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            app:icon="@drawable/icon_info"
-            app:tint="?attr/colorPrimary" />
+            style="?attr/iconButton"
+            app:icon="@drawable/icon_info" />
 
     </LinearLayout>
 

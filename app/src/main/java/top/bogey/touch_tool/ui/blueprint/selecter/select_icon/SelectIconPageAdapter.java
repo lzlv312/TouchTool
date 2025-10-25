@@ -62,7 +62,7 @@ public class SelectIconPageAdapter extends RecyclerView.Adapter<SelectIconPageAd
             GridLayoutManager layoutManager = (GridLayoutManager) binding.getRoot().getLayoutManager();
             if (layoutManager != null) {
                 boolean portrait = DisplayUtil.isPortrait(binding.getRoot().getContext());
-                layoutManager.setSpanCount(portrait ? 6 : 12);
+                layoutManager.setSpanCount(portrait ? 5 : 10);
             }
         }
 

@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical">
 
             <com.google.android.material.textview.MaterialTextView
@@ -21,13 +21,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/picker_point_title"
-                android:textSize="12sp" />
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/playButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_play_arrow" />
 
         </LinearLayout>
@@ -41,77 +39,69 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:clipChildren="false"
                 android:hint="@string/point_x"
-                app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
-                app:shapeAppearanceOverlay="@style/Theme.TouchTool.ShapeAppearance.LeftCorner.Small">
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/xEdit"
                     android:layout_width="match_parent"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="-0.5dp"
-                    android:gravity="start|center_vertical"
+                    android:layout_height="?attr/iconButtonSize"
+                    android:gravity="center"
                     android:inputType="numberSigned"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="0dp"
-                    android:textSize="8sp" />
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:clipChildren="false"
                 android:hint="@string/point_y"
-                app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
-                app:shapeAppearanceOverlay="@style/Theme.TouchTool.ShapeAppearance.RightCorner.Small">
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/yEdit"
                     android:layout_width="match_parent"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="-0.5dp"
-                    android:gravity="end|center_vertical"
+                    android:layout_height="?attr/iconButtonSize"
+                    android:gravity="center"
                     android:inputType="numberSigned"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="0dp"
-                    android:textSize="8sp" />
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButtonGroup
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:gravity="center"
+            android:spacing="2dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/backButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_arrow_back" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginHorizontal="8dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_save" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pickerButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_my_location" />
 
-        </LinearLayout>
+        </com.google.android.material.button.MaterialButtonGroup>
 
     </LinearLayout>
 

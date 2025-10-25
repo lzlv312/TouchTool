@@ -22,13 +22,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/picker_node_title"
-                android:textSize="12sp" />
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/switchButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_swap_horiz" />
 
         </LinearLayout>
@@ -36,42 +34,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingVertical="4dp">
+            android:orientation="vertical">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/pathText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="8sp" />
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
-            <LinearLayout
+            <FrameLayout
                 android:id="@+id/testBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:visibility="gone">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end">
+                    android:layout_gravity="end">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/matchButton"
-                        style="@style/Theme.TouchTool.IconButton.Filled"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="end"
+                        style="?attr/iconButtonFilled"
                         app:icon="@drawable/icon_image" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/touchButton"
-                        style="@style/Theme.TouchTool.IconButton.Filled"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="end"
-                        android:layout_marginStart="8dp"
+                        style="?attr/iconButtonFilled"
                         app:icon="@drawable/icon_touch_app" />
 
                 </LinearLayout>
@@ -81,42 +70,36 @@
                     android:layout_width="96dp"
                     android:layout_height="96dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="4dp"
                     android:scaleType="fitCenter"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
-            </LinearLayout>
+
+            </FrameLayout>
 
         </LinearLayout>
 
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButtonGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:gravity="center"
+            android:spacing="2dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/backButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_arrow_back" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginHorizontal="8dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_save" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pickerButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_widgets" />
 
-        </LinearLayout>
+        </com.google.android.material.button.MaterialButtonGroup>
 
     </LinearLayout>
 

@@ -4,15 +4,54 @@
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:maxWidth="240dp"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
     <LinearLayout
-        android:id="@+id/buttonBox"
-        android:layout_width="156dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="4dp" />
+        android:minWidth="96dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/iconButtonSize"
+            android:paddingHorizontal="8dp">
+
+            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/closeButton"
+                style="?attr/iconButton"
+                android:layout_gravity="end|center"
+                app:icon="@drawable/icon_close" />
+        </FrameLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            style="?attr/materialCardViewFilledStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="?attr/colorSurface"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/buttonBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="8dp"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
+                app:justifyContent="center">
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

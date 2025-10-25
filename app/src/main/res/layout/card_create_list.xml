@@ -29,22 +29,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="8dp">
+            android:gravity="center_vertical">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:lines="1"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/editButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="?attr/iconButton"
                 app:icon="@drawable/icon_edit" />
 
         </LinearLayout>
@@ -60,61 +58,65 @@
             android:textColor="?attr/colorOnTertiaryContainer"
             android:visibility="gone" />
 
-        <com.google.android.material.button.MaterialButtonGroup
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="8dp"
-            android:spacing="0dp">
+            android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/expandButton"
-                style="?attr/materialIconButtonStyle"
+            <com.google.android.material.button.MaterialButtonGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/icon_symptoms" />
+                android:spacing="0dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/resetButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/icon_refresh" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/expandButton"
+                    style="?attr/iconButton"
+                    app:icon="@drawable/icon_symptoms" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/resetButton"
+                    style="?attr/iconButton"
+                    app:icon="@drawable/icon_refresh" />
+
+            </com.google.android.material.button.MaterialButtonGroup>
 
             <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:minWidth="4dp" />
+                android:layout_weight="1" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/lockButton"
-                style="?attr/materialIconButtonStyle"
+
+            <com.google.android.material.button.MaterialButtonGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/fill_button_background_check"
-                android:checkable="true"
-                app:icon="@drawable/icon_lock_open"
-                app:iconTint="@color/button_container_check" />
+                android:spacing="0dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/lockButton"
+                    style="?attr/iconButton"
+                    android:backgroundTint="@color/fill_button_background_check"
+                    android:checkable="true"
+                    app:icon="@drawable/icon_lock_open"
+                    app:iconTint="@color/button_container_check" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/copyButton"
+                    style="?attr/iconButton"
+                    app:icon="@drawable/icon_content_copy" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/removeButton"
+                    style="?attr/iconButton"
+                    android:backgroundTint="@color/fill_button_background_error_check"
+                    android:checkable="true"
+                    app:icon="@drawable/icon_delete"
+                    app:iconTint="@color/button_container_check" />
+
+            </com.google.android.material.button.MaterialButtonGroup>
 
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/copyButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/icon_content_copy" />
+        </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/removeButton"
-                style="?attr/materialIconButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/fill_button_background_error_check"
-                android:checkable="true"
-                app:icon="@drawable/icon_delete"
-                app:iconTint="@color/button_container_check" />
-
-        </com.google.android.material.button.MaterialButtonGroup>
 
         <LinearLayout
             android:id="@+id/pinBox"

@@ -1,11 +1,25 @@
 <resources>
     <attr name="colorPrimaryLight" format="color" />
 
+    <attr name="iconButtonSize" format="dimension" />
+    <attr name="iconButtonPadding" format="dimension" />
+    <attr name="iconButton" format="reference" />
+    <attr name="iconButtonOutlined" format="reference" />
+    <attr name="iconButtonFilled" format="reference" />
+    <attr name="iconButtonFilledTonal" format="reference" />
+
     <style name="Theme.TouchTool.Base" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
+
+        <item name="iconButtonSize">36dp</item>
+        <item name="iconButtonPadding">4dp</item>
+        <item name="iconButton">@style/Theme.TouchTool.IconButton</item>
+        <item name="iconButtonOutlined">@style/Theme.TouchTool.IconButton.Outlined</item>
+        <item name="iconButtonFilled">@style/Theme.TouchTool.IconButton.Filled</item>
+        <item name="iconButtonFilledTonal">@style/Theme.TouchTool.IconButton.Filled.Tonal</item>
     </style>
 
     <style name="Theme.TouchTool.Transparent" parent="Theme.TouchTool.Base">

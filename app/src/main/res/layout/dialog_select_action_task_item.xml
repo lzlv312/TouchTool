@@ -10,13 +10,13 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="?attr/iconButtonSize"
+        android:layout_height="?attr/iconButtonSize"
         android:layout_gravity="end"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="?attr/iconButtonSize"
         android:alpha="0.25"
-        app:tint="?attr/colorOnSurfaceVariant" />
+        android:tint="?attr/colorOnSurfaceVariant" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,9 +40,9 @@
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/setButton"
+                android:id="@+id/settingButton"
                 style="?attr/iconButton"
-                app:icon="@drawable/icon_download" />
+                app:icon="@drawable/icon_settings" />
 
         </LinearLayout>
 
@@ -54,36 +54,6 @@
             android:alpha="0.75"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:visibility="gone" />
-
-        <com.google.android.material.button.MaterialButtonGroup
-            android:id="@+id/varBox"
-            style="@style/Widget.Material3.MaterialButtonGroup.Connected"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:spacing="0dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/keySlot"
-                style="?attr/iconButtonOutlined"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:paddingHorizontal="0dp"
-                android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/typeSpinner"
-                style="?attr/iconButtonFilled" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/valueSlot"
-                style="?attr/iconButtonOutlined"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:paddingHorizontal="0dp"
-                android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
-
-        </com.google.android.material.button.MaterialButtonGroup>
 
         <LinearLayout
             android:layout_width="match_parent"

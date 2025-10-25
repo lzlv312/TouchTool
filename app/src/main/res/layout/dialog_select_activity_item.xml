@@ -4,20 +4,21 @@
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
+    android:layout_marginBottom="2dp"
     android:checkable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="?attr/iconButtonSize"
+            android:layout_height="?attr/iconButtonSize"
             android:layout_gravity="center_vertical"
-            android:layout_margin="8dp" />
+            android:layout_marginEnd="8dp" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -28,13 +29,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="4dp">
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp" />
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/tipsBg"
@@ -50,8 +52,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="8dp"
-                        android:textColor="?attr/colorOnTertiary"
-                        android:textSize="12sp" />
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                        android:textColor="?attr/colorOnTertiary" />
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -61,8 +63,7 @@
                 android:id="@+id/packageName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:textSize="12sp" />
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
         </LinearLayout>
 

@@ -9,15 +9,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="4dp"
-        android:layout_marginVertical="4dp"
         android:gravity="center_vertical">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/expandButton"
-            style="@style/Theme.TouchTool.IconButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            style="?iconButton"
+            android:layout_margin="8dp"
             app:icon="@drawable/icon_keyboard_arrow_down" />
 
         <LinearLayout
@@ -31,14 +28,14 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp" />
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/activityName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alpha="0.75"
-                android:textSize="8sp" />
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
         </LinearLayout>
 

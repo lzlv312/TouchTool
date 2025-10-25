@@ -7,39 +7,46 @@
     android:layout_margin="8dp"
     android:orientation="vertical">
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchBox"
+        style="?attr/textInputOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/task_search"
+        app:endIconMode="clear_text"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
+        app:startIconDrawable="@drawable/icon_search">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchEdit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/searchBox"
-            style="?attr/textInputFilledStyle"
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/task_import_tag" />
+
+        <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/task_search"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp"
-            app:endIconMode="clear_text"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
-            app:startIconDrawable="@drawable/icon_search">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/searchEdit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:singleLine="true" />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="1" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/selectAllButton"
-            style="@style/Theme.TouchTool.IconButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:text="@string/select_all" />
 
     </LinearLayout>
 
@@ -47,7 +54,6 @@
         android:id="@+id/selectionBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/dialog_task_manager_item" />
 

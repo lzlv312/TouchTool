@@ -4,21 +4,20 @@
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
+    android:layout_marginEnd="8dp"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minWidth="48dp"
-        android:minHeight="32dp"
-        android:paddingHorizontal="4dp">
+        android:minWidth="?attr/iconButtonSize"
+        android:minHeight="?attr/iconButtonSize"
+        android:padding="8dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/icon"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_margin="2dp"
+            android:layout_width="?attr/iconButtonSize"
+            android:layout_height="?attr/iconButtonSize"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -26,10 +25,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginHorizontal="4dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="12sp" />
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
     </LinearLayout>
 

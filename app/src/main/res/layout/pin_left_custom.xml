@@ -59,52 +59,39 @@
         app:icon="@drawable/icon_visibility"
         app:iconTint="?attr/colorOutline" />
 
-    <LinearLayout
+    <com.google.android.material.button.MaterialButtonGroup
         android:id="@+id/varBox"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginHorizontal="4dp"
-        android:baselineAligned="false">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:baselineAligned="false"
+        android:spacing="2dp">
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/keySlot"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginHorizontal="4dp"
-            android:background="@drawable/shape_border"
-            android:gravity="center"
-            android:minWidth="48dp"
-            android:paddingHorizontal="4dp"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="8sp" />
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingHorizontal="0dp" />
 
-        <Spinner
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/typeSpinner"
+            style="?attr/materialButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:background="@drawable/shape_border"
-            android:dropDownWidth="match_parent"
-            android:entries="@array/pin_simple_type"
-            android:gravity="center"
+            android:layout_height="match_parent"
             android:minWidth="48dp"
-            android:popupBackground="@drawable/shape_spinner_background"
-            android:spinnerMode="dropdown"
-            android:textColor="?attr/colorPrimary" />
+            android:paddingHorizontal="0dp" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/valueSlot"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginHorizontal="4dp"
-            android:background="@drawable/shape_border"
-            android:gravity="center"
-            android:minWidth="48dp"
-            android:paddingHorizontal="4dp"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="8sp"
-            android:visibility="gone" />
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingHorizontal="0dp" />
 
-    </LinearLayout>
+    </com.google.android.material.button.MaterialButtonGroup>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/removeButton"

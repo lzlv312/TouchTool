@@ -25,7 +25,7 @@
 
     <string-array name="pin_simple_type">
         <item>单独</item>
-        <item>数组</item>
+        <item>列表</item>
         <item>字典</item>
     </string-array>
 

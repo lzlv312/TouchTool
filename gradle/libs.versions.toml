@@ -30,12 +30,12 @@ mmkv = { group = "com.tencent", name = "mmkv", version.ref = "mmkv" }
 
 flexbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexbox" }
 
-shizuku-api = { group = "dev.rikka.shizuku", name = "api", version.ref = "shizuku"}
-shizuku-provider = { group = "dev.rikka.shizuku", name = "provider", version.ref = "shizuku"}
+shizuku-api = { group = "dev.rikka.shizuku", name = "api", version.ref = "shizuku" }
+shizuku-provider = { group = "dev.rikka.shizuku", name = "provider", version.ref = "shizuku" }
 
-exp4j = {group = "net.objecthunter", name = "exp4j", version.ref = "exp4j"}
-zxinglite = {group = "com.github.jenly1314", name = "zxing-lite", version.ref = "zxing"}
-tinypinyin = {group = "com.github.promeg", name = "tinypinyin", version.ref = "tinypinyin"}
+exp4j = { group = "net.objecthunter", name = "exp4j", version.ref = "exp4j" }
+zxinglite = { group = "com.github.jenly1314", name = "zxing-lite", version.ref = "zxing" }
+tinypinyin = { group = "com.github.promeg", name = "tinypinyin", version.ref = "tinypinyin" }
 
 [plugins]
 application = { id = "com.android.application", version.ref = "agp" }

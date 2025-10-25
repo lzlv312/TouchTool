@@ -19,8 +19,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/closeButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="32dp"
+                style="?attr/iconButton"
                 android:layout_height="24dp"
                 app:icon="@drawable/icon_keyboard_arrow_up" />
 
@@ -31,8 +30,8 @@
                 android:orientation="vertical" />
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/dragSpace"
@@ -40,15 +39,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/dragSpaceButton"
-            style="@style/Theme.TouchTool.IconButton"
-            android:layout_width="16dp"
-            android:layout_height="32dp"
-            android:rotation="-90"
-            app:icon="@drawable/icon_keyboard_arrow_up" />
+            style="?attr/iconButton"
+            android:layout_width="24dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:padding="2dp"
+            app:icon="@drawable/icon_keyboard_arrow_left" />
+
     </com.google.android.material.card.MaterialCardView>
 
 </FrameLayout>

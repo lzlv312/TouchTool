@@ -15,25 +15,17 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:paddingHorizontal="4dp">
+            android:layout_height="?attr/iconButtonSize"
+            android:paddingHorizontal="8dp">
 
-            <com.google.android.material.button.MaterialButton
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="32dp"
-                android:layout_height="4dp"
-                android:layout_gravity="center"
-                android:backgroundTint="?attr/colorOnSurfaceVariant"
-                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/closeButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                style="?attr/iconButton"
                 android:layout_gravity="end|center"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
                 app:icon="@drawable/icon_close" />
         </FrameLayout>
 
@@ -51,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_margin="2dp"
+                android:layout_margin="8dp"
                 app:flexDirection="row"
                 app:flexWrap="wrap"
                 app:justifyContent="center">

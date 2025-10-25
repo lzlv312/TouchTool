@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="24dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical">
 
             <com.google.android.material.textview.MaterialTextView
@@ -21,52 +21,43 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/picker_touch_title"
-                android:textSize="12sp" />
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/playButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_play_arrow" />
 
         </LinearLayout>
 
         <top.bogey.touch_tool.ui.custom.TouchPathView
             android:id="@+id/pathView"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_gravity="center"
-            android:layout_marginVertical="8dp" />
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButtonGroup
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:gravity="center"
+            android:spacing="2dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/backButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_arrow_back" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginHorizontal="8dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_save" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pickerButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                style="?attr/iconButtonFilled"
                 app:icon="@drawable/icon_gesture" />
 
-        </LinearLayout>
+        </com.google.android.material.button.MaterialButtonGroup>
 
     </LinearLayout>
 
