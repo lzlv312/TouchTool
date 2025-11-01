@@ -8,7 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="?attr/defaultPadding">
 
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
             android:layout_width="match_parent"
@@ -19,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/select_app_search"
-            android:paddingHorizontal="8dp"
             app:endIconMode="clear_text"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
             app:startIconDrawable="@drawable/icon_search">
@@ -36,8 +36,8 @@
             android:id="@+id/appIconBox"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="?attr/defaultPadding"
+            android:layout_marginEnd="-8dp"
             android:layout_weight="1"
             android:clipToPadding="false"
             android:paddingBottom="96dp"
@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="32dp"
+        android:layout_margin="?attr/iconButtonSize"
         android:src="@drawable/icon_swap_horiz" />
 
 </FrameLayout>

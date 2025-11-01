@@ -62,9 +62,9 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
     }
 
     @Override
-    public void onExecuteNext(TaskRunnable runnable, Pin pin) {
+    public void beforeExecuteNext(TaskRunnable runnable, Pin pin) {
         if (pin == completePin) {
-            super.onExecuteNext(runnable, pin);
+            super.beforeExecuteNext(runnable, pin);
         }
     }
 

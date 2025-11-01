@@ -14,7 +14,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.databinding.WidgetSettingSelectBinding;
-import top.bogey.touch_tool.databinding.WidgetSettingSelectButtonBinding;
+import top.bogey.touch_tool.databinding.WidgetSettingSelectButtonHorizontalBinding;
 
 public class SettingWidgetSelect extends FrameLayout {
     private final WidgetSettingSelectBinding binding;
@@ -36,7 +36,7 @@ public class SettingWidgetSelect extends FrameLayout {
 
             int options = typedArray.getResourceId(R.styleable.SettingWidgetSelect_options, 0);
             for (String option : getResources().getStringArray(options)) {
-                WidgetSettingSelectButtonBinding buttonBinding = WidgetSettingSelectButtonBinding.inflate(LayoutInflater.from(context), binding.group, true);
+                WidgetSettingSelectButtonHorizontalBinding buttonBinding = WidgetSettingSelectButtonHorizontalBinding.inflate(LayoutInflater.from(context), binding.group, true);
                 buttonBinding.getRoot().setText(option);
                 buttonBinding.getRoot().setId(generateViewId());
             }

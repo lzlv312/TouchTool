@@ -21,8 +21,8 @@ public class ExecutePinSlotView extends PinSlotView {
         super(context, pin);
         binding = PinSlotNormalBinding.inflate(LayoutInflater.from(context), this, true);
         binding.getRoot().setStrokeColor(getPinColor());
-        float cornerSize1 = DisplayUtil.dp2px(context, 2f);
-        float cornerSize2 = DisplayUtil.dp2px(context, 5.5f);
+        float cornerSize1 = DisplayUtil.dp2px(context, 4f);
+        float cornerSize2 = DisplayUtil.dp2px(context, 8.5f);
         binding.getRoot().setShapeAppearanceModel(ShapeAppearanceModel.builder()
                 .setTopLeftCorner(CornerFamily.ROUNDED, cornerSize1)
                 .setTopRightCorner(CornerFamily.ROUNDED, cornerSize1)

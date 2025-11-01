@@ -60,7 +60,7 @@ public class SelectIconPageItemRecyclerViewAdapter extends RecyclerView.Adapter<
             context = binding.getRoot().getContext();
 
             binding.getRoot().setOnClickListener(v -> {
-                int index = getAdapterPosition();
+                int index = getBindingAdapterPosition();
                 Object object = data.get(index);
                 Drawable drawable = binding.icon.getDrawable();
                 Bitmap bitmap;

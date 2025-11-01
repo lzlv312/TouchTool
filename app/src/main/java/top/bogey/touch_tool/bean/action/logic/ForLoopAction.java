@@ -59,9 +59,9 @@ public class ForLoopAction extends ExecuteAction {
     }
 
     @Override
-    public void onExecuteNext(TaskRunnable runnable, Pin pin) {
+    public void beforeExecuteNext(TaskRunnable runnable, Pin pin) {
         if (pin == completePin) {
-            super.onExecuteNext(runnable, pin);
+            super.beforeExecuteNext(runnable, pin);
         }
     }
 }

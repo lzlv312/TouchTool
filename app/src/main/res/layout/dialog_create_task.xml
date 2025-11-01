@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="?attr/defaultPadding">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="?attr/defaultPadding"
         android:hint="@string/title"
         app:endIconMode="clear_text"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
@@ -26,7 +26,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="?attr/defaultPadding"
         android:hint="@string/des"
         app:endIconMode="clear_text"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
@@ -43,7 +43,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="?attr/defaultPadding">
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"

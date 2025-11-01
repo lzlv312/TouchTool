@@ -11,6 +11,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
@@ -32,7 +33,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
     private final TaskView taskView;
 
     private String tag;
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     public TaskPageItemRecyclerViewAdapter(TaskView taskView) {
         this.taskView = taskView;
@@ -99,7 +100,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
             context = binding.getRoot().getContext();
 
             binding.getRoot().setOnClickListener(v -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 Task task = tasks.get(position);
 
                 if (taskView.selecting) {
@@ -122,7 +123,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
             });
 
             binding.getRoot().setOnLongClickListener(v -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 Task task = tasks.get(position);
 
                 if (taskView.selecting) {
@@ -139,7 +140,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
             });
 
             binding.editButton.setOnClickListener(v -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 Task task = tasks.get(position);
 
                 EditTaskDialog dialog = new EditTaskDialog(context, task);
@@ -151,7 +152,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
             });
 
             binding.enableSwitch.setOnClickListener(v -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 Task task = tasks.get(position);
 
                 if (binding.enableSwitch.isChecked() == task.isEnable()) return;
@@ -160,7 +161,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
             });
 
             binding.stopButton.setOnClickListener(v -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 Task task = tasks.get(position);
 
                 MainAccessibilityService service = MainApplication.getInstance().getService();

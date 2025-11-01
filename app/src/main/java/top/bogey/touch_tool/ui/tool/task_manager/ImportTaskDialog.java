@@ -48,12 +48,13 @@ public class ImportTaskDialog extends FrameLayout {
         showDialog(context, view);
     }
 
+    private final DialogTaskManagerBinding binding;
     private final ImportTaskDialogAdapter adapter;
 
 
     public ImportTaskDialog(@NonNull Context context, TaskRecord taskRecord) {
         super(context);
-        DialogTaskManagerBinding binding = DialogTaskManagerBinding.inflate(LayoutInflater.from(context), this, true);
+        binding = DialogTaskManagerBinding.inflate(LayoutInflater.from(context), this, true);
 
         List<TaskPackage> taskPackages = new ArrayList<>();
         for (Task task : taskRecord.tasks()) {
@@ -88,7 +89,7 @@ public class ImportTaskDialog extends FrameLayout {
             }
         });
 
-        TaskRecord record = adapter.getTaskRecord();
+        TaskRecord record = adapter.getTaskRecord(true);
         if (record.tasks() != null && record.variables() != null) {
             binding.selectAllButton.setChecked(record.tasks().size() == taskRecord.tasks().size() && record.variables().size() == taskRecord.variables().size());
         } else {
@@ -97,7 +98,7 @@ public class ImportTaskDialog extends FrameLayout {
     }
 
     public void importTask() {
-        TaskRecord taskRecord = adapter.getTaskRecord();
+        TaskRecord taskRecord = adapter.getTaskRecord(binding.importTag.isChecked());
         for (Task task : taskRecord.tasks()) {
             Saver.getInstance().saveTask(task);
         }

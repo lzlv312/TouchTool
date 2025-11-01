@@ -36,6 +36,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
+import top.bogey.touch_tool.common.StaticFunction;
 import top.bogey.touch_tool.databinding.DialogSelectActionNormalItemBinding;
 import top.bogey.touch_tool.databinding.DialogSelectActionTaskItemBinding;
 import top.bogey.touch_tool.databinding.DialogSelectActionVariableItemBinding;
@@ -328,7 +329,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             binding.keySlot.setOnClickListener(v -> {
                 ListPopupWindow popup = new ListPopupWindow(context);
                 List<PinInfo> pinInfoList = new ArrayList<>();
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_spinner_item);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_textview_item);
                 PIN_INFO_MAP.forEach((pinType, infoList) -> infoList.forEach(info -> {
                     adapter.add(info.getTitle());
                     pinInfoList.add(info);
@@ -336,6 +337,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 popup.setAdapter(adapter);
                 popup.setAnchorView(binding.keySlot);
                 popup.setModal(true);
+                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(context, adapter));
                 popup.setOnItemClickListener((parent, view, position, id) -> {
                     PinInfo pinInfo = pinInfoList.get(position);
                     binding.keySlot.setText(pinInfo.getTitle());
@@ -351,10 +353,11 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             binding.typeSpinner.setOnClickListener(v -> {
                 ListPopupWindow popup = new ListPopupWindow(context);
                 String[] array = context.getResources().getStringArray(R.array.pin_simple_type);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_spinner_item, array);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_textview_item, array);
                 popup.setAdapter(adapter);
                 popup.setAnchorView(binding.typeSpinner);
                 popup.setModal(true);
+                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(context, adapter));
                 popup.setOnItemClickListener((parent, view, position, id) -> {
                     binding.typeSpinner.setText(array[position]);
                     int index = getBindingAdapterPosition();
@@ -371,7 +374,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
             binding.valueSlot.setOnClickListener(v -> {
                 ListPopupWindow popup = new ListPopupWindow(context);
                 List<PinInfo> pinInfoList = new ArrayList<>();
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_spinner_item);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_textview_item);
                 PIN_INFO_MAP.forEach((pinType, infoList) -> infoList.forEach(info -> {
                     adapter.add(info.getTitle());
                     pinInfoList.add(info);
@@ -379,6 +382,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 popup.setAdapter(adapter);
                 popup.setAnchorView(binding.valueSlot);
                 popup.setModal(true);
+                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(context, adapter));
                 popup.setOnItemClickListener((parent, view, position, id) -> {
                     PinInfo pinInfo = pinInfoList.get(position);
                     binding.valueSlot.setText(pinInfo.getTitle());
@@ -536,7 +540,7 @@ public class SelectActionItemRecyclerViewAdapter extends RecyclerView.Adapter<Se
                 PinInfo keyPinInfo = var.getKeyPinInfo();
                 if (keyPinInfo != null) variableBinding.keySlot.setText(keyPinInfo.getTitle());
 
-                int[] array = new int[] {R.drawable.icon_remove, R.drawable.icon_data_array, R.drawable.icon_map};
+                int[] array = new int[]{R.drawable.icon_remove, R.drawable.icon_data_array, R.drawable.icon_map};
                 variableBinding.typeSpinner.setIconResource(array[var.getType().ordinal()]);
 
                 if (var.getType() == Variable.VariableType.MAP) {

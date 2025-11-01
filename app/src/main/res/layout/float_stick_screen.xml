@@ -34,35 +34,32 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/dragImage"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="?attr/iconButtonSize"
+            android:layout_height="?attr/iconButtonSize"
             android:layout_gravity="end|bottom"
             android:scaleType="centerInside"
             android:src="@drawable/icon_line_curve"
             android:tint="?attr/colorOutlineVariant"
-            android:translationX="2dp"
-            android:translationY="2dp" />
+            android:translationX="4dp"
+            android:translationY="4dp" />
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButtonGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|end">
+            android:layout_gravity="top|end"
+            android:spacing="0dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                style="?attr/iconButton"
                 app:icon="@drawable/icon_save" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/closeButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                style="?attr/iconButton"
                 app:icon="@drawable/icon_close" />
 
-        </LinearLayout>
+        </com.google.android.material.button.MaterialButtonGroup>
 
     </FrameLayout>
 

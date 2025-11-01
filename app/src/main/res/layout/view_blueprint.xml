@@ -9,12 +9,13 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             app:navigationIcon="@drawable/menu_arrow_back"
             app:subtitle="@string/blueprint" />
 
@@ -24,7 +25,7 @@
         android:id="@+id/cardLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/baseToolBar"
@@ -32,21 +33,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="48dp"
         app:cardElevation="5dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButtonGroup
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:spacing="0dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/editButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_margin="4dp"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_check"
                 android:checkable="true"
                 app:icon="@drawable/icon_visibility"
@@ -54,30 +54,26 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/addButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                app:icon="@drawable/icon_add"
-                app:iconSize="28dp" />
+                style="?attr/materialIconButtonFilledStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/icon_add" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/sortButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="4dp"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:icon="@drawable/icon_refresh" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pasteButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="4dp"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:icon="@drawable/icon_content_paste" />
-        </LinearLayout>
+        </com.google.android.material.button.MaterialButtonGroup>
 
     </com.google.android.material.card.MaterialCardView>
 
@@ -87,29 +83,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="48dp"
         android:visibility="gone"
         app:cardElevation="5dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButtonGroup
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:spacing="0dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/exchangeButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="4dp"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:icon="@drawable/icon_swap_horiz" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="4dp"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_check"
                 android:checkable="true"
                 app:icon="@drawable/icon_lock"
@@ -117,32 +112,29 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/copyButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="4dp"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:icon="@drawable/icon_content_copy" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/copyContentButton"
-                style="@style/Theme.TouchTool.IconButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="4dp"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:icon="@drawable/icon_copy" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteButton"
-                style="@style/Theme.TouchTool.IconButton.Filled"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="4dp"
+                style="?attr/materialIconButtonFilledStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_error_check"
                 android:checkable="true"
                 app:icon="@drawable/icon_delete"
                 app:iconTint="@color/button_container_check" />
 
-        </LinearLayout>
+        </com.google.android.material.button.MaterialButtonGroup>
 
     </com.google.android.material.card.MaterialCardView>
 

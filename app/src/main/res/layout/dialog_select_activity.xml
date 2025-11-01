@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="?attr/defaultPadding"
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -29,7 +29,7 @@
         android:id="@+id/activityBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="?attr/defaultPadding"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         tools:listitem="@layout/dialog_select_activity_item" />
 

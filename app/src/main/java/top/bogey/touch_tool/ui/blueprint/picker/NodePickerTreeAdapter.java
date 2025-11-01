@@ -127,7 +127,7 @@ public class NodePickerTreeAdapter extends TreeAdapter {
                 NodeInfo nodeInfo = (NodeInfo) node.getData();
                 if (nodeInfo == null) return;
                 nodeInfo.visible = !nodeInfo.visible;
-                notifyItemChanged(getAdapterPosition());
+                notifyItemChanged(getBindingAdapterPosition());
             });
 
             binding.infoButton.setOnClickListener(v -> {

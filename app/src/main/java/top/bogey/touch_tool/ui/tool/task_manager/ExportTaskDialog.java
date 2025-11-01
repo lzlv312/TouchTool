@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.Editable;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -55,6 +56,8 @@ public class ExportTaskDialog extends FrameLayout {
     public ExportTaskDialog(@NonNull Context context, List<Task> tasks, boolean selectAll) {
         super(context);
         DialogTaskManagerBinding binding = DialogTaskManagerBinding.inflate(LayoutInflater.from(context), this, true);
+
+        binding.importTag.setVisibility(View.GONE);
 
         adapter = new ExportTaskDialogAdapter();
         binding.selectionBox.setAdapter(adapter);

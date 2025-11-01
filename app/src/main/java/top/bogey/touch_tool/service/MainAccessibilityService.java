@@ -510,7 +510,7 @@ public class MainAccessibilityService extends AccessibilityService {
             });
             return future.join();
         } else {
-            return null;
+            return getScreenShotByCapture();
         }
     }
 

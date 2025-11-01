@@ -7,7 +7,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingHorizontal="?attr/defaultPadding">
 
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
             android:layout_width="match_parent"
@@ -18,7 +19,6 @@
             style="?attr/textInputOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
             android:hint="@string/select_icon_search"
             android:visibility="gone"
             app:endIconMode="clear_text"
@@ -38,7 +38,6 @@
             style="?attr/tabSecondaryStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             app:tabMode="scrollable" />
 
         <androidx.viewpager2.widget.ViewPager2
@@ -57,8 +56,7 @@
         android:clipChildren="false"
         android:clipToPadding="false"
         android:orientation="vertical"
-        android:paddingHorizontal="24dp"
-        android:paddingBottom="12dp">
+        android:padding="?attr/iconButtonSize">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/searchButton"
@@ -66,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="?attr/halfIconButtonSize"
             android:src="@drawable/icon_search" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

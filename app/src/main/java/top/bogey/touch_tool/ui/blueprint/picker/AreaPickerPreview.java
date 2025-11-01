@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ListPopupWindow;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ import top.bogey.touch_tool.utils.listener.TextChangedListener;
 public class AreaPickerPreview extends BasePicker<Rect> {
     private final FloatPickerAreaPreviewBinding binding;
     private boolean test = false;
+    private int ocrAppIndex = 0;
 
     public AreaPickerPreview(@NonNull Context context, ResultCallback<Rect> callback, Rect rect) {
         super(context, callback);
@@ -75,32 +77,41 @@ public class AreaPickerPreview extends BasePicker<Rect> {
             binding.testBox.setVisibility(test ? VISIBLE : GONE);
         });
 
-        List<String> ocrAppNames = TaskInfoSummary.getInstance().getOcrAppNames();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.pin_widget_select_item, ocrAppNames);
-//        binding.spinner.setAdapter(adapter);
 
         binding.timeSlider.setLabelFormatter(value -> getContext().getString(R.string.picker_area_offset, (int) value));
 
-//        binding.testButton.setOnClickListener(v -> {
-//            int position = binding.spinner.getSelectedItemPosition();
-//            List<String> ocrApps = TaskInfoSummary.getInstance().getOcrApps();
-//            if (position < ocrApps.size()) {
-//                MainAccessibilityService service = MainApplication.getInstance().getService();
-//                Bitmap bitmap = service.tryGetScreenShot();
-//                if (bitmap != null) {
-//                    Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, area.left, area.top, area.width(), area.height());
-//                    service.runOcr(ocrApps.get(position), clipBitmap, result -> {
-//                        StringBuilder builder = new StringBuilder();
-//                        int value = (int) binding.timeSlider.getValue();
-//                        for (OcrResult ocrResult : result) {
-//                            if (ocrResult.getSimilar() < value) continue;
-//                            builder.append(ocrResult.getText()).append("\n");
-//                        }
-//                        post(() -> Toast.makeText(context, builder.toString().trim(), Toast.LENGTH_SHORT).show());
-//                    });
-//                }
-//            }
-//        });
+        List<String> ocrAppNames = TaskInfoSummary.getInstance().getOcrAppNames();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.widget_textview_item, ocrAppNames);
+        binding.spinner.setOnClickListener(v -> {
+            ListPopupWindow popup = new ListPopupWindow(getContext());
+            popup.setAdapter(adapter);
+            popup.setAnchorView(binding.spinner);
+            popup.setOnItemClickListener((parent, view, position, id) -> {
+                binding.spinner.setText(adapter.getItem(position));
+                ocrAppIndex = position;
+            });
+            popup.show();
+        });
+
+        binding.testButton.setOnClickListener(v -> {
+            List<String> ocrApps = TaskInfoSummary.getInstance().getOcrApps();
+            if (ocrAppIndex < ocrApps.size()) {
+                MainAccessibilityService service = MainApplication.getInstance().getService();
+                Bitmap bitmap = service.tryGetScreenShot();
+                if (bitmap != null) {
+                    Bitmap clipBitmap = DisplayUtil.safeClipBitmap(bitmap, area.left, area.top, area.width(), area.height());
+                    service.runOcr(ocrApps.get(ocrAppIndex), clipBitmap, result -> {
+                        StringBuilder builder = new StringBuilder();
+                        int value = (int) binding.timeSlider.getValue();
+                        for (OcrResult ocrResult : result) {
+                            if (ocrResult.getSimilar() < value) continue;
+                            builder.append(ocrResult.getText()).append("\n");
+                        }
+                        post(() -> Toast.makeText(context, builder.toString().trim(), Toast.LENGTH_SHORT).show());
+                    });
+                }
+            }
+        });
 
         binding.backButton.setOnClickListener(v -> dismiss());
 

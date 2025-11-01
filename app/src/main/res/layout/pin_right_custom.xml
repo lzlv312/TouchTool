@@ -5,68 +5,55 @@
     android:layout_height="wrap_content"
     android:layout_gravity="end"
     android:gravity="center_vertical"
-    android:minHeight="24dp"
+    android:minHeight="?attr/iconButtonSize"
     android:orientation="horizontal">
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginHorizontal="4dp"
-        android:alpha="0.5"
-        android:src="@drawable/icon_drag_pan"
-        app:tint="?attr/colorOutline" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/removeButton"
-        style="@style/Theme.TouchTool.IconButton.Outlined"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        app:icon="@drawable/icon_remove"
-        app:iconTint="?attr/colorOutline" />
+        style="?attr/iconButtonOutlined"
+        app:icon="@drawable/icon_remove" />
 
+    <com.google.android.material.button.MaterialButton
+        style="?attr/iconButton"
+        app:icon="@drawable/icon_drag_pan" />
 
     <com.google.android.material.button.MaterialButtonGroup
         android:id="@+id/varBox"
+        style="@style/Widget.Material3.MaterialButtonGroup.Connected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:baselineAligned="false"
-        android:spacing="2dp">
+        android:spacing="0dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/keySlot"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            style="?attr/iconButtonOutlined"
+            android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:paddingHorizontal="0dp" />
+            android:minWidth="?attr/iconButtonSize"
+            android:paddingHorizontal="0dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/typeSpinner"
-            style="?attr/materialButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:minWidth="48dp"
-            android:paddingHorizontal="0dp" />
+            style="?attr/iconButtonFilled"
+            android:paddingHorizontal="0dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/valueSlot"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            style="?attr/iconButtonOutlined"
+            android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:paddingHorizontal="0dp" />
+            android:minWidth="?attr/iconButtonSize"
+            android:paddingHorizontal="0dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
     </com.google.android.material.button.MaterialButtonGroup>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/visibleButton"
-        style="@style/Theme.TouchTool.IconButton"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginHorizontal="4dp"
-        app:icon="@drawable/icon_visibility"
-        app:iconTint="?attr/colorOutline" />
+        style="?attr/iconButton"
+        app:icon="@drawable/icon_visibility" />
 
     <Space
         android:layout_width="0dp"
@@ -76,39 +63,38 @@
     <FrameLayout
         android:id="@+id/pinBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="4dp" />
+        android:layout_height="wrap_content" />
 
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="4dp"
+        android:layout_height="?attr/iconButtonSize"
+        android:layout_marginHorizontal="?attr/defaultPadding"
         android:clipChildren="false"
         android:hint="@string/custom_pin_name"
-        android:maxWidth="192dp"
-        android:minHeight="24dp"
-        app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
+        android:maxWidth="96dp"
+        android:translationY="-2dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:breakStrategy="simple"
             android:gravity="center"
             android:inputType="text"
             android:maxLines="1"
-            android:minHeight="20dp"
             android:paddingHorizontal="8dp"
             android:paddingVertical="0dp"
-            android:textSize="8sp" />
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/pinSlotBox"
-        android:layout_width="12dp"
-        android:layout_height="12dp" />
+        android:layout_width="?attr/halfIconButtonSize"
+        android:layout_height="?attr/halfIconButtonSize"
+        android:gravity="end"
+        android:orientation="horizontal" />
 
 </LinearLayout>

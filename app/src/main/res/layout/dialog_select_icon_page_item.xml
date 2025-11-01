@@ -4,8 +4,8 @@
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginEnd="?attr/defaultPadding"
+    android:layout_marginBottom="?attr/defaultPadding"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_margin="8dp"
+        android:layout_margin="?attr/defaultPadding"
         android:scaleType="centerInside"
         android:src="@drawable/icon_app"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />

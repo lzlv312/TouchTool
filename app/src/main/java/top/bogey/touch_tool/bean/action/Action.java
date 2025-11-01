@@ -27,7 +27,6 @@ import top.bogey.touch_tool.bean.pin.PinListener;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBase;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinMap;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinNode;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.save.SettingSaver;
@@ -218,7 +217,7 @@ public abstract class Action extends Identity implements PinListener {
     public abstract void execute(TaskRunnable runnable, Pin pin);
 
     public void executeNext(TaskRunnable runnable, Pin pin) {
-        onExecuteNext(runnable, pin);
+        beforeExecuteNext(runnable, pin);
 
         if (runnable.isInterrupt()) return;
         if (pin == null) return;
@@ -229,13 +228,16 @@ public abstract class Action extends Identity implements PinListener {
         Action action = runnable.getTask().getAction(linkedPin.getOwnerId());
         if (action == null) return;
 
-        runnable.addExecuteProgress(this);
-        runnable.addDebugLog(action, 1);
         action.resetReturnValue(runnable, linkedPin);
         action.execute(runnable, linkedPin);
     }
 
-    public void onExecuteNext(TaskRunnable runnable, Pin pin) {
+    protected void afterInitExecuteParams(TaskRunnable runnable) {
+        runnable.addExecuteProgress(this);
+        runnable.addDebugLog(this, 1);
+    }
+
+    public void beforeExecuteNext(TaskRunnable runnable, Pin pin) {
         runnable.addDebugLog(this, -1);
     }
 

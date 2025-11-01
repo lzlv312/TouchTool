@@ -24,6 +24,7 @@ import top.bogey.touch_tool.bean.pin.PinInfo;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinType;
 import top.bogey.touch_tool.bean.task.Variable;
+import top.bogey.touch_tool.common.StaticFunction;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.IDynamicPinCard;
 import top.bogey.touch_tool.utils.DisplayUtil;
@@ -50,64 +51,74 @@ public abstract class PinCustomView extends PinView {
         super.init();
         MaterialButton keyTypeView = getKeyTypeView();
         if (keyTypeView != null) {
-            ListPopupWindow popup = new ListPopupWindow(getContext());
-            List<PinInfo> pinInfoList = new ArrayList<>();
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.widget_spinner_item);
-            PIN_INFO_MAP.forEach((pinType, infoList) -> infoList.forEach(info -> {
-                adapter.add(info.getTitle());
-                pinInfoList.add(info);
-            }));
-            popup.setAdapter(adapter);
-            popup.setAnchorView(keyTypeView);
-            popup.setModal(true);
-            popup.setOnItemClickListener((parent, view, position, id) -> {
-                PinInfo pinInfo = pinInfoList.get(position);
-                keyTypeView.setText(pinInfo.getTitle());
-                variable.setKeyPinInfo(pinInfo);
-                pin.setValue(variable.getValue().copy());
-                popup.dismiss();
+            keyTypeView.setOnClickListener(v -> {
+                ListPopupWindow popup = new ListPopupWindow(getContext());
+                List<PinInfo> pinInfoList = new ArrayList<>();
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.widget_textview_item);
+                PIN_INFO_MAP.forEach((pinType, infoList) -> infoList.forEach(info -> {
+                    adapter.add(info.getTitle());
+                    pinInfoList.add(info);
+                }));
+                popup.setAdapter(adapter);
+                popup.setAnchorView(keyTypeView);
+                popup.setModal(true);
+                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(getContext(), adapter));
+                popup.setOnItemClickListener((parent, view, position, id) -> {
+                    PinInfo pinInfo = pinInfoList.get(position);
+                    keyTypeView.setText(pinInfo.getTitle());
+                    variable.setKeyPinInfo(pinInfo);
+                    pin.setValue(variable.getValue().copy());
+                    popup.dismiss();
+                });
+                popup.show();
             });
-            popup.show();
         }
 
         MaterialButton valueTypeView = getValueTypeView();
         if (valueTypeView != null) {
-            ListPopupWindow popup = new ListPopupWindow(getContext());
-            List<PinInfo> pinInfoList = new ArrayList<>();
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.widget_spinner_item);
-            PIN_INFO_MAP.forEach((pinType, infoList) -> infoList.forEach(info -> {
-                adapter.add(info.getTitle());
-                pinInfoList.add(info);
-            }));
-            popup.setAdapter(adapter);
-            popup.setAnchorView(valueTypeView);
-            popup.setModal(true);
-            popup.setOnItemClickListener((parent, view, position, id) -> {
-                PinInfo pinInfo = pinInfoList.get(position);
-                valueTypeView.setText(pinInfo.getTitle());
-                variable.setValuePinInfo(pinInfo);
-                pin.setValue(variable.getValue().copy());
-                popup.dismiss();
+            valueTypeView.setOnClickListener(v -> {
+                ListPopupWindow popup = new ListPopupWindow(getContext());
+                List<PinInfo> pinInfoList = new ArrayList<>();
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.widget_textview_item);
+                PIN_INFO_MAP.forEach((pinType, infoList) -> infoList.forEach(info -> {
+                    adapter.add(info.getTitle());
+                    pinInfoList.add(info);
+                }));
+                popup.setAdapter(adapter);
+                popup.setAnchorView(valueTypeView);
+                popup.setModal(true);
+                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(getContext(), adapter));
+                popup.setOnItemClickListener((parent, view, position, id) -> {
+                    PinInfo pinInfo = pinInfoList.get(position);
+                    valueTypeView.setText(pinInfo.getTitle());
+                    variable.setValuePinInfo(pinInfo);
+                    pin.setValue(variable.getValue().copy());
+                    popup.dismiss();
+                });
+                popup.show();
             });
-            popup.show();
+
         }
 
         MaterialButton typeView = getTypeView();
         if (typeView != null) {
-            ListPopupWindow popup = new ListPopupWindow(getContext());
-            String[] array = getContext().getResources().getStringArray(R.array.pin_simple_type);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.widget_spinner_item, array);
-            popup.setAdapter(adapter);
-            popup.setAnchorView(typeView);
-            popup.setModal(true);
-            popup.setOnItemClickListener((parent, view, position, id) -> {
-                typeView.setIconResource(ICON_ARRAY[position]);
-                variable.setType(Variable.VariableType.values()[position]);
-                pin.setValue(variable.getValue().copy());
-                refreshPin();
-                popup.dismiss();
+            typeView.setOnClickListener(v -> {
+                ListPopupWindow popup = new ListPopupWindow(getContext());
+                String[] array = getContext().getResources().getStringArray(R.array.pin_simple_type);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.widget_textview_item, array);
+                popup.setAdapter(adapter);
+                popup.setAnchorView(typeView);
+                popup.setModal(true);
+                popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(getContext(), adapter));
+                popup.setOnItemClickListener((parent, view, position, id) -> {
+                    typeView.setIconResource(ICON_ARRAY[position]);
+                    variable.setType(Variable.VariableType.values()[position]);
+                    pin.setValue(variable.getValue().copy());
+                    refreshPin();
+                    popup.dismiss();
+                });
+                popup.show();
             });
-            popup.show();
         }
 
         EditText editText = getTitleEdit();

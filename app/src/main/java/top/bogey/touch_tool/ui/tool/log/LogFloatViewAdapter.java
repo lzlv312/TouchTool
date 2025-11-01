@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
+import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.log.ActionLog;
 import top.bogey.touch_tool.bean.save.log.DateTimeLog;
@@ -25,6 +26,7 @@ import top.bogey.touch_tool.bean.save.log.LogSave;
 import top.bogey.touch_tool.bean.save.log.NormalLog;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.FloatLogActionItemBinding;
+import top.bogey.touch_tool.databinding.FloatLogActionValueItemBinding;
 import top.bogey.touch_tool.databinding.FloatLogDateTimeItemBinding;
 import top.bogey.touch_tool.databinding.FloatLogNormalItemBinding;
 import top.bogey.touch_tool.ui.blueprint.BlueprintView;
@@ -219,7 +221,7 @@ public class LogFloatViewAdapter extends TreeAdapter {
                     }
                     BlueprintView.tryFocusAction(currTask, action);
                     if (searchIndex != -1) notifyItemChanged(searchIndex);
-                    searchIndex = getAdapterPosition();
+                    searchIndex = getBindingAdapterPosition();
                     notifyItemChanged(searchIndex);
                 }
             });
@@ -261,6 +263,19 @@ public class LogFloatViewAdapter extends TreeAdapter {
                 actionBinding.title.setText(actionLog.getLog());
                 actionBinding.time.setText(logInfo.getTime(context));
                 actionBinding.icon.setImageResource(actionLog.isExecute() ? R.drawable.icon_shuffle : R.drawable.icon_equal);
+
+                if (action != null) {
+                    actionBinding.valueBox.removeAllViews();
+                    Action currentAction = action;
+                    actionLog.getValues().forEach((key, value) -> {
+                        Pin pinById = currentAction.getPinById(key);
+                        if (pinById == null) return;
+                        FloatLogActionValueItemBinding itemBinding = FloatLogActionValueItemBinding.inflate(LayoutInflater.from(context), actionBinding.valueBox, true);
+                        itemBinding.title.setText(pinById.getTitle());
+                        itemBinding.text.setText(value.toString());
+                    });
+                }
+                actionBinding.valueCard.setVisibility(searchIndex == getBindingAdapterPosition() ? View.VISIBLE : View.GONE);
             }
 
             if (log instanceof DateTimeLog dateTimeLog && dateTimeBinding != null) {
@@ -268,7 +283,7 @@ public class LogFloatViewAdapter extends TreeAdapter {
             }
 
             if (itemView instanceof MaterialCardView cardView) {
-                if (searchIndex == getAdapterPosition()) {
+                if (searchIndex == getBindingAdapterPosition()) {
                     cardView.setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorTertiaryContainer));
                 } else {
                     cardView.setCardBackgroundColor(DisplayUtil.getAttrColor(context, com.google.android.material.R.attr.colorSurfaceContainerHighest));

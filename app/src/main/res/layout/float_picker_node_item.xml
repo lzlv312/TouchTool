@@ -23,6 +23,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/visibleButton"
             style="?attr/iconButton"
+            android:translationX="-8dp"
             app:icon="@drawable/icon_visibility" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -30,6 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="-8dp"
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="2"

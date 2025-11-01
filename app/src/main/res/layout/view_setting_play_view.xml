@@ -15,6 +15,8 @@
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:layout_scrollEffect="compress"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             app:navigationIcon="@drawable/menu_arrow_back"
             app:title="@string/preference_setting_manual_play" />
 
@@ -82,7 +84,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:buttonText="@string/preference_setting_manual_play_reset"
-                        app:buttonVisible="right"
+                        app:buttonVisible="button"
                         app:description="@string/preference_setting_manual_play_reset_desc"
                         app:icon="@drawable/icon_refresh"
                         app:title="@string/preference_setting_manual_play_reset" />
@@ -115,80 +117,81 @@
                         app:cardBackgroundColor="?attr/colorSurface"
                         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
 
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/playButtonBox"
-                            style="?attr/materialCardViewFilledStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end|center_vertical"
-                            android:layout_marginVertical="8dp"
-                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingVertical="8dp">
 
-                            <LinearLayout
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/playButtonBox"
+                                style="?attr/materialCardViewFilledStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:orientation="vertical">
+                                android:layout_gravity="end|center_vertical"
+                                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.LargeIncreased">
 
-                                <com.google.android.material.button.MaterialButton
-                                    style="@style/Theme.TouchTool.IconButton"
-                                    android:layout_width="32dp"
-                                    android:layout_height="24dp"
-                                    app:icon="@drawable/icon_keyboard_arrow_up" />
-
-                                <FrameLayout
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="2dp">
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical"
+                                    android:padding="2dp">
 
-                                    <com.google.android.material.card.MaterialCardView
-                                        android:id="@+id/playButton"
-                                        style="?attr/materialCardViewFilledStyle"
-                                        android:layout_width="28dp"
-                                        android:layout_height="28dp"
-                                        app:cardBackgroundColor="?attr/colorSurface"
-                                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+                                    <com.google.android.material.button.MaterialButton
+                                        style="?attr/iconButton"
+                                        android:layout_height="?attr/smallIconButtonSize"
+                                        app:icon="@drawable/icon_keyboard_arrow_up" />
 
-                                    <com.google.android.material.progressindicator.LinearProgressIndicator
-                                        android:id="@+id/lineProgress"
-                                        android:layout_width="30dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="bottom|center_horizontal"
-                                        android:indeterminate="false"
-                                        android:max="100"
-                                        android:progress="50"
-                                        android:visibility="gone"
-                                        app:indicatorInset="0dp"
-                                        app:trackCornerRadius="1dp"
-                                        app:trackThickness="3dp" />
-
-                                    <com.google.android.material.progressindicator.CircularProgressIndicator
-                                        android:id="@+id/circleProgress"
+                                    <FrameLayout
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:indeterminate="false"
-                                        android:max="100"
-                                        android:progress="50"
-                                        app:indicatorInset="0dp"
-                                        app:indicatorSize="28dp"
-                                        app:trackCornerRadius="1dp"
-                                        app:trackThickness="3dp" />
+                                        android:layout_height="wrap_content">
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:id="@+id/playTitle"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:gravity="center"
-                                        android:textColor="?attr/colorPrimary"
-                                        android:textSize="12sp" />
+                                        <com.google.android.material.card.MaterialCardView
+                                            android:id="@+id/playButton"
+                                            style="?attr/materialCardViewFilledStyle"
+                                            android:layout_width="?attr/iconButtonSize"
+                                            android:layout_height="?attr/iconButtonSize"
+                                            app:cardBackgroundColor="?attr/colorSurface"
+                                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
-                                </FrameLayout>
+                                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                                            android:id="@+id/lineProgress"
+                                            android:layout_width="?attr/iconButtonSize"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="bottom|center_horizontal"
+                                            android:indeterminate="false"
+                                            android:visibility="visible"
+                                            app:indicatorInset="0dp"
+                                            app:indicatorSize="?attr/iconButtonSize"
+                                            app:trackCornerRadius="1dp"
+                                            app:trackThickness="3dp" />
 
-                            </LinearLayout>
+                                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                                            android:id="@+id/circleProgress"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:indeterminate="false"
+                                            app:indicatorInset="0dp"
+                                            app:indicatorSize="?attr/iconButtonSize"
+                                            app:trackCornerRadius="1dp"
+                                            app:trackThickness="3dp" />
 
-                        </com.google.android.material.card.MaterialCardView>
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:id="@+id/playTitle"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                                            android:textColor="?attr/colorPrimary" />
 
+                                    </FrameLayout>
+
+                                </LinearLayout>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </FrameLayout>
                     </com.google.android.material.card.MaterialCardView>
 
                     <Space
@@ -203,37 +206,36 @@
                         app:cardBackgroundColor="?attr/colorSurface"
                         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
 
+
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/dragSpace"
                             style="?attr/materialCardViewFilledStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end|center_vertical"
-                            android:layout_marginVertical="8dp"
-                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
+                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.LargeIncreased">
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/dragButton"
-                                style="@style/Theme.TouchTool.IconButton"
-                                android:layout_width="16dp"
-                                android:layout_height="32dp"
-                                app:icon="@drawable/icon_keyboard_arrow_left" />
-                        </com.google.android.material.card.MaterialCardView>
+                                style="?attr/iconButton"
+                                android:textScaleX="0"
+                                app:icon="@drawable/icon_keyboard_arrow_left"
+                                app:iconGravity="textStart" />
 
+                        </com.google.android.material.card.MaterialCardView>
 
                         <FrameLayout
                             android:id="@+id/singleButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="2dp">
+                            android:layout_gravity="center">
 
                             <com.google.android.material.card.MaterialCardView
                                 android:id="@+id/singleButtonCard"
                                 style="?attr/materialCardViewFilledStyle"
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
-                                app:cardBackgroundColor="?attr/colorSurface"
+                                android:layout_width="?attr/iconButtonSize"
+                                android:layout_height="?attr/iconButtonSize"
+                                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
                             <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -242,18 +244,18 @@
                                 android:layout_height="wrap_content"
                                 android:indeterminate="false"
                                 app:indicatorInset="0dp"
-                                app:indicatorSize="28dp"
+                                app:indicatorSize="?attr/iconButtonSize"
                                 app:trackCornerRadius="1dp"
                                 app:trackThickness="3dp" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/singleTitle"
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                android:textColor="?attr/colorPrimary"
-                                android:textSize="12sp" />
+                                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                                android:textColor="?attr/colorPrimary" />
 
                         </FrameLayout>
 
@@ -300,18 +302,6 @@
                         app:value="1" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSlider
-                        android:id="@+id/manualPlayCloseSize"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:description="@string/preference_setting_manual_play_close_size_desc"
-                        app:icon="@drawable/icon_zoom_in_map"
-                        app:max="3"
-                        app:min="1"
-                        app:title="@string/preference_setting_manual_play_close_size"
-                        app:value="1" />
-
-
-                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSlider
                         android:id="@+id/manualPlayHeight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -320,6 +310,18 @@
                         app:max="3"
                         app:min="1"
                         app:title="@string/preference_setting_manual_play_height"
+                        app:value="1" />
+
+
+                    <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSlider
+                        android:id="@+id/manualPlayCloseSize"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:description="@string/preference_setting_manual_play_close_size_desc"
+                        app:icon="@drawable/icon_zoom_in_map"
+                        app:max="3"
+                        app:min="1"
+                        app:title="@string/preference_setting_manual_play_close_size"
                         app:value="1" />
 
                     <top.bogey.touch_tool.ui.setting.widget.SettingWidgetSlider

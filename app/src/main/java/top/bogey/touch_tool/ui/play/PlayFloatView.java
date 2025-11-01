@@ -39,13 +39,16 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindowHelper;
 
 public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskListener {
-    public static final int UNIT_PIXEL = 5;
+    public static final int UNIT_DP_SIZE = 2;
+    public static final int BUTTON_DP_SIZE = 36;
+    public static final int UNIT_GROW_DP_SIZE = 8;
+
 
     private static String HIDE_PACKAGE = null;
     private static long HIDE_TIME = 0;
 
     private final FloatPlayBinding binding;
-    private final int padding = SettingSaver.getInstance().getManualPlayViewPadding() * UNIT_PIXEL;
+    private final int padding = SettingSaver.getInstance().getManualPlayViewPadding() * UNIT_DP_SIZE;
 
     private int runningTaskCount = 0;
 
@@ -72,8 +75,12 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         super(context);
         binding = FloatPlayBinding.inflate(LayoutInflater.from(context), this, true);
         DisplayUtil.setViewMargin(binding.playButtonBox, padding, 0, padding, 0);
+
         int size = SettingSaver.getInstance().getManualPlayViewCloseSize();
-        DisplayUtil.setViewWidth(binding.dragSpaceButton, (int) DisplayUtil.dp2px(context, 8 + 8 * size));
+        int buttonDpSize = BUTTON_DP_SIZE * 2 / 3;
+        int growDpSize = (BUTTON_DP_SIZE - buttonDpSize) / 2;
+        int px = (int) DisplayUtil.dp2px(context, buttonDpSize + growDpSize * (size - 1));
+        DisplayUtil.setViewWidth(binding.dragSpaceButton, px);
 
         binding.dragSpaceButton.setOnClickListener(v -> {
             refreshExpand(true);
@@ -167,13 +174,14 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         SettingSaver.getInstance().setManualPlayViewState(expand);
         binding.playButtonBox.setVisibility(expand ? VISIBLE : GONE);
         binding.dragSpace.setVisibility(expand ? GONE : VISIBLE);
-        binding.dragSpaceButton.setIconResource(inLeft() ? R.drawable.icon_keyboard_arrow_down : R.drawable.icon_keyboard_arrow_up);
+        binding.dragSpaceButton.setIconResource(inLeft() ? R.drawable.icon_keyboard_arrow_right : R.drawable.icon_keyboard_arrow_left);
         binding.getRoot().animate().alpha(expand ? 1 : 0.7f);
     }
 
     private void refreshCorner(boolean dragging) {
         boolean expand = SettingSaver.getInstance().getManualPlayViewState();
-        float cornerSize = DisplayUtil.dp2px(getContext(), expand ? 16 : 8);
+        int buttonDpSize = BUTTON_DP_SIZE * 2 / 3;
+        float cornerSize = DisplayUtil.dp2px(getContext(), expand ? BUTTON_DP_SIZE / 2f : buttonDpSize / 2f);
         if (dragging) {
             ShapeAppearanceModel appearanceModel = ShapeAppearanceModel.builder()
                     .setTopLeftCorner(CornerFamily.ROUNDED, cornerSize)

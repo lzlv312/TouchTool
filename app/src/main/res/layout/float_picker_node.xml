@@ -17,9 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:minWidth="24dp"
+        android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
         android:textColor="?attr/colorTertiary"
-        android:textSize="12sp"
         app:layout_anchor="@id/markBox"
         app:layout_anchorGravity="top|center_horizontal" />
 
@@ -32,7 +31,7 @@
         <com.google.android.material.button.MaterialButtonGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:spacing="2dp">
+            android:spacing="?attr/defaultOffset">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/backButton"
@@ -61,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:spacing="2dp">
+            android:spacing="?attr/defaultOffset">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/upButton"
@@ -115,7 +114,7 @@
                     android:id="@+id/searchEdit"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:paddingHorizontal="48dp"
+                    android:paddingHorizontal="?attr/minTouchTargetSize"
                     android:paddingVertical="0dp"
                     android:singleLine="true" />
 
@@ -127,7 +126,6 @@
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/typeGroup"
-                style="@style/Widget.Material3.MaterialButtonGroup.Connected"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 app:selectionRequired="true"

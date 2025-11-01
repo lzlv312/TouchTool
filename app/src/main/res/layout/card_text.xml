@@ -5,8 +5,8 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="?attr/minTouchTargetSize"
+        android:layout_height="?attr/minTouchTargetSize"
         android:layout_gravity="center_horizontal"
         android:alpha="0.1"
         app:srcCompat="@drawable/icon_edit"
@@ -60,7 +60,7 @@
                 android:id="@+id/textEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
+                android:paddingHorizontal="?attr/defaultPadding"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                 android:textColor="?attr/colorOnTertiaryContainer" />
 
@@ -70,7 +70,7 @@
             style="@style/Widget.Material3.CardView.Filled"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="8dp"
+            android:layout_margin="?attr/defaultPadding"
             android:alpha="0.5" />
 
     </LinearLayout>

@@ -63,12 +63,14 @@
     <string name="task_add">添加任务</string>
     <string name="task_update">修改任务</string>
     <string name="task_search">搜索任务</string>
+    <string name="task_search_history">搜索历史</string>
+    <string name="task_search_result">搜索结果</string>
     <string name="task_tag_add">添加标签</string>
     <string name="task_delete_tips">有%d个任务调用了此任务，分别是：</string>
     <string name="tasks_delete_tips">有%d个任务调用了这些任务，分别是：</string>
 
     <string name="task_import">导入任务</string>
-    <string name="task_import_tag">导入标签</string>
+    <string name="task_import_tag">导入分类</string>
     <string name="task_import_desc">从你选择的文件中选择需要导入的任务配置和通用自定义卡片</string>
     <string name="task_import_error_tips">将覆盖本地任务“%s”</string>
 
@@ -260,6 +262,7 @@
     <string name="app_setting_disable">功能已关闭</string>
 
     <string name="app_setting_reload">重启无障碍服务</string>
+    <string name="app_setting_reload_desc">关闭或清理当前无障碍服务，并重新启动无障碍服务</string>
     <string name="app_setting_reload_error">重启无障碍失败</string>
     <string name="app_setting_reload_success">重启无障碍成功</string>
     <string name="app_setting_reload_button_text">重启</string>
@@ -374,7 +377,7 @@
 
     <string name="preference_setting_manual_play_size">悬浮窗展开宽度</string>
     <string name="preference_setting_manual_play_size_desc">设置手动执行悬浮窗展开宽度以容纳更多文字</string>
-    <string name="preference_setting_manual_play_size_test_text">大家好</string>
+    <string name="preference_setting_manual_play_size_test_text">长宽高</string>
 
     <string name="preference_setting_manual_play_close_size">悬浮窗收起宽度</string>
     <string name="preference_setting_manual_play_close_size_desc">设置手动执行悬浮窗收起宽度以更好的在侧边点击</string>

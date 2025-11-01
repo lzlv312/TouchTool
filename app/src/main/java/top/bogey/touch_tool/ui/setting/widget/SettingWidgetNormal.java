@@ -37,16 +37,19 @@ public class SettingWidgetNormal extends FrameLayout {
             int buttonType = typedArray.getInt(R.styleable.SettingWidgetNormal_buttonVisible, 0);
             button = switch (buttonType) {
                 case 0 -> {
-                    binding.button.setVisibility(VISIBLE);
-                    yield binding.button;
+                    binding.button.setVisibility(GONE);
+                    binding.arrow.setVisibility(GONE);
+                    yield null;
                 }
                 case 1 -> {
-                    binding.button2.setVisibility(VISIBLE);
-                    yield binding.button2;
+                    binding.button.setVisibility(VISIBLE);
+                    binding.arrow.setVisibility(GONE);
+                    yield binding.button;
                 }
                 case 2 -> {
-                    binding.button3.setVisibility(VISIBLE);
-                    yield binding.button3;
+                    binding.button.setVisibility(GONE);
+                    binding.arrow.setVisibility(VISIBLE);
+                    yield binding.arrow;
                 }
                 default -> null;
             };

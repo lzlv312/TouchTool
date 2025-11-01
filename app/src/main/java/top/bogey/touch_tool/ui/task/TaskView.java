@@ -19,7 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.search.SearchView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -35,6 +37,7 @@ import top.bogey.touch_tool.bean.other.Usage;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.task.TaskSaveListener;
 import top.bogey.touch_tool.bean.task.Task;
+import top.bogey.touch_tool.databinding.ViewTagListItemBinding;
 import top.bogey.touch_tool.databinding.ViewTaskBinding;
 import top.bogey.touch_tool.service.ITaskListener;
 import top.bogey.touch_tool.service.MainAccessibilityService;
@@ -49,6 +52,7 @@ import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 public class TaskView extends Fragment implements ITaskListener, TaskSaveListener {
     private ViewTaskBinding binding;
+    private MenuItem searchMenuItem = null;
 
     boolean selecting = false;
     Set<String> selected = new HashSet<>();
@@ -60,6 +64,7 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         @Override
         public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
             menuInflater.inflate(R.menu.menu_task, menu);
+            searchMenuItem = menu.findItem(R.id.cleanSearch);
         }
 
         @Override
@@ -86,6 +91,9 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
                     ExportTaskDialog.showDialog(activity);
                 }
                 return true;
+            } else if (menuItem.getItemId() == R.id.cleanSearch) {
+                binding.searchBar.setText("");
+                resetTags();
             }
             return false;
         }
@@ -94,8 +102,12 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
     private final OnBackPressedCallback callback = new OnBackPressedCallback(false) {
         @Override
         public void handleOnBackPressed() {
-            unselectAll();
-            hideBottomBar();
+            if (selecting) {
+                unselectAll();
+                hideBottomBar();
+            } else {
+                binding.searchView.hide();
+            }
         }
     };
 
@@ -115,21 +127,44 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
 
         binding = ViewTaskBinding.inflate(inflater, container, false);
 
-        binding.toolBar.addMenuProvider(menuProvider, getViewLifecycleOwner());
+        binding.searchBar.addMenuProvider(menuProvider, getViewLifecycleOwner());
 
         Saver.getInstance().addListener(this);
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service != null && service.isEnabled()) service.addListener(this);
 
-        binding.searchEdit.addTextChangedListener(new TextChangedListener() {
+        TaskPageItemRecyclerViewAdapter searchAdapter = new TaskPageItemRecyclerViewAdapter(this);
+        binding.searchBox.setAdapter(searchAdapter);
+
+        binding.searchView.getEditText().addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
-                binding.clean.setVisibility(s.length() == 0 ? View.GONE : View.VISIBLE);
-                resetTags();
+                if (s.length() == 0) {
+                    searchAdapter.setTasks("", new ArrayList<>());
+                } else {
+                    searchAdapter.setTasks("", Saver.getInstance().searchTasks(s.toString()));
+                }
             }
         });
 
-        binding.clean.setOnClickListener(v -> binding.searchEdit.setText(""));
+        binding.searchView.addTransitionListener((searchView, oldState, newState) -> callback.setEnabled(newState == SearchView.TransitionState.SHOWN || selecting));
+
+        binding.searchView.getEditText().setOnEditorActionListener((textView, i, keyEvent) -> {
+            Editable text = binding.searchView.getText();
+            String textString = text.toString();
+            Saver.getInstance().addSearchHistory(textString);
+            refreshSearchHistory();
+            binding.searchBar.setText(textString);
+            resetTags();
+            binding.searchView.hide();
+            return false;
+        });
+
+        binding.cleanButton.setOnClickListener(v -> {
+            Saver.getInstance().cleanSearchHistory();
+            refreshSearchHistory();
+        });
+        refreshSearchHistory();
 
         adapter = new TaskPageViewAdapter(this);
         binding.tasksBox.setAdapter(adapter);
@@ -218,12 +253,32 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
     }
 
     public void resetTags() {
-        Editable text = binding.searchEdit.getText();
-        if (text != null && text.length() > 0) {
-            adapter.search(text.toString());
-        } else {
+        CharSequence text = binding.searchBar.getText();
+        String string = text.toString();
+        if (string.isEmpty()) {
             List<String> tags = Saver.getInstance().getTaskTags();
             adapter.setTags(tags);
+            if (searchMenuItem != null) searchMenuItem.setVisible(false);
+        } else {
+            adapter.search(string);
+            if (searchMenuItem != null) searchMenuItem.setVisible(true);
+        }
+    }
+
+    public void refreshSearchHistory() {
+        binding.historyBox.removeAllViews();
+        for (String history : Saver.getInstance().getSearchHistory()) {
+            ViewTagListItemBinding itemBinding = ViewTagListItemBinding.inflate(LayoutInflater.from(getContext()), binding.historyBox, true);
+            Chip chip = itemBinding.getRoot();
+            chip.setOnCloseIconClickListener(v -> {
+                Saver.getInstance().removeSearchHistory(history);
+                binding.historyBox.removeView(chip);
+            });
+
+            chip.setCheckable(false);
+            chip.setText(history);
+
+            chip.setOnClickListener(v -> binding.searchView.getEditText().setText(history));
         }
     }
 

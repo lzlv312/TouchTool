@@ -6,8 +6,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/icon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="?attr/minTouchTargetSize"
+        android:layout_height="?attr/minTouchTargetSize"
         android:layout_gravity="center_horizontal"
         android:alpha="0.1"
         app:srcCompat="@drawable/icon_settings"
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="4dp" />
+            android:paddingHorizontal="?attr/defaultPadding" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="?attr/defaultPadding"
                 android:layout_weight="1"
                 android:lines="1"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorTertiaryContainer"
             android:gravity="center"
-            android:paddingHorizontal="8dp"
+            android:paddingHorizontal="?attr/defaultPadding"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textColor="?attr/colorOnTertiaryContainer"
             android:visibility="gone" />
@@ -118,7 +118,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
+                android:minWidth="?attr/defaultPadding"
                 android:layout_weight="1" />
 
             <LinearLayout
@@ -136,7 +136,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingHorizontal="8dp"
+            android:paddingHorizontal="?attr/defaultPadding"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:visibility="gone" />
 
@@ -147,7 +147,7 @@
             android:layout_gravity="bottom"
             android:gravity="bottom"
             android:orientation="horizontal"
-            android:paddingHorizontal="4dp" />
+            android:paddingHorizontal="?attr/defaultPadding" />
 
     </LinearLayout>
 
@@ -156,7 +156,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="8dp"
+        android:layout_margin="?attr/defaultPadding"
         android:alpha="0.1"
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"

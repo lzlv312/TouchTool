@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="64dp"
-        android:spacing="2dp">
+        android:spacing="?attr/defaultOffset">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/backButton"
@@ -48,7 +48,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="2px"
-            android:layout_height="24dp"
+            android:layout_height="?attr/halfIconButtonSize"
             android:layout_gravity="center"
             android:background="?attr/colorPrimaryLight"
             tools:ignore="PxUsage" />

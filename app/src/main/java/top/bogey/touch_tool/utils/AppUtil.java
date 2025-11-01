@@ -212,6 +212,7 @@ public class AppUtil {
     }
 
     public static void copyToClipboard(Context context, String text, boolean showToast) {
+        if (text == null) return;
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(text, text);
         clipboard.setPrimaryClip(clip);
