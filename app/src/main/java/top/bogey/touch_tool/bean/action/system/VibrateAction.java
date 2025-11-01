@@ -12,10 +12,10 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class VibrateAction  extends ExecuteAction {
+public class VibrateAction extends ExecuteAction {
     protected final transient Pin durationPin = new Pin(new PinInteger(1000), R.string.vibrate_action_time);
 
-    public VibrateAction(){
+    public VibrateAction() {
         super(ActionType.VIBRATE);
         addPin(durationPin);
     }
