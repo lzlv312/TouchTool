@@ -58,6 +58,8 @@ public enum ActionType {
     STOP_RINGTONE,
     TEXT_TO_SPEECH,
 
+    VIBRATE,
+
     SEND_NOTIFICATION,
     SEND_TOAST,
 

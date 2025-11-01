@@ -73,6 +73,7 @@ public class ActionMap {
                     ActionType.PLAY_RINGTONE,
                     ActionType.STOP_RINGTONE,
                     ActionType.TEXT_TO_SPEECH,
+                    ActionType.VIBRATE,
                     ActionType.SEND_NOTIFICATION,
                     ActionType.SEND_TOAST,
 

@@ -215,6 +215,10 @@
     <string name="text_to_speak_action">文本转语音</string>
     <string name="text_to_speak_action_desc">将文本转为语音并播放</string>
 
+    <string name="vibrate_action">震动</string>
+    <string name="vibrate_action_desc">震动手机</string>
+    <string name="vibrate_action_time">时长(ms)</string>
+
     <string name="send_notification_action">发送通知</string>
     <string name="send_notification_action_desc">发送自定义通知到通知栏</string>
     <string name="send_notification_action_title">标题</string>
