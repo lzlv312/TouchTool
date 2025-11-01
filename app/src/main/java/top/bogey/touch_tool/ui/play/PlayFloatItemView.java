@@ -106,7 +106,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         binding.lineProgress.setIndeterminate(false);
         binding.circleProgress.setVisibility(View.GONE);
         binding.lineProgress.setVisibility(View.GONE);
-        binding.icon.setIconResource(R.drawable.icon_play_arrow);
+        binding.icon.setImageResource(R.drawable.icon_play_arrow);
     }
 
     private void setPlaying() {
@@ -116,7 +116,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         binding.lineProgress.setIndeterminate(true);
         binding.circleProgress.setVisibility(size == height ? View.VISIBLE : View.GONE);
         binding.lineProgress.setVisibility(size == height ? View.GONE : View.VISIBLE);
-        binding.icon.setIconResource(R.drawable.icon_pause);
+        binding.icon.setImageResource(R.drawable.icon_pause);
     }
 
     private boolean resume() {
@@ -136,7 +136,7 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
         binding.lineProgress.setIndeterminate(false);
         binding.circleProgress.setVisibility(View.GONE);
         binding.lineProgress.setVisibility(View.GONE);
-        binding.icon.setIconResource(0);
+        binding.icon.setImageResource(0);
         binding.title.setText(getTitle(task, startAction));
     }
 
