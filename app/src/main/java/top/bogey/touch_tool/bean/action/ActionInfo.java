@@ -148,6 +148,7 @@ import top.bogey.touch_tool.bean.action.system.OpenAppAction;
 import top.bogey.touch_tool.bean.action.system.OpenShortcutAction;
 import top.bogey.touch_tool.bean.action.system.OpenUriSchemeAction;
 import top.bogey.touch_tool.bean.action.system.PlayRingtoneAction;
+import top.bogey.touch_tool.bean.action.system.VibrateAction;
 import top.bogey.touch_tool.bean.action.system.ReadFromClipboardAction;
 import top.bogey.touch_tool.bean.action.system.SendNotificationAction;
 import top.bogey.touch_tool.bean.action.system.SendToastAction;
@@ -229,6 +230,7 @@ public class ActionInfo {
     private final static ActionInfo PLAY_RINGTONE_INFO = new ActionInfo(ActionType.PLAY_RINGTONE, PlayRingtoneAction.class, R.drawable.icon_notifications_active, R.string.play_ringtone_action, R.string.play_ringtone_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STOP_RINGTONE_INFO = new ActionInfo(ActionType.STOP_RINGTONE, StopRingtoneAction.class, R.drawable.icon_notifications_off, R.string.stop_ringtone_action, R.string.stop_ringtone_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo TEXT_TO_SPEECH_INFO = new ActionInfo(ActionType.TEXT_TO_SPEECH, TextToSpeechAction.class, R.drawable.icon_text_to_speech, R.string.text_to_speak_action, R.string.text_to_speak_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo VIBRATE_INFO = new ActionInfo(ActionType.VIBRATE, VibrateAction.class, R.drawable.icon_vibrate, R.string.vibrate_action, R.string.vibrate_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SEND_NOTIFICATION_INFO = new ActionInfo(ActionType.SEND_NOTIFICATION, SendNotificationAction.class, R.drawable.icon_notifications, R.string.send_notification_action, R.string.send_notification_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SEND_TOAST_INFO = new ActionInfo(ActionType.SEND_TOAST, SendToastAction.class, R.drawable.icon_toast, R.string.send_toast_action, R.string.send_toast_action_desc, 0, NormalActionCard.class);
 
@@ -432,6 +434,7 @@ public class ActionInfo {
             case PLAY_RINGTONE -> PLAY_RINGTONE_INFO;
             case STOP_RINGTONE -> STOP_RINGTONE_INFO;
             case TEXT_TO_SPEECH -> TEXT_TO_SPEECH_INFO;
+            case VIBRATE -> VIBRATE_INFO;
             case SEND_NOTIFICATION -> SEND_NOTIFICATION_INFO;
             case SEND_TOAST -> SEND_TOAST_INFO;
 
