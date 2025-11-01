@@ -4,8 +4,8 @@
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="?attr/defaultPadding"
-    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
+    android:layout_margin="?attr/defaultOffset"
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,18 +14,28 @@
         android:minHeight="?attr/iconButtonSize"
         android:padding="?attr/defaultPadding">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/icon"
-            android:layout_width="?attr/iconButtonSize"
-            android:layout_height="?attr/iconButtonSize"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/iconBox"
+            style="?attr/materialCardViewFilledStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="?attr/colorSurface"
+            android:layout_marginEnd="?attr/defaultPadding"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/icon"
+                android:layout_width="?attr/iconButtonSize"
+                android:layout_height="?attr/iconButtonSize"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/titleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="?attr/defaultPadding"
             android:layout_weight="1"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />

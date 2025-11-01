@@ -64,8 +64,8 @@ public class TaskInfoSummary {
 
     private final List<String> ocrApps = new ArrayList<>();
 
-    private PackageActivity packageActivity = new PackageActivity(null, null);
-    private PackageActivity lastPackageActivity = new PackageActivity(null, null);
+    private PackageActivity packageActivity = new PackageActivity("", "");
+    private PackageActivity lastPackageActivity = new PackageActivity("", "");
     private final List<ResultCallback<PackageActivity>> packageActivityListeners = new ArrayList<>();
 
     private Notification notification;
@@ -399,7 +399,7 @@ public class TaskInfoSummary {
     public boolean setPackageActivity(String packageName, String activityName) {
         if (packageName == null || activityName == null) return false;
         if (packageName.isEmpty() || activityName.isEmpty()) return false;
-        if (packageActivity.packageName.equals(packageName) && packageActivity.activityName.equals(activityName)) return false;
+        if (packageName.equals(packageActivity.packageName) && activityName.equals(packageActivity.activityName)) return false;
         lastPackageActivity = packageActivity;
         packageActivity = new PackageActivity(packageName, activityName);
         packageActivityListeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onResult(packageActivity));
@@ -447,7 +447,7 @@ public class TaskInfoSummary {
 
     public void onPhoneStateChanged() {
         tryStartActions(ScreenStartAction.class);
-        tryShowManualPlayView(!packageActivity.activityName.equals(MainActivity.class.getName()));
+        tryShowManualPlayView(!MainActivity.class.getName().equals(packageActivity.activityName));
     }
 
     public List<NotworkState> getNetworkState() {

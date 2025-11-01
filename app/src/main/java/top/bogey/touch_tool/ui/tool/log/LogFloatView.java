@@ -158,6 +158,7 @@ public class LogFloatView extends FrameLayout implements FloatInterface, LogSave
         binding.nextButton.setOnClickListener(v -> searchLog(true));
 
         binding.clearButton.setOnClickListener(v -> {
+            if (task == null) return;
             Saver.getInstance().clearLog(task.getId());
             adapter.setLogSave(Saver.getInstance().getLogSave(task.getId()));
         });
