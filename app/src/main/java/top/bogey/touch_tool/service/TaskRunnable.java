@@ -144,7 +144,11 @@ public class TaskRunnable implements Runnable {
 
     public void addLog(LogInfo logInfo, int stackOption) {
         switch (stackOption) {
-            case -1 -> addLog(logStack.pop(), 0);
+            case -1 -> {
+                LogInfo info = logStack.pop();
+                info.syncLog(logInfo.getLogObject());
+                addLog(info, 0);
+            }
             case 0 -> {
                 if (logStack.isEmpty()) {
                     if (!skipLog) Saver.getInstance().addLog(task.getId(), logInfo, true);

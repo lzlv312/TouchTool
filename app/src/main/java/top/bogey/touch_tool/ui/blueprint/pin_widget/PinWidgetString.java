@@ -166,7 +166,6 @@ public class PinWidgetString extends PinWidget<PinString> {
                                 Intent intent = new Intent(getContext(), InstantActivity.class);
                                 intent.setAction(InstantActivity.INTENT_KEY_DO_ACTION);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.putExtra(InstantActivity.INTENT_KEY_DO_ACTION, true);
                                 intent.putExtra(InstantActivity.TASK_ID, card.getTask().getId());
                                 intent.putExtra(InstantActivity.ACTION_ID, card.getAction().getId());
                                 ShortcutInfo info = new ShortcutInfo.Builder(getContext(), card.getAction().getId())

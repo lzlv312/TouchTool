@@ -145,7 +145,7 @@ public abstract class PinCustomView extends PinView {
             float y = event.getY();
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 PointF pointF = DisplayUtil.getLocationRelativeToView(this, getCard());
-                if (getCard().getLinkAblePinView(x + pointF.x, y + pointF.y) == this) {
+                if (getCard().getLinkAblePinView((x + pointF.x) * getCard().getScaleX(), (y + pointF.y) * getCard().getScaleY()) == this) {
                     dynamicPinCard.suppressLayout();
                 }
             }

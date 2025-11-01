@@ -14,6 +14,7 @@ import top.bogey.touch_tool.databinding.ViewToolBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.blueprint.picker.NodePickerPreview;
 import top.bogey.touch_tool.ui.tool.app_info.AppInfoFloatView;
+import top.bogey.touch_tool.ui.tool.log.LogFloatView;
 
 public class ToolView extends Fragment {
     private ViewToolBinding binding;
@@ -37,6 +38,8 @@ public class ToolView extends Fragment {
         binding.appInfoButton.setOnClickListener(v -> new AppInfoFloatView(requireActivity()).show());
 
         binding.nodePickerButton.setOnClickListener(v -> new NodePickerPreview(requireActivity(), null,  null).show());
+
+        binding.logButton.setOnClickListener(v -> new LogFloatView(requireActivity()).show());
 
         return binding.getRoot();
     }

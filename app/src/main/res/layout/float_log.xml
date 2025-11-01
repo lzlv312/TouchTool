@@ -41,8 +41,9 @@
                 android:layout_height="?attr/iconButtonSize"
                 android:orientation="horizontal">
 
-                <com.google.android.material.textview.MaterialTextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/title"
+                    style="?attr/iconButtonOutlined"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

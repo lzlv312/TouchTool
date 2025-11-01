@@ -171,6 +171,11 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         new TabLayoutMediator(binding.tabBox, binding.tasksBox, (tab, position) -> tab.setText(adapter.tags.get(position))).attach();
         resetTags();
 
+        binding.tagButton.setOnClickListener(v -> {
+            TaskTagListView tagListView = new TaskTagListView(this);
+            tagListView.show(getParentFragmentManager(), null);
+        });
+
         binding.selectAllButton.setOnClickListener(v -> selectAll());
 
         binding.deleteButton.setOnClickListener(v -> {
@@ -286,6 +291,16 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
         TabLayout.Tab tab = binding.tabBox.getTabAt(binding.tabBox.getSelectedTabPosition());
         if (tab == null || tab.getText() == null) return null;
         return tab.getText().toString();
+    }
+
+    public void gotoTargetTag(String tag) {
+        for (int i = 0; i < binding.tabBox.getTabCount(); i++) {
+            TabLayout.Tab tab = binding.tabBox.getTabAt(i);
+            if (tab == null || tab.getText() == null) continue;
+            if (tag.equals(tab.getText().toString())) {
+                binding.tabBox.selectTab(tab);
+            }
+        }
     }
 
     public void showBottomBar() {

@@ -22,7 +22,7 @@
         style="@style/Widget.Material3.MaterialButtonGroup.Connected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:spacing="0dp">
+        android:spacing="-4dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/keySlot"

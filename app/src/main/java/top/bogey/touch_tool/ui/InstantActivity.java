@@ -95,13 +95,10 @@ public class InstantActivity extends BaseActivity {
                 }
             }
         } else if (INTENT_KEY_DO_ACTION.equals(action)) {
-            boolean doAction = intent.getBooleanExtra(INTENT_KEY_DO_ACTION, false);
-            if (doAction) {
-                String taskId = intent.getStringExtra(TASK_ID);
-                String actionId = intent.getStringExtra(ACTION_ID);
-                String pinId = intent.getStringExtra(PIN_ID);
-                doAction(taskId, actionId, pinId, null);
-            }
+            String taskId = intent.getStringExtra(TASK_ID);
+            String actionId = intent.getStringExtra(ACTION_ID);
+            String pinId = intent.getStringExtra(PIN_ID);
+            doAction(taskId, actionId, pinId, null);
         }
     }
 

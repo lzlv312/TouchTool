@@ -74,7 +74,7 @@ public class SendNotificationAction extends ExecuteAction {
         Pin linkedPin = executePin.getLinkedPin(runnable.getTask());
         if (linkedPin != null) {
             Intent intent = new Intent(context, InstantActivity.class);
-            intent.putExtra(InstantActivity.INTENT_KEY_DO_ACTION, true);
+            intent.setAction(InstantActivity.INTENT_KEY_DO_ACTION);
             intent.putExtra(InstantActivity.TASK_ID, runnable.getTask().getId());
             intent.putExtra(InstantActivity.ACTION_ID, getId());
             intent.putExtra(InstantActivity.PIN_ID, executePin.getId());

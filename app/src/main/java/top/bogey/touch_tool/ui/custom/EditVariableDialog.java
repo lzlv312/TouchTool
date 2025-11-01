@@ -3,8 +3,10 @@ package top.bogey.touch_tool.ui.custom;
 import android.content.Context;
 import android.text.Editable;
 import android.view.LayoutInflater;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -70,6 +72,17 @@ public class EditVariableDialog extends MaterialAlertDialogBuilder {
             dialog.dismiss();
             callback.onResult(false);
         });
+    }
+
+    @Override
+    public AlertDialog show() {
+        AlertDialog dialog = super.show();
+        binding.titleEdit.postDelayed(() -> {
+            binding.titleEdit.requestFocus();
+            InputMethodManager imm = (InputMethodManager) dialog.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(binding.titleEdit, InputMethodManager.SHOW_IMPLICIT);
+        }, 100);
+        return dialog;
     }
 
     public void setCallback(BooleanResultCallback callback) {

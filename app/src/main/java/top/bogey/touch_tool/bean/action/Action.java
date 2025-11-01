@@ -228,13 +228,10 @@ public abstract class Action extends Identity implements PinListener {
         Action action = runnable.getTask().getAction(linkedPin.getOwnerId());
         if (action == null) return;
 
+        runnable.addExecuteProgress(action);
+        runnable.addDebugLog(action, 1);
         action.resetReturnValue(runnable, linkedPin);
         action.execute(runnable, linkedPin);
-    }
-
-    protected void afterInitExecuteParams(TaskRunnable runnable) {
-        runnable.addExecuteProgress(this);
-        runnable.addDebugLog(this, 1);
     }
 
     public void beforeExecuteNext(TaskRunnable runnable, Pin pin) {

@@ -108,6 +108,50 @@
 
                     </LinearLayout>
 
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="8dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/logButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:backgroundTint="?attr/colorSurface"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:text="@string/task_running_log"
+                            android:textColor="?attr/colorOnSurface"
+                            app:icon="@drawable/icon_draw"
+                            app:iconTint="?attr/colorPrimary"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
+
+                        <Space
+                            android:layout_width="8dp"
+                            android:layout_height="wrap_content" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:backgroundTint="?attr/colorSurface"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:text="@string/node_picker"
+                            android:textColor="?attr/colorOnSurface"
+                            android:visibility="invisible"
+                            app:icon="@drawable/icon_widgets"
+                            app:iconTint="?attr/colorPrimary"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>

@@ -8,9 +8,15 @@ import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.ListPopupWindow;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -32,11 +38,12 @@ import top.bogey.touch_tool.utils.listener.TextChangedListener;
 public class LogFloatView extends FrameLayout implements FloatInterface, LogSaveListener {
     private final FloatLogBinding binding;
     private final LogFloatViewAdapter adapter;
-    private final Task task;
     private final String tag = LogFloatView.class.getName();
 
     private final int minWidth, minHeight;
     private final int maxWidth, maxHeight;
+
+    private Task task;
     private int originWidth = 0, originHeight = 0;
     private int width = 0, height = 0;
 
@@ -46,7 +53,12 @@ public class LogFloatView extends FrameLayout implements FloatInterface, LogSave
     private boolean expanded = true;
 
     @SuppressLint("ClickableViewAccessibility")
-    public LogFloatView(@NonNull Context context, Task task) {
+    public LogFloatView(@NonNull Context context) {
+        this(context, null);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public LogFloatView(@NonNull Context context, @Nullable Task task) {
         super(context);
         this.task = task;
 
@@ -59,7 +71,28 @@ public class LogFloatView extends FrameLayout implements FloatInterface, LogSave
         binding = FloatLogBinding.inflate(LayoutInflater.from(context), this, true);
         adapter = new LogFloatViewAdapter();
 
-        binding.title.setText(task.getTitle());
+        binding.title.setOnClickListener(v -> {
+            ListPopupWindow popup = new ListPopupWindow(context);
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, R.layout.widget_textview_item);
+            List<Task> tasks = Saver.getInstance().getTasks();
+            List<Task> validTasks = new ArrayList<>();
+            tasks.forEach(t -> {
+                if (t.isEnable()) {
+                    validTasks.add(t);
+                    arrayAdapter.add(t.getTitle());
+                }
+            });
+            popup.setAdapter(arrayAdapter);
+            popup.setAnchorView(binding.title);
+            popup.setOnItemClickListener((parent, view, position, id) -> {
+                this.task = validTasks.get(position);
+                binding.title.setText(this.task.getTitle());
+                adapter.setLogSave(Saver.getInstance().getLogSave(this.task.getId()));
+                popup.dismiss();
+            });
+            popup.setModal(true);
+            popup.show();
+        });
 
         binding.closeButton.setOnClickListener(v -> dismiss());
 
@@ -103,8 +136,11 @@ public class LogFloatView extends FrameLayout implements FloatInterface, LogSave
 
         binding.recyclerView.setAdapter(adapter);
 
-        adapter.setLogSave(Saver.getInstance().getLogSave(task.getId()));
-        binding.recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+        if (task != null) {
+            binding.title.setText(task.getTitle());
+            adapter.setLogSave(Saver.getInstance().getLogSave(task.getId()));
+            binding.recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+        }
 
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override
@@ -241,6 +277,7 @@ public class LogFloatView extends FrameLayout implements FloatInterface, LogSave
 
     @Override
     public void onNewLog(LogSave logSave, LogInfo log) {
+        if (task == null) return;
         post(() -> {
             if (logSave.getKey().equals(task.getId())) {
                 adapter.addLog(logSave, log);

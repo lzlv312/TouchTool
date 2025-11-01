@@ -38,7 +38,6 @@ public class CreateQRCodeAction extends ExecuteAction {
             Bitmap qrCode = CodeUtils.createQRCode(content.toString(), size.getValue());
             imagePin.getValue(PinImage.class).setImage(qrCode);
         }
-        afterInitExecuteParams(runnable);
         executeNext(runnable, outPin);
     }
 }

@@ -39,6 +39,12 @@ public class LogInfo implements ILazyTreeNodeData {
         children.addAll(GsonUtil.getAsObject(jsonObject, "children", TypeToken.getParameterized(ArrayList.class, String.class).getType(), new ArrayList<>()));
     }
 
+    public void syncLog(Log log) {
+        if (this.log instanceof ActionLog actionLog && log instanceof ActionLog logLog) {
+            actionLog.syncLog(logLog);
+        }
+    }
+
     public String getUid() {
         return uid;
     }

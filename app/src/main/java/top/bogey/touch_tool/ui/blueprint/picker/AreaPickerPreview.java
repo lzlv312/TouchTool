@@ -89,9 +89,11 @@ public class AreaPickerPreview extends BasePicker<Rect> {
             popup.setOnItemClickListener((parent, view, position, id) -> {
                 binding.spinner.setText(adapter.getItem(position));
                 ocrAppIndex = position;
+                popup.dismiss();
             });
             popup.show();
         });
+        if (!ocrAppNames.isEmpty()) binding.spinner.setText(ocrAppNames.get(ocrAppIndex));
 
         binding.testButton.setOnClickListener(v -> {
             List<String> ocrApps = TaskInfoSummary.getInstance().getOcrApps();

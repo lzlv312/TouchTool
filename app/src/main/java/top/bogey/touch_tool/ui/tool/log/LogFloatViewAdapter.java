@@ -272,7 +272,7 @@ public class LogFloatViewAdapter extends TreeAdapter {
                         if (pinById == null) return;
                         FloatLogActionValueItemBinding itemBinding = FloatLogActionValueItemBinding.inflate(LayoutInflater.from(context), actionBinding.valueBox, true);
                         itemBinding.title.setText(pinById.getTitle());
-                        itemBinding.text.setText(value.toString());
+                        itemBinding.content.setText(value.toString());
                     });
                 }
                 actionBinding.valueCard.setVisibility(searchIndex == getBindingAdapterPosition() ? View.VISIBLE : View.GONE);

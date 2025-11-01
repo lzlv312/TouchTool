@@ -32,6 +32,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
+import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -479,33 +480,40 @@ public class MainAccessibilityService extends AccessibilityService {
     // 录屏 ----------------------------------------------------------------------------- end
 
     // 截图 ----------------------------------------------------------------------------- start
+
+    private WeakReference<Bitmap> screenShot = new WeakReference<>(null);
+    private final ExecutorService captureExecutorService = Executors.newSingleThreadExecutor();
+
     public synchronized Bitmap getScreenShotByCapture() {
-        return captureBinder != null ? captureBinder.getScreenShot() : null;
+        if (captureBinder == null) return screenShot.get();
+        Bitmap bitmap = captureBinder.getScreenShot();
+        screenShot = new WeakReference<>(bitmap);
+        return bitmap;
     }
 
+    // 不能递归调用，会锁死
     public synchronized Bitmap getScreenShotByAccessibility() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             CompletableFuture<Bitmap> future = new CompletableFuture<>();
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            takeScreenshot(0, executorService, new TakeScreenshotCallback() {
+            takeScreenshot(0, captureExecutorService, new TakeScreenshotCallback() {
                 @Override
-                public void onSuccess(@NonNull ScreenshotResult screenshot) {
-                    try (HardwareBuffer hardwareBuffer = screenshot.getHardwareBuffer()) {
-                        Bitmap bitmap = Bitmap.wrapHardwareBuffer(hardwareBuffer, screenshot.getColorSpace());
+                public void onSuccess(@NonNull ScreenshotResult result) {
+                    try (HardwareBuffer hardwareBuffer = result.getHardwareBuffer()) {
+                        Bitmap bitmap = Bitmap.wrapHardwareBuffer(hardwareBuffer, result.getColorSpace());
                         if (bitmap != null) {
                             Bitmap copy = bitmap.copy(Bitmap.Config.ARGB_8888, false);
+                            screenShot = new WeakReference<>(copy);
                             bitmap.recycle();
                             future.complete(copy);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
-                        future.complete(null);
+                        future.complete(screenShot.get());
                     }
                 }
 
                 @Override
                 public void onFailure(int errorCode) {
-                    future.complete(null);
+                    future.complete(screenShot.get());
                 }
             });
             return future.join();

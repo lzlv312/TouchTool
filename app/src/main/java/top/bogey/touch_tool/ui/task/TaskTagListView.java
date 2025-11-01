@@ -94,6 +94,7 @@ public class TaskTagListView extends BottomSheetDialogFragment {
         } else {
             chip.setCheckable(false);
             chip.setChecked(false);
+            chip.setOnClickListener(v -> taskView.gotoTargetTag(tag));
         }
     }
 

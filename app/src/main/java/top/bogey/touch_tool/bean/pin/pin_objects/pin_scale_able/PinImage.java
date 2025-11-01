@@ -97,13 +97,12 @@ public class PinImage extends PinScaleAble<String> {
 
     @Override
     public String getValue() {
-        if (!serialized) {
+        if (!serialized && image != null && !image.isRecycled()) {
             try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
                 image.compress(Bitmap.CompressFormat.WEBP, 100, stream);
                 byte[] bytes = stream.toByteArray();
                 value = Base64.encodeToString(bytes, Base64.NO_WRAP);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ignored) {
             }
         }
         return super.getValue();

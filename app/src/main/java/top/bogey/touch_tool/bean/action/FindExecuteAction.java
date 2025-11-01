@@ -28,7 +28,6 @@ public abstract class FindExecuteAction extends ExecuteAction {
     public final void execute(TaskRunnable runnable, Pin pin) {
         PinNumber<?> timeout = getPinValue(runnable, timeoutPin);
         PinNumber<?> interval = getPinValue(runnable, intervalPin);
-        afterInitExecuteParams(runnable);
 
         boolean found = find(runnable);
         long startTime = System.currentTimeMillis();

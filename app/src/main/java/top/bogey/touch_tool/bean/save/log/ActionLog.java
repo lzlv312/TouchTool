@@ -60,6 +60,13 @@ public class ActionLog extends Log {
         values.putAll(GsonUtil.getAsObject(jsonObject, "values", TypeToken.getParameterized(HashMap.class, String.class, PinBase.class).getType(), new HashMap<>()));
     }
 
+    public void syncLog(ActionLog log) {
+        if (taskId.equals(log.taskId) && actionId.equals(log.actionId)) {
+            this.values.clear();
+            this.values.putAll(log.values);
+        }
+    }
+
     public int getIndex() {
         return index;
     }

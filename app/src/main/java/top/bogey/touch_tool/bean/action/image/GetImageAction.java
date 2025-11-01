@@ -64,7 +64,6 @@ public class GetImageAction extends ExecuteAction implements SyncAction {
             posPin.getValue(PinPoint.class).setValue(areaRect.left, areaRect.top);
         }
 
-        afterInitExecuteParams(runnable);
         executeNext(runnable, outPin);
     }
 

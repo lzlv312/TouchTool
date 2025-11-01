@@ -131,9 +131,6 @@ public class BlueprintView extends Fragment {
             MenuItem item = menu.findItem(R.id.taskDetailLog);
             item.setChecked(task.hasFlag(Task.FLAG_DEBUG));
             item.setVisible(task.getParent() == null);
-
-            item = menu.findItem(R.id.taskRunningLog);
-            item.setVisible(task.getParent() == null);
         }
 
         @Override
@@ -155,6 +152,7 @@ public class BlueprintView extends Fragment {
                 return true;
             } else if (itemId == R.id.taskRunningLog) {
                 Task task = taskStack.peek();
+                while (task.getParent() != null) task = task.getParent();
                 new LogFloatView(requireContext(), task).show();
                 return true;
             } else if (itemId == R.id.taskRunningLogSwitch) {

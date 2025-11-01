@@ -17,13 +17,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipChildren="false"
         android:gravity="center_vertical"
-        android:padding="?attr/defaultPadding">
+        android:paddingVertical="?attr/defaultOffset">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/expandButton"
             style="?attr/iconButton"
-            android:layout_marginEnd="8dp"
             app:icon="@drawable/icon_keyboard_arrow_down" />
 
         <LinearLayout
@@ -53,14 +53,13 @@
                 style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:cardBackgroundColor="?attr/colorSurface">
+                android:layout_marginEnd="-34dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:id="@+id/valueBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="?attr/defaultOffset"
                     android:orientation="vertical" />
 
             </com.google.android.material.card.MaterialCardView>

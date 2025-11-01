@@ -25,7 +25,6 @@ public class PickAreaAction extends ExecuteAction {
 
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
-        afterInitExecuteParams(runnable);
         AreaPicker.showPicker(result -> {
             if (result != null) {
                 areaPin.getValue(PinArea.class).setValue(result);

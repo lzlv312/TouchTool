@@ -64,9 +64,9 @@ public class TaskInfoSummary {
 
     private final List<String> ocrApps = new ArrayList<>();
 
-    private PackageActivity packageActivity;
-    private PackageActivity lastPackageActivity;
-    private List<ResultCallback<PackageActivity>> packageActivityListeners = new ArrayList<>();
+    private PackageActivity packageActivity = new PackageActivity(null, null);
+    private PackageActivity lastPackageActivity = new PackageActivity(null, null);
+    private final List<ResultCallback<PackageActivity>> packageActivityListeners = new ArrayList<>();
 
     private Notification notification;
     private BatteryInfo batteryInfo;
@@ -399,7 +399,7 @@ public class TaskInfoSummary {
     public boolean setPackageActivity(String packageName, String activityName) {
         if (packageName == null || activityName == null) return false;
         if (packageName.isEmpty() || activityName.isEmpty()) return false;
-        if (packageActivity != null && packageActivity.packageName.equals(packageName) && packageActivity.activityName.equals(activityName)) return false;
+        if (packageActivity.packageName.equals(packageName) && packageActivity.activityName.equals(activityName)) return false;
         lastPackageActivity = packageActivity;
         packageActivity = new PackageActivity(packageName, activityName);
         packageActivityListeners.stream().filter(Objects::nonNull).forEach(listener -> listener.onResult(packageActivity));
@@ -447,7 +447,6 @@ public class TaskInfoSummary {
 
     public void onPhoneStateChanged() {
         tryStartActions(ScreenStartAction.class);
-        if (packageActivity == null) return;
         tryShowManualPlayView(!packageActivity.activityName.equals(MainActivity.class.getName()));
     }
 
