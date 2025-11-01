@@ -127,7 +127,7 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
             binding.getRoot().setOnClickListener(v -> {
                 selectApp();
                 callback.onResult(true);
-                notifyItemChanged(getAdapterPosition());
+                notifyItemChanged(getBindingAdapterPosition());
             });
 
             binding.activityButton.setOnClickListener(v -> {
@@ -141,7 +141,7 @@ public class SelectAppDialogAdapter extends RecyclerView.Adapter<SelectAppDialog
                         .setPositiveButton(R.string.enter, (dialog, which) -> {
                             selectApp(finalApp);
                             callback.onResult(true);
-                            notifyItemChanged(getAdapterPosition());
+                            notifyItemChanged(getBindingAdapterPosition());
                         })
                         .setView(view)
                         .show();

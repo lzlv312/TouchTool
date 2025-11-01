@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="?attr/iconButtonSize">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text"
@@ -12,16 +14,11 @@
         android:ellipsize="end"
         android:maxWidth="192dp"
         android:maxLines="5"
-        android:textSize="12sp" />
+        android:textAppearance="@style/TextAppearance.Material3.LabelSmall" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/pickButton"
-        style="@style/Theme.TouchTool.IconButton.Outlined"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginHorizontal="4dp"
-        app:icon="@drawable/icon_data_array"
-        app:iconSize="16dp" />
+        style="?attr/iconButtonOutlined"
+        app:icon="@drawable/icon_data_array" />
 
 </LinearLayout>

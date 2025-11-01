@@ -3,40 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingHorizontal="4dp">
+    android:minWidth="?attr/minTouchTargetSize"
+    android:orientation="vertical">
 
-    <com.google.android.material.imageview.ShapeableImageView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/pickButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center_horizontal"
-        android:background="?attr/colorSurfaceContainerHigh"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+        style="?attr/iconButtonOutlined"
+        android:layout_gravity="center_horizontal" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/editBox"
+        android:id="@+id/titleBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="2dp"
+        android:layout_height="?attr/iconButtonSize"
         android:clipChildren="false"
-        android:maxWidth="48dp"
-        android:minHeight="24dp"
-        app:hintTextAppearance="@style/Theme.TouchTool.TextAppearance.Hint"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small">
+        android:minWidth="?attr/minTouchTargetSize"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editText"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:breakStrategy="simple"
             android:gravity="center"
             android:inputType="text"
             android:maxLines="1"
-            android:minHeight="20dp"
             android:paddingHorizontal="8dp"
             android:paddingVertical="0dp"
-            android:textSize="8sp" />
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

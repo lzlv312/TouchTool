@@ -19,6 +19,7 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinNodePathString;
 import top.bogey.touch_tool.databinding.FloatPickerNodePreviewBinding;
 import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.custom.MarkTargetFloatView;
+import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.StringResultCallback;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
@@ -56,6 +57,8 @@ public class NodePickerPreview extends BasePicker<String> {
             nodePath.setValue(result);
             binding.pathText.setText(nodePath.getValue());
         }, nodePath.getValue()).show());
+
+        binding.copyButton.setOnClickListener(v -> AppUtil.copyToClipboard(getContext(), nodePath.getValue()));
 
         binding.matchButton.setOnClickListener(v -> {
             MainAccessibilityService service = MainApplication.getInstance().getService();

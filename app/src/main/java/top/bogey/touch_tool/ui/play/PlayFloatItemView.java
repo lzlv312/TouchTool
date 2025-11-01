@@ -1,5 +1,8 @@
 package top.bogey.touch_tool.ui.play;
 
+import static top.bogey.touch_tool.ui.play.PlayFloatView.BUTTON_DP_SIZE;
+import static top.bogey.touch_tool.ui.play.PlayFloatView.UNIT_GROW_DP_SIZE;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -74,11 +77,15 @@ public class PlayFloatItemView extends FrameLayout implements ITaskListener {
 
         binding.circleProgress.setVisibility(View.GONE);
         binding.lineProgress.setVisibility(View.GONE);
-        binding.circleProgress.setIndicatorSize((int) DisplayUtil.dp2px(context, 20 + 8 * Math.min(size, height)));
-        DisplayUtil.setViewWidth(binding.lineProgress, (int) DisplayUtil.dp2px(context, 8 + 8 * size));
 
-        DisplayUtil.setViewWidth(binding.cardLayout, (int) DisplayUtil.dp2px(context, 20 + 8 * size));
-        DisplayUtil.setViewHeight(binding.cardLayout, (int) DisplayUtil.dp2px(context, 20 + 8 * height));
+
+        int sizePx = (int) DisplayUtil.dp2px(context, BUTTON_DP_SIZE + UNIT_GROW_DP_SIZE * (size - 1));
+        int heightPx = (int) DisplayUtil.dp2px(context, BUTTON_DP_SIZE + UNIT_GROW_DP_SIZE * (height - 1));
+        binding.circleProgress.setIndicatorSize(sizePx);
+        DisplayUtil.setViewWidth(binding.lineProgress, sizePx);
+
+        DisplayUtil.setViewWidth(binding.cardLayout, sizePx);
+        DisplayUtil.setViewHeight(binding.cardLayout, heightPx);
     }
 
     public boolean check(Task task, StartAction startAction) {

@@ -4,7 +4,7 @@
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
+    android:layout_marginEnd="?attr/defaultPadding"
     app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
     <LinearLayout
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:minWidth="?attr/iconButtonSize"
         android:minHeight="?attr/iconButtonSize"
-        android:padding="8dp">
+        android:padding="?attr/defaultPadding">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/icon"
@@ -25,7 +25,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="?attr/defaultPadding"
             android:layout_weight="1"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />

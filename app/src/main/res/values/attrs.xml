@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="colorPrimaryLight" format="color" />
+
+    <attr name="iconButtonSize" format="dimension" />
+    <attr name="iconButtonPadding" format="dimension" />
+    <attr name="defaultPadding" format="dimension" />
+    <attr name="defaultOffset" format="dimension" />
+    <attr name="smallIconButtonSize" format="dimension" />
+    <attr name="halfIconButtonSize" format="dimension" />
+
+    <attr name="iconButton" format="reference" />
+    <attr name="iconButtonOutlined" format="reference" />
+    <attr name="iconButtonFilled" format="reference" />
+    <attr name="iconButtonTonal" format="reference" />
+
     <attr name="icon" format="reference" />
     <attr name="title" format="string" />
     <attr name="description" format="string" />
@@ -9,9 +23,8 @@
         <attr name="title" />
         <attr name="description" />
         <attr name="buttonVisible">
-            <enum name="none" value="-1" />
-            <enum name="bottom" value="0" />
-            <enum name="right" value="1" />
+            <enum name="none" value="0" />
+            <enum name="button" value="1" />
             <enum name="arrow" value="2" />
         </attr>
         <attr name="buttonText" format="string" />

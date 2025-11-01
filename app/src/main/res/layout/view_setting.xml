@@ -15,6 +15,8 @@
             android:id="@+id/toolBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:layout_scrollEffect="compress"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             app:title="@string/setting" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -74,7 +76,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:buttonText="@string/app_setting_reload_button_text"
-                        app:buttonVisible="right"
+                        app:buttonVisible="button"
+                        app:description="@string/app_setting_reload_desc"
                         app:icon="@drawable/icon_refresh"
                         app:title="@string/app_setting_reload" />
 
@@ -83,7 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:buttonText="@string/setting_copy_shell"
-                        app:buttonVisible="right"
+                        app:buttonVisible="button"
                         app:description="@string/app_setting_auto_reload_desc"
                         app:icon="@drawable/icon_refresh"
                         app:title="@string/app_setting_auto_reload" />
@@ -125,7 +128,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:buttonText="@string/app_setting_clean_cache_button_text"
-                        app:buttonVisible="right"
+                        app:buttonVisible="button"
                         app:description="@string/app_setting_clean_cache_desc"
                         app:icon="@drawable/icon_delete"
                         app:title="@string/app_setting_clean_cache" />
@@ -182,7 +185,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:buttonText="@string/setting_copy_shell"
-                        app:buttonVisible="right"
+                        app:buttonVisible="button"
                         app:description="@string/permission_setting_notification_type_sensitive_desc"
                         app:icon="@drawable/icon_visibility"
                         app:title="@string/permission_setting_notification_type_sensitive" />

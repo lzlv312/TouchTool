@@ -1,5 +1,8 @@
 package top.bogey.touch_tool.ui.play;
 
+import static top.bogey.touch_tool.ui.play.PlayFloatView.BUTTON_DP_SIZE;
+import static top.bogey.touch_tool.ui.play.PlayFloatView.UNIT_GROW_DP_SIZE;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
@@ -56,11 +59,9 @@ public class SinglePlayView extends PlayFloatItemView implements FloatInterface 
         super(context, task, action);
         size = SettingSaver.getInstance().getManualPlayViewSingleSize();
 
-        int px = (int) DisplayUtil.dp2px(context, 20 + 8 * size);
+        int px = (int) DisplayUtil.dp2px(context, BUTTON_DP_SIZE + UNIT_GROW_DP_SIZE * (size - 1));
         DisplayUtil.setViewWidth(binding.cardLayout, px);
         DisplayUtil.setViewHeight(binding.cardLayout, px);
-        DisplayUtil.setViewWidth(binding.title, px);
-        DisplayUtil.setViewHeight(binding.title, px);
         binding.circleProgress.setIndicatorSize(px);
     }
 

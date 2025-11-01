@@ -1,6 +1,8 @@
 package top.bogey.touch_tool.ui.setting;
 
-import static top.bogey.touch_tool.ui.play.PlayFloatView.UNIT_PIXEL;
+import static top.bogey.touch_tool.ui.play.PlayFloatView.BUTTON_DP_SIZE;
+import static top.bogey.touch_tool.ui.play.PlayFloatView.UNIT_DP_SIZE;
+import static top.bogey.touch_tool.ui.play.PlayFloatView.UNIT_GROW_DP_SIZE;
 
 import android.graphics.Point;
 import android.os.Bundle;
@@ -21,14 +23,12 @@ import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class SettingPlayView extends Fragment {
     private ViewSettingPlayViewBinding binding;
-    private int padding;
     private String testText;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
-        padding = (int) DisplayUtil.dp2px(activity, 8);
         testText = getString(R.string.preference_setting_manual_play_size_test_text);
 
         binding = ViewSettingPlayViewBinding.inflate(inflater, container, false);
@@ -123,7 +123,8 @@ public class SettingPlayView extends Fragment {
         int size = SettingSaver.getInstance().getManualPlayViewExpandSize();
         int height = SettingSaver.getInstance().getManualPlayViewButtonHeight();
 
-        DisplayUtil.setViewMargin(binding.playButtonBox, padding * UNIT_PIXEL, this.padding, padding * UNIT_PIXEL, this.padding);
+        int px = (int) DisplayUtil.dp2px(requireContext(), UNIT_DP_SIZE * padding);
+        DisplayUtil.setViewMargin(binding.playButtonBox, px, 0, px, 0);
         String testText = this.testText.substring(0, Math.min(this.testText.length(), size));
         binding.playTitle.setText(testText);
 
@@ -132,28 +133,33 @@ public class SettingPlayView extends Fragment {
         binding.lineProgress.setVisibility(size == height ? View.GONE : View.VISIBLE);
         binding.lineProgress.setIndeterminate(true);
 
-        binding.circleProgress.setIndicatorSize((int) DisplayUtil.dp2px(requireContext(), 20 + 8 * Math.min(size, height)));
-        DisplayUtil.setViewWidth(binding.lineProgress, (int) DisplayUtil.dp2px(requireContext(), 8 + 8 * size));
-
-        DisplayUtil.setViewWidth(binding.playButton, (int) DisplayUtil.dp2px(requireContext(), 20 + 8 * size));
-        DisplayUtil.setViewHeight(binding.playButton, (int) DisplayUtil.dp2px(requireContext(), 20 + 8 * height));
+        int sizePx = (int) DisplayUtil.dp2px(requireContext(), BUTTON_DP_SIZE + UNIT_GROW_DP_SIZE * (size - 1));
+        int heightPx = (int) DisplayUtil.dp2px(requireContext(), BUTTON_DP_SIZE + UNIT_GROW_DP_SIZE * (height - 1));
+        binding.circleProgress.setIndicatorSize(sizePx);
+        DisplayUtil.setViewWidth(binding.lineProgress, sizePx);
+        DisplayUtil.setViewWidth(binding.playButton, sizePx);
+        DisplayUtil.setViewHeight(binding.playButton, heightPx);
     }
 
     private void refreshCloseView() {
         int size = SettingSaver.getInstance().getManualPlayViewCloseSize();
-        DisplayUtil.setViewWidth(binding.dragButton, (int) DisplayUtil.dp2px(requireContext(), 8 + 8 * size));
+        int buttonDpSize = BUTTON_DP_SIZE * 2 / 3;
+        int growDpSize = (BUTTON_DP_SIZE - buttonDpSize) / 2;
+        int px = (int) DisplayUtil.dp2px(requireContext(), buttonDpSize + growDpSize * (size - 1));
+        DisplayUtil.setViewWidth(binding.dragButton, px);
     }
 
     private void refreshSingleView() {
         int size = SettingSaver.getInstance().getManualPlayViewSingleSize();
 
-        binding.singleTitle.setText(testText.substring(0, 1));
+        String testText = this.testText.substring(0, Math.min(this.testText.length(), size));
+        binding.singleTitle.setText(testText);
 
-        int offset = 20 + 8 * size;
-        DisplayUtil.setViewWidth(binding.singleButtonCard, (int) DisplayUtil.dp2px(requireContext(), offset));
-        DisplayUtil.setViewHeight(binding.singleButtonCard, (int) DisplayUtil.dp2px(requireContext(), offset));
+        int px = (int) DisplayUtil.dp2px(requireContext(), BUTTON_DP_SIZE + UNIT_GROW_DP_SIZE * (size - 1));
+        DisplayUtil.setViewWidth(binding.singleButtonCard, px);
+        DisplayUtil.setViewHeight(binding.singleButtonCard, px);
 
-        binding.singleProgress.setIndicatorSize((int) DisplayUtil.dp2px(requireContext(), offset));
+        binding.singleProgress.setIndicatorSize(px);
         binding.singleProgress.setIndeterminate(true);
     }
 }

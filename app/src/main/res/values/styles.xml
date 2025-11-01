@@ -19,24 +19,10 @@
         <item name="android:padding">?attr/iconButtonPadding</item>
     </style>
 
-    <style name="Theme.TouchTool.IconButton.Filled.Tonal" parent="Widget.Material3.Button.IconButton.Filled.Tonal">
+    <style name="Theme.TouchTool.IconButton.Tonal" parent="Widget.Material3.Button.IconButton.Filled.Tonal">
         <item name="android:layout_width">?attr/iconButtonSize</item>
         <item name="android:layout_height">?attr/iconButtonSize</item>
         <item name="android:padding">?attr/iconButtonPadding</item>
-    </style>
-
-    <style name="Theme.TouchTool.ShapeAppearance.LeftCorner.Small" parent="ShapeAppearance.Material3.Corner.Small">
-        <item name="cornerSizeTopRight">0%</item>
-        <item name="cornerSizeBottomRight">0%</item>
-    </style>
-
-    <style name="Theme.TouchTool.ShapeAppearance.RightCorner.Small" parent="ShapeAppearance.Material3.Corner.Small">
-        <item name="cornerSizeTopLeft">0%</item>
-        <item name="cornerSizeBottomLeft">0%</item>
-    </style>
-
-    <style name="Theme.TouchTool.TextAppearance.Hint" parent="TextAppearance.Material3.LabelSmall">
-        <item name="android:textSize">6sp</item>
     </style>
 
 </resources>

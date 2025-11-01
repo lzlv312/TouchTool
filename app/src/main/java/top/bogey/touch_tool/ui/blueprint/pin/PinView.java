@@ -101,7 +101,10 @@ public abstract class PinView extends FrameLayout implements PinListener {
         if (slotView != null) slotView.setLinked(pin.isLinked());
 
         TextView textView = getTitleView();
-        if (textView != null) textView.setText(pin.getTitle());
+        if (textView != null) {
+            textView.setText(pin.getTitle());
+            textView.setVisibility(pin.getTitle() == null || pin.getTitle().isEmpty() ? GONE : VISIBLE);
+        }
 
         refreshCopyButton();
 

@@ -4,21 +4,20 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Editable;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ListPopupWindow;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_string.PinSingleSelect;
+import top.bogey.touch_tool.common.StaticFunction;
 import top.bogey.touch_tool.databinding.PinWidgetSelectBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.pin.PinView;
-import top.bogey.touch_tool.utils.listener.SpinnerSelectedListener;
 import top.bogey.touch_tool.utils.listener.TextChangedListener;
 
 @SuppressLint("ViewConstructor")
@@ -34,16 +33,20 @@ public class PinWidgetSelect extends PinWidget<PinSingleSelect> {
 
     @Override
     protected void initBase() {
-        adapter = new ArrayAdapter<>(getContext(), R.layout.pin_widget_select_item, pinBase.getOptions());
-        binding.spinner.setAdapter(adapter);
-        binding.spinner.setSelection(pinBase.getIndex());
-        binding.spinner.setOnItemSelectedListener(new SpinnerSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        adapter = new ArrayAdapter<>(getContext(), R.layout.widget_textview_item, pinBase.getOptions());
+        binding.spinner.setOnClickListener(v -> {
+            ListPopupWindow popup = new ListPopupWindow(getContext());
+            popup.setAdapter(adapter);
+            popup.setAnchorView(binding.spinner);
+            popup.setModal(true);
+            popup.setWidth(StaticFunction.measureArrayAdapterContentWidth(getContext(), adapter));
+            popup.setOnItemClickListener((parent, view, position, id) -> {
                 pinBase.setValue(adapter.getItem(position));
                 pinView.getPin().notifyValueUpdated();
-            }
+            });
+            popup.show();
         });
+        binding.spinner.setText(pinBase.getValue());
     }
 
     @Override
@@ -63,7 +66,7 @@ public class PinWidgetSelect extends PinWidget<PinSingleSelect> {
                 }
                 adapter.clear();
                 adapter.addAll(pinBase.getOptions());
-                binding.spinner.setSelection(pinBase.getIndex());
+                binding.spinner.setText(pinBase.getValue());
             }
         });
     }

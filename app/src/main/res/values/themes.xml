@@ -1,14 +1,6 @@
 <resources>
-    <attr name="colorPrimaryLight" format="color" />
 
-    <attr name="iconButtonSize" format="dimension" />
-    <attr name="iconButtonPadding" format="dimension" />
-    <attr name="iconButton" format="reference" />
-    <attr name="iconButtonOutlined" format="reference" />
-    <attr name="iconButtonFilled" format="reference" />
-    <attr name="iconButtonFilledTonal" format="reference" />
-
-    <style name="Theme.TouchTool.Base" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.TouchTool" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar">
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowActionBar">false</item>
@@ -16,18 +8,22 @@
 
         <item name="iconButtonSize">36dp</item>
         <item name="iconButtonPadding">4dp</item>
+        <item name="defaultPadding">8dp</item>
+        <item name="defaultOffset">2dp</item>
+        <item name="smallIconButtonSize">24dp</item>
+        <item name="halfIconButtonSize">18dp</item>
         <item name="iconButton">@style/Theme.TouchTool.IconButton</item>
         <item name="iconButtonOutlined">@style/Theme.TouchTool.IconButton.Outlined</item>
         <item name="iconButtonFilled">@style/Theme.TouchTool.IconButton.Filled</item>
-        <item name="iconButtonFilledTonal">@style/Theme.TouchTool.IconButton.Filled.Tonal</item>
+        <item name="iconButtonTonal">@style/Theme.TouchTool.IconButton.Tonal</item>
     </style>
 
-    <style name="Theme.TouchTool.Transparent" parent="Theme.TouchTool.Base">
+    <style name="Theme.TouchTool.Transparent">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
-    <style name="Theme.TouchTool" parent="Theme.TouchTool.Base">
+    <style name="Theme.TouchTool.DayNight">
         <item name="android:windowLightStatusBar">true</item>
         <item name="colorPrimaryLight">?attr/colorPrimaryInverse</item>
     </style>

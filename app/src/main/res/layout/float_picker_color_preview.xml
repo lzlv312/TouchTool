@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="?attr/defaultPadding">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,7 +73,7 @@
                             android:layout_height="?attr/iconButtonSize"
                             android:gravity="center"
                             android:inputType="numberSigned"
-                            android:paddingHorizontal="8dp"
+                            android:paddingHorizontal="?attr/defaultPadding"
                             android:paddingVertical="0dp"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
@@ -94,7 +94,7 @@
                             android:layout_height="?attr/iconButtonSize"
                             android:gravity="center"
                             android:inputType="numberSigned"
-                            android:paddingHorizontal="8dp"
+                            android:paddingHorizontal="?attr/defaultPadding"
                             android:paddingVertical="0dp"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
@@ -116,7 +116,7 @@
                             android:layout_height="?attr/iconButtonSize"
                             android:gravity="center"
                             android:inputType="numberSigned"
-                            android:paddingHorizontal="8dp"
+                            android:paddingHorizontal="?attr/defaultPadding"
                             android:paddingVertical="0dp"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
@@ -133,21 +133,37 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <com.google.android.material.slider.Slider
-                    android:id="@+id/timeSlider"
-                    android:layout_width="wrap_content"
+                <FrameLayout
+                    android:layout_width="192dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:stepSize="1"
-                    android:value="80"
-                    android:valueFrom="1"
-                    android:valueTo="100"
-                    app:thumbHeight="?attr/iconButtonSize"
-                    app:trackColorInactive="?attr/colorSurface" />
+                    android:paddingHorizontal="-12dp">
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/timeSlider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:stepSize="1"
+                        android:value="80"
+                        android:valueFrom="1"
+                        android:valueTo="100"
+                        app:thumbHeight="?attr/iconButtonSize"
+                        app:trackColorInactive="?attr/colorSurface" />
+
+                </FrameLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/matchedImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="96dp"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -166,14 +182,6 @@
 
                     </LinearLayout>
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/matchedImage"
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:layout_gravity="center"
-                        android:scaleType="fitCenter"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
-
                 </FrameLayout>
 
             </LinearLayout>
@@ -184,7 +192,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:spacing="2dp">
+            android:spacing="?attr/defaultOffset">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/backButton"

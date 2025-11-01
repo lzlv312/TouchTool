@@ -10,7 +10,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/expandButton"
         style="?iconButton"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="?attr/defaultPadding"
         app:icon="@drawable/icon_zoom_in_map" />
 
     <FrameLayout
@@ -38,7 +38,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="?attr/iconButtonSize"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="?attr/defaultPadding">
 
                 <com.google.android.material.bottomsheet.BottomSheetDragHandleView
 
@@ -57,8 +57,8 @@
                 style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginHorizontal="?attr/defaultPadding"
+                android:layout_marginBottom="?attr/defaultPadding"
                 android:layout_weight="1"
                 app:cardBackgroundColor="?attr/colorSurface">
 
@@ -66,7 +66,7 @@
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="8dp"
+                    android:layout_margin="?attr/defaultPadding"
                     android:clipToPadding="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/float_app_info_item" />

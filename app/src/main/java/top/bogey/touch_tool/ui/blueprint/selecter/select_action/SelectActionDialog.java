@@ -37,8 +37,8 @@ import top.bogey.touch_tool.bean.task.ITagManager;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.bean.task.Variable;
 import top.bogey.touch_tool.databinding.DialogSelectActionBinding;
-import top.bogey.touch_tool.databinding.WidgetSettingSelectButton2Binding;
-import top.bogey.touch_tool.databinding.WidgetSettingSelectButtonBinding;
+import top.bogey.touch_tool.databinding.WidgetSettingSelectButtonHorizontalBinding;
+import top.bogey.touch_tool.databinding.WidgetSettingSelectButtonVerticalBinding;
 import top.bogey.touch_tool.ui.MainActivity;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.ui.custom.EditVariableDialog;
@@ -109,7 +109,7 @@ public class SelectActionDialog extends BottomSheetDialog {
         GroupType[] groupTypes = getGroupTypes();
         for (int i = 0; i < groupTypes.length; i++) {
             GroupType groupType = groupTypes[i];
-            WidgetSettingSelectButtonBinding buttonBinding = WidgetSettingSelectButtonBinding.inflate(LayoutInflater.from(getContext()), binding.group, true);
+            WidgetSettingSelectButtonHorizontalBinding buttonBinding = WidgetSettingSelectButtonHorizontalBinding.inflate(LayoutInflater.from(getContext()), binding.group, true);
             buttonBinding.getRoot().setId(View.generateViewId());
             buttonBinding.getRoot().setText(groupName[groupType.ordinal()]);
             buttonBinding.getRoot().setTag(groupType);
@@ -282,7 +282,7 @@ public class SelectActionDialog extends BottomSheetDialog {
         int index = 0;
         for (int i = 0; i < chips.length; i++) {
             String s = chips[i];
-            WidgetSettingSelectButton2Binding buttonBinding = WidgetSettingSelectButton2Binding.inflate(LayoutInflater.from(getContext()), binding.subGroup, true);
+            WidgetSettingSelectButtonVerticalBinding buttonBinding = WidgetSettingSelectButtonVerticalBinding.inflate(LayoutInflater.from(getContext()), binding.subGroup, true);
             MaterialButton button = buttonBinding.getRoot();
             button.setId(View.generateViewId());
             button.setText(s);

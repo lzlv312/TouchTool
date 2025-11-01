@@ -54,19 +54,21 @@ public class ImportTaskDialogAdapter extends RecyclerView.Adapter<ImportTaskDial
         return taskPackages.size();
     }
 
-    public TaskRecord getTaskRecord() {
+    public TaskRecord getTaskRecord(boolean importTag) {
         Set<Task> tasks = new HashSet<>();
         for (Task task : taskReference.getTasks()) {
-            task.cleanInvalidTag();
+            if (!importTag) task.cleanInvalidTag();
             tasks.add(task);
         }
 
         List<String> allTags = Saver.getInstance().getAllTags();
         Set<Variable> variables = new HashSet<>();
         for (Variable variable : taskReference.getVariables()) {
-            for (String tag : new ArrayList<>(variable.getTags())) {
-                if (allTags.contains(tag)) continue;
-                variable.removeTag(tag);
+            if (!importTag) {
+                for (String tag : new ArrayList<>(variable.getTags())) {
+                    if (allTags.contains(tag)) continue;
+                    variable.removeTag(tag);
+                }
             }
             variables.add(variable);
         }

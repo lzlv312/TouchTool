@@ -123,7 +123,7 @@ public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<Cus
 
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder source, @NonNull RecyclerView.ViewHolder target) {
-            adapter.swapPin(source.getAdapterPosition(), target.getAdapterPosition());
+            adapter.swapPin(source.getBindingAdapterPosition(), target.getBindingAdapterPosition());
             return true;
         }
 
@@ -143,7 +143,7 @@ public class CustomActionCardRecycleViewAdapter extends RecyclerView.Adapter<Cus
 
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder source, @NonNull RecyclerView.ViewHolder target) {
-            adapter.swapPin(source.getAdapterPosition(), target.getAdapterPosition());
+            adapter.swapPin(source.getBindingAdapterPosition(), target.getBindingAdapterPosition());
             return true;
         }
 

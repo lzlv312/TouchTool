@@ -4,45 +4,36 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:minWidth="24dp"
-    android:minHeight="24dp"
+    android:minHeight="?attr/iconButtonSize"
     android:orientation="horizontal">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/pinSlotBox"
-        android:layout_width="12dp"
-        android:layout_height="12dp" />
+        android:orientation="horizontal"
+        android:layout_width="?attr/halfIconButtonSize"
+        android:layout_height="?attr/halfIconButtonSize" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="4dp"
-        android:singleLine="true"
-        android:textSize="8sp" />
+        android:layout_marginHorizontal="?attr/defaultPadding"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
     <FrameLayout
         android:id="@+id/pinBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="4dp" />
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/cpButton"
-        style="@style/Theme.TouchTool.IconButton"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginHorizontal="4dp"
-        app:icon="@drawable/icon_copy"
-        app:iconSize="14dp"
-        app:iconTint="?attr/colorOutline" />
+        style="?attr/iconButton"
+        app:icon="@drawable/icon_copy" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/removeButton"
-        style="@style/Theme.TouchTool.IconButton.Outlined"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        app:icon="@drawable/icon_remove"
-        app:iconTint="?attr/colorOutline" />
+        style="?attr/iconButtonOutlined"
+        app:icon="@drawable/icon_remove" />
 
 </LinearLayout>

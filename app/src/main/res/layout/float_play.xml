@@ -15,12 +15,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="?attr/defaultOffset">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/closeButton"
                 style="?attr/iconButton"
-                android:layout_height="24dp"
+                android:layout_height="?attr/smallIconButtonSize"
                 app:icon="@drawable/icon_keyboard_arrow_up" />
 
             <LinearLayout
@@ -44,11 +45,9 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/dragSpaceButton"
             style="?attr/iconButton"
-            android:layout_width="24dp"
-            android:insetLeft="0dp"
-            android:insetRight="0dp"
-            android:padding="2dp"
-            app:icon="@drawable/icon_keyboard_arrow_left" />
+            android:textScaleX="0"
+            app:icon="@drawable/icon_keyboard_arrow_left"
+            app:iconGravity="textStart" />
 
     </com.google.android.material.card.MaterialCardView>
 

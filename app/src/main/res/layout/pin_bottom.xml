@@ -5,15 +5,12 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:gravity="center_horizontal"
-    android:minWidth="32dp"
+    android:minWidth="?attr/minTouchTargetSize"
     android:orientation="vertical">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/removeButton"
-        style="@style/Theme.TouchTool.IconButton.Outlined"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginVertical="4dp"
+        style="?attr/iconButtonOutlined"
         app:icon="@drawable/icon_remove"
         app:iconTint="?attr/colorOutline" />
 
@@ -25,15 +22,17 @@
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="12dp"
+        android:layout_height="?attr/halfIconButtonSize"
         android:ellipsize="end"
         android:gravity="center"
         android:singleLine="true"
-        android:textSize="6sp" />
+        android:textAppearance="@style/TextAppearance.Material3.LabelSmall" />
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/pinSlotBox"
-        android:layout_width="12dp"
-        android:layout_height="12dp" />
+        android:orientation="vertical"
+        android:gravity="bottom"
+        android:layout_width="?attr/halfIconButtonSize"
+        android:layout_height="?attr/halfIconButtonSize" />
 
 </LinearLayout>

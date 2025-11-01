@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="?attr/defaultPadding">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,17 +36,38 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/pathText"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/pathText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:breakStrategy="simple"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/copyButton"
+                    style="?attr/iconButtonFilled"
+                    android:layout_gravity="end"
+                    app:icon="@drawable/icon_content_copy" />
+
+            </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/testBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/matchedImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="96dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -65,14 +86,6 @@
 
                 </LinearLayout>
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/matchedImage"
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
-                    android:layout_gravity="center"
-                    android:scaleType="fitCenter"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
-
             </FrameLayout>
 
         </LinearLayout>
@@ -82,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:spacing="2dp">
+            android:spacing="?attr/defaultOffset">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/backButton"

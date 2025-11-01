@@ -76,6 +76,8 @@ import top.bogey.touch_tool.utils.AppUtil;
 import top.bogey.touch_tool.utils.DisplayUtil;
 
 public class CardLayoutView extends FrameLayout implements TaskSaveListener, VariableSaveListener, IHistoryOwner {
+    public static final int GRID_DP_SIZE = 12;
+
     private static final int TOUCH_NONE = 0;
     private static final int TOUCH_BACKGROUND = 1;
     private static final int TOUCH_CARD = 2;
@@ -133,7 +135,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         longTouchHandler = new Handler();
         doubleTouchHandler = new Handler();
 
-        gridSize = DisplayUtil.dp2px(context, 8);
+        gridSize = DisplayUtil.dp2px(context, GRID_DP_SIZE);
 
         gridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         gridPaint.setStrokeWidth(1);
@@ -151,7 +153,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
             public boolean onScale(@NonNull ScaleGestureDetector detector) {
                 float oldScale = scale;
                 scale *= detector.getScaleFactor();
-                scale = Math.max(0.3f, Math.min(scale, 2f));
+                scale = Math.max(0.2f, Math.min(scale, 2f));
 
                 float v = 1 - scale / oldScale;
                 float focusX = detector.getFocusX() - offsetX;
@@ -194,7 +196,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         this.history = history;
         offsetX = 0;
         offsetY = 0;
-        scale = 1;
+        scale = 1f;
         cleanSelectedCards();
 
         cards.values().forEach(this::removeView);

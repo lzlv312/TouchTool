@@ -34,6 +34,7 @@ public class ParseQRCodeAction extends ExecuteAction {
         if (bitmap == null) return;
         String content = CodeUtils.parseQRCode(bitmap);
         contentPin.getValue(PinString.class).setValue(content);
+        afterInitExecuteParams(runnable);
         executeNext(runnable, outPin);
     }
 }

@@ -2,6 +2,7 @@ package top.bogey.touch_tool.ui.blueprint.pin_widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.text.Editable;
 import android.view.LayoutInflater;
 
@@ -39,17 +40,17 @@ public class PinWidgetExecute extends PinWidget<PinExecute> {
 
     @Override
     protected void initBase() {
-        binding.editText.setSaveEnabled(false);
-        binding.editText.setSaveFromParentEnabled(false);
+        binding.title.setSaveEnabled(false);
+        binding.title.setSaveFromParentEnabled(false);
 
         switch (pinBase.getSubType()) {
             case WITH_STRING -> {
                 pinView.getTitleView().setVisibility(GONE);
-                binding.editBox.setVisibility(VISIBLE);
+                binding.titleBox.setVisibility(VISIBLE);
                 binding.pickButton.setVisibility(GONE);
                 PinStringExecute stringExecute = (PinStringExecute) pinBase;
-                binding.editText.setText(stringExecute.getValue());
-                binding.editText.addTextChangedListener(new TextChangedListener() {
+                binding.title.setText(stringExecute.getValue());
+                binding.title.addTextChangedListener(new TextChangedListener() {
                     @Override
                     public void afterTextChanged(Editable s) {
                         stringExecute.setValue(s.toString());
@@ -59,17 +60,17 @@ public class PinWidgetExecute extends PinWidget<PinExecute> {
             }
             case WITH_ICON -> {
                 pinView.getTitleView().setVisibility(GONE);
-                binding.editBox.setVisibility(VISIBLE);
+                binding.titleBox.setVisibility(VISIBLE);
                 binding.pickButton.setVisibility(VISIBLE);
                 PinIconExecute iconExecute = (PinIconExecute) pinBase;
-                binding.pickButton.setImageBitmap(iconExecute.getImage());
+                binding.pickButton.setIcon(new BitmapDrawable(getResources(), iconExecute.getImage()));
                 binding.pickButton.setOnClickListener(v -> new SelectIconDialog(getContext(), result -> {
-                    binding.pickButton.setImageBitmap(result);
+                    binding.pickButton.setIcon(new BitmapDrawable(getResources(), result));
                     iconExecute.setImage(result);
                     pinView.getPin().notifyValueUpdated();
                 }).show());
-                binding.editText.setText(iconExecute.getValue());
-                binding.editText.addTextChangedListener(new TextChangedListener() {
+                binding.title.setText(iconExecute.getValue());
+                binding.title.addTextChangedListener(new TextChangedListener() {
                     @Override
                     public void afterTextChanged(Editable s) {
                         iconExecute.setValue(s.toString());

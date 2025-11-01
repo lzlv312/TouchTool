@@ -57,7 +57,7 @@ public class ActionLog extends Log {
         taskId = GsonUtil.getAsString(jsonObject, "taskId", "");
         actionId = GsonUtil.getAsString(jsonObject, "actionId", "");
         execute = GsonUtil.getAsBoolean(jsonObject, "execute", true);
-        values.putAll(GsonUtil.getAsObject(jsonObject, "values", TypeToken.getParameterized(HashMap.class, String.class, PinObject.class).getType(), new HashMap<>()));
+        values.putAll(GsonUtil.getAsObject(jsonObject, "values", TypeToken.getParameterized(HashMap.class, String.class, PinBase.class).getType(), new HashMap<>()));
     }
 
     public int getIndex() {

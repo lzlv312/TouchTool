@@ -2,8 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="?attr/materialCardViewFilledStyle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="?attr/iconButtonSize"
+    android:layout_height="?attr/iconButtonSize">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardLayout"
@@ -37,8 +37,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/icon"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="?attr/halfIconButtonSize"
+        android:layout_height="?attr/halfIconButtonSize"
         android:layout_gravity="end|bottom"
         android:tint="?attr/colorPrimary" />
 
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
         android:textColor="?attr/colorPrimary" />
 
 </FrameLayout>

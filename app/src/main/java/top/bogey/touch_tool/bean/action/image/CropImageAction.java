@@ -41,6 +41,7 @@ public class CropImageAction extends ExecuteAction {
             imagePin.getValue(PinImage.class).setImage(clipBitmap);
             offsetPin.getValue(PinPoint.class).setValue(areaRect.left, areaRect.top);
         }
+        afterInitExecuteParams(runnable);
         executeNext(runnable, outPin);
     }
 }

@@ -4,17 +4,16 @@
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium">
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:minWidth="32dp"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="4dp"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="12sp" />
+        android:minWidth="?attr/iconButtonSize"
+        android:padding="?attr/defaultPadding"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="?attr/colorPrimary" />
 
 </com.google.android.material.card.MaterialCardView>

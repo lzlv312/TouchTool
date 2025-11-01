@@ -63,6 +63,7 @@ public class Saver {
     private final Set<VariableSaveListener> variableListeners = new HashSet<>();
 
     private final MMKV tagMMKV = MMKV.mmkvWithID("TAG_DB", MMKV.SINGLE_PROCESS_MODE);
+    private final MMKV searchHistoryMMKV = MMKV.mmkvWithID("SEARCH_HISTORY_DB", MMKV.SINGLE_PROCESS_MODE);
 
     private final static String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/" + AppUtil.LOG_DIR_NAME;
     private final Map<String, LogSave> loggers = new HashMap<>();
@@ -355,4 +356,31 @@ public class Saver {
         return list;
     }
 
+    // ====================================================================================================================
+    public void addSearchHistory(String history) {
+        searchHistoryMMKV.encode(history, true);
+    }
+
+    public void removeSearchHistory(String history) {
+        searchHistoryMMKV.remove(history);
+    }
+
+    public void cleanSearchHistory() {
+        searchHistoryMMKV.clearAll();
+    }
+
+    public List<String> getSearchHistory() {
+        Set<String> set = new HashSet<>();
+        List<String> list = new ArrayList<>();
+        String[] keys = searchHistoryMMKV.allKeys();
+        if (keys == null) return list;
+        for (String key : keys) {
+            if (searchHistoryMMKV.decodeBool(key) && !set.contains(key)) {
+                list.add(key);
+                set.add(key);
+            }
+            if (list.size() >= 10) break;
+        }
+        return list;
+    }
 }
