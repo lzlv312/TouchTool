@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:inputType="numberSigned"
+            android:inputType="text"
             android:paddingHorizontal="8dp"
             android:paddingVertical="0dp"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall" />

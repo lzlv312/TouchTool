@@ -186,6 +186,7 @@ public enum ActionType {
     LIST_APPEND,
     LIST_CLEAR,
     LIST_GET,
+    LIST_CHOICE,
     LIST_SET,
     LIST_INDEX_OF,
     LIST_FOREACH,

@@ -50,6 +50,7 @@ import top.bogey.touch_tool.bean.action.list.MakeListAction;
 import top.bogey.touch_tool.bean.action.logic.ChoiceExecuteAction;
 import top.bogey.touch_tool.bean.action.logic.ForLoopAction;
 import top.bogey.touch_tool.bean.action.logic.IfConditionAction;
+import top.bogey.touch_tool.bean.action.list.ListChoiceAction;
 import top.bogey.touch_tool.bean.action.logic.ParallelExecuteAction;
 import top.bogey.touch_tool.bean.action.logic.RandomExecuteAction;
 import top.bogey.touch_tool.bean.action.logic.SequenceExecuteAction;
@@ -201,6 +202,7 @@ public class ActionInfo {
     private final static ActionInfo WAIT_IF_LOGIC_INFO = new ActionInfo(ActionType.WAIT_IF_LOGIC, WaitConditionAction.class, R.drawable.icon_hourglass_bottom, R.string.wait_if_action, R.string.wait_if_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SWITCH_LOGIC_INFO = new ActionInfo(ActionType.SWITCH_LOGIC, SwitchAction.class, R.drawable.icon_live_help, R.string.switch_action, R.string.switch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo CHOICE_LOGIC_INFO = new ActionInfo(ActionType.CHOICE_LOGIC, ChoiceExecuteAction.class, R.drawable.icon_person_check, R.string.choice_action, R.string.choice_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo LIST_CHOICE_LOGIC_INFO = new ActionInfo(ActionType.LIST_CHOICE, ListChoiceAction.class, R.drawable.icon_data_array, R.string.list_choice_action, R.string.list_choice_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FOR_LOGIC_INFO = new ActionInfo(ActionType.FOR_LOGIC, ForLoopAction.class, R.drawable.icon_repeat_one, R.string.for_loop_action, R.string.for_loop_action_desc, R.string.for_loop_action_help, NormalActionCard.class);
     private final static ActionInfo WHILE_LOGIC_INFO = new ActionInfo(ActionType.WHILE_LOGIC, WhileLoopAction.class, R.drawable.icon_repeat, R.string.while_loop_action, R.string.while_loop_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SEQUENCE_LOGIC_INFO = new ActionInfo(ActionType.SEQUENCE_LOGIC, SequenceExecuteAction.class, R.drawable.icon_tactic, R.string.sequence_action, R.string.sequence_action_desc, 0, NormalActionCard.class);
@@ -407,6 +409,7 @@ public class ActionInfo {
             case WAIT_IF_LOGIC -> WAIT_IF_LOGIC_INFO;
             case SWITCH_LOGIC -> SWITCH_LOGIC_INFO;
             case CHOICE_LOGIC -> CHOICE_LOGIC_INFO;
+            case LIST_CHOICE -> LIST_CHOICE_LOGIC_INFO;
             case FOR_LOGIC -> FOR_LOGIC_INFO;
             case WHILE_LOGIC -> WHILE_LOGIC_INFO;
             case SEQUENCE_LOGIC -> SEQUENCE_LOGIC_INFO;

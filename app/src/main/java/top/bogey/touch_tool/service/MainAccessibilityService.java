@@ -3,6 +3,7 @@ package top.bogey.touch_tool.service;
 import static top.bogey.touch_tool.service.TaskInfoSummary.OCR_SERVICE_ACTION;
 
 import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.accessibilityservice.GestureDescription;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -740,7 +741,7 @@ public class MainAccessibilityService extends AccessibilityService {
 
     // 震动 ----------------------------------------------------------------------------- start
     public void vibrate(long duration) {
-        Vibrator vibrator  = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator == null) return;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

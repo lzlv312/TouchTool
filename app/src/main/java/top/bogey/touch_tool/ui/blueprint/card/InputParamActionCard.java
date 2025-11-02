@@ -3,6 +3,7 @@ package top.bogey.touch_tool.ui.blueprint.card;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ public class InputParamActionCard extends ActionCard {
         super(context, task, action);
         setCardBackgroundColor(getResources().getColor(android.R.color.transparent, null));
         setElevation(0);
+        setStrokeWidth(0);
     }
 
     @Override
@@ -48,6 +50,8 @@ public class InputParamActionCard extends ActionCard {
         if (slotBox != null) slotBox.setVisibility(GONE);
         TextView titleView = pinView.getTitleView();
         if (titleView != null) titleView.setVisibility(GONE);
+        Button copyAndPasteButton = pinView.getCopyAndPasteButton();
+        if (copyAndPasteButton != null) copyAndPasteButton.setVisibility(GONE);
 
         frameLayout.addView(pinView);
         pinViews.put(pin.getId(), pinView);

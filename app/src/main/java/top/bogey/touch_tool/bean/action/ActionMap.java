@@ -200,6 +200,7 @@ public class ActionMap {
                     ActionType.LIST_FOREACH,
                     ActionType.LIST_ADD,
                     ActionType.LIST_GET,
+                    ActionType.LIST_CHOICE,
                     ActionType.LIST_SET,
                     ActionType.LIST_SIZE,
                     ActionType.LIST_IS_EMPTY,

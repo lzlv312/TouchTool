@@ -661,6 +661,11 @@
     <string name="list_get_action">获取元素</string>
     <string name="list_get_action_desc">从列表中获取元素</string>
 
+    <string name="list_choice_action">手动选择元素</string>
+    <string name="list_choice_action_desc">弹出选择窗口供使用者选择列表的一项</string>
+    <string name="list_choice_action_default">默认</string>
+    <string name="list_choice_action_timeout">超时(ms)</string>
+
     <string name="list_set_action">设置元素</string>
     <string name="list_set_action_desc">向列表中设置元素</string>
     <string name="list_set_action_value">之前的对象</string>

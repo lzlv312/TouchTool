@@ -11,7 +11,6 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.CalculateAction;
 import top.bogey.touch_tool.bean.pin.Pin;
-import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_list.PinList;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinInteger;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
@@ -42,12 +41,16 @@ public class PointsToTouchAction extends CalculateAction {
         List<PinTouchPath.PathPart> pathParts = new ArrayList<>();
 
         int everyTime = time.intValue();
-        if (points.size() > 1) everyTime = everyTime / (points.size() - 1);
+        int firstTime = everyTime;
+        if (points.size() > 1) {
+            firstTime = 0;
+            everyTime = everyTime / (points.size() - 1);
+        }
 
-        for (PinObject object : points) {
-            PinPoint point = (PinPoint) object;
+        for (int i = 0; i < points.size(); i++) {
+            PinPoint point = (PinPoint) points.get(i);
             Point pos = point.getValue();
-            PinTouchPath.PathPart pathPart = new PinTouchPath.PathPart(everyTime, pos.x, pos.y);
+            PinTouchPath.PathPart pathPart = new PinTouchPath.PathPart(i == 0 ? firstTime : everyTime, pos.x, pos.y);
             pathParts.add(pathPart);
         }
         PinTouchPath pinTouchPath = new PinTouchPath(pathParts);

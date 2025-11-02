@@ -18,12 +18,8 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.other.NodeInfo;
@@ -40,7 +36,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
     private final FloatPickerNodeBinding binding;
     private NodePickerTreeAdapter adapter;
 
-    private final List<NodeInfo> roots = NodeInfo.getWindows();
+    private List<NodeInfo> roots = NodeInfo.getWindows();
 
     private final Paint gridPaint;
     private final Paint markPaint;
@@ -48,8 +44,6 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
 
     private final PinNodePathString nodePath;
     private NodeInfo nodeInfo = null;
-    private boolean realShow = false;
-    private boolean init = false;
 
     public NodePicker(@NonNull Context context, ResultCallback<NodeInfo> callback, String path) {
         super(context, callback);
@@ -58,26 +52,14 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         nodePath = new PinNodePathString(path);
         binding = FloatPickerNodeBinding.inflate(LayoutInflater.from(context), this, true);
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            Queue<NodeInfo> queue = new LinkedList<>(roots);
-            while (!queue.isEmpty()) {
-                NodeInfo node = queue.poll();
-                if (node != null) {
-                    queue.addAll(node.getChildren());
-                }
-            }
-
-            init = true;
-            post(() -> {
-                adapter = new NodePickerTreeAdapter(this, roots);
-                binding.widgetRecyclerView.setAdapter(adapter);
-                if (realShow) realShow();
-                invalidate();
-            });
-
-            executor.close();
-        });
+        adapter = new NodePickerTreeAdapter(this, roots);
+        binding.widgetRecyclerView.setAdapter(adapter);
+        // 不知道为啥，webview需要第二次才能正常显示节点
+        postDelayed(() -> {
+            roots = NodeInfo.getWindows();
+            adapter = new NodePickerTreeAdapter(this, roots);
+            binding.widgetRecyclerView.setAdapter(adapter);
+        }, 50);
 
         gridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         gridPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -125,6 +107,7 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
         binding.searchEdit.addTextChangedListener(new TextChangedListener() {
             @Override
             public void afterTextChanged(Editable s) {
+                if (adapter == null) return;
                 adapter.searchNodes(s.toString());
             }
         });
@@ -142,7 +125,6 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
 
     @Override
     protected void realShow() {
-        realShow = true;
         if (adapter == null) return;
         nodeInfo = nodePath.findNode(roots, true);
         selectNode(nodeInfo);
@@ -267,7 +249,6 @@ public class NodePicker extends FullScreenPicker<NodeInfo> implements NodePicker
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!init) return false;
         float x = event.getX();
         float y = event.getY();
 

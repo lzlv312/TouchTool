@@ -60,7 +60,7 @@ public class NodeInfo extends SimpleNodeInfo implements ITreeNodeData {
 
     public List<NodeInfo> getChildren() {
         List<NodeInfo> children = new ArrayList<>();
-        for (int i = 0; i < node.getChildCount(); i++) {
+        for (int i = 0; i < getChildCount(); i++) {
             NodeInfo child = getChild(i);
             if (child != null) children.add(child);
         }
