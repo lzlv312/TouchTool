@@ -34,8 +34,16 @@ public class StringSubStringAction extends CalculateAction {
         PinNumber<?> start = getPinValue(runnable, startPin);
         PinNumber<?> end = getPinValue(runnable, endPin);
         int max = text.toString().length();
-        int startPos = Math.max(1, Math.min(max, start.intValue()));
-        int endPos = Math.max(1, Math.min(max, end.intValue()));
+        int startPos = start.intValue();
+        if (startPos < 0) {
+            startPos = Math.max(0, max + startPos + 1);
+        }
+        startPos = Math.max(1, Math.min(max, startPos));
+        int endPos = end.intValue();
+        if (endPos < 0) {
+            endPos = Math.max(0, max + endPos + 1);
+        }
+        endPos = Math.max(1, Math.min(max, endPos));
         if (startPos > endPos) {
             int temp = startPos;
             startPos = endPos;
