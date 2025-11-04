@@ -17,6 +17,8 @@ public interface ITaskManager {
 
     Task downFindTask(String id);
 
+    Task getTopParent();
+
     /**
      * 判断传入的任务是否为我的父任务
      *

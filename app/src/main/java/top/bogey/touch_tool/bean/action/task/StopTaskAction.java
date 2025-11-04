@@ -46,7 +46,7 @@ public class StopTaskAction extends ExecuteAction {
 
     public Task getTask() {
         PinTaskString taskString = taskPin.getValue();
-        return Saver.getInstance().getTask(null, taskString.getValue());
+        return Saver.getInstance().downFindTask(null, taskString.getValue());
     }
 
     @Override

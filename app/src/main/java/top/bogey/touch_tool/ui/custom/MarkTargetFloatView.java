@@ -75,7 +75,7 @@ public class MarkTargetFloatView extends AppCompatImageView implements FloatInte
         Canvas canvas = new Canvas(bitmap);
         canvas.translate(-targetArea.left, -targetArea.top);
 
-        canvas.drawRoundRect(new RectF(targetArea), 0, 0, paint);
+        canvas.drawRect(new RectF(targetArea), paint);
         setImageBitmap(bitmap);
         postDelayed(() -> animate().alpha(0).withEndAction(this::dismiss), 500);
     }
@@ -96,7 +96,7 @@ public class MarkTargetFloatView extends AppCompatImageView implements FloatInte
                 .setAnchor(EAnchor.TOP_LEFT)
                 .setDragAble(false)
                 .setSpecial(true)
-                .setFlag(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+                .setFlag(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 .show();
     }
 

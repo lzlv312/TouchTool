@@ -138,6 +138,11 @@ public class AppInfoFloatView extends FrameLayout implements FloatInterface, Res
         float x = event.getRawX();
         float y = event.getRawY();
         switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN -> {
+                lastX = x;
+                lastY = y;
+                return true;
+            }
             case MotionEvent.ACTION_MOVE -> {
                 float dx = x - lastX;
                 float dy = y - lastY;

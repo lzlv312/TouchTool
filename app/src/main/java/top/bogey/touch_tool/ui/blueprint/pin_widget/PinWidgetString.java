@@ -264,7 +264,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                 }, null).show());
             }
             case TASK_ID, ALL_TASK_ID -> {
-                Task task = Saver.getInstance().getTask(card.getTask(), pinBase.getValue());
+                Task task = Saver.getInstance().upFindTask(card.getTask(), pinBase.getValue());
                 if (task != null) binding.editText.setText(task.getTitle());
                 binding.pickButton.setIconResource(R.drawable.icon_assignment);
                 ResultCallback<Action> callback = action -> {

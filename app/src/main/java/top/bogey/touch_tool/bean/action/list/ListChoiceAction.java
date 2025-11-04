@@ -26,7 +26,8 @@ import top.bogey.touch_tool.bean.pin.special_pin.ShowAblePin;
 import top.bogey.touch_tool.bean.pin.special_pin.SingleSelectPin;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.service.TaskRunnable;
-import top.bogey.touch_tool.ui.custom.ChoiceExecuteFloatView;
+import top.bogey.touch_tool.ui.custom.ChoiceExecuteFloatView.Choice;
+import top.bogey.touch_tool.ui.custom.ListChoiceFloatView;
 import top.bogey.touch_tool.utils.EAnchor;
 import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
@@ -57,17 +58,17 @@ public class ListChoiceAction extends ListExecuteAction {
     @Override
     public void execute(TaskRunnable runnable, Pin pin) {
         PinList list = getPinValue(runnable, listPin);
-        List<ChoiceExecuteFloatView.Choice> choices = new ArrayList<>();
+        List<Choice> choices = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             PinObject pinObject = list.get(i);
-            choices.add(new ChoiceExecuteFloatView.Choice(String.valueOf(i), pinObject.toString(), null));
+            choices.add(new Choice(String.valueOf(i), pinObject.toString(), null));
         }
 
         PinNumber<?> timeout = getPinValue(runnable, timeoutPin);
         AtomicReference<String> resultIndex = new AtomicReference<>();
 
         if (getTypeValue() == 0) {
-            ChoiceExecuteFloatView.showChoice(choices, result -> {
+            ListChoiceFloatView.showChoice(choices, result -> {
                 resultIndex.set(result);
                 runnable.resume();
             });
@@ -75,14 +76,14 @@ public class ListChoiceAction extends ListExecuteAction {
             PinSingleSelect anchor = getPinValue(runnable, anchorPin);
             PinSingleSelect gravity = getPinValue(runnable, gravityPin);
             PinPoint point = getPinValue(runnable, posPin);
-            ChoiceExecuteFloatView.showChoice(choices, result -> {
+            ListChoiceFloatView.showChoice(choices, result -> {
                 resultIndex.set(result);
                 runnable.resume();
             }, EAnchor.values()[anchor.getIndex()], EAnchor.values()[gravity.getIndex()], point.getValue());
         }
 
         runnable.await(timeout.intValue());
-        FloatWindow.dismiss(ChoiceExecuteFloatView.class.getName());
+        FloatWindow.dismiss(ListChoiceFloatView.class.getName());
 
         String index = resultIndex.get();
         if (index != null) {

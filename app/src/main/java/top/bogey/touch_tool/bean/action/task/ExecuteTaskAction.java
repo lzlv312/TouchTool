@@ -118,7 +118,7 @@ public class ExecuteTaskAction extends Action implements DynamicPinsAction, Sync
 
     public Task getTask(Task context) {
         PinTaskString taskString = taskPin.getValue();
-        return Saver.getInstance().getTask(context, taskString.getValue());
+        return Saver.getInstance().upFindTask(context, taskString.getValue());
     }
 
     public void setTask(Task task) {

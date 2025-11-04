@@ -19,9 +19,9 @@
             android:layout_height="?attr/iconButtonSize">
 
             <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-                android:paddingBottom="0dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:paddingBottom="0dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/closeButton"
@@ -38,17 +38,12 @@
             app:cardBackgroundColor="?attr/colorSurface"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/buttonBox"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/flexBox"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:layout_margin="?attr/defaultPadding"
-                app:flexDirection="row"
-                app:flexWrap="wrap"
-                app:justifyContent="center">
-
-            </com.google.android.flexbox.FlexboxLayout>
+                android:orientation="vertical" />
 
         </com.google.android.material.card.MaterialCardView>
 

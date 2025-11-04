@@ -79,6 +79,13 @@ public class TaskManager implements ITaskManager {
     }
 
     @Override
+    public Task getTopParent() {
+        Task task = parent.getParent();
+        if (task != null) return task.getTopParent();
+        return null;
+    }
+
+    @Override
     public boolean isMyParent(String id) {
         Task task = parent.getParent();
         if (task != null) {

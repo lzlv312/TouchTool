@@ -14,7 +14,7 @@
         android:layout_height="?attr/iconButtonSize"
         android:layout_gravity="end"
         android:layout_margin="?attr/defaultPadding"
-        android:alpha="0.25"
+        android:alpha="0.1"
         android:tint="?attr/colorOnSurfaceVariant" />
 
     <LinearLayout

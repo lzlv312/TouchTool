@@ -1,6 +1,6 @@
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:accessibilityEventTypes="typeWindowStateChanged|typeNotificationStateChanged|typeWindowContentChanged"
+    android:accessibilityEventTypes="typeWindowStateChanged|typeNotificationStateChanged"
     android:accessibilityFeedbackType="feedbackAllMask"
     android:accessibilityFlags="flagReportViewIds|flagIncludeNotImportantViews|flagRetrieveInteractiveWindows|flagRequestFilterKeyEvents"
     android:canPerformGestures="true"
@@ -8,6 +8,6 @@
     android:canRequestFilterKeyEvents="true"
     android:canRetrieveWindowContent="true"
     android:canTakeScreenshot="true"
-    android:notificationTimeout="0"
+    android:notificationTimeout="50"
     android:settingsActivity="top.bogey.touch_tool.ui.MainActivity"
     tools:ignore="UnusedAttribute" />

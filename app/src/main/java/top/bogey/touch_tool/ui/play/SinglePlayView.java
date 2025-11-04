@@ -63,6 +63,8 @@ public class SinglePlayView extends PlayFloatItemView implements FloatInterface 
         DisplayUtil.setViewWidth(binding.cardLayout, px);
         DisplayUtil.setViewHeight(binding.cardLayout, px);
         binding.circleProgress.setIndicatorSize(px);
+
+        binding.cardLayout.setStrokeWidth(1);
     }
 
     @Override

@@ -12,7 +12,8 @@
         android:layout_width="?attr/iconButtonSize"
         android:layout_height="?attr/iconButtonSize"
         app:cardBackgroundColor="?attr/colorSurface"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+        app:strokeColor="?attr/colorOutline" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/lineProgress"

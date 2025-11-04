@@ -26,6 +26,8 @@ public class PlayFloatHideChoiceView extends FrameLayout implements FloatInterfa
         super(context);
         FloatPlayHideChoiceBinding binding = FloatPlayHideChoiceBinding.inflate(LayoutInflater.from(context), this, true);
 
+        binding.closeButton.setOnClickListener(v -> dismiss());
+
         String[] strings = getResources().getStringArray(R.array.manual_play_hide_type);
         for (int i = 0; i < strings.length - 1; i++) {
             MaterialButton button = new MaterialButton(context);

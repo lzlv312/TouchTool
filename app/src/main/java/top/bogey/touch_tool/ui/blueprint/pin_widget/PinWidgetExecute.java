@@ -63,9 +63,9 @@ public class PinWidgetExecute extends PinWidget<PinExecute> {
                 binding.titleBox.setVisibility(VISIBLE);
                 binding.pickButton.setVisibility(VISIBLE);
                 PinIconExecute iconExecute = (PinIconExecute) pinBase;
-                binding.pickButton.setIcon(new BitmapDrawable(getResources(), iconExecute.getImage()));
+                binding.pickButton.setImageBitmap(iconExecute.getImage());
                 binding.pickButton.setOnClickListener(v -> new SelectIconDialog(getContext(), result -> {
-                    binding.pickButton.setIcon(new BitmapDrawable(getResources(), result));
+                    binding.pickButton.setImageBitmap(result);
                     iconExecute.setImage(result);
                     pinView.getPin().notifyValueUpdated();
                 }).show());

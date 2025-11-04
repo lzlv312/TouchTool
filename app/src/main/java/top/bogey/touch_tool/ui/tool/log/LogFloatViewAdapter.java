@@ -215,7 +215,7 @@ public class LogFloatViewAdapter extends TreeAdapter {
                 Log log = logInfo.getLogObject();
                 if (log instanceof ActionLog actionLog) {
                     Action action = null;
-                    Task currTask = Saver.getInstance().getTask(task, actionLog.getTaskId());
+                    Task currTask = Saver.getInstance().downFindTask(task, actionLog.getTaskId());
                     if (currTask != null) {
                         action = currTask.getAction(actionLog.getActionId());
                     }
@@ -252,7 +252,7 @@ public class LogFloatViewAdapter extends TreeAdapter {
 
             if (log instanceof ActionLog actionLog && actionBinding != null) {
                 Action action = null;
-                Task currTask = Saver.getInstance().getTask(task, actionLog.getTaskId());
+                Task currTask = Saver.getInstance().downFindTask(task, actionLog.getTaskId());
                 if (currTask != null) {
                     action = currTask.getAction(actionLog.getActionId());
                 }

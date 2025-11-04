@@ -45,7 +45,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:breakStrategy="simple"
-                    android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+                    android:maxWidth="240dp"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelSmall" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/copyButton"

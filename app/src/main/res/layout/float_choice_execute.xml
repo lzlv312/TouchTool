@@ -20,7 +20,8 @@
 
             <com.google.android.material.bottomsheet.BottomSheetDragHandleView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:paddingBottom="0dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/closeButton"
@@ -39,7 +40,7 @@
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/flexBox"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="?attr/defaultPadding"

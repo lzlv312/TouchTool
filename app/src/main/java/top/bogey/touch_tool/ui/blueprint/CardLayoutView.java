@@ -93,6 +93,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
 
     private static final long LONG_TOUCH_TIME = 300L;
 
+    private static final float DEFAULT_SCALE = 0.75f;
+
     private final Handler longTouchHandler;
     private final Handler doubleTouchHandler;
 
@@ -118,7 +120,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
     private boolean movingTouch = false;
 
     private float offsetX, offsetY;
-    private float scale = 1f;
+    private float scale = DEFAULT_SCALE;
 
     private final Map<String, ActionCard> cards = new HashMap<>();
     private Task task;
@@ -196,7 +198,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         this.history = history;
         offsetX = 0;
         offsetY = 0;
-        scale = 1f;
+        scale = DEFAULT_SCALE;
         cleanSelectedCards();
 
         cards.values().forEach(this::removeView);

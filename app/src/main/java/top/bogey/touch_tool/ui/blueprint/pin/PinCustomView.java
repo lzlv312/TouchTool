@@ -34,12 +34,12 @@ import top.bogey.touch_tool.utils.listener.TextChangedListener;
 public abstract class PinCustomView extends PinView {
     private final static Map<PinType, List<PinInfo>> PIN_INFO_MAP = PinInfo.getCustomPinInfoMap();
     private final static int[] ICON_ARRAY = new int[]{R.drawable.icon_remove, R.drawable.icon_data_array, R.drawable.icon_map};
-    private final Variable variable;
+    private Variable variable;
 
     public PinCustomView(@NonNull Context context, ActionCard card, Pin pin) {
         super(context, card, pin, true);
-        if (pin.getValue() instanceof PinObject) {
-            variable = new Variable((PinObject) pin.getValue().copy());
+        if (pin.getValue() instanceof PinObject pinObject) {
+            variable = new Variable((PinObject) pinObject.copy());
         } else {
             variable = null;
         }
@@ -155,6 +155,10 @@ public abstract class PinCustomView extends PinView {
 
     @Override
     public void refreshPin() {
+        if (pin.getValue() instanceof PinObject pinObject) {
+            variable = new Variable((PinObject) pinObject.copy());
+        }
+
         EditText editText = getTitleEdit();
         if (!editText.hasFocus()) {
             editText.setText(pin.getTitle());

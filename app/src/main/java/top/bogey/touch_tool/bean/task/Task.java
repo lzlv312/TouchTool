@@ -147,6 +147,11 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
     }
 
     @Override
+    public Task getTopParent() {
+        return taskManager.getTopParent();
+    }
+
+    @Override
     public boolean isMyParent(String id) {
         return taskManager.isMyParent(id);
     }

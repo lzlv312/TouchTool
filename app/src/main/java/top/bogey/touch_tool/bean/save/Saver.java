@@ -176,9 +176,16 @@ public class Saver {
         return taskSave.getTask();
     }
 
-    public Task getTask(Task context, String taskId) {
+    public Task downFindTask(Task context, String taskId) {
         if (context == null) return getTask(taskId);
         Task task = context.downFindTask(taskId);
+        if (task == null) task = getTask(taskId);
+        return task;
+    }
+
+    public Task upFindTask(Task context, String taskId) {
+        if (context == null) return getTask(taskId);
+        Task task = context.upFindTask(taskId);
         if (task == null) task = getTask(taskId);
         return task;
     }

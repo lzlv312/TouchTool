@@ -26,7 +26,8 @@
                 android:id="@+id/icon"
                 android:layout_width="?attr/minTouchTargetSize"
                 android:layout_height="?attr/minTouchTargetSize"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/appName"
