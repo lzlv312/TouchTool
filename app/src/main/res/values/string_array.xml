@@ -179,6 +179,12 @@
         <item>铃声</item>
     </string-array>
 
+    <string-array name="volume_type">
+        <item>媒体音量</item>
+        <item>通知音量</item>
+        <item>闹钟音量</item>
+    </string-array>
+
     <string-array name="to_int_type">
         <item>四舍五入</item>
         <item>向上取整</item>

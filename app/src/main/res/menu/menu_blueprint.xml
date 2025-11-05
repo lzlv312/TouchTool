@@ -26,6 +26,7 @@
 
     <item
         android:id="@+id/taskRunningLogSwitch"
+        android:checkable="true"
         android:title="@string/task_running_log_switch" />
 
     <item

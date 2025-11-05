@@ -66,10 +66,15 @@ public class LoggerAction extends ExecuteAction {
         return logPin;
     }
 
-    public void switchLog() {
+    public boolean switchLog() {
         boolean show = showPin.getValue(PinBoolean.class).getValue();
         show = !show;
         showPin.setValue(new PinBoolean(show));
         savePin.setValue(new PinBoolean(show));
+        return show;
+    }
+
+    public boolean getLogSwitch() {
+        return showPin.getValue(PinBoolean.class).getValue();
     }
 }

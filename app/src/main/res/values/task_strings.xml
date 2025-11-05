@@ -219,6 +219,15 @@
     <string name="vibrate_action_desc">震动手机</string>
     <string name="vibrate_action_time">时长(ms)</string>
 
+    <string name="get_volume_action">获取音量</string>
+    <string name="get_volume_action_desc">获取音量大小</string>
+    <string name="get_volume_action_current">当前音量值</string>
+    <string name="get_volume_action_max">最大音量值</string>
+
+    <string name="set_volume_action">设置音量</string>
+    <string name="set_volume_action_desc">设置音量大小</string>
+    <string name="set_volume_action_value">音量值</string>
+
     <string name="send_notification_action">发送通知</string>
     <string name="send_notification_action_desc">发送自定义通知到通知栏</string>
     <string name="send_notification_action_title">标题</string>

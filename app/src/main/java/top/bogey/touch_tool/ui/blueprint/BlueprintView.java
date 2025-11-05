@@ -131,6 +131,21 @@ public class BlueprintView extends Fragment {
             MenuItem item = menu.findItem(R.id.taskDetailLog);
             item.setChecked(task.hasFlag(Task.FLAG_DEBUG));
             item.setVisible(task.getParent() == null);
+
+            boolean logFlag = false;
+            Queue<Task> queue = new LinkedList<>();
+            queue.add(task);
+            while (!queue.isEmpty()) {
+                Task pool = queue.poll();
+                if (pool == null) continue;
+                for (Action action : pool.getActions(LoggerAction.class)) {
+                    LoggerAction logger = (LoggerAction) action;
+                    logFlag |= logger.getLogSwitch();
+                }
+                queue.addAll(pool.getTasks());
+            }
+            MenuItem logSwitchItem = menu.findItem(R.id.taskRunningLogSwitch);
+            logSwitchItem.setChecked(logFlag);
         }
 
         @Override
@@ -156,6 +171,7 @@ public class BlueprintView extends Fragment {
                 new LogFloatView(requireContext(), task).show();
                 return true;
             } else if (itemId == R.id.taskRunningLogSwitch) {
+                boolean logFlag = false;
                 Task task = taskStack.peek();
                 Queue<Task> queue = new LinkedList<>();
                 queue.add(task);
@@ -164,11 +180,13 @@ public class BlueprintView extends Fragment {
                     if (pool == null) continue;
                     for (Action action : pool.getActions(LoggerAction.class)) {
                         LoggerAction logger = (LoggerAction) action;
-                        logger.switchLog();
+                        logFlag |= logger.switchLog();
                     }
                     queue.addAll(pool.getTasks());
                 }
                 task.save();
+                menuItem.setChecked(logFlag);
+                return true;
             } else if (itemId == R.id.taskDetailLog) {
                 Task task = taskStack.peek();
                 task.toggleFlag(Task.FLAG_DEBUG);

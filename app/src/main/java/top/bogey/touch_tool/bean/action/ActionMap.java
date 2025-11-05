@@ -94,7 +94,10 @@ public class ActionMap {
                     ActionType.GET_NETWORK_STATUS,
 
                     ActionType.GET_CURRENT_DATE,
-                    ActionType.GET_CURRENT_TIME
+                    ActionType.GET_CURRENT_TIME,
+
+                    ActionType.GET_VOLUME,
+                    ActionType.SET_VOLUME
             ));
 
             case NUMBER -> list.addAll(Arrays.asList(
