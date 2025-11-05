@@ -82,6 +82,9 @@ public enum ActionType {
     GET_CURRENT_DATE,
     GET_CURRENT_TIME,
 
+    GET_VOLUME,
+    SET_VOLUME,
+
     // 数值
     NUMBER_ADD,
     NUMBER_SUB,

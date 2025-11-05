@@ -145,6 +145,8 @@ import top.bogey.touch_tool.bean.action.system.GetDateAction;
 import top.bogey.touch_tool.bean.action.system.GetNetworkStatusAction;
 import top.bogey.touch_tool.bean.action.system.GetScreenStatusAction;
 import top.bogey.touch_tool.bean.action.system.GetTimeAction;
+import top.bogey.touch_tool.bean.action.system.GetVolumeAction;
+import top.bogey.touch_tool.bean.action.system.SetVolumeAction;
 import top.bogey.touch_tool.bean.action.system.OpenAppAction;
 import top.bogey.touch_tool.bean.action.system.OpenShortcutAction;
 import top.bogey.touch_tool.bean.action.system.OpenUriSchemeAction;
@@ -254,7 +256,8 @@ public class ActionInfo {
 
     private final static ActionInfo GET_CURRENT_DATE_INFO = new ActionInfo(ActionType.GET_CURRENT_DATE, GetDateAction.class, R.drawable.icon_calendar_month, R.string.get_date_action, R.string.get_date_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_CURRENT_TIME_INFO = new ActionInfo(ActionType.GET_CURRENT_TIME, GetTimeAction.class, R.drawable.icon_schedule, R.string.get_time_action, R.string.get_time_action_desc, 0, NormalActionCard.class);
-
+    private final static ActionInfo GET_VOLUME_INFO = new ActionInfo(ActionType.GET_VOLUME, GetVolumeAction.class, R.drawable.icon_volume, R.string.get_volume_action, R.string.get_volume_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SET_VOLUME_INFO = new ActionInfo(ActionType.SET_VOLUME, SetVolumeAction.class, R.drawable.icon_volume, R.string.set_volume_action, R.string.set_volume_action_desc, 0, NormalActionCard.class);
 
     // 数值运算
     private final static ActionInfo NUMBER_ADD_INFO = new ActionInfo(ActionType.NUMBER_ADD, NumberAddAction.class, R.drawable.icon_add, R.string.number_add_action, R.string.number_add_action_desc, 0, NormalActionCard.class);
@@ -459,6 +462,9 @@ public class ActionInfo {
 
             case GET_CURRENT_DATE -> GET_CURRENT_DATE_INFO;
             case GET_CURRENT_TIME -> GET_CURRENT_TIME_INFO;
+
+            case GET_VOLUME -> GET_VOLUME_INFO;
+            case SET_VOLUME -> SET_VOLUME_INFO;
 
 
             case NUMBER_ADD -> NUMBER_ADD_INFO;
