@@ -41,6 +41,9 @@ public class ListGetAction extends ListCalculateAction {
         PinList list = getPinValue(runnable, listPin);
         PinNumber<?> index = getPinValue(runnable, indexPin);
         int indexValue = index.intValue();
+        if (indexValue < 0) {
+            indexValue += list.size() + 1;
+        }
         if (indexValue >= 1 && indexValue <= list.size()) {
             existPin.getValue(PinBoolean.class).setValue(true);
             resultPin.setValue(returnValue(list.get(indexValue - 1)));
