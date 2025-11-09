@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 import top.bogey.touch_tool.bean.save.Saver;
-import top.bogey.touch_tool.bean.task.IDragTouchHelperAdapter;
 import top.bogey.touch_tool.databinding.ViewTaskPageBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
 import top.bogey.touch_tool.utils.callback.CommonDragCallback;
