@@ -22,7 +22,7 @@ import top.bogey.touch_tool.utils.AppUtil;
 public class TaskTagAdapter extends RecyclerView.Adapter<TaskTagAdapter.ViewHolder> implements TaskTagListView.ItemTouchHelperAdapter {
     private final TaskView taskView;
     private final Set<String> tags;
-    private List<String> allTags;
+    private final List<String> allTags;
     private final Saver saver;
 
     public TaskTagAdapter(TaskView taskView, Set<String> tags) {
