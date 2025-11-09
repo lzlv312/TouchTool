@@ -23,6 +23,7 @@ import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.start.StartAction;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.task.TaskSaveListener;
+import top.bogey.touch_tool.bean.task.IDragTouchHelperAdapter;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewTaskPageItemActionBinding;
 import top.bogey.touch_tool.databinding.ViewTaskPageItemBinding;
@@ -30,7 +31,7 @@ import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 
-public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPageItemRecyclerViewAdapter.ViewHolder> implements TaskSaveListener, TaskTagListView.ItemTouchHelperAdapter {
+public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPageItemRecyclerViewAdapter.ViewHolder> implements TaskSaveListener, IDragTouchHelperAdapter {
     private final TaskView taskView;
 
     private String tag;

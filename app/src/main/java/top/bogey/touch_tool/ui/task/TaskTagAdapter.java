@@ -15,11 +15,12 @@ import java.util.Set;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.task.IDragTouchHelperAdapter;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewTagListItemBinding;
 import top.bogey.touch_tool.utils.AppUtil;
 
-public class TaskTagAdapter extends RecyclerView.Adapter<TaskTagAdapter.ViewHolder> implements TaskTagListView.ItemTouchHelperAdapter {
+public class TaskTagAdapter extends RecyclerView.Adapter<TaskTagAdapter.ViewHolder> implements IDragTouchHelperAdapter {
     private final TaskView taskView;
     private final Set<String> tags;
     private final List<String> allTags;

@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.Set;
 
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.task.IDragTouchHelperAdapter;
 import top.bogey.touch_tool.databinding.ViewTaskPageBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.utils.callback.CommonDragCallback;
 
 public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapter.ViewHolder> {
 
@@ -92,7 +94,7 @@ public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapte
 
             adapter = new TaskPageItemRecyclerViewAdapter(taskView);
 
-            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new TaskItemTouchHelperCallback(adapter));
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new CommonDragCallback(adapter));
             itemTouchHelper.attachToRecyclerView(binding.getRoot());
             adapter.setItemTouchHelper(itemTouchHelper);
 
@@ -112,57 +114,6 @@ public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapte
             } else {
                 adapter.setTasks(tag, Saver.getInstance().getOrderedTasks(tag));
             }
-        }
-    }
-
-    private static class TaskItemTouchHelperCallback extends ItemTouchHelper.Callback {
-        private final TaskTagListView.ItemTouchHelperAdapter adapter;
-
-        public TaskItemTouchHelperCallback(TaskTagListView.ItemTouchHelperAdapter adapter) {
-            this.adapter = adapter;
-        }
-
-        @Override
-        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-            // 允许上下左右拖拽（网格布局需要支持左右拖拽）
-            int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-            int swipeFlags = 0; // 不支持滑动删除
-            return makeMovementFlags(dragFlags, swipeFlags);
-        }
-
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            int fromPosition = viewHolder.getBindingAdapterPosition();
-            int toPosition = target.getBindingAdapterPosition();
-            if (fromPosition != RecyclerView.NO_POSITION && toPosition != RecyclerView.NO_POSITION) {
-                adapter.onItemMove(fromPosition, toPosition);
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            // 不处理滑动事件
-        }
-
-        @Override
-        public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-            // 拖拽时放大视图效果
-            if (actionState != ItemTouchHelper.ACTION_STATE_IDLE && viewHolder != null) {
-                viewHolder.itemView.setScaleX(1.05f);
-                viewHolder.itemView.setScaleY(1.05f);
-            }
-            super.onSelectedChanged(viewHolder, actionState);
-        }
-
-        @Override
-        public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-            super.clearView(recyclerView, viewHolder);
-            // 拖拽结束后恢复视图大小
-            viewHolder.itemView.setScaleX(1f);
-            viewHolder.itemView.setScaleY(1f);
-            adapter.onItemDragEnded();
         }
     }
 }

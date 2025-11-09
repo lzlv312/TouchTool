@@ -21,9 +21,11 @@ import java.util.Set;
 
 import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.save.Saver;
+import top.bogey.touch_tool.bean.task.IDragTouchHelperAdapter;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewTagListBinding;
 import top.bogey.touch_tool.utils.AppUtil;
+import top.bogey.touch_tool.utils.callback.CommonDragCallback;
 
 public class TaskTagListView extends BottomSheetDialogFragment {
     private final TaskView taskView;
@@ -56,7 +58,7 @@ public class TaskTagListView extends BottomSheetDialogFragment {
         layoutManager.setFlexWrap(FlexWrap.WRAP); // 自动换行
         binding.tagBox.setLayoutManager(layoutManager);
         binding.tagBox.setAdapter(taskTagAdapter);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new TagItemTouchHelperCallback(taskTagAdapter));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new CommonDragCallback(taskTagAdapter));
         itemTouchHelper.attachToRecyclerView(binding.tagBox);
 
         binding.addButton.setOnClickListener(v -> AppUtil.showEditDialog(requireContext(), R.string.task_tag_add, "", result -> {
@@ -74,62 +76,5 @@ public class TaskTagListView extends BottomSheetDialogFragment {
         taskView.hideBottomBar();
         taskView.resetTags();
         super.onDestroyView();
-    }
-
-    public static class TagItemTouchHelperCallback extends ItemTouchHelper.Callback {
-        private final ItemTouchHelperAdapter adapter;
-
-        public TagItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
-            this.adapter = adapter;
-        }
-
-        @Override
-        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-            int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT; // 允许上下拖拽
-            int swipeFlags = 0;
-            return makeMovementFlags(dragFlags, swipeFlags);
-        }
-
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            int fromPosition = viewHolder.getBindingAdapterPosition();
-            int toPosition = target.getBindingAdapterPosition();
-            if (fromPosition != RecyclerView.NO_POSITION && toPosition != RecyclerView.NO_POSITION) {
-                adapter.onItemMove(fromPosition, toPosition);
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        }
-
-        @Override
-        public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-            if (actionState != ItemTouchHelper.ACTION_STATE_IDLE && viewHolder != null) {
-                ViewGroup parent = (ViewGroup) viewHolder.itemView.getParent();
-                if (parent != null) {
-                    parent.bringChildToFront(viewHolder.itemView);
-                }
-                viewHolder.itemView.setScaleX(1.05f);
-                viewHolder.itemView.setScaleY(1.05f);
-            }
-            super.onSelectedChanged(viewHolder, actionState);
-        }
-
-        @Override
-        public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-            super.clearView(recyclerView, viewHolder);
-            viewHolder.itemView.setScaleX(1f);
-            viewHolder.itemView.setScaleY(1f);
-            adapter.onItemDragEnded();
-        }
-    }
-
-    public interface ItemTouchHelperAdapter {
-        void onItemMove(int fromPosition, int toPosition);
-
-        void onItemDragEnded();
     }
 }
