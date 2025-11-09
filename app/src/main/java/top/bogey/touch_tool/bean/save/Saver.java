@@ -47,6 +47,7 @@ public class Saver {
 
     private static final String EMPTY_TAG = MainApplication.getInstance().getString(R.string.tag_empty);
     private static final String TAG_ORDER_KEY = "tag_order";
+    private static final String TASK_ORDER_PREFIX = "task_order_";
 
     public static boolean matchTag(String tag, List<String> tags) {
         boolean emptyTags = tags == null || tags.isEmpty();
@@ -69,6 +70,7 @@ public class Saver {
 
     private final MMKV tagMMKV = MMKV.mmkvWithID("TAG_DB", MMKV.SINGLE_PROCESS_MODE);
     private final MMKV searchHistoryMMKV = MMKV.mmkvWithID("SEARCH_HISTORY_DB", MMKV.SINGLE_PROCESS_MODE);
+    private final MMKV taskOrderMMKV = MMKV.defaultMMKV();
 
     private final static String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/" + AppUtil.LOG_DIR_NAME;
     private final Map<String, LogSave> loggers = new HashMap<>();
@@ -261,6 +263,58 @@ public class Saver {
         taskListeners.remove(listener);
     }
 
+    public void saveTaskOrder(String tag, List<Task> orderedTasks) {
+        if (tag == null || orderedTasks == null) return;
+
+        // 1. 提取任务ID列表（存储ID而非完整对象，减少存储体积）
+        List<String> taskIds = new ArrayList<>();
+        for (Task task : orderedTasks) {
+            taskIds.add(task.getId());
+        }
+
+        // 2. 生成该标签对应的存储键
+        String key = TASK_ORDER_PREFIX + tag;
+
+        // 3. 序列化并存储（使用项目已有Gson工具）
+        taskOrderMMKV.encode(key, new Gson().toJson(taskIds));
+    }
+
+    public List<Task> getOrderedTasks(String tag) {
+        if (tag == null) return new ArrayList<>();
+
+        // 1. 获取该标签下所有任务（项目已有方法）
+        List<Task> allTagTasks = getTasks(tag);
+        if (allTagTasks.isEmpty()) return allTagTasks;
+
+        // 2. 读取保存的任务ID排序
+        String key = TASK_ORDER_PREFIX + tag;
+        String json = taskOrderMMKV.decodeString(key, "[]");
+        Type type = new TypeToken<List<String>>() {
+        }.getType();
+        List<String> orderedIds = new Gson().fromJson(json, type);
+
+        // 3. 按ID排序重组任务列表
+        Map<String, Task> taskMap = new HashMap<>();
+        for (Task task : allTagTasks) {
+            taskMap.put(task.getId(), task);
+        }
+
+        List<Task> orderedTasks = new ArrayList<>();
+        // 先添加排序序列中的任务
+        assert orderedIds != null;
+        for (String taskId : orderedIds) {
+            if (taskMap.containsKey(taskId)) {
+                orderedTasks.add(taskMap.remove(taskId));
+            }
+        }
+        // 剩余未排序的任务追加到末尾（按原逻辑排序）
+        List<Task> remainingTasks = new ArrayList<>(taskMap.values());
+        AppUtil.chineseSort(remainingTasks, Task::getTitle); // 沿用项目原排序逻辑
+        orderedTasks.addAll(remainingTasks);
+
+        return orderedTasks;
+    }
+
     // ====================================================================================================================
 
     public List<Variable> getVars() {
@@ -325,7 +379,8 @@ public class Saver {
     public void addLog(String key, LogInfo log, boolean autoUid) {
         LogSave logSave = getLogSave(key);
         logSave.addLog(log, autoUid);
-        if (autoUid) logListeners.stream().filter(Objects::nonNull).forEach(v -> v.onNewLog(logSave, log));
+        if (autoUid)
+            logListeners.stream().filter(Objects::nonNull).forEach(v -> v.onNewLog(logSave, log));
     }
 
     public void clearLog(String key) {
