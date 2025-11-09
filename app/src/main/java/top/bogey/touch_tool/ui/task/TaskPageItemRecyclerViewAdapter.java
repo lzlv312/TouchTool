@@ -110,7 +110,7 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
 
     public void setTasks(@NonNull String tag, List<Task> tasks) {
         this.tag = tag;
-        this.tasks = Saver.getInstance().getOrderedTasks(tag);
+        this.tasks = tasks;
 
         notifyDataSetChanged();
     }

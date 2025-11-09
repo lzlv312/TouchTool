@@ -461,9 +461,6 @@ public class Saver {
             Type listType = new TypeToken<List<String>>() {
             }.getType();
             List<String> order = new Gson().fromJson(json, listType);
-            if (order == null || order.isEmpty()) {
-
-            }
             return order != null ? order : new ArrayList<>();
         } catch (Exception e) {
             return new ArrayList<>();
