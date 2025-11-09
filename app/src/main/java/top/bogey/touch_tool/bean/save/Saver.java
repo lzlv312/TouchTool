@@ -9,6 +9,7 @@ import com.tencent.mmkv.MMKV;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -70,7 +71,7 @@ public class Saver {
 
     private final MMKV tagMMKV = MMKV.mmkvWithID("TAG_DB", MMKV.SINGLE_PROCESS_MODE);
     private final MMKV searchHistoryMMKV = MMKV.mmkvWithID("SEARCH_HISTORY_DB", MMKV.SINGLE_PROCESS_MODE);
-    private final MMKV taskOrderMMKV = MMKV.defaultMMKV();
+    private final MMKV taskOrderMMKV = MMKV.mmkvWithID("TASK_ORDER_DB", MMKV.SINGLE_PROCESS_MODE);
 
     private final static String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/" + AppUtil.LOG_DIR_NAME;
     private final Map<String, LogSave> loggers = new HashMap<>();
@@ -173,9 +174,7 @@ public class Saver {
         }
 
         List<String> savedOrder = getSavedTagOrder();
-        List<String> list = savedOrder.stream()
-                .filter(tags::contains)
-                .collect(Collectors.toList());
+        List<String> list = savedOrder.stream().filter(tags::contains).collect(Collectors.toList());
         Set<String> orderedSet = new HashSet<>(list);
         for (String tag : tags) {
             if (!orderedSet.contains(tag)) {
@@ -213,13 +212,32 @@ public class Saver {
     }
 
     public void saveTask(Task task) {
-        TaskSave taskSave = taskSaves.get(task.getId());
+        String taskId = task.getId();
+        TaskSave taskSave = taskSaves.get(taskId);
         if (taskSave == null) {
-            taskSaves.put(task.getId(), new TaskSave(taskMMKV, task));
+            taskSaves.put(taskId, new TaskSave(taskMMKV, task));
             taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onCreate(task));
         } else {
             taskSave.setTask(task);
             taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onUpdate(task));
+        }
+        List<String> taskTags = task.getTags();
+        if (taskTags == null || taskTags.isEmpty()) {
+            taskTags = Collections.singletonList(EMPTY_TAG);
+        }
+        for (String tag : taskTags) {
+            String orderKey = TASK_ORDER_PREFIX + tag;
+            String json = taskOrderMMKV.decodeString(orderKey, "[]");
+            Type type = new TypeToken<List<String>>() {
+            }.getType();
+            List<String> orderedIds = new Gson().fromJson(json, type);
+            if (orderedIds == null) {
+                orderedIds = new ArrayList<>();
+            }
+            if (!orderedIds.contains(taskId)) {
+                orderedIds.add(taskId); // 默认添加到末尾，可根据需求修改位置
+            }
+            taskOrderMMKV.encode(orderKey, new Gson().toJson(orderedIds));
         }
 
         MainAccessibilityService service = MainApplication.getInstance().getService();
@@ -228,13 +246,40 @@ public class Saver {
         }
     }
 
+    public void taskOrderRemoveTag(Task task, String tag) {
+        String taskId = task.getId();
+        String orderKey = TASK_ORDER_PREFIX + tag;
+        String json = taskOrderMMKV.decodeString(orderKey, "[]");
+        Type type = new TypeToken<List<String>>() {
+        }.getType();
+        List<String> orderedIds = new Gson().fromJson(json, type);
+        if (orderedIds != null && orderedIds.remove(taskId)) {
+            taskOrderMMKV.encode(orderKey, new Gson().toJson(orderedIds));
+        }
+    }
+
+
     public void removeTask(String id) {
         TaskSave taskSave = taskSaves.remove(id);
         if (taskSave == null) return;
         Task task = taskSave.getTask();
+        List<String> taskTags = task.getTags();
         task.setEnable(false);
         taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onRemove(task));
         taskSave.remove();
+
+        if (taskTags != null) {
+            for (String tag : taskTags) {
+                String orderKey = TASK_ORDER_PREFIX + tag;
+                String json = taskOrderMMKV.decodeString(orderKey, "[]");
+                Type type = new TypeToken<List<String>>() {
+                }.getType();
+                List<String> orderedIds = new Gson().fromJson(json, type);
+                if (orderedIds != null && orderedIds.remove(id)) {
+                    taskOrderMMKV.encode(orderKey, new Gson().toJson(orderedIds));
+                }
+            }
+        }
 
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service != null) {
@@ -447,9 +492,7 @@ public class Saver {
 
     public void saveTagOrder(List<String> orderedTags) {
         // 过滤空标签和无效标签
-        List<String> filtered = orderedTags.stream()
-                .filter(t -> t != null && !t.isEmpty() && !t.equals(EMPTY_TAG))
-                .distinct() // 去重
+        List<String> filtered = orderedTags.stream().filter(t -> t != null && !t.isEmpty() && !t.equals(EMPTY_TAG)).distinct() // 去重
                 .collect(Collectors.toList());
         String json = new Gson().toJson(filtered);
         tagMMKV.putString(TAG_ORDER_KEY, json);
