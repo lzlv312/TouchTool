@@ -3,8 +3,11 @@ package top.bogey.touch_tool.bean.save;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tencent.mmkv.MMKV;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -42,6 +46,7 @@ public class Saver {
     }
 
     private static final String EMPTY_TAG = MainApplication.getInstance().getString(R.string.tag_empty);
+    private static final String TAG_ORDER_KEY = "tag_order";
 
     public static boolean matchTag(String tag, List<String> tags) {
         boolean emptyTags = tags == null || tags.isEmpty();
@@ -164,8 +169,17 @@ public class Saver {
                 emptyTag = true;
             }
         }
-        List<String> list = new ArrayList<>(tags);
-        AppUtil.chineseSort(list, tag -> tag);
+
+        List<String> savedOrder = getSavedTagOrder();
+        List<String> list = savedOrder.stream()
+                .filter(tags::contains)
+                .collect(Collectors.toList());
+        Set<String> orderedSet = new HashSet<>(list);
+        for (String tag : tags) {
+            if (!orderedSet.contains(tag)) {
+                list.add(tag);
+            }
+        }
         if (emptyTag || taskSaves.isEmpty()) list.add(EMPTY_TAG);
         return list;
     }
@@ -330,11 +344,17 @@ public class Saver {
 
     // ====================================================================================================================
     public void addTag(String tag) {
-        tagMMKV.encode(tag, true);
+        if (tag == null || tag.isEmpty()) return;
+
+        List<String> currentOrder = getSavedTagOrder();
+        if (!currentOrder.contains(tag)) {
+            currentOrder.add(tag);
+            saveTagOrder(currentOrder);
+        }
     }
 
     public void removeTag(String tag) {
-        tagMMKV.remove(tag);
+        if (tag == null || tag.isEmpty()) return;
         taskSaves.forEach((id, taskSave) -> {
             Task task = taskSave.getTask();
             task.removeInnerTag(tag);
@@ -348,19 +368,55 @@ public class Saver {
                 var.save();
             }
         });
+        List<String> currentOrder = getSavedTagOrder();
+        if (currentOrder.remove(tag)) {
+            saveTagOrder(currentOrder);
+        }
     }
 
     public List<String> getAllTags() {
-        List<String> list = new ArrayList<>();
-        String[] keys = tagMMKV.allKeys();
-        if (keys == null) return list;
-        for (String key : keys) {
-            if (tagMMKV.decodeBool(key)) {
-                list.add(key);
+        List<String> savedOrder = getSavedTagOrder();
+        if (savedOrder.isEmpty()) {
+            Set<String> tags = new HashSet<>();
+            for (Map.Entry<String, TaskSave> entry : taskSaves.entrySet()) {
+                TaskSave v = entry.getValue();
+                Task task = v.getTask();
+                if (task.getTags() != null && !task.getTags().isEmpty()) {
+                    tags.addAll(task.getTags());
+                }
             }
+            savedOrder = new ArrayList<>(tags);
         }
-        AppUtil.chineseSort(list, tag -> tag);
-        return list;
+        return savedOrder;
+    }
+
+    public void saveTagOrder(List<String> orderedTags) {
+        // 过滤空标签和无效标签
+        List<String> filtered = orderedTags.stream()
+                .filter(t -> t != null && !t.isEmpty() && !t.equals(EMPTY_TAG))
+                .distinct() // 去重
+                .collect(Collectors.toList());
+        String json = new Gson().toJson(filtered);
+        tagMMKV.putString(TAG_ORDER_KEY, json);
+    }
+
+    private List<String> getSavedTagOrder() {
+        String json = tagMMKV.getString(TAG_ORDER_KEY, "[]");
+        try {
+            Type listType = new TypeToken<List<String>>() {
+            }.getType();
+            List<String> order = new Gson().fromJson(json, listType);
+            if (order == null || order.isEmpty()) {
+
+            }
+            return order != null ? order : new ArrayList<>();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public void updateTagOrder(List<String> newOrder) {
+        saveTagOrder(newOrder);
     }
 
     // ====================================================================================================================
