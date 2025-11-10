@@ -67,8 +67,6 @@ public class TaskTagAdapter extends RecyclerView.Adapter<TaskTagAdapter.ViewHold
 
     public void refreshTags() {
         List<String> newTags = saver.getAllTags();
-
-        Set<String> oldTagsSet = new HashSet<>(tags);
         Set<String> newTagsSet = new HashSet<>(newTags);
 
         // 先移除已不存在的标签
