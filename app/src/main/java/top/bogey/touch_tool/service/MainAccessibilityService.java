@@ -36,6 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -543,6 +544,10 @@ public class MainAccessibilityService extends AccessibilityService {
     private final Map<String, IOcr> ocrBinderMap = new HashMap<>();
 
     public synchronized void runOcr(String packageName, Bitmap bitmap, ResultCallback<List<OcrResult>> callback) {
+        if (bitmap == null) {
+            callback.onResult(new ArrayList<>());
+        }
+
         IOcr iOcr = ocrBinderMap.get(packageName);
         if (iOcr == null || !iOcr.asBinder().isBinderAlive()) {
             ServiceConnection connection = new ServiceConnection() {
@@ -551,10 +556,6 @@ public class MainAccessibilityService extends AccessibilityService {
                     IOcr iOcr = IOcr.Stub.asInterface(service);
                     ocrBinderMap.put(packageName, iOcr);
                     try {
-                        if (bitmap == null) {
-                            callback.onResult(Collections.emptyList());
-                            return;
-                        }
                         iOcr.runOcr(bitmap, new IOcrCallback.Stub() {
                             @Override
                             public void onResult(List<OcrResult> result) {
@@ -563,6 +564,7 @@ public class MainAccessibilityService extends AccessibilityService {
                         });
                     } catch (RemoteException e) {
                         e.printStackTrace();
+                        callback.onResult(new ArrayList<>());
                     }
                 }
 
@@ -585,6 +587,7 @@ public class MainAccessibilityService extends AccessibilityService {
                 });
             } catch (RemoteException e) {
                 e.printStackTrace();
+                callback.onResult(new ArrayList<>());
             }
         }
     }

@@ -121,25 +121,22 @@ public class SettingView extends Fragment {
 
         // 重启服务
         binding.reloadService.setOnButtonClickListener(v -> {
-            View btn = v.findViewById(R.id.button);
-            if (btn instanceof android.widget.Button button) {
-                button.setEnabled(false);
-                button.setText(R.string.app_setting_reload_button_running);
+            binding.reloadService.setButtonText(getString(R.string.app_setting_reload_button_running));
+            binding.reloadService.setEnabled(false);
 
-                if (activity.stopAccessibilityServiceBySecurePermission()) {
-                    binding.getRoot().postDelayed(() -> {
-                        SettingSaver.getInstance().setServiceEnabled(true);
-                        binding.enableSwitch.setChecked(true);
-                        activity.restartAccessibilityServiceBySecurePermission();
-                        Toast.makeText(activity, R.string.app_setting_reload_success, Toast.LENGTH_SHORT).show();
-                        button.setEnabled(true);
-                        button.setText(R.string.app_setting_reload_button_text);
-                    }, 1000);
-                } else {
-                    Toast.makeText(activity, R.string.app_setting_reload_error, Toast.LENGTH_SHORT).show();
-                    button.setEnabled(true);
-                    button.setText(R.string.app_setting_reload_button_text);
-                }
+            if (activity.stopAccessibilityServiceBySecurePermission()) {
+                binding.getRoot().postDelayed(() -> {
+                    SettingSaver.getInstance().setServiceEnabled(true);
+                    binding.enableSwitch.setChecked(true);
+                    activity.restartAccessibilityServiceBySecurePermission();
+                    Toast.makeText(activity, R.string.app_setting_reload_success, Toast.LENGTH_SHORT).show();
+                    binding.reloadService.setEnabled(true);
+                    binding.reloadService.setButtonText(getString(R.string.app_setting_reload_button_text));
+                }, 1000);
+            } else {
+                Toast.makeText(activity, R.string.app_setting_reload_error, Toast.LENGTH_SHORT).show();
+                binding.reloadService.setEnabled(true);
+                binding.reloadService.setButtonText(getString(R.string.app_setting_reload_button_text));
             }
         });
         refreshReloadService();

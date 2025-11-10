@@ -71,10 +71,14 @@ public class FloatWindowHelper {
         }
         viewParent.addView(floatView);
 
-        try { manager.addView(viewParent, params); }
-        catch (android.view.WindowManager.BadTokenException e) {
+        try {
+            manager.addView(viewParent, params);
+        } catch (android.view.WindowManager.BadTokenException e) {
             new android.os.Handler().postDelayed(() -> {
-                try { manager.addView(viewParent, params); } catch (Exception ignored) {}
+                try {
+                    manager.addView(viewParent, params);
+                } catch (Exception ignored) {
+                }
             }, 200);
         }
     }
