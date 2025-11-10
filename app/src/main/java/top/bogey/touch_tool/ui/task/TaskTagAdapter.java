@@ -71,6 +71,7 @@ public class TaskTagAdapter extends RecyclerView.Adapter<TaskTagAdapter.ViewHold
         Set<String> oldTagsSet = new HashSet<>(tags);
         Set<String> newTagsSet = new HashSet<>(newTags);
 
+        // 先移除已不存在的标签
         for (int i = allTags.size() - 1; i >= 0; i--) {
             String tag = allTags.get(i);
             if (!newTagsSet.contains(tag)) {
@@ -81,12 +82,16 @@ public class TaskTagAdapter extends RecyclerView.Adapter<TaskTagAdapter.ViewHold
 
         for (int i = 0; i < newTags.size(); i++) {
             String tag = newTags.get(i);
-            if (!oldTagsSet.contains(tag)) {
+            int index = allTags.indexOf(tag);
+            if (index == -1) {
+                // 新标签，添加到对应位置
                 allTags.add(i, tag);
                 notifyItemInserted(i);
-            } else if (!allTags.get(i).equals(tag)) {
-                allTags.set(i, tag);
-                notifyItemChanged(i);
+            } else if (index != i) {
+                // 标签位置变化，移动位置
+                allTags.remove(index);
+                allTags.add(i, tag);
+                notifyItemMoved(index, i);
             }
         }
     }
