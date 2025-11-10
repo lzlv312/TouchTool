@@ -266,6 +266,7 @@
     <string name="app_setting_reload_error">重启无障碍失败</string>
     <string name="app_setting_reload_success">重启无障碍成功</string>
     <string name="app_setting_reload_button_text">重启</string>
+    <string name="app_setting_reload_button_running">重启中</string>
 
     <string name="app_setting_auto_reload">自动重启无障碍</string>
     <string name="app_setting_auto_reload_desc">授予 写入安全设置 权限能够使应用自动重启无障碍服务</string>

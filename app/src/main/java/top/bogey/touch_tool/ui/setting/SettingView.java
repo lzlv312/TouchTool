@@ -121,16 +121,25 @@ public class SettingView extends Fragment {
 
         // 重启服务
         binding.reloadService.setOnButtonClickListener(v -> {
-            boolean result = activity.stopAccessibilityServiceBySecurePermission();
-            if (result) {
-                binding.getRoot().postDelayed(() -> {
-                    SettingSaver.getInstance().setServiceEnabled(true);
-                    binding.enableSwitch.setChecked(true);
-                    activity.restartAccessibilityServiceBySecurePermission();
-                    Toast.makeText(activity, getString(R.string.app_setting_reload_success), Toast.LENGTH_SHORT).show();
-                }, 1000);
-            } else {
-                Toast.makeText(activity, getString(R.string.app_setting_reload_error), Toast.LENGTH_SHORT).show();
+            View btn = v.findViewById(R.id.button);
+            if (btn instanceof android.widget.Button button) {
+                button.setEnabled(false);
+                button.setText(R.string.app_setting_reload_button_running);
+
+                if (activity.stopAccessibilityServiceBySecurePermission()) {
+                    binding.getRoot().postDelayed(() -> {
+                        SettingSaver.getInstance().setServiceEnabled(true);
+                        binding.enableSwitch.setChecked(true);
+                        activity.restartAccessibilityServiceBySecurePermission();
+                        Toast.makeText(activity, R.string.app_setting_reload_success, Toast.LENGTH_SHORT).show();
+                        button.setEnabled(true);
+                        button.setText(R.string.app_setting_reload_button_text);
+                    }, 1000);
+                } else {
+                    Toast.makeText(activity, R.string.app_setting_reload_error, Toast.LENGTH_SHORT).show();
+                    button.setEnabled(true);
+                    button.setText(R.string.app_setting_reload_button_text);
+                }
             }
         });
         refreshReloadService();

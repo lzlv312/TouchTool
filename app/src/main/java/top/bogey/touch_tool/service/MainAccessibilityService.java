@@ -551,6 +551,10 @@ public class MainAccessibilityService extends AccessibilityService {
                     IOcr iOcr = IOcr.Stub.asInterface(service);
                     ocrBinderMap.put(packageName, iOcr);
                     try {
+                        if (bitmap == null) {
+                            callback.onResult(Collections.emptyList());
+                            return;
+                        }
                         iOcr.runOcr(bitmap, new IOcrCallback.Stub() {
                             @Override
                             public void onResult(List<OcrResult> result) {
