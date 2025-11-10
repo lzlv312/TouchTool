@@ -96,4 +96,5 @@ dependencies {
     implementation(libs.exp4j)
     implementation(libs.zxinglite)
     implementation(libs.tinypinyin)
+    implementation(libs.hiddenapibypass)
 }

@@ -64,6 +64,7 @@ public class ActionMap {
 
             case SYSTEM -> list.addAll(Arrays.asList(
                     ActionType.OPEN_APP,
+                    ActionType.OPEN_ACTIVITY,
                     ActionType.OPEN_URI_SCHEME,
                     ActionType.OPEN_SHORTCUT,
                     ActionType.SHELL,
@@ -120,7 +121,6 @@ public class ActionMap {
             ));
 
             case STRING -> list.addAll(Arrays.asList(
-                    ActionType.STRING_FROM_OBJECT,
                     ActionType.STRING_TO_NUMBER,
                     ActionType.STRING_APPEND,
                     ActionType.STRING_SUBSTRING,
@@ -134,7 +134,8 @@ public class ActionMap {
                     ActionType.GET_OCR_TEXT,
                     ActionType.FIND_OCR_TEXT,
                     ActionType.IS_OCR_TEXT_EXIST,
-                    ActionType.PARSE_JSON
+                    ActionType.PARSE_JSON,
+                    ActionType.STRING_FROM_OBJECT
             ));
 
             case BOOLEAN -> list.addAll(Arrays.asList(
