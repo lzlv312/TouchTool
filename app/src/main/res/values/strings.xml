@@ -122,6 +122,8 @@
     <string name="check_need_super_user_error">需要超级用户权限</string>
     <string name="check_need_ocr_module_error">需要Ocr模型</string>
     <string name="check_not_exist_variable_error">引用的变量不存在</string>
+    <string name="check_secure_permission_error">需要"写入安全设置(SECURE)"权限</string>
+    <string name="check_android_version_9_error">需要Android 9.0及以上版本</string>
 
     <!-- 警告 -->
     <string name="check_need_capture_warning">需要开启录屏动作</string>
@@ -266,6 +268,7 @@
     <string name="app_setting_reload_error">重启无障碍失败</string>
     <string name="app_setting_reload_success">重启无障碍成功</string>
     <string name="app_setting_reload_button_text">重启</string>
+    <string name="app_setting_reload_button_running">重启中</string>
 
     <string name="app_setting_auto_reload">自动重启无障碍</string>
     <string name="app_setting_auto_reload_desc">授予 写入安全设置 权限能够使应用自动重启无障碍服务</string>

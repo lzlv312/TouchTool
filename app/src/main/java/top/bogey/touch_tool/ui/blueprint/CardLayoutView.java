@@ -180,7 +180,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
                 touchState = TOUCH_NONE;
             }
         });
-        detector.setQuickScaleEnabled(!AppUtil.isRelease(context));
+        detector.setQuickScaleEnabled(true);
 
         Saver.getInstance().addListener((TaskSaveListener) this);
         Saver.getInstance().addListener((VariableSaveListener) this);

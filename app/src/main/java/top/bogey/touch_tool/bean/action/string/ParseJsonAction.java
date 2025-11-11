@@ -36,30 +36,38 @@ public class ParseJsonAction extends CalculateAction implements SyncAction {
 
     @Override
     public void calculate(TaskRunnable runnable, Pin pin) {
-        if (!resultPin.getValue().isDynamic()) return;
         PinObject json = getPinValue(runnable, jsonPin);
         String jsonString = json.toString();
         Gson gson = new Gson();
-        try {
-            if (jsonString.startsWith("{")) {
+        if (resultPin.getValue().isDynamic()) {
+            if (jsonString.startsWith("{") && resultPin.getValue() instanceof PinMap) {
                 Map<String, Object> map = gson.fromJson(jsonString, new TypeToken<Map<String, Object>>() {
                 }.getType());
                 PinBase pinBase = PinBase.parseValue(map);
                 resultPin.setValue(pinBase);
-            } else if (jsonString.startsWith("[")) {
-                List<Object> list = gson.fromJson(jsonString, new TypeToken<List<Object>>() {
-                }.getType());
-                PinBase pinBase = PinBase.parseValue(list);
-                resultPin.setValue(pinBase);
             }
-        } catch (Exception ignored) {
+        } else {
+            try {
+                if (jsonString.startsWith("{")) {
+                    Map<String, Object> map = gson.fromJson(jsonString, new TypeToken<Map<String, Object>>() {
+                    }.getType());
+                    PinBase pinBase = PinBase.parseValue(map);
+                    resultPin.setValue(pinBase);
+                } else if (jsonString.startsWith("[")) {
+                    List<Object> list = gson.fromJson(jsonString, new TypeToken<List<Object>>() {
+                    }.getType());
+                    PinBase pinBase = PinBase.parseValue(list);
+                    resultPin.setValue(pinBase);
+                }
+            } catch (Exception ignored) {
+            }
         }
     }
 
     @Override
     public void sync(Task context) {
-        if (jsonPin.isLinked()) return;
         resultPin.setValue(new PinMap());
+        if (jsonPin.isLinked()) return;
         PinFileContentString pinValue = jsonPin.getValue(PinFileContentString.class);
         String json = pinValue.getValue();
         Gson gson = new Gson();

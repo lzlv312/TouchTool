@@ -21,6 +21,7 @@ import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
+import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinObject;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinSubType;
 import top.bogey.touch_tool.bean.pin.pin_objects.pin_execute.PinExecute;
@@ -36,16 +37,17 @@ public class SendNotificationAction extends ExecuteAction {
     private final transient Pin titlePin = new Pin(new PinString(), R.string.send_notification_action_title);
     private final transient Pin contentPin = new Pin(new PinString(), R.string.send_notification_action_content);
     private final transient Pin iconPin = new Pin(new PinImage(PinSubType.WITH_ICON), R.string.send_notification_action_icon);
+    private final transient Pin autoCancelPin = new Pin(new PinBoolean(true), R.string.send_notification_action_auto_cancel);
     private final transient Pin executePin = new Pin(new PinExecute(), R.string.send_notification_action_execute, true);
 
     public SendNotificationAction() {
         super(ActionType.SEND_NOTIFICATION);
-        addPins(titlePin, contentPin, iconPin, executePin);
+        addPins(titlePin, contentPin, iconPin, autoCancelPin, executePin);
     }
 
     public SendNotificationAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(titlePin, contentPin, iconPin, executePin);
+        reAddPins(titlePin, contentPin, iconPin, autoCancelPin, executePin);
     }
 
     @Override
@@ -53,6 +55,7 @@ public class SendNotificationAction extends ExecuteAction {
         PinObject title = getPinValue(runnable, titlePin);
         PinObject content = getPinValue(runnable, contentPin);
         PinImage icon = getPinValue(runnable, iconPin);
+        PinBoolean autoCancel = getPinValue(runnable, autoCancelPin);
 
         Context context = MainApplication.getInstance();
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -64,6 +67,7 @@ public class SendNotificationAction extends ExecuteAction {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CUSTOM_NOTIFICATION_CHANNEL);
         builder.setContentTitle(title.toString());
         builder.setContentText(content.toString());
+        builder.setAutoCancel(autoCancel.getValue());
         if (icon.getImage() != null) {
             builder.setSmallIcon(IconCompat.createWithBitmap(icon.getImage()));
             builder.setLargeIcon(icon.getImage());

@@ -69,7 +69,6 @@ public class TaskRunnable implements Runnable {
             } catch (Exception ignored) {
             }
             addLog(errorInfo);
-
         }
 
         while (!logStack.isEmpty()) {
@@ -228,6 +227,10 @@ public class TaskRunnable implements Runnable {
 
     public boolean isInterrupt() {
         return interrupt;
+    }
+
+    public boolean isDebug() {
+        return debug;
     }
 
     public void setFuture(Future<?> future) {

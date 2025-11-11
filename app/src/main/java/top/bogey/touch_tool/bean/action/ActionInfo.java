@@ -146,6 +146,7 @@ import top.bogey.touch_tool.bean.action.system.GetNetworkStatusAction;
 import top.bogey.touch_tool.bean.action.system.GetScreenStatusAction;
 import top.bogey.touch_tool.bean.action.system.GetTimeAction;
 import top.bogey.touch_tool.bean.action.system.GetVolumeAction;
+import top.bogey.touch_tool.bean.action.system.OpenActivityAction;
 import top.bogey.touch_tool.bean.action.system.SetVolumeAction;
 import top.bogey.touch_tool.bean.action.system.OpenAppAction;
 import top.bogey.touch_tool.bean.action.system.OpenShortcutAction;
@@ -225,6 +226,7 @@ public class ActionInfo {
 
     // 系统动作
     private final static ActionInfo OPEN_APP_INFO = new ActionInfo(ActionType.OPEN_APP, OpenAppAction.class, R.drawable.icon_apps, R.string.open_app_action, R.string.open_app_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo OPEN_ACTIVITY_INFO = new ActionInfo(ActionType.OPEN_ACTIVITY, OpenActivityAction.class, R.drawable.icon_apps, R.string.open_activity_action, R.string.open_activity_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo OPEN_URI_SCHEME_INFO = new ActionInfo(ActionType.OPEN_URI_SCHEME, OpenUriSchemeAction.class, R.drawable.icon_link, R.string.open_uri_scheme_action, R.string.open_uri_scheme_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo OPEN_SHORTCUT_INFO = new ActionInfo(ActionType.OPEN_SHORTCUT, OpenShortcutAction.class, R.drawable.icon_apps, R.string.open_shortcut_action, R.string.open_shortcut_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo SHELL_INFO = new ActionInfo(ActionType.SHELL, ExecuteShellAction.class, R.drawable.icon_terminal, R.string.execute_shell_action, R.string.execute_shell_action_desc, 0, NormalActionCard.class);
@@ -431,6 +433,7 @@ public class ActionInfo {
 
 
             case OPEN_APP -> OPEN_APP_INFO;
+            case OPEN_ACTIVITY -> OPEN_ACTIVITY_INFO;
             case OPEN_URI_SCHEME -> OPEN_URI_SCHEME_INFO;
             case OPEN_SHORTCUT -> OPEN_SHORTCUT_INFO;
             case SHELL -> SHELL_INFO;

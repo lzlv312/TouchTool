@@ -186,6 +186,10 @@
     <string name="open_app_action_params">参数</string>
     <string name="open_app_action_bundle">额外信息(Bundle)</string>
 
+    <string name="open_activity_action">打开活动</string>
+    <string name="open_activity_action_desc">打开选定的活动</string>
+    <string name="open_activity_action_params">参数</string>
+
     <string name="open_uri_scheme_action">打开链接</string>
     <string name="open_uri_scheme_action_desc">打开Uri Scheme链接</string>
     <string name="open_uri_scheme_action_uri">链接</string>
@@ -233,6 +237,7 @@
     <string name="send_notification_action_title">标题</string>
     <string name="send_notification_action_content">内容</string>
     <string name="send_notification_action_icon">图标</string>
+    <string name="send_notification_action_auto_cancel">自动取消</string>
     <string name="send_notification_action_execute">点按执行</string>
 
     <string name="send_toast_action">弹出提示</string>
