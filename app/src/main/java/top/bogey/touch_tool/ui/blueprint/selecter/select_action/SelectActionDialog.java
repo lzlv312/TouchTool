@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -259,9 +260,16 @@ public class SelectActionDialog extends BottomSheetDialog {
             }
         });
 
-        ArrayList<String> keys = new ArrayList<>(map.keySet());
-        AppUtil.chineseSort(keys, tag -> tag);
+        List<String> savedTagOrder = Saver.getInstance().getTaskTags();
+        List<String> keys = savedTagOrder.stream()
+                .filter(map.keySet()::contains)
+                .collect(Collectors.toList());
+        List<String> remainingKeys = map.keySet().stream()
+                .filter(key -> !savedTagOrder.contains(key))
+                .collect(Collectors.toList());
+        keys.addAll(remainingKeys);
         LinkedHashMap<String, List<Object>> linkedHashMap = new LinkedHashMap<>();
+
         for (String key : keys) {
             List<Object> objects = map.get(key);
             linkedHashMap.put(TAG_PREFIX + key, objects);

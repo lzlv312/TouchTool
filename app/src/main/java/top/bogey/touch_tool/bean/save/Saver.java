@@ -3,15 +3,20 @@ package top.bogey.touch_tool.bean.save;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tencent.mmkv.MMKV;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import top.bogey.touch_tool.MainApplication;
 import top.bogey.touch_tool.R;
@@ -42,6 +47,8 @@ public class Saver {
     }
 
     private static final String EMPTY_TAG = MainApplication.getInstance().getString(R.string.tag_empty);
+    private static final String TAG_ORDER_KEY = "tag_order";
+    private static final String TASK_ORDER_PREFIX = "task_order_";
 
     public static boolean matchTag(String tag, List<String> tags) {
         boolean emptyTags = tags == null || tags.isEmpty();
@@ -64,6 +71,7 @@ public class Saver {
 
     private final MMKV tagMMKV = MMKV.mmkvWithID("TAG_DB", MMKV.SINGLE_PROCESS_MODE);
     private final MMKV searchHistoryMMKV = MMKV.mmkvWithID("SEARCH_HISTORY_DB", MMKV.SINGLE_PROCESS_MODE);
+    private final MMKV taskOrderMMKV = MMKV.mmkvWithID("TASK_ORDER_DB", MMKV.SINGLE_PROCESS_MODE);
 
     private final static String LOG_DIR = MainApplication.getInstance().getCacheDir().getAbsolutePath() + "/" + AppUtil.LOG_DIR_NAME;
     private final Map<String, LogSave> loggers = new HashMap<>();
@@ -164,8 +172,15 @@ public class Saver {
                 emptyTag = true;
             }
         }
-        List<String> list = new ArrayList<>(tags);
-        AppUtil.chineseSort(list, tag -> tag);
+
+        List<String> savedOrder = getSavedTagOrder();
+        List<String> list = savedOrder.stream().filter(tags::contains).collect(Collectors.toList());
+        Set<String> orderedSet = new HashSet<>(list);
+        for (String tag : tags) {
+            if (!orderedSet.contains(tag)) {
+                list.add(tag);
+            }
+        }
         if (emptyTag || taskSaves.isEmpty()) list.add(EMPTY_TAG);
         return list;
     }
@@ -197,13 +212,32 @@ public class Saver {
     }
 
     public void saveTask(Task task) {
-        TaskSave taskSave = taskSaves.get(task.getId());
+        String taskId = task.getId();
+        TaskSave taskSave = taskSaves.get(taskId);
         if (taskSave == null) {
-            taskSaves.put(task.getId(), new TaskSave(taskMMKV, task));
+            taskSaves.put(taskId, new TaskSave(taskMMKV, task));
             taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onCreate(task));
         } else {
             taskSave.setTask(task);
             taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onUpdate(task));
+        }
+        List<String> taskTags = task.getTags();
+        if (taskTags == null || taskTags.isEmpty()) {
+            taskTags = Collections.singletonList(EMPTY_TAG);
+        }
+        for (String tag : taskTags) {
+            String orderKey = TASK_ORDER_PREFIX + tag;
+            String json = taskOrderMMKV.decodeString(orderKey, "[]");
+            Type type = new TypeToken<List<String>>() {
+            }.getType();
+            List<String> orderedIds = new Gson().fromJson(json, type);
+            if (orderedIds == null) {
+                orderedIds = new ArrayList<>();
+            }
+            if (!orderedIds.contains(taskId)) {
+                orderedIds.add(taskId); // 默认添加到末尾，可根据需求修改位置
+            }
+            taskOrderMMKV.encode(orderKey, new Gson().toJson(orderedIds));
         }
 
         MainAccessibilityService service = MainApplication.getInstance().getService();
@@ -212,13 +246,43 @@ public class Saver {
         }
     }
 
+    public void taskOrderRemoveTag(Task task, String tag) {
+        if(tag.isEmpty()){
+            tag = EMPTY_TAG;
+        }
+        String taskId = task.getId();
+        String orderKey = TASK_ORDER_PREFIX + tag;
+        String json = taskOrderMMKV.decodeString(orderKey, "[]");
+        Type type = new TypeToken<List<String>>() {
+        }.getType();
+        List<String> orderedIds = new Gson().fromJson(json, type);
+        if (orderedIds != null && orderedIds.remove(taskId)) {
+            taskOrderMMKV.encode(orderKey, new Gson().toJson(orderedIds));
+        }
+    }
+
+
     public void removeTask(String id) {
         TaskSave taskSave = taskSaves.remove(id);
         if (taskSave == null) return;
         Task task = taskSave.getTask();
+        List<String> taskTags = task.getTags();
         task.setEnable(false);
         taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onRemove(task));
         taskSave.remove();
+        if (taskTags == null || taskTags.isEmpty()) {
+            taskTags = Collections.singletonList(EMPTY_TAG);
+        }
+        for (String tag : taskTags) {
+            String orderKey = TASK_ORDER_PREFIX + tag;
+            String json = taskOrderMMKV.decodeString(orderKey, "[]");
+            Type type = new TypeToken<List<String>>() {
+            }.getType();
+            List<String> orderedIds = new Gson().fromJson(json, type);
+            if (orderedIds != null && orderedIds.remove(id)) {
+                taskOrderMMKV.encode(orderKey, new Gson().toJson(orderedIds));
+            }
+        }
 
         MainAccessibilityService service = MainApplication.getInstance().getService();
         if (service != null) {
@@ -245,6 +309,64 @@ public class Saver {
 
     public void removeListener(TaskSaveListener listener) {
         taskListeners.remove(listener);
+    }
+
+    public void clearTaskOrderByTag(String tag) {
+        if (tag == null) return;
+        String key = TASK_ORDER_PREFIX + tag;
+        taskOrderMMKV.remove(key);
+    }
+
+    public void saveTaskOrder(String tag, List<Task> orderedTasks) {
+        if (tag == null || orderedTasks == null) return;
+
+        // 1. 提取任务ID列表（存储ID而非完整对象，减少存储体积）
+        List<String> taskIds = new ArrayList<>();
+        for (Task task : orderedTasks) {
+            taskIds.add(task.getId());
+        }
+
+        // 2. 生成该标签对应的存储键
+        String key = TASK_ORDER_PREFIX + tag;
+
+        // 3. 序列化并存储（使用项目已有Gson工具）
+        taskOrderMMKV.encode(key, new Gson().toJson(taskIds));
+    }
+
+    public List<Task> getOrderedTasks(String tag) {
+        if (tag == null) return new ArrayList<>();
+
+        // 1. 获取该标签下所有任务（项目已有方法）
+        List<Task> allTagTasks = getTasks(tag);
+        if (allTagTasks.isEmpty()) return allTagTasks;
+
+        // 2. 读取保存的任务ID排序
+        String key = TASK_ORDER_PREFIX + tag;
+        String json = taskOrderMMKV.decodeString(key, "[]");
+        Type type = new TypeToken<List<String>>() {
+        }.getType();
+        List<String> orderedIds = new Gson().fromJson(json, type);
+
+        // 3. 按ID排序重组任务列表
+        Map<String, Task> taskMap = new HashMap<>();
+        for (Task task : allTagTasks) {
+            taskMap.put(task.getId(), task);
+        }
+
+        List<Task> orderedTasks = new ArrayList<>();
+        // 先添加排序序列中的任务
+        assert orderedIds != null;
+        for (String taskId : orderedIds) {
+            if (taskMap.containsKey(taskId)) {
+                orderedTasks.add(taskMap.remove(taskId));
+            }
+        }
+        // 剩余未排序的任务追加到末尾（按原逻辑排序）
+        List<Task> remainingTasks = new ArrayList<>(taskMap.values());
+        AppUtil.chineseSort(remainingTasks, Task::getTitle); // 沿用项目原排序逻辑
+        orderedTasks.addAll(remainingTasks);
+
+        return orderedTasks;
     }
 
     // ====================================================================================================================
@@ -311,7 +433,8 @@ public class Saver {
     public void addLog(String key, LogInfo log, boolean autoUid) {
         LogSave logSave = getLogSave(key);
         logSave.addLog(log, autoUid);
-        if (autoUid) logListeners.stream().filter(Objects::nonNull).forEach(v -> v.onNewLog(logSave, log));
+        if (autoUid)
+            logListeners.stream().filter(Objects::nonNull).forEach(v -> v.onNewLog(logSave, log));
     }
 
     public void clearLog(String key) {
@@ -330,11 +453,17 @@ public class Saver {
 
     // ====================================================================================================================
     public void addTag(String tag) {
-        tagMMKV.encode(tag, true);
+        if (tag == null || tag.isEmpty()) return;
+
+        List<String> currentOrder = getSavedTagOrder();
+        if (!currentOrder.contains(tag)) {
+            currentOrder.add(tag);
+            saveTagOrder(currentOrder);
+        }
     }
 
     public void removeTag(String tag) {
-        tagMMKV.remove(tag);
+        if (tag == null || tag.isEmpty()) return;
         taskSaves.forEach((id, taskSave) -> {
             Task task = taskSave.getTask();
             task.removeInnerTag(tag);
@@ -348,19 +477,51 @@ public class Saver {
                 var.save();
             }
         });
+        List<String> currentOrder = getSavedTagOrder();
+        if (currentOrder.remove(tag)) {
+            saveTagOrder(currentOrder);
+        }
+        clearTaskOrderByTag(tag);
     }
 
     public List<String> getAllTags() {
-        List<String> list = new ArrayList<>();
-        String[] keys = tagMMKV.allKeys();
-        if (keys == null) return list;
-        for (String key : keys) {
-            if (tagMMKV.decodeBool(key)) {
-                list.add(key);
+        List<String> savedOrder = getSavedTagOrder();
+        if (savedOrder.isEmpty()) {
+            Set<String> tags = new HashSet<>();
+            for (Map.Entry<String, TaskSave> entry : taskSaves.entrySet()) {
+                TaskSave v = entry.getValue();
+                Task task = v.getTask();
+                if (task.getTags() != null && !task.getTags().isEmpty()) {
+                    tags.addAll(task.getTags());
+                }
             }
+            savedOrder = new ArrayList<>(tags);
         }
-        AppUtil.chineseSort(list, tag -> tag);
-        return list;
+        return savedOrder;
+    }
+
+    public void saveTagOrder(List<String> orderedTags) {
+        // 过滤空标签和无效标签
+        List<String> filtered = orderedTags.stream().filter(t -> t != null && !t.isEmpty() && !t.equals(EMPTY_TAG)).distinct() // 去重
+                .collect(Collectors.toList());
+        String json = new Gson().toJson(filtered);
+        tagMMKV.putString(TAG_ORDER_KEY, json);
+    }
+
+    private List<String> getSavedTagOrder() {
+        String json = tagMMKV.getString(TAG_ORDER_KEY, "[]");
+        try {
+            Type listType = new TypeToken<List<String>>() {
+            }.getType();
+            List<String> order = new Gson().fromJson(json, listType);
+            return order != null ? order : new ArrayList<>();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public void updateTagOrder(List<String> newOrder) {
+        saveTagOrder(newOrder);
     }
 
     // ====================================================================================================================

@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.databinding.ViewTaskPageBinding;
 import top.bogey.touch_tool.utils.DisplayUtil;
+import top.bogey.touch_tool.utils.callback.CommonDragCallback;
 
 public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapter.ViewHolder> {
 
@@ -90,6 +92,11 @@ public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapte
             super(binding.getRoot());
 
             adapter = new TaskPageItemRecyclerViewAdapter(taskView);
+
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new CommonDragCallback(adapter));
+            itemTouchHelper.attachToRecyclerView(binding.getRoot());
+            adapter.setItemTouchHelper(itemTouchHelper);
+
             binding.getRoot().setAdapter(adapter);
             StaggeredGridLayoutManager layoutManager = (StaggeredGridLayoutManager) binding.getRoot().getLayoutManager();
             if (layoutManager == null) return;
@@ -104,7 +111,7 @@ public class TaskPageViewAdapter extends RecyclerView.Adapter<TaskPageViewAdapte
             if (search) {
                 adapter.setTasks(tag, Saver.getInstance().searchTasks(tag));
             } else {
-                adapter.setTasks(tag, Saver.getInstance().getTasks(tag));
+                adapter.setTasks(tag, Saver.getInstance().getOrderedTasks(tag));
             }
         }
     }

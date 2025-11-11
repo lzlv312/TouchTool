@@ -9,9 +9,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import top.bogey.touch_tool.MainApplication;
@@ -19,9 +21,9 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionCheckResult;
 import top.bogey.touch_tool.bean.action.start.StartAction;
-import top.bogey.touch_tool.bean.base.Identity;
 import top.bogey.touch_tool.bean.save.Saver;
 import top.bogey.touch_tool.bean.save.task.TaskSaveListener;
+import top.bogey.touch_tool.bean.task.IDragTouchHelperAdapter;
 import top.bogey.touch_tool.bean.task.Task;
 import top.bogey.touch_tool.databinding.ViewTaskPageItemActionBinding;
 import top.bogey.touch_tool.databinding.ViewTaskPageItemBinding;
@@ -29,14 +31,19 @@ import top.bogey.touch_tool.service.MainAccessibilityService;
 import top.bogey.touch_tool.ui.custom.EditTaskDialog;
 import top.bogey.touch_tool.utils.AppUtil;
 
-public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPageItemRecyclerViewAdapter.ViewHolder> implements TaskSaveListener {
+public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPageItemRecyclerViewAdapter.ViewHolder> implements TaskSaveListener, IDragTouchHelperAdapter {
     private final TaskView taskView;
 
     private String tag;
     private List<Task> tasks = new ArrayList<>();
+    private ItemTouchHelper itemTouchHelper;
 
     public TaskPageItemRecyclerViewAdapter(TaskView taskView) {
         this.taskView = taskView;
+    }
+
+    public void setItemTouchHelper(ItemTouchHelper itemTouchHelper) {
+        this.itemTouchHelper = itemTouchHelper;
     }
 
     @NonNull
@@ -82,10 +89,30 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
         }
     }
 
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(tasks, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(tasks, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDragEnded() {
+        // 保存排序到数据库
+        Saver.getInstance().saveTaskOrder(tag, tasks);
+    }
+
     public void setTasks(@NonNull String tag, List<Task> tasks) {
         this.tag = tag;
         this.tasks = tasks;
-        AppUtil.chineseSort(tasks, Identity::getTitle);
+
         notifyDataSetChanged();
     }
 
@@ -98,6 +125,15 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
 
             this.binding = binding;
             context = binding.getRoot().getContext();
+
+            itemView.setOnLongClickListener(v -> {
+                if (itemTouchHelper != null) {
+                    itemTouchHelper.startDrag(ViewHolder.this);
+                    return true;
+                }
+                return false;
+            });
+
 
             binding.getRoot().setOnClickListener(v -> {
                 int position = getBindingAdapterPosition();
@@ -120,23 +156,6 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
                     NavController controller = Navigation.findNavController(MainApplication.getInstance().getActivity(), R.id.conView);
                     controller.navigate(TaskViewDirections.actionTaskToBlueprint(task.getId()));
                 }
-            });
-
-            binding.getRoot().setOnLongClickListener(v -> {
-                int position = getBindingAdapterPosition();
-                Task task = tasks.get(position);
-
-                if (taskView.selecting) {
-                    if (!taskView.selected.remove(task.getId())) {
-                        taskView.selected.add(task.getId());
-                    }
-                    notifyItemChanged(position);
-                } else {
-                    taskView.showBottomBar();
-                    taskView.selected.add(task.getId());
-                    notifyItemChanged(position);
-                }
-                return true;
             });
 
             binding.editButton.setOnClickListener(v -> {
@@ -195,7 +214,8 @@ public class TaskPageItemRecyclerViewAdapter extends RecyclerView.Adapter<TaskPa
             binding.taskTag.setText(tagString);
             binding.taskTag.setVisibility(tagString.isEmpty() ? View.INVISIBLE : View.VISIBLE);
 
-            if (binding.enableSwitch.isChecked() != task.isEnable()) binding.enableSwitch.setChecked(task.isEnable());
+            if (binding.enableSwitch.isChecked() != task.isEnable())
+                binding.enableSwitch.setChecked(task.isEnable());
 
             ActionCheckResult result = new ActionCheckResult();
             task.check(result);

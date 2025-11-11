@@ -303,12 +303,16 @@ public class Task extends Identity implements IActionManager, ITaskManager, IVar
 
     @Override
     public void addTag(String tag) {
+        if (tagManager.getTags().isEmpty()) {
+            Saver.getInstance().taskOrderRemoveTag(this, "");
+        }
         tagManager.addTag(tag);
     }
 
     @Override
     public void removeTag(String tag) {
         tagManager.removeTag(tag);
+        Saver.getInstance().taskOrderRemoveTag(this, tag);
     }
 
     public void removeInnerTag(String tag) {

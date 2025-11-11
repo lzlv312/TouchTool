@@ -175,6 +175,15 @@ public class TaskView extends Fragment implements ITaskListener, TaskSaveListene
             TaskTagListView tagListView = new TaskTagListView(this);
             tagListView.show(getParentFragmentManager(), null);
         });
+        binding.tagButton.setOnLongClickListener(v -> {
+            if (selecting) {
+                unselectAll();
+                hideBottomBar();
+            } else {
+                showBottomBar();
+            }
+            return true;
+        });
 
         binding.selectAllButton.setOnClickListener(v -> selectAll());
 
