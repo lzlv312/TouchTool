@@ -249,9 +249,7 @@ public class SettingSaver {
     }
 
     public int getNotificationType() {
-        int type = mmkv.decodeInt(NOTIFICATION_TYPE, 0);
-        if (type == 1) type = NotificationService.isEnabled() ? 1 : 0;
-        return type;
+        return mmkv.decodeInt(NOTIFICATION_TYPE, 0);
     }
 
     public void setNotificationType(int type) {

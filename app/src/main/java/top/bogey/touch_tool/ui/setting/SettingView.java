@@ -220,7 +220,9 @@ public class SettingView extends Fragment {
                     .show();
         });
         binding.cleanCacheButton.setDescription(getString(R.string.app_setting_clean_cache_desc, AppUtil.getFileSizeString(activity.getCacheDir())));
-
+        if (!AppUtil.isRelease(activity)) {
+            binding.cleanCacheButton.setOnClickListener(v -> AppUtil.crashTest());
+        }
 
         // 超级用户
         binding.superUserSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
@@ -245,6 +247,7 @@ public class SettingView extends Fragment {
         binding.superUserSelect.checkIndex(SettingSaver.getInstance().getSuperUserType());
 
         // 通知来源
+        binding.notificationTypeSelect.checkIndex(SettingSaver.getInstance().getNotificationType());
         binding.notificationTypeSelect.setOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
                 View view = group.findViewById(checkedId);
@@ -264,7 +267,6 @@ public class SettingView extends Fragment {
                 refreshNotificationCmd();
             }
         });
-        binding.notificationTypeSelect.checkIndex(SettingSaver.getInstance().getNotificationType());
 
         binding.notificationTypeCmd.setOnButtonClickListener(v -> {
             String cmd = String.format("appops set %s RECEIVE_SENSITIVE_NOTIFICATIONS allow", requireActivity().getPackageName());

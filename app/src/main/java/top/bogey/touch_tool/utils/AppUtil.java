@@ -71,6 +71,10 @@ public class AppUtil {
         return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) == 0;
     }
 
+    public static void crashTest() {
+        throw new RuntimeException("Crash test");
+    }
+
     public static void runOnUiThread(Runnable runnable) {
         if (runnable != null) {
             if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
@@ -312,12 +316,13 @@ public class AppUtil {
 
     public static boolean isPinyinContains(String str, String value) {
         String pinyin = Pinyin.toPinyin(str, ",");
-        if (pinyin == null) return false;
+        if (pinyin == null || pinyin.isEmpty()) return false;
         pinyin = pinyin.toLowerCase();
         value = value.toLowerCase();
         if (isStringContains(pinyin, value)) return true;
         StringBuilder builder = new StringBuilder();
         for (String s : pinyin.split(",")) {
+            if (s == null || s.isEmpty()) continue;
             builder.append(s.charAt(0));
         }
         return isStringContains(builder.toString(), value);

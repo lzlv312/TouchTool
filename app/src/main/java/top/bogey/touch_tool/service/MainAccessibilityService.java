@@ -89,6 +89,7 @@ public class MainAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        setServiceInfo(new AccessibilityServiceInfo());
         if (event == null) return;
 
         if (event.getClassName() == null) return;
@@ -546,6 +547,7 @@ public class MainAccessibilityService extends AccessibilityService {
     public synchronized void runOcr(String packageName, Bitmap bitmap, ResultCallback<List<OcrResult>> callback) {
         if (bitmap == null) {
             callback.onResult(new ArrayList<>());
+            return;
         }
 
         IOcr iOcr = ocrBinderMap.get(packageName);

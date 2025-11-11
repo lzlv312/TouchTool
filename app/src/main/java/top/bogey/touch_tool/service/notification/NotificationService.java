@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onListenerConnected() {
         super.onListenerConnected();
+        Log.d("TAG", "NotificationService onListenerConnected");
         isEnabled = true;
     }
 
