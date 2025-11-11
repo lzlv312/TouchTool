@@ -247,6 +247,9 @@ public class Saver {
     }
 
     public void taskOrderRemoveTag(Task task, String tag) {
+        if(tag.isEmpty()){
+            tag = EMPTY_TAG;
+        }
         String taskId = task.getId();
         String orderKey = TASK_ORDER_PREFIX + tag;
         String json = taskOrderMMKV.decodeString(orderKey, "[]");
@@ -267,17 +270,17 @@ public class Saver {
         task.setEnable(false);
         taskListeners.stream().filter(Objects::nonNull).forEach(v -> v.onRemove(task));
         taskSave.remove();
-
-        if (taskTags != null) {
-            for (String tag : taskTags) {
-                String orderKey = TASK_ORDER_PREFIX + tag;
-                String json = taskOrderMMKV.decodeString(orderKey, "[]");
-                Type type = new TypeToken<List<String>>() {
-                }.getType();
-                List<String> orderedIds = new Gson().fromJson(json, type);
-                if (orderedIds != null && orderedIds.remove(id)) {
-                    taskOrderMMKV.encode(orderKey, new Gson().toJson(orderedIds));
-                }
+        if (taskTags == null || taskTags.isEmpty()) {
+            taskTags = Collections.singletonList(EMPTY_TAG);
+        }
+        for (String tag : taskTags) {
+            String orderKey = TASK_ORDER_PREFIX + tag;
+            String json = taskOrderMMKV.decodeString(orderKey, "[]");
+            Type type = new TypeToken<List<String>>() {
+            }.getType();
+            List<String> orderedIds = new Gson().fromJson(json, type);
+            if (orderedIds != null && orderedIds.remove(id)) {
+                taskOrderMMKV.encode(orderKey, new Gson().toJson(orderedIds));
             }
         }
 
@@ -306,6 +309,12 @@ public class Saver {
 
     public void removeListener(TaskSaveListener listener) {
         taskListeners.remove(listener);
+    }
+
+    public void clearTaskOrderByTag(String tag) {
+        if (tag == null) return;
+        String key = TASK_ORDER_PREFIX + tag;
+        taskOrderMMKV.remove(key);
     }
 
     public void saveTaskOrder(String tag, List<Task> orderedTasks) {
@@ -472,6 +481,7 @@ public class Saver {
         if (currentOrder.remove(tag)) {
             saveTagOrder(currentOrder);
         }
+        clearTaskOrderByTag(tag);
     }
 
     public List<String> getAllTags() {
