@@ -1,0 +1,110 @@
+name: Release CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '版本号 (可选)'
+        required: false
+        default: ''
+      message:
+        description: '发布说明 (可选)'
+        required: false
+        default: ''
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        
+    - name: Cache Gradle packages
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+          
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Setup Keystore
+      run: |
+        cat << EOF > keystore.properties
+        storeFile=../keystore.jks
+        storePassword=${{ secrets.KEY_STORE_PASSWORD }}
+        keyAlias=${{ secrets.ALIAS }}
+        keyPassword=${{ secrets.KEY_PASSWORD }}
+        EOF
+        
+        # 解码并创建keystore文件
+        echo "${{ secrets.SIGNING_KEY }}" | base64 -d > keystore.jks
+        
+    - name: Build Release APK
+      run: ./gradlew assembleRelease
+      
+    - name: Get version info
+      id: version_info
+      run: |
+        # Determine version from tag or manual input
+        if [ "${{ github.event_name }}" = "push" ]; then
+          # Extract version from tag (remove 'v' prefix)
+          VERSION=${GITHUB_REF#refs/tags/v}
+        else
+          # Use manual input version if provided, otherwise generate one
+          VERSION=${{ inputs.version }}
+          if [ -z "$VERSION" ]; then
+            VERSION="manual-$(date +'%Y%m%d-%H%M%S')"
+          fi
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        
+        # Get current date for release notes
+        DATE=$(date +'%Y-%m-%d')
+        echo "date=$DATE" >> $GITHUB_OUTPUT
+        
+        # Find the built APK file
+        APK_PATH=$(find app/build/outputs/apk/release -name "*.APK" | head -n 1)
+        echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
+        echo "apk_name=$(basename $APK_PATH)" >> $GITHUB_OUTPUT
+        
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ github.ref }}
+        name: Release ${{ steps.version_info.outputs.version }}
+        body: |
+          ## 版本号: ${{ steps.version_info.outputs.version }}
+          
+          发布日期: ${{ steps.version_info.outputs.date }}
+          
+          ### 更新内容
+          ${{ inputs.message || '- 请在提交信息中查看详细更新内容' }}
+          
+          ### 下载说明
+          - 下载下方的APK文件进行安装
+          - 请在安装前卸载旧版本
+          
+          ### 系统要求
+          - Android 7.0 (API 24) 或更高版本
+          - 仅支持 ARM64 架构设备
+        files: ${{ steps.version_info.outputs.apk_path }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
