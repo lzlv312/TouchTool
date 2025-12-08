@@ -7,3 +7,9 @@
 /build
 /captures
 local.properties
+
+# 签名证书文件
+*.jks
+*.p12
+*.p8
+keystore.properties

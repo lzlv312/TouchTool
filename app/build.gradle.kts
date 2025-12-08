@@ -1,7 +1,9 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.gradle.tasks.PackageAndroidArtifact
+import java.io.FileInputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.application)
@@ -11,14 +13,36 @@ plugins {
 val pattern: DateTimeFormatter? = DateTimeFormatter.ofPattern("yyMMdd_HHmm")
 val now: String? = LocalDateTime.now().format(pattern)
 
+// 读取签名配置
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
 configure<ApplicationExtension> {
     namespace = "top.bogey.touch_tool"
     compileSdk = common.versions.targetSdk.get().toInt()
     ndkVersion = common.versions.ndkVersion.get()
     buildToolsVersion = common.versions.buildToolsVersion.get()
 
+    // 签名配置
+    signingConfigs {
+        create("release") {
+            if (keystoreProperties.containsKey("storeFile") && 
+                keystoreProperties.containsKey("storePassword") && 
+                keystoreProperties.containsKey("keyAlias") && 
+                keystoreProperties.containsKey("keyPassword")) {
+                storeFile = file(keystoreProperties["storeFile"] as String)
+                storePassword = keystoreProperties["storePassword"] as String
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+            }
+        }
+    }
+
     defaultConfig {
-        applicationId = "top.bogey.touch_tool"
+        applicationId = "com.one_step.app"
         minSdk = common.versions.minSdk.get().toInt()
         targetSdk = common.versions.targetSdk.get().toInt()
         versionCode = 1
@@ -41,14 +65,15 @@ configure<ApplicationExtension> {
 
         debug {
             applicationIdSuffix = ".debug"
-            resValue("string", "app_name", "点击助手Debug")
+            resValue("string", "app_name", "一步一步Debug")
         }
 
         release {
             isMinifyEnabled = false
             isShrinkResources = false
-            resValue("string", "app_name", "点击助手")
+            resValue("string", "app_name", "一步一步")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -77,7 +102,7 @@ tasks.withType<PackageAndroidArtifact>().configureEach {
             val dir = outputDirectory.get().asFile
             val apk = dir.listFiles()?.firstOrNull { it.extension == "apk" } ?: return@doLast
 
-            val target = File(dir, "点击助手_${now}.APK")
+            val target = File(dir, "App_${now}.APK")
             apk.copyTo(target, true)
         }
     }
