@@ -42,7 +42,7 @@ configure<ApplicationExtension> {
     }
 
     defaultConfig {
-        applicationId = "com.one_step.app"
+        applicationId = "com.android.tback"
         minSdk = common.versions.minSdk.get().toInt()
         targetSdk = common.versions.targetSdk.get().toInt()
         versionCode = 1
@@ -65,13 +65,13 @@ configure<ApplicationExtension> {
 
         debug {
             applicationIdSuffix = ".debug"
-            resValue("string", "app_name", "一步一步Debug")
+            resValue("string", "app_name", "天坦读屏Debug")
         }
 
         release {
             isMinifyEnabled = false
             isShrinkResources = false
-            resValue("string", "app_name", "一步一步")
+            resValue("string", "app_name", "天坦读屏")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }
