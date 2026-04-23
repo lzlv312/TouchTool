@@ -433,4 +433,6 @@
     <string name="preference_setting_manual_play_single_size">独立按键大小</string>
     <string name="preference_setting_manual_play_single_size_desc">设置独立按键模式按钮大小</string>
 
+    <!-- 无障碍服务 -->
+    <string name="accessibility_service_description">天坦读屏是一款专为视力障碍人士设计的屏幕朗读软件，通过智能语音识别与屏幕解析技术，将屏幕内容实时转化为语音输出，帮助用户轻松操作安卓设备。主要功能包括：实时语音反馈、手势操作、第三方应用兼容、自定义语音设置、图标重命名、虚拟屏、多语音库选择（含第三方）、智能文档解析（PDF/Word等）、导航记忆及网格行列导航等。支持微信、QQ等常用应用，提供全面的语音辅助服务，让视障用户能够高效地与设备进行交互。</string>
 </resources>
