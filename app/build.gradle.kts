@@ -64,6 +64,8 @@ configure<ApplicationExtension> {
     buildTypes {
 
         debug {
+            isMinifyEnabled = false
+            isShrinkResources = false
             applicationIdSuffix = ".debug"
             resValue("string", "app_name", "天坦读屏Debug")
         }
