@@ -257,6 +257,7 @@
 
     <string name="text_to_speak_action">文本转语音</string>
     <string name="text_to_speak_action_desc">将文本转为语音并播放</string>
+    <string name="text_to_speak_action_mode">阻塞模式</string>
 
     <string name="vibrate_action">震动</string>
     <string name="vibrate_action_desc">震动手机</string>

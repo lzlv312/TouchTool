@@ -26,6 +26,7 @@ import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
@@ -46,6 +47,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
@@ -207,6 +209,7 @@ public class MainAccessibilityService extends AccessibilityService {
 
             resetAllAlarm();
             resetAllBroadcast();
+            initTTS();
             SuperUser.getInstance().init(result -> {});
             tryStartMainActivity();
         } else {
@@ -221,6 +224,7 @@ public class MainAccessibilityService extends AccessibilityService {
             stopSound(null);
             cancelAllAlarm();
             cancelAllBroadcast();
+            destroyTTS();
             SuperUser.getInstance().exit();
             FloatWindow.dismiss(KeepAliveFloatView.class.getName());
         }
@@ -909,18 +913,52 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     private TextToSpeech tts;
+    private Map<String, BooleanResultCallback> speakCallbacks = new HashMap<>();
 
-    public void speak(String text) {
-        if (tts == null) {
-            tts = new TextToSpeech(this, status -> {
-                if (status == TextToSpeech.SUCCESS) {
-                    tts.setLanguage(Locale.CHINA);
-                    tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
-                }
-            });
-        } else {
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+    private void initTTS() {
+        if (tts != null) return;
+        tts = new TextToSpeech(this, status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                tts.setLanguage(Locale.CHINA);
+                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onDone(String utteranceId) {
+                        BooleanResultCallback callback = speakCallbacks.remove(utteranceId);
+                        if (callback != null) callback.onResult(true);
+                    }
+
+                    @Override
+                    public void onError(String utteranceId) {
+                        BooleanResultCallback callback = speakCallbacks.remove(utteranceId);
+                        if (callback != null) callback.onResult(false);
+                    }
+
+                    @Override
+                    public void onStart(String utteranceId) {
+
+                    }
+                });
+            }
+        });
+    }
+
+    private void destroyTTS() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+            tts = null;
         }
+    }
+
+    public void speak(String text, BooleanResultCallback callback) {
+        if (tts == null) return;
+        String id = UUID.randomUUID().toString();
+        speakCallbacks.put(id, callback);
+
+        Bundle params = new Bundle();
+        params.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, id);
+
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, params, id);
     }
 
     // 播放声音 ----------------------------------------------------------------------------- end

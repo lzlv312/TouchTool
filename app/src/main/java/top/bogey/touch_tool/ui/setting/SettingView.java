@@ -143,11 +143,14 @@ public class SettingView extends Fragment {
             if (activity.stopAccessibilityServiceBySecurePermission()) {
                 binding.getRoot().postDelayed(() -> {
                     SettingSaver.APP_SERVICE.set(true);
-                    binding.enableSwitch.setChecked(true);
                     activity.restartAccessibilityServiceBySecurePermission();
                     Toast.makeText(activity, R.string.app_setting_reload_success, Toast.LENGTH_SHORT).show();
-                    binding.reloadService.setEnabled(true);
-                    binding.reloadService.setButtonText(getString(R.string.app_setting_reload_button_text));
+                    try {
+                        binding.enableSwitch.setChecked(true);
+                        binding.reloadService.setEnabled(true);
+                        binding.reloadService.setButtonText(getString(R.string.app_setting_reload_button_text));
+                    } catch (Exception ignored) {
+                    }
                 }, 1000);
             } else {
                 Toast.makeText(activity, R.string.app_setting_reload_error, Toast.LENGTH_SHORT).show();
