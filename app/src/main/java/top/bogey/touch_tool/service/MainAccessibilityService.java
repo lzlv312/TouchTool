@@ -37,7 +37,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.MutableLiveData;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -210,7 +210,8 @@ public class MainAccessibilityService extends AccessibilityService {
             resetAllAlarm();
             resetAllBroadcast();
             initTTS();
-            SuperUser.getInstance().init(result -> {});
+            SuperUser.getInstance().init(result -> {
+            });
             tryStartMainActivity();
         } else {
             if (systemEventReceiver != null) systemEventReceiver.unregister();
@@ -726,12 +727,16 @@ public class MainAccessibilityService extends AccessibilityService {
 
     // 截图 ----------------------------------------------------------------------------- start
 
-    private WeakReference<Bitmap> screenShot = new WeakReference<>(null);
+    private SoftReference<Bitmap> screenShot = new SoftReference<>(null);
 
     public synchronized Bitmap getScreenShotByCapture() {
-        if (captureBinder == null) return screenShot.get();
+        Bitmap cachedBitmap = screenShot.get();
+        if (captureBinder == null) return cachedBitmap;
+
+        if (cachedBitmap != null && !cachedBitmap.isRecycled()) cachedBitmap.recycle();
+
         Bitmap bitmap = captureBinder.getScreenShot();
-        screenShot = new WeakReference<>(bitmap);
+        screenShot = new SoftReference<>(bitmap);
         return bitmap;
     }
 
@@ -746,7 +751,11 @@ public class MainAccessibilityService extends AccessibilityService {
                         Bitmap bitmap = Bitmap.wrapHardwareBuffer(hardwareBuffer, result.getColorSpace());
                         if (bitmap != null) {
                             Bitmap copy = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-                            screenShot = new WeakReference<>(copy);
+
+                            Bitmap cachedBitmap = screenShot.get();
+                            if (cachedBitmap != null && !cachedBitmap.isRecycled()) cachedBitmap.recycle();
+
+                            screenShot = new SoftReference<>(copy);
                             bitmap.recycle();
                             future.complete(copy);
                         }
