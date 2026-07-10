@@ -342,7 +342,7 @@ public class TaskInfoSummary {
         }
         List<ChoiceExecuteFloatView.Choice> choices = new ArrayList<>();
         tasks.forEach((action, task) -> choices.add(new ChoiceExecuteFloatView.Choice(action.getId(), task.getTitle(), null)));
-        ChoiceExecuteFloatView.showChoice(service.getString(R.string.execute_task_action), choices, result -> {
+        ChoiceExecuteFloatView.showChoice(service.getString(R.string.execute_task_action), choices, 0, result -> {
             Action action = tasks.keySet().stream().filter(a -> a.getId().equals(result)).findFirst().orElse(null);
             if (action == null) return;
             Task task = tasks.get(action);

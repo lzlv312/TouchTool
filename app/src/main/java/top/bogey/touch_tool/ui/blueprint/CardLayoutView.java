@@ -150,7 +150,7 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
             public boolean onScale(@NonNull ScaleGestureDetector detector) {
                 float oldScale = scale;
                 scale *= detector.getScaleFactor();
-                scale = Math.max(0.2f, Math.min(scale, 2f));
+                scale = Math.clamp(scale, 0.2f, 2f);
 
                 float v = 1 - scale / oldScale;
                 float focusX = detector.getFocusX() - offsetX;

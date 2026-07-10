@@ -295,7 +295,6 @@
 
     </FrameLayout>
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/baseToolBar"
         style="?attr/materialCardViewFilledStyle"

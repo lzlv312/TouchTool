@@ -526,7 +526,9 @@ public class MainAccessibilityService extends AccessibilityService {
             AlarmManager.AlarmClockInfo clockInfo = new AlarmManager.AlarmClockInfo(nextStartTime, null);
             manager.setAlarmClock(clockInfo, pendingIntent);
         }
-        LogSaver.getInstance().addLog(task.getId(), new LogInfo(new NormalLog(getString(R.string.time_start_action_set_tips, AppUtil.formatDateTime(this, nextStartTime, false, true)))), true);
+        if (timeStartAction.isShowTimeLog()) {
+            LogSaver.getInstance().addLog(task.getId(), new LogInfo(new NormalLog(getString(R.string.time_start_action_set_tips, AppUtil.formatDateTime(this, nextStartTime, false, true)))), true);
+        }
     }
 
     public void replaceAlarm(Task task) {
@@ -686,9 +688,12 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public void stopCapture() {
         if (captureConnection != null) {
-            unbindService(captureConnection);
-            captureConnection = null;
-            stopService(new Intent(this, CaptureService.class));
+            try {
+                unbindService(captureConnection);
+                captureConnection = null;
+                stopService(new Intent(this, CaptureService.class));
+            } catch (Exception ignored) {
+            }
         }
         captureBinder = null;
     }
@@ -733,11 +738,14 @@ public class MainAccessibilityService extends AccessibilityService {
         Bitmap cachedBitmap = screenShot.get();
         if (captureBinder == null) return cachedBitmap;
 
-        if (cachedBitmap != null && !cachedBitmap.isRecycled()) cachedBitmap.recycle();
-
         Bitmap bitmap = captureBinder.getScreenShot();
-        screenShot = new SoftReference<>(bitmap);
-        return bitmap;
+        if (bitmap == null) {
+            return cachedBitmap;
+        } else {
+            if (cachedBitmap != null && !cachedBitmap.isRecycled()) cachedBitmap.recycle();
+            screenShot = new SoftReference<>(bitmap);
+            return bitmap;
+        }
     }
 
     // 不能递归调用，会锁死
@@ -922,7 +930,7 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     private TextToSpeech tts;
-    private Map<String, BooleanResultCallback> speakCallbacks = new HashMap<>();
+    private final Map<String, BooleanResultCallback> speakCallbacks = new HashMap<>();
 
     private void initTTS() {
         if (tts != null) return;

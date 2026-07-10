@@ -35,11 +35,8 @@ public class TextToSpeechAction extends ExecuteAction {
         service.speak(text.getValue(), result -> {
             if (mode.getValue()) runnable.resume();
         });
-        if (mode.getValue()) {
-            runnable.await();
-            executeNext(runnable, modePin);
-        } else {
-            executeNext(runnable, outPin);
-        }
+
+        if (mode.getValue()) runnable.await();
+        executeNext(runnable, outPin);
     }
 }
