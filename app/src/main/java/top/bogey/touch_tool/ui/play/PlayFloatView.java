@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -175,10 +176,12 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
         Task task = runnable.getStartTask();
         StartAction action = runnable.getStartAction();
         PlayFloatItemView itemView = new PlayFloatItemView(getContext(), task, action);
+        binding.buttonBox.addView(itemView);
         itemView.setNeedRemove(true);
         itemView.onStart(runnable);
         runnable.addListener(itemView);
-        binding.buttonBox.addView(itemView);
+
+        if (runnable.isInterrupt()) itemView.onFinish(runnable);
     }
 
     public void setActions(List<TaskInfoSummary.ManualExecuteInfo> actions) {
@@ -291,8 +294,8 @@ public class PlayFloatView extends FrameLayout implements FloatInterface, ITaskL
     private boolean inLeft() {
         int[] location = new int[2];
         getLocationOnScreen(location);
-        Point size = DisplayUtil.getScreenSize(getContext());
-        return location[0] < (size.x - getWidth()) / 2;
+        Size size = DisplayUtil.getScreenSize(getContext());
+        return location[0] < (size.getWidth() - getWidth()) / 2;
     }
 
     @Override

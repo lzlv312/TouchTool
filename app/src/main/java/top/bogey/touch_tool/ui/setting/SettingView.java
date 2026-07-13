@@ -143,11 +143,14 @@ public class SettingView extends Fragment {
             if (activity.stopAccessibilityServiceBySecurePermission()) {
                 binding.getRoot().postDelayed(() -> {
                     SettingSaver.APP_SERVICE.set(true);
-                    binding.enableSwitch.setChecked(true);
                     activity.restartAccessibilityServiceBySecurePermission();
                     Toast.makeText(activity, R.string.app_setting_reload_success, Toast.LENGTH_SHORT).show();
-                    binding.reloadService.setEnabled(true);
-                    binding.reloadService.setButtonText(getString(R.string.app_setting_reload_button_text));
+                    try {
+                        binding.enableSwitch.setChecked(true);
+                        binding.reloadService.setEnabled(true);
+                        binding.reloadService.setButtonText(getString(R.string.app_setting_reload_button_text));
+                    } catch (Exception ignored) {
+                    }
                 }, 1000);
             } else {
                 Toast.makeText(activity, R.string.app_setting_reload_error, Toast.LENGTH_SHORT).show();
@@ -245,12 +248,16 @@ public class SettingView extends Fragment {
 
                 // 尝试超级用户
                 ISuperUser instance = SuperUser.getInstance();
-                if (instance == null || !instance.init()) {
-                    SettingSaver.PERMISSION_SUPER_USER.set(0);
-                    binding.superUserSelect.checkIndex(0);
+                if (instance != null) {
+                    instance.init(result -> {
+                        if (!result) {
+                            SettingSaver.PERMISSION_SUPER_USER.set(0);
+                            binding.superUserSelect.checkIndex(0);
 
-                    if (instance instanceof ShizukuSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_shizuku, Toast.LENGTH_SHORT).show();
-                    else if (instance instanceof RootSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_root, Toast.LENGTH_SHORT).show();
+                            if (instance instanceof ShizukuSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_shizuku, Toast.LENGTH_SHORT).show();
+                            else if (instance instanceof RootSuperUser) Toast.makeText(activity, R.string.permission_setting_super_user_no_root, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
                 refreshNotificationCmd();
                 refreshAutoReloadService();

@@ -65,14 +65,12 @@ configure<ApplicationExtension> {
 
         debug {
             isMinifyEnabled = false
-            isShrinkResources = false
             applicationIdSuffix = ".debug"
             resValue("string", "app_name", "天坦读屏Debug")
         }
 
         release {
             isMinifyEnabled = false
-            isShrinkResources = false
             resValue("string", "app_name", "天坦读屏")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")

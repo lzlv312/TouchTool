@@ -57,6 +57,7 @@ import top.bogey.touch_tool.bean.action.list.ListIndexOfAction;
 import top.bogey.touch_tool.bean.action.list.ListIsEmptyAction;
 import top.bogey.touch_tool.bean.action.list.ListRemoveAction;
 import top.bogey.touch_tool.bean.action.list.ListRemoveObjectAction;
+import top.bogey.touch_tool.bean.action.list.ListReverseAction;
 import top.bogey.touch_tool.bean.action.list.ListSetAction;
 import top.bogey.touch_tool.bean.action.list.ListSizeAction;
 import top.bogey.touch_tool.bean.action.list.ListSortAction;
@@ -180,6 +181,8 @@ import top.bogey.touch_tool.bean.action.system.WriteToClipboardAction;
 import top.bogey.touch_tool.bean.action.task.CustomEndAction;
 import top.bogey.touch_tool.bean.action.task.CustomStartAction;
 import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
+import top.bogey.touch_tool.bean.action.task.GetAllRunningTaskAction;
+import top.bogey.touch_tool.bean.action.task.IsTaskRunningAction;
 import top.bogey.touch_tool.bean.action.task.StopTaskAction;
 import top.bogey.touch_tool.bean.action.variable.GetOrSetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
@@ -213,6 +216,8 @@ public class ActionInfo {
     private final static ActionInfo CUSTOM_END_INFO = new ActionInfo(ActionType.CUSTOM_END, CustomEndAction.class, R.drawable.icon_input, R.string.custom_end_action, R.string.custom_end_action_desc, 0, CustomActionCard.class);
     private final static ActionInfo EXECUTE_TASK_INFO = new ActionInfo(ActionType.EXECUTE_TASK, ExecuteTaskAction.class, R.drawable.icon_assignment, R.string.execute_task_action, 0, 0, ExecuteCustomActionCard.class);
     private final static ActionInfo STOP_TASK_INFO = new ActionInfo(ActionType.STOP_TASK, StopTaskAction.class, R.drawable.icon_stop, R.string.stop_task_action, R.string.stop_task_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo IS_TASK_RUNNING_INFO = new ActionInfo(ActionType.IS_TASK_RUNNING, IsTaskRunningAction.class, R.drawable.icon_assignment, R.string.is_task_running_action, R.string.is_task_running_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo GET_ALL_RUNNING_TASK_INFO = new ActionInfo(ActionType.GET_ALL_RUNNING_TASK, GetAllRunningTaskAction.class, R.drawable.icon_assignment, R.string.get_all_running_task_action, R.string.get_all_running_task_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_VARIABLE_INFO = new ActionInfo(ActionType.GET_VARIABLE, GetVariableAction.class, R.drawable.icon_upload, R.string.get_value_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo SET_VARIABLE_INFO = new ActionInfo(ActionType.SET_VARIABLE, SetVariableAction.class, R.drawable.icon_download, R.string.set_value_action, 0, 0, NormalActionCard.class);
     private final static ActionInfo GET_OR_SET_VARIABLE_INFO = new ActionInfo(ActionType.GET_OR_SET_VARIABLE, GetOrSetVariableAction.class, R.drawable.icon_shuffle, R.string.get_or_set_value_action, 0, 0, NormalActionCard.class);
@@ -407,6 +412,7 @@ public class ActionInfo {
     private final static ActionInfo LIST_SUBLIST_INFO = new ActionInfo(ActionType.LIST_SUBLIST, ListSubListAction.class, R.drawable.icon_split_scene, R.string.list_sublist_action, R.string.list_sublist_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_FOREACH_INFO = new ActionInfo(ActionType.LIST_FOREACH, ListForeachAction.class, R.drawable.icon_repeat, R.string.list_foreach_action, R.string.list_foreach_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo LIST_SORT_INFO = new ActionInfo(ActionType.LIST_SORT, ListSortAction.class, R.drawable.icon_swap_horiz, R.string.list_sort_action, R.string.list_sort_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo LIST_REVERSE_INFO = new ActionInfo(ActionType.LIST_REVERSE, ListReverseAction.class, R.drawable.icon_swap_horiz, R.string.list_reverse_action, R.string.list_reverse_action_desc, 0, NormalActionCard.class);
 
 
     // Map操作
@@ -443,6 +449,8 @@ public class ActionInfo {
             case CUSTOM_END -> CUSTOM_END_INFO;
             case EXECUTE_TASK -> EXECUTE_TASK_INFO;
             case STOP_TASK -> STOP_TASK_INFO;
+            case IS_TASK_RUNNING -> IS_TASK_RUNNING_INFO;
+            case GET_ALL_RUNNING_TASK -> GET_ALL_RUNNING_TASK_INFO;
             case GET_VARIABLE -> GET_VARIABLE_INFO;
             case SET_VARIABLE -> SET_VARIABLE_INFO;
             case GET_OR_SET_VARIABLE -> GET_OR_SET_VARIABLE_INFO;
@@ -628,6 +636,7 @@ public class ActionInfo {
             case LIST_SUBLIST -> LIST_SUBLIST_INFO;
             case LIST_FOREACH -> LIST_FOREACH_INFO;
             case LIST_SORT -> LIST_SORT_INFO;
+            case LIST_REVERSE -> LIST_REVERSE_INFO;
 
 
             case MAP_MAKE -> MAP_MAKE_INFO;

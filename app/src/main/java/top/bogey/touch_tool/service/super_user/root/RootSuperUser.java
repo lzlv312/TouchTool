@@ -1,25 +1,16 @@
 package top.bogey.touch_tool.service.super_user.root;
 
-import android.util.Log;
-
 import androidx.annotation.Keep;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 
 import top.bogey.touch_tool.service.super_user.CmdResult;
 import top.bogey.touch_tool.service.super_user.ISuperUser;
+import top.bogey.touch_tool.service.super_user.shell.CommandShellSession;
+import top.bogey.touch_tool.utils.callback.BooleanResultCallback;
 
 public class RootSuperUser implements ISuperUser {
-    private final static String EXIT_MARKER = "EXIT_MARKER";
-
     private boolean existRoot = false;
-    private Process rootProcess = null;
-    private BufferedWriter cmdWriter = null;
-    private BufferedReader outputReader = null;
-    private BufferedReader errorReader = null;
+
+    private CommandShellSession commandShellSession;
 
     @Keep
     public RootSuperUser() {
@@ -27,88 +18,44 @@ public class RootSuperUser implements ISuperUser {
     }
 
     @Override
-    public boolean init() {
-        return openRootSession();
-    }
-
-    @Override
-    public void tryInit() {
+    public void init(BooleanResultCallback callback) {
         openRootSession();
+        callback.onResult(existRoot);
     }
 
     @Override
     public void exit() {
-        try {
-            if (cmdWriter != null) {
-                cmdWriter.write("exit\n");
-                cmdWriter.flush();
-                cmdWriter.close();
-            }
-            if (outputReader != null) outputReader.close();
-            if (errorReader != null) errorReader.close();
-            if (rootProcess != null) rootProcess.destroy();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            existRoot = false;
+        if (commandShellSession != null) {
+            commandShellSession.close();
+            commandShellSession = null;
         }
+
+        existRoot = false;
     }
 
     @Override
     public boolean isValid() {
-        return openRootSession();
+        return existRoot && commandShellSession != null;
     }
 
     @Override
     public CmdResult runCommand(String cmd) {
-        if (!existRoot) return null;
-
-        try {
-            cmdWriter.write(cmd + "\n");
-            cmdWriter.write("echo \n");
-            cmdWriter.write("echo " + EXIT_MARKER + ":$?\n");
-            cmdWriter.flush();
-
-            StringBuilder output = new StringBuilder();
-            String line;
-            while ((line = outputReader.readLine()) != null) {
-                Log.d("TAG", "runCommand: " + line);
-                if (line.startsWith(EXIT_MARKER)) {
-                    int exitCode = Integer.parseInt(line.substring(EXIT_MARKER.length() + 1));
-                    return new CmdResult(exitCode == 0, output.toString().trim());
-                }
-                output.append(line).append("\n");
-            }
-
-            StringBuilder error = new StringBuilder();
-            while ((line = errorReader.readLine()) != null) {
-                error.append(line).append("\n");
-            }
-            return new CmdResult(false, error.toString().trim());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            exit();
-            return new CmdResult(false, e.getMessage());
-        }
+        if (!existRoot || commandShellSession == null) return null;
+        return commandShellSession.runCommand(cmd);
     }
 
-    public boolean openRootSession() {
-        if (existRoot) return true;
+    public void openRootSession() {
+        if (existRoot) return;
         try {
-            rootProcess = Runtime.getRuntime().exec("su");
-            cmdWriter = new BufferedWriter(new OutputStreamWriter(rootProcess.getOutputStream()));
-            outputReader = new BufferedReader(new InputStreamReader(rootProcess.getInputStream()));
-            errorReader = new BufferedReader(new InputStreamReader(rootProcess.getErrorStream()));
-
-            existRoot = true;
-            CmdResult result = runCommand("echo root");
+            commandShellSession = new CommandShellSession("su");
+            CmdResult result = commandShellSession.runCommand("echo root");
             existRoot = result.getResult();
-            return existRoot;
+            if (!existRoot) {
+                exit();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             exit();
-            return false;
         }
     }
 }

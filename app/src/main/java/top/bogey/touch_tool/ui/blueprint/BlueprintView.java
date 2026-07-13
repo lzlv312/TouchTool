@@ -9,6 +9,7 @@ import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -148,6 +149,7 @@ public class BlueprintView extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHideActivityBackground(false);
         binding.getRoot().post(() -> binding.cardLayout.initCacheBoxArea(binding.baseToolBar, binding.cachedPinBox));
     }
 
@@ -304,7 +306,7 @@ public class BlueprintView extends Fragment {
                             .setView(imageView)
                             .setPositiveButton(R.string.save, (dialog, which) -> {
                                 dialog.dismiss();
-                                AppUtil.saveImage(requireContext(), bitmap);
+                                AppUtil.writePictureImage(requireContext(), bitmap);
                             })
                             .setNegativeButton(R.string.share_to_action, (dialog, which) -> {
                                 dialog.dismiss();
@@ -313,9 +315,9 @@ public class BlueprintView extends Fragment {
                             .setNeutralButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                             .show();
 
-                    Point size = DisplayUtil.getScreenSize(requireContext());
+                    Size size = DisplayUtil.getScreenSize(requireContext());
                     DisplayUtil.setViewWidth(imageView, ViewGroup.LayoutParams.MATCH_PARENT);
-                    DisplayUtil.setViewHeight(imageView, size.y / 2);
+                    DisplayUtil.setViewHeight(imageView, size.getHeight() / 2);
                     return true;
                 }
                 return false;
@@ -482,6 +484,7 @@ public class BlueprintView extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        setHideActivityBackground(SettingSaver.APP_HIDE_ACTIVITY_BACKGROUND.get());
 
         while (!taskStack.empty()) {
             taskStack.pop().save();
@@ -581,5 +584,20 @@ public class BlueprintView extends Fragment {
             }
         }
         return searchActions;
+    }
+
+    private void setHideActivityBackground(boolean hide) {
+        int taskId = requireActivity().getTaskId();
+        ActivityManager manager = (ActivityManager) requireActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager != null) {
+            List<ActivityManager.AppTask> taskList = manager.getAppTasks();
+            if (taskList != null) {
+                for (ActivityManager.AppTask task : taskList) {
+                    ActivityManager.RecentTaskInfo taskInfo = task.getTaskInfo();
+                    if (taskInfo == null) continue;
+                    if (taskInfo.id == taskId) task.setExcludeFromRecents(hide);
+                }
+            }
+        }
     }
 }
