@@ -113,7 +113,7 @@ public class MainActivity extends FloatViewActivity {
 
         Uri uri = null;
         if (Intent.ACTION_SEND.equals(intent.getAction())) {
-            uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            uri = intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri.class);
         } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             uri = intent.getData();
         }

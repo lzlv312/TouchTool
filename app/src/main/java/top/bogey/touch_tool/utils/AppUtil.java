@@ -125,7 +125,7 @@ public class AppUtil {
             binding.titleEdit.requestFocus();
             binding.titleEdit.selectAll();
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(binding.titleEdit, InputMethodManager.SHOW_IMPLICIT);
+            imm.showSoftInput(binding.titleEdit, 0);
         }, 100);
     }
 

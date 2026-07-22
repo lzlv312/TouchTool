@@ -192,7 +192,7 @@ public class PinWidgetString extends PinWidget<PinString> {
                     MainActivity activity = MainApplication.getInstance().getActivity();
                     activity.launcherRingtone(value, (code, intent) -> {
                         if (code == Activity.RESULT_OK) {
-                            Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                            Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri.class);
                             if (uri == null) {
                                 binding.editText.setText("");
                                 pinBase.setValue(null);

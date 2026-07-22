@@ -48,7 +48,7 @@ public class DisplayUtil {
 
     @ColorInt
     public static int blendColor(int color1, int color2, float ratio) {
-        ratio = Math.max(0f, Math.min(1f, ratio));
+        ratio = Math.clamp(ratio, 0f, 1f);
         final float inverseRatio = 1f - ratio;
         int a = (int) (Color.alpha(color1) * inverseRatio + Color.alpha(color2) * ratio);
         int r = (int) (Color.red(color1) * inverseRatio + Color.red(color2) * ratio);
@@ -182,7 +182,7 @@ public class DisplayUtil {
         Size screenSize = DisplayUtil.getScreenSize(context);
         int maxHeight = screenSize.getHeight() - location[1] - anchorView.getHeight();
         int minHeight = (int) DisplayUtil.dp2px(context, 32);
-        height = Math.max(Math.min(height, maxHeight), minHeight);
+        height = Math.clamp(height, minHeight, maxHeight);
         popup.setHeight(height);
         popup.show();
     }

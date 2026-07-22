@@ -450,7 +450,7 @@ public class SettingView extends Fragment {
         PackageManager packageManager = activity.getPackageManager();
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(activity.getPackageName(), 0);
-            binding.versionText.setText(packageInfo.versionName + "(" + packageInfo.versionCode + ")");
+            binding.versionText.setText(packageInfo.versionName + "(" + packageInfo.getLongVersionCode() + ")");
         } catch (Exception e) {
             e.printStackTrace();
         }

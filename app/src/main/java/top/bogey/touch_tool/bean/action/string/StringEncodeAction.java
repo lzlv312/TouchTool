@@ -38,9 +38,7 @@ public class StringEncodeAction extends CalculateAction {
         String value = text.getValue();
         if (value == null || value.isEmpty()) return;
         String result = switch (type.getIndex()) {
-            case 0 -> {
-                yield URLEncoder.encode(value, StandardCharsets.UTF_8);
-            }
+            case 0 -> URLEncoder.encode(value, StandardCharsets.UTF_8);
             case 1 -> Base64.encodeToString(value.getBytes(), Base64.NO_WRAP);
             default -> value;
         };

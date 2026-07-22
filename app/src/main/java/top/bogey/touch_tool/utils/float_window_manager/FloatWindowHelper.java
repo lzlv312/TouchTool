@@ -253,8 +253,8 @@ public class FloatWindowHelper {
         config.location = relativePoint;
         Point gravityPoint = getGravityPoint();
         Point offset = getAnchorOffset();
-        params.x = Math.max(showArea.left, Math.min(showArea.right, gravityPoint.x + relativePoint.x + offset.x));
-        params.y = Math.max(showArea.top, Math.min(showArea.bottom, gravityPoint.y + relativePoint.y + offset.y));
+        params.x = Math.clamp(gravityPoint.x + relativePoint.x + offset.x, showArea.left, showArea.right);
+        params.y = Math.clamp(gravityPoint.y + relativePoint.y + offset.y, showArea.top, showArea.bottom);
         manager.updateViewLayout(viewParent, params);
     }
 

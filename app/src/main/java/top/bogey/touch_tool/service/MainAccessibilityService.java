@@ -20,11 +20,13 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CombinedVibration;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.os.VibratorManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
@@ -803,7 +805,7 @@ public class MainAccessibilityService extends AccessibilityService {
     @Override
     protected boolean onKeyEvent(KeyEvent event) {
         if (!SettingSaver.TASK_VOLUME_KEY_STOP.get()) return super.onKeyEvent(event);
-        if (handler == null) handler = new Handler();
+        if (handler == null) handler = new Handler(Looper.getMainLooper());
 
         if (event != null && event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -982,7 +984,13 @@ public class MainAccessibilityService extends AccessibilityService {
 
     // 震动 ----------------------------------------------------------------------------- start
     public void vibrate(long duration) {
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrator vibrator;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            VibratorManager manager = (VibratorManager) getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
+            vibrator = manager.getDefaultVibrator();
+        } else {
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        }
         if (vibrator == null) return;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

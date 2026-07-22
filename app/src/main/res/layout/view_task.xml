@@ -10,14 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
+        app:materialThemeOverlay="@style/ThemeOverlay.Material3Expressive.AppBarWithSearch"
         app:statusBarForeground="?attr/colorSurface">
 
         <com.google.android.material.search.SearchBar
             android:id="@+id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:hint="@string/task_search"
-            android:maxWidth="@null" />
+            app:hideNavigationIcon="false"
+            app:textCentered="false" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -177,8 +180,10 @@
 
     <com.google.android.material.search.SearchView
         android:id="@+id/searchView"
+        style="@style/Widget.Material3Expressive.SearchView.AppBarWithSearch"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:hint="@string/task_search_hint"
         app:layout_anchor="@id/searchBar">
 
         <LinearLayout
@@ -201,7 +206,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/cleanButton"
-                    style="?attr/materialIconButtonStyle"
+                    style="?attr/defaultIconButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/icon_delete" />

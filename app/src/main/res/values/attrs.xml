@@ -9,6 +9,10 @@
     <attr name="smallIconButtonSize" format="dimension" />
     <attr name="halfIconButtonSize" format="dimension" />
 
+    <attr name="defaultIconButton" format="reference" />
+    <attr name="defaultIconButtonFilled" format="reference" />
+    <attr name="defaultIconButtonOutlined" format="reference" />
+
     <attr name="iconButton" format="reference" />
     <attr name="iconButtonOutlined" format="reference" />
     <attr name="iconButtonFilled" format="reference" />

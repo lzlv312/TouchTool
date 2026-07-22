@@ -52,7 +52,7 @@ public class SystemEventReceiver extends BroadcastReceiver {
             case Intent.ACTION_SCREEN_ON, Intent.ACTION_SCREEN_OFF, Intent.ACTION_USER_PRESENT -> TaskInfoSummary.getInstance().onPhoneStateChanged();
 
             case BluetoothDevice.ACTION_ACL_CONNECTED, BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice.class);
                 if (device == null) return;
                 TaskInfoSummary.getInstance().addBluetoothInfo(device.getAddress(), device.getName(), action.equals(BluetoothDevice.ACTION_ACL_CONNECTED));
             }
@@ -65,7 +65,7 @@ public class SystemEventReceiver extends BroadcastReceiver {
             }
 
             case MainAccessibilityService.INTENT_KEY_DELETE_URI -> {
-                Uri uri = intent.getParcelableExtra(MainAccessibilityService.URI);
+                Uri uri = intent.getParcelableExtra(MainAccessibilityService.URI, Uri.class);
                 Log.d("TAG", "onReceive: " + uri);
                 if (uri == null) return;
                 context.getContentResolver().delete(uri, null, null);

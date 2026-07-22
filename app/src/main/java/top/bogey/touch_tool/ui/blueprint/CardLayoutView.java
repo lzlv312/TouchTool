@@ -129,8 +129,8 @@ public class CardLayoutView extends FrameLayout implements TaskSaveListener, Var
         setSaveEnabled(false);
         setSaveFromParentEnabled(false);
 
-        longTouchHandler = new Handler();
-        doubleTouchHandler = new Handler();
+        longTouchHandler = new Handler(Looper.getMainLooper());
+        doubleTouchHandler = new Handler(Looper.getMainLooper());
 
         gridSize = DisplayUtil.dp2px(context, GRID_DP_SIZE);
 

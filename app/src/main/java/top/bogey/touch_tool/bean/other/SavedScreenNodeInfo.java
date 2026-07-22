@@ -16,7 +16,7 @@ public class SavedScreenNodeInfo {
 
     public SavedScreenNodeInfo(Bitmap image, List<NodeInfo> roots) {
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
-            image.compress(Bitmap.CompressFormat.WEBP, 100, stream);
+            image.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 100, stream);
             byte[] bytes = stream.toByteArray();
             this.image = Base64.encodeToString(bytes, Base64.NO_WRAP);
         } catch (IOException ignored) {
