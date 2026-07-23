@@ -38,7 +38,14 @@ public class StringDecodeAction extends CalculateAction {
         String value = text.getValue();
         if (value == null || value.isEmpty()) return;
         String result = switch (type.getIndex()) {
-            case 0 -> URLDecoder.decode(value, StandardCharsets.UTF_8);
+            case 0 -> {
+                try {
+                    yield URLDecoder.decode(value, StandardCharsets.UTF_8.name());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    yield value;
+                }
+            }
             case 1 -> new String(Base64.decode(value, Base64.NO_WRAP));
             default -> value;
         };

@@ -3,6 +3,7 @@ package top.bogey.touch_tool.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,9 +15,9 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Size;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -71,8 +72,11 @@ public class DisplayUtil {
     }
 
     public static boolean isPortrait(Context context) {
-        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        return manager.getDefaultDisplay().getRotation() % 2 == Surface.ROTATION_0;
+        int orientation = context.getResources().getConfiguration().orientation;
+        return orientation != Configuration.ORIENTATION_LANDSCAPE;
+
+//        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+//        return manager.getDefaultDisplay().getRotation() % 2 == Surface.ROTATION_0;
     }
 
     public static boolean isInFreeFormMode(Activity activity) {
@@ -91,10 +95,13 @@ public class DisplayUtil {
     }
 
     public static Size getScreenSize(Context context) {
-        Point point = new Point();
-        // 获取屏幕宽高
-        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealSize(point);
-        return new Size(point.x, point.y);
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return new Size(metrics.widthPixels, metrics.heightPixels);
+
+//        Point point = new Point();
+//        // 获取屏幕宽高
+//        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealSize(point);
+//        return new Size(point.x, point.y);
     }
 
     public static int getScreenWidth(Context context) {

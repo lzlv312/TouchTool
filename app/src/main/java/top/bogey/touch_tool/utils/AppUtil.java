@@ -21,7 +21,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
+import android.net.ConnectivityManager;
 import android.net.DhcpInfo;
+import android.net.LinkAddress;
+import android.net.LinkProperties;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.RouteInfo;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -55,6 +61,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -168,37 +175,66 @@ public class AppUtil {
     }
 
     public static TaskInfoSummary.WifiInfo getWifiInfo(Context context) {
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        if (wifiManager == null) return null;
+        String wifiName, gatewayIp = "", ip = "";
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            if (wifiManager == null) return null;
 
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        if (wifiInfo == null) return null;
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            if (wifiInfo == null) return null;
 
-        DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
-        if (dhcpInfo == null) return null;
+            DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
+            if (dhcpInfo == null) return null;
 
-        String wifiName = wifiInfo.getSSID();
+            wifiName = wifiInfo.getSSID();
 
-        String gatewayIp = "";
-        int gateway = dhcpInfo.gateway;
-        byte[] bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(gateway).array();
+            int gateway = dhcpInfo.gateway;
+            byte[] bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(gateway).array();
 
-        try {
-            InetAddress address = InetAddress.getByAddress(bytes);
-            gatewayIp = address.getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+            try {
+                InetAddress address = InetAddress.getByAddress(bytes);
+                gatewayIp = address.getHostAddress();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
 
-        String ip = "";
-        int ipAddress = wifiInfo.getIpAddress();
-        bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(ipAddress).array();
+            int ipAddress = wifiInfo.getIpAddress();
+            bytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(ipAddress).array();
 
-        try {
-            InetAddress address = InetAddress.getByAddress(bytes);
-            ip = address.getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+            try {
+                InetAddress address = InetAddress.getByAddress(bytes);
+                ip = address.getHostAddress();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        } else {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connectivityManager == null) return null;
+            Network network = connectivityManager.getActiveNetwork();
+            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+            if (capabilities == null) return null;
+
+            if (!capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) return null;
+            WifiInfo info = (WifiInfo) capabilities.getTransportInfo();
+            if (info == null) return null;
+            wifiName = info.getSSID();
+
+            LinkProperties properties = connectivityManager.getLinkProperties(network);
+            if (properties == null) return null;
+            for (RouteInfo route : properties.getRoutes()) {
+                if (route.isDefaultRoute() && route.getGateway() instanceof Inet4Address gateway) {
+                    gatewayIp = gateway.getHostAddress();
+                    break;
+                }
+            }
+
+            for (LinkAddress linkAddress : properties.getLinkAddresses()) {
+                InetAddress address = linkAddress.getAddress();
+                if (address instanceof Inet4Address inet4Address && !inet4Address.isLoopbackAddress()) {
+                    ip = inet4Address.getHostAddress();
+                    break;
+                }
+            }
         }
 
         return new TaskInfoSummary.WifiInfo(wifiName, gatewayIp, ip);

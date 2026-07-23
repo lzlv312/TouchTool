@@ -595,7 +595,7 @@ public class BlueprintView extends Fragment {
                 for (ActivityManager.AppTask task : taskList) {
                     ActivityManager.RecentTaskInfo taskInfo = task.getTaskInfo();
                     if (taskInfo == null) continue;
-                    if (taskInfo.taskId == taskId) task.setExcludeFromRecents(hide);
+                    if (taskInfo.id == taskId) task.setExcludeFromRecents(hide);
                 }
             }
         }

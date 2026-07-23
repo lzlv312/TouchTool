@@ -74,8 +74,6 @@
                         android:id="@+id/manualPlayReset"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:buttonText="@string/preference_setting_manual_play_reset"
-                        app:buttonVisible="button"
                         app:description="@string/preference_setting_manual_play_reset_desc"
                         app:icon="@drawable/icon_refresh"
                         app:title="@string/preference_setting_manual_play_reset" />

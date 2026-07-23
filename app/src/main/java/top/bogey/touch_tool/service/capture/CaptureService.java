@@ -49,7 +49,7 @@ public class CaptureService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         if (projection == null) {
-            Intent data = intent.getParcelableExtra(DATA, Intent.class);
+            Intent data = intent.getParcelableExtra(DATA);
             if (data != null) {
                 MediaProjectionManager manager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
                 projection = manager.getMediaProjection(Activity.RESULT_OK, data);

@@ -68,7 +68,7 @@ public class InstantActivity extends BaseActivity {
             }
         } else if (Intent.ACTION_SEND.equals(action)) {
             Object object = null;
-            Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri.class);
+            Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             if (uri != null) {
                 String type = getContentResolver().getType(uri);
                 if (type != null) {
