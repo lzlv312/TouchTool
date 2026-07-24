@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Size;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -81,7 +82,7 @@ public class FloatWindowHelper {
         try {
             manager.addView(viewParent, params);
         } catch (android.view.WindowManager.BadTokenException e) {
-            new android.os.Handler().postDelayed(() -> {
+            new android.os.Handler(Looper.getMainLooper()).postDelayed(() -> {
                 try {
                     manager.addView(viewParent, params);
                 } catch (Exception ignored) {
@@ -153,7 +154,7 @@ public class FloatWindowHelper {
                     params.flags = FloatWindow.FOCUSABLE | config.flag;
                     manager.updateViewLayout(viewParent, params);
 
-                    new Handler().postDelayed(() -> {
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
                         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                         if (inputMethodManager != null) inputMethodManager.showSoftInput(editText, 0);
                     }, 100);
@@ -165,7 +166,7 @@ public class FloatWindowHelper {
 
     void showFloatWindow() {
         if (config.animator != null) {
-            new Handler().postDelayed(() -> {
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 Animator enter = config.animator.enter(viewParent, config.side);
                 if (enter != null) {
                     enter.addListener(new AnimatorListenerAdapter() {
@@ -248,6 +249,7 @@ public class FloatWindowHelper {
     // 设置窗口位置
     void setRelativePoint(EAnchor anchor, EAnchor gravity, Point relativePoint) {
         Rect showArea = getShowArea();
+        showArea.sort();
         config.anchor = anchor;
         config.gravity = gravity;
         config.location = relativePoint;
