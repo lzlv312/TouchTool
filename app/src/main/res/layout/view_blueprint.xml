@@ -366,14 +366,14 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/exchangeButton"
-                style="?attr/defaultIconButtonFilled"
+                style="?attr/defaultIconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:icon="@drawable/icon_swap_horiz" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lockButton"
-                style="?attr/defaultIconButtonFilled"
+                style="?attr/defaultIconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_check"
@@ -383,7 +383,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/copyButton"
-                style="?attr/defaultIconButtonFilled"
+                style="?attr/defaultIconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -392,7 +392,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteButton"
-                style="?attr/defaultIconButtonFilled"
+                style="?attr/defaultIconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/fill_button_background_error_check"
