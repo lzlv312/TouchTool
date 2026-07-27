@@ -74,9 +74,6 @@ public class DisplayUtil {
     public static boolean isPortrait(Context context) {
         int orientation = context.getResources().getConfiguration().orientation;
         return orientation != Configuration.ORIENTATION_LANDSCAPE;
-
-//        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-//        return manager.getDefaultDisplay().getRotation() % 2 == Surface.ROTATION_0;
     }
 
     public static boolean isInFreeFormMode(Activity activity) {
@@ -95,13 +92,10 @@ public class DisplayUtil {
     }
 
     public static Size getScreenSize(Context context) {
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        return new Size(metrics.widthPixels, metrics.heightPixels);
-
-//        Point point = new Point();
-//        // 获取屏幕宽高
-//        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealSize(point);
-//        return new Size(point.x, point.y);
+        Point point = new Point();
+        // 获取屏幕宽高
+        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealSize(point);
+        return new Size(point.x, point.y);
     }
 
     public static int getScreenWidth(Context context) {
@@ -242,7 +236,7 @@ public class DisplayUtil {
     }
 
     public static Bitmap safeScaleBitmap(Bitmap bitmap, int maxWidth, int maxHeight) {
-        if (bitmap == null) return null;
+        if (bitmap == null || bitmap.isRecycled()) return null;
         final int srcWidth = bitmap.getWidth();
         final int srcHeight = bitmap.getHeight();
         if (srcWidth <= maxWidth && srcHeight <= maxHeight) return bitmap;
@@ -256,7 +250,7 @@ public class DisplayUtil {
     }
 
     public static Rect safeClipBitmapArea(Bitmap bitmap, int x, int y, int width, int height) {
-        if (bitmap == null) return null;
+        if (bitmap == null || bitmap.isRecycled()) return null;
         if (x < 0) {
             width += x;
             x = 0;
