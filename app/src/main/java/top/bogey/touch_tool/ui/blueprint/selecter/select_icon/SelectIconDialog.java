@@ -86,7 +86,7 @@ public class SelectIconDialog extends BottomSheetDialog {
                 binding.searchBox.setVisibility(View.VISIBLE);
                 binding.searchEdit.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(binding.searchEdit, InputMethodManager.SHOW_IMPLICIT);
+                imm.showSoftInput(binding.searchEdit, 0);
             }
         });
 
