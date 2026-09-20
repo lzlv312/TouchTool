@@ -20,7 +20,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CombinedVibration;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -136,8 +135,8 @@ public class MainAccessibilityService extends AccessibilityService {
                 if (notification != null && notification.extras != null) {
                     Bundle extras = notification.extras;
                     for (String key : extras.keySet()) {
-                        Object value = extras.get(key);
-                        content.put(key, String.valueOf(value));
+                        String value = extras.getString(key);
+                        content.put(key, value);
                     }
                 } else if (!textList.isEmpty()) {
                     String s = textList.get(0).toString();
@@ -271,6 +270,8 @@ public class MainAccessibilityService extends AccessibilityService {
     }
 
     public TaskRunnable runTask(Task task, StartAction startAction, ITaskListener listener) {
+        cleanInterruptTask();
+
         if (task == null || startAction == null) return null;
         if (!isEnabled()) return null;
 
@@ -348,6 +349,10 @@ public class MainAccessibilityService extends AccessibilityService {
 
     public List<TaskRunnable> getRunningTask() {
         return new ArrayList<>(tasks);
+    }
+
+    private void cleanInterruptTask() {
+        tasks.removeIf(TaskRunnable::isInterrupt);
     }
 
     public void stopTask(Task task) {
@@ -616,7 +621,7 @@ public class MainAccessibilityService extends AccessibilityService {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
                     for (String name : bundle.keySet()) {
-                        extras.put(name, String.valueOf(bundle.get(name)));
+                        extras.put(name, bundle.getString(name));
                     }
                 }
                 TaskInfoSummary.getInstance().setBroadcastInfo(action, data, extras);
