@@ -17,8 +17,9 @@ import top.bogey.touch_tool.service.TaskRunnable;
 
 public class BooleanAndShortCircuitAction extends CalculateAction implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinBoolean(), R.string.pin_boolean_condition);
-    private final transient Pin firstPin = new Pin(new PinBoolean(), R.string.pin_boolean_condition);
-    private final transient Pin secondPin = new Pin(new PinBoolean(), R.string.pin_boolean_condition);
+    // 默认条件针脚，和动态添加的一样可以移除
+    private final transient Pin firstPin = new Pin(new PinBoolean(), R.string.pin_boolean_condition, false, true);
+    private final transient Pin secondPin = new Pin(new PinBoolean(), R.string.pin_boolean_condition, false, true);
     private final transient Pin addPin = new Pin(new PinAdd(morePin), R.string.pin_add_pin);
     private final transient Pin resultPin = new Pin(new PinBoolean(), R.string.pin_boolean_result, true);
     private final transient Pin indexPin = new Pin(new PinInteger(), R.string.boolean_and_short_action_index, true);
@@ -53,11 +54,11 @@ public class BooleanAndShortCircuitAction extends CalculateAction implements Dyn
 
     @Override
     public List<Pin> getDynamicPins() {
+        // 添加针脚之前的输入针脚都参与计算，默认针脚被移除后自然不再计入
         List<Pin> pins = new ArrayList<>();
-        boolean start = false;
+        boolean start = true;
         for (Pin pin : getPins()) {
             if (pin == addPin) start = false;
-            if (pin == firstPin) start = true;
             if (start) pins.add(pin);
         }
         return pins;

@@ -191,6 +191,7 @@ import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.CreateListActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.CustomActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.DynamicParamsActionCard;
+import top.bogey.touch_tool.ui.blueprint.card.DynamicPinsActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.ExecuteCustomActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.InputConfigActionCard;
 import top.bogey.touch_tool.ui.blueprint.card.NormalActionCard;
@@ -226,14 +227,14 @@ public class ActionInfo {
     // 逻辑动作
     private final static ActionInfo IF_LOGIC_INFO = new ActionInfo(ActionType.IF_LOGIC, IfConditionAction.class, R.drawable.icon_graph_1, R.string.if_action, R.string.if_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo WAIT_IF_LOGIC_INFO = new ActionInfo(ActionType.WAIT_IF_LOGIC, WaitConditionAction.class, R.drawable.icon_hourglass_bottom, R.string.wait_if_action, R.string.wait_if_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo SWITCH_LOGIC_INFO = new ActionInfo(ActionType.SWITCH_LOGIC, SwitchAction.class, R.drawable.icon_live_help, R.string.switch_action, R.string.switch_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo CHOICE_LOGIC_INFO = new ActionInfo(ActionType.CHOICE_LOGIC, ChoiceExecuteAction.class, R.drawable.icon_person_check, R.string.choice_action, R.string.choice_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SWITCH_LOGIC_INFO = new ActionInfo(ActionType.SWITCH_LOGIC, SwitchAction.class, R.drawable.icon_live_help, R.string.switch_action, R.string.switch_action_desc, 0, DynamicPinsActionCard.class);
+    private final static ActionInfo CHOICE_LOGIC_INFO = new ActionInfo(ActionType.CHOICE_LOGIC, ChoiceExecuteAction.class, R.drawable.icon_person_check, R.string.choice_action, R.string.choice_action_desc, 0, DynamicPinsActionCard.class);
     private final static ActionInfo LIST_CHOICE_LOGIC_INFO = new ActionInfo(ActionType.LIST_CHOICE, ListChoiceAction.class, R.drawable.icon_data_array, R.string.list_choice_action, R.string.list_choice_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo FOR_LOGIC_INFO = new ActionInfo(ActionType.FOR_LOGIC, ForLoopAction.class, R.drawable.icon_repeat_one, R.string.for_loop_action, R.string.for_loop_action_desc, R.string.for_loop_action_help, NormalActionCard.class);
     private final static ActionInfo WHILE_LOGIC_INFO = new ActionInfo(ActionType.WHILE_LOGIC, WhileLoopAction.class, R.drawable.icon_repeat, R.string.while_loop_action, R.string.while_loop_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo SEQUENCE_LOGIC_INFO = new ActionInfo(ActionType.SEQUENCE_LOGIC, SequenceExecuteAction.class, R.drawable.icon_tactic, R.string.sequence_action, R.string.sequence_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo RANDOM_LOGIC_INFO = new ActionInfo(ActionType.RANDOM_LOGIC, RandomExecuteAction.class, R.drawable.icon_shuffle, R.string.random_action, R.string.random_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo PARALLEL_LOGIC_INFO = new ActionInfo(ActionType.PARALLEL_LOGIC, ParallelExecuteAction.class, R.drawable.icon_graph_2, R.string.parallel_action, R.string.parallel_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SEQUENCE_LOGIC_INFO = new ActionInfo(ActionType.SEQUENCE_LOGIC, SequenceExecuteAction.class, R.drawable.icon_tactic, R.string.sequence_action, R.string.sequence_action_desc, 0, DynamicPinsActionCard.class);
+    private final static ActionInfo RANDOM_LOGIC_INFO = new ActionInfo(ActionType.RANDOM_LOGIC, RandomExecuteAction.class, R.drawable.icon_shuffle, R.string.random_action, R.string.random_action_desc, 0, DynamicPinsActionCard.class);
+    private final static ActionInfo PARALLEL_LOGIC_INFO = new ActionInfo(ActionType.PARALLEL_LOGIC, ParallelExecuteAction.class, R.drawable.icon_graph_2, R.string.parallel_action, R.string.parallel_action_desc, 0, DynamicPinsActionCard.class);
 
 
     // 通用动作
@@ -292,9 +293,9 @@ public class ActionInfo {
     private final static ActionInfo SET_VOLUME_INFO = new ActionInfo(ActionType.SET_VOLUME, SetVolumeAction.class, R.drawable.icon_volume, R.string.set_volume_action, R.string.set_volume_action_desc, 0, NormalActionCard.class);
 
     // 数值运算
-    private final static ActionInfo NUMBER_ADD_INFO = new ActionInfo(ActionType.NUMBER_ADD, NumberAddAction.class, R.drawable.icon_add, R.string.number_add_action, R.string.number_add_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo NUMBER_ADD_INFO = new ActionInfo(ActionType.NUMBER_ADD, NumberAddAction.class, R.drawable.icon_add, R.string.number_add_action, R.string.number_add_action_desc, 0, DynamicPinsActionCard.class);
     private final static ActionInfo NUMBER_SUB_INFO = new ActionInfo(ActionType.NUMBER_SUB, NumberSubAction.class, R.drawable.icon_remove, R.string.number_subtract_action, R.string.number_subtract_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo NUMBER_MUL_INFO = new ActionInfo(ActionType.NUMBER_MUL, NumberMulAction.class, R.drawable.icon_close, R.string.number_multiply_action, R.string.number_multiply_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo NUMBER_MUL_INFO = new ActionInfo(ActionType.NUMBER_MUL, NumberMulAction.class, R.drawable.icon_close, R.string.number_multiply_action, R.string.number_multiply_action_desc, 0, DynamicPinsActionCard.class);
     private final static ActionInfo NUMBER_DIV_INFO = new ActionInfo(ActionType.NUMBER_DIV, NumberDivAction.class, R.drawable.icon_stream, R.string.number_divide_action, R.string.number_divide_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo NUMBER_MOD_INFO = new ActionInfo(ActionType.NUMBER_MOD, NumberModAction.class, R.drawable.icon_percent, R.string.number_mod_action, R.string.number_mod_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo NUMBER_ABS_INFO = new ActionInfo(ActionType.NUMBER_ABS, NumberAbsAction.class, R.drawable.icon_data_array, R.string.number_abs_action, R.string.number_abs_action_desc, 0, NormalActionCard.class);
@@ -311,7 +312,7 @@ public class ActionInfo {
     // 文本处理
     private final static ActionInfo STRING_FROM_OBJECT_INFO = new ActionInfo(ActionType.STRING_FROM_OBJECT, StringFromObjectAction.class, R.drawable.icon_text_fields, R.string.string_from_object_action, R.string.string_from_object_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_TO_NUMBER_INFO = new ActionInfo(ActionType.STRING_TO_NUMBER, StringToNumberAction.class, R.drawable.icon_123, R.string.string_to_number_action, R.string.string_to_number_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo STRING_APPEND_INFO = new ActionInfo(ActionType.STRING_APPEND, StringAppendAction.class, R.drawable.icon_add, R.string.string_append_action, R.string.string_append_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo STRING_APPEND_INFO = new ActionInfo(ActionType.STRING_APPEND, StringAppendAction.class, R.drawable.icon_add, R.string.string_append_action, R.string.string_append_action_desc, 0, DynamicPinsActionCard.class);
     private final static ActionInfo STRING_SUBSTRING_INFO = new ActionInfo(ActionType.STRING_SUBSTRING, StringSubStringAction.class, R.drawable.icon_split_scene, R.string.string_substring_action, R.string.string_substring_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_REGEX_INFO = new ActionInfo(ActionType.STRING_REGEX, StringMatchAction.class, R.drawable.icon_regular_expression, R.string.string_match_action, R.string.string_match_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo STRING_SPLIT_INFO = new ActionInfo(ActionType.STRING_SPLIT, StringSplitAction.class, R.drawable.icon_data_array, R.string.string_split_action, R.string.string_split_action_desc, 0, NormalActionCard.class);
@@ -328,11 +329,11 @@ public class ActionInfo {
 
 
     // 条件判断
-    private final static ActionInfo BOOLEAN_OR_INFO = new ActionInfo(ActionType.BOOLEAN_OR, BooleanOrAction.class, R.drawable.icon_repeat_one, R.string.boolean_or_action, R.string.boolean_or_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo BOOLEAN_AND_INFO = new ActionInfo(ActionType.BOOLEAN_AND, BooleanAndAction.class, R.drawable.icon_repeat, R.string.boolean_and_action, R.string.boolean_and_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo BOOLEAN_OR_INFO = new ActionInfo(ActionType.BOOLEAN_OR, BooleanOrAction.class, R.drawable.icon_repeat_one, R.string.boolean_or_action, R.string.boolean_or_action_desc, 0, DynamicPinsActionCard.class);
+    private final static ActionInfo BOOLEAN_AND_INFO = new ActionInfo(ActionType.BOOLEAN_AND, BooleanAndAction.class, R.drawable.icon_repeat, R.string.boolean_and_action, R.string.boolean_and_action_desc, 0, DynamicPinsActionCard.class);
      private final static ActionInfo BOOLEAN_NOT_INFO = new ActionInfo(ActionType.BOOLEAN_NOT, BooleanNotAction.class, R.drawable.icon_swap_horiz, R.string.boolean_not_action, R.string.boolean_not_action_desc, 0, NormalActionCard.class);
-     private final static ActionInfo BOOLEAN_AND_SHORT_INFO = new ActionInfo(ActionType.BOOLEAN_AND_SHORT, BooleanAndShortCircuitAction.class, R.drawable.icon_repeat, R.string.boolean_and_short_action, R.string.boolean_and_short_action_desc, 0, NormalActionCard.class);
-     private final static ActionInfo BOOLEAN_OR_SHORT_INFO = new ActionInfo(ActionType.BOOLEAN_OR_SHORT, BooleanOrShortCircuitAction.class, R.drawable.icon_repeat_one, R.string.boolean_or_short_action, R.string.boolean_or_short_action_desc, 0, NormalActionCard.class);
+     private final static ActionInfo BOOLEAN_AND_SHORT_INFO = new ActionInfo(ActionType.BOOLEAN_AND_SHORT, BooleanAndShortCircuitAction.class, R.drawable.icon_repeat, R.string.boolean_and_short_action, R.string.boolean_and_short_action_desc, 0, DynamicPinsActionCard.class);
+     private final static ActionInfo BOOLEAN_OR_SHORT_INFO = new ActionInfo(ActionType.BOOLEAN_OR_SHORT, BooleanOrShortCircuitAction.class, R.drawable.icon_repeat_one, R.string.boolean_or_short_action, R.string.boolean_or_short_action_desc, 0, DynamicPinsActionCard.class);
 
 
     // 控件操作
@@ -390,7 +391,7 @@ public class ActionInfo {
     private final static ActionInfo POINT_TO_INT_INFO = new ActionInfo(ActionType.POINT_TO_INT, PointToIntegerAction.class, R.drawable.icon_123, R.string.point_to_integer_action, R.string.point_to_integer_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo POINT_FROM_INT_INFO = new ActionInfo(ActionType.POINT_FROM_INT, PointFromIntegerAction.class, R.drawable.icon_my_location, R.string.point_from_integer_action, R.string.point_from_integer_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo POINT_OFFSET_INFO = new ActionInfo(ActionType.POINT_OFFSET, PointOffsetAction.class, R.drawable.icon_my_location, R.string.point_offset_action, R.string.point_offset_action_desc, 0, NormalActionCard.class);
-    private final static ActionInfo POINT_TO_TOUCH_INFO = new ActionInfo(ActionType.POINT_TO_TOUCH, PointToTouchAction.class, R.drawable.icon_gesture, R.string.point_to_touch_action, R.string.point_to_touch_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo POINT_TO_TOUCH_INFO = new ActionInfo(ActionType.POINT_TO_TOUCH, PointToTouchAction.class, R.drawable.icon_gesture, R.string.point_to_touch_action, R.string.point_to_touch_action_desc, 0, DynamicPinsActionCard.class);
     private final static ActionInfo POINTS_TO_TOUCH_INFO = new ActionInfo(ActionType.POINTS_TO_TOUCH, PointsToTouchAction.class, R.drawable.icon_gesture, R.string.points_to_touch_action, R.string.points_to_touch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo TOUCH_INFO = new ActionInfo(ActionType.TOUCH, TouchAction.class, R.drawable.icon_gesture, R.string.touch_action, R.string.touch_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo TOUCH_POINT_INFO = new ActionInfo(ActionType.TOUCH_POINT, TouchPointAction.class, R.drawable.icon_touch_app, R.string.touch_point_action, R.string.touch_point_action_desc, 0, NormalActionCard.class);

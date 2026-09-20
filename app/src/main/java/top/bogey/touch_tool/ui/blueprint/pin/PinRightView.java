@@ -15,20 +15,15 @@ import top.bogey.touch_tool.databinding.PinRightBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 
 @SuppressLint("ViewConstructor")
-public class PinRightView extends PinView implements PinDragAble {
+public class PinRightView extends PinView {
     private final PinRightBinding binding;
 
     public PinRightView(@NonNull Context context, ActionCard card, Pin pin) {
-        this(context, card, pin, null);
-    }
-
-    public PinRightView(@NonNull Context context, ActionCard card, Pin pin, OnStartDragListener listener) {
         super(context, card, pin, false);
 
         binding = PinRightBinding.inflate(LayoutInflater.from(context), this, true);
         // 输出针脚不需要UI，除非是常显针脚
         binding.pinBox.setVisibility(pin instanceof AlwaysShowPin ? VISIBLE : GONE);
-        initDragView(binding.dragButton, this, listener);
 
         init();
     }
@@ -41,6 +36,11 @@ public class PinRightView extends PinView implements PinDragAble {
     @Override
     public TextView getTitleView() {
         return binding.title;
+    }
+
+    @Override
+    public Button getDragButton() {
+        return binding.dragButton;
     }
 
     @Override

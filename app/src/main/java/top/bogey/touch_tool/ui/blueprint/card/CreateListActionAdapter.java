@@ -16,28 +16,20 @@ import top.bogey.touch_tool.ui.blueprint.pin.PinView;
 import top.bogey.touch_tool.utils.ui.DragViewHolderHelper;
 import top.bogey.touch_tool.utils.ui.IDragAbleRecycleViewAdapter;
 
-// 列表、字典的输入项列表，按住针脚上的拖动柄可以调换顺序
+// 列表、字典的输入项列表，长按可以调换顺序
 // 列表每行是一个针脚，字典每行是键值两个针脚，拖动时整行一起移动
 public class CreateListActionAdapter extends RecyclerView.Adapter<CreateListActionAdapter.ViewHolder> implements IDragAbleRecycleViewAdapter {
     private final List<List<PinView>> rows = new ArrayList<>();
     private final ActionCard card;
     private final ItemTouchHelper touchHelper;
-    private RecyclerView recyclerView;
 
     public CreateListActionAdapter(ActionCard card) {
         this.card = card;
-        // 拖动只由针脚上的拖动柄触发，关闭长按拖动
-        DragViewHolderHelper helper = new DragViewHolderHelper(DragViewHolderHelper.VERTICAL, this) {
-            @Override
-            public boolean isLongPressDragEnabled() {
-                return false;
-            }
-        };
-        touchHelper = new ItemTouchHelper(helper);
+        // 长按整行拖动，拖动柄只作为可拖动位置的视觉提示
+        touchHelper = new ItemTouchHelper(new DragViewHolderHelper(DragViewHolderHelper.VERTICAL, this));
     }
 
     public void attachToRecyclerView(RecyclerView recyclerView) {
-        this.recyclerView = recyclerView;
         recyclerView.setAdapter(this);
         touchHelper.attachToRecyclerView(recyclerView);
     }
@@ -86,9 +78,9 @@ public class CreateListActionAdapter extends RecyclerView.Adapter<CreateListActi
         return pinView;
     }
 
-    // 输入项都是带拖动柄的左侧针脚
+    // 输入项都是左侧针脚
     private PinView createPinView(Pin pin) {
-        return new PinLeftView(card.getContext(), card, pin, this::startDrag);
+        return new PinLeftView(card.getContext(), card, pin);
     }
 
     public void removePin(Pin pin) {
@@ -108,15 +100,6 @@ public class CreateListActionAdapter extends RecyclerView.Adapter<CreateListActi
                 }
             }
         }
-    }
-
-    // 按住拖动柄时才开始拖动排序
-    private void startDrag(PinView pinView) {
-        if (recyclerView == null) return;
-        // 针脚被放在 itemView 里，由 RecyclerView 沿父链反查它所在的 ViewHolder
-        RecyclerView.ViewHolder holder = recyclerView.findContainingViewHolder(pinView);
-        if (holder == null) return;
-        touchHelper.startDrag(holder);
     }
 
     @Override

@@ -30,7 +30,8 @@ import top.bogey.touch_tool.utils.float_window_manager.FloatWindow;
 
 public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
     private final transient Pin inPin = new Pin(new PinExecute(), R.string.pin_execute);
-    private final transient Pin outPin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
+    // 默认的首个分支针脚，和动态添加的分支一样可以移除
+    private final transient Pin outPin = new Pin(new PinIconExecute(), R.string.pin_execute, true, true);
     private final static Pin morePin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
 
 
@@ -41,7 +42,8 @@ public class ChoiceExecuteAction extends Action implements DynamicPinsAction {
     private final transient Pin gravityPin = new PosShowablePin(new PinSingleSelect(R.array.anchor, 4), R.string.screen_anchor, false, false, true);
     private final transient Pin posPin = new PosShowablePin(new PinPoint(), R.string.screen_anchor_pos, false, false, true);
 
-    private final transient Pin secondPin = new Pin(new PinIconExecute(), R.string.pin_execute, true);
+    // 默认的第二个分支针脚，同样可以移除
+    private final transient Pin secondPin = new Pin(new PinIconExecute(), R.string.pin_execute, true, true);
     private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_execute, true);
     private final transient Pin defaultPin = new Pin(new PinExecute(), R.string.choice_action_default, true);
 

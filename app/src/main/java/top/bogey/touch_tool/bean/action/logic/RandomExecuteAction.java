@@ -10,7 +10,6 @@ import top.bogey.touch_tool.R;
 import top.bogey.touch_tool.bean.action.Action;
 import top.bogey.touch_tool.bean.action.ActionType;
 import top.bogey.touch_tool.bean.action.parent.DynamicPinsAction;
-import top.bogey.touch_tool.bean.action.parent.ExecuteAction;
 import top.bogey.touch_tool.bean.pin.Pin;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinAdd;
 import top.bogey.touch_tool.bean.pin.pin_objects.PinBoolean;
@@ -20,13 +19,16 @@ import top.bogey.touch_tool.bean.pin.pin_objects.pin_number.PinNumber;
 import top.bogey.touch_tool.bean.pin.special_pin.AlwaysShowPin;
 import top.bogey.touch_tool.service.TaskRunnable;
 
-public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAction {
+public class RandomExecuteAction extends Action implements DynamicPinsAction {
     private final static Pin morePin = new Pin(new PinExecute(), R.string.pin_execute, true);
 
+    private final transient Pin inPin = new Pin(new PinExecute(), R.string.pin_execute);
     private final transient Pin timesPin = new Pin(new PinInteger(1), R.string.random_action_times);
     private final transient Pin allowRepeatPin = new Pin(new PinBoolean(false), R.string.random_action_allow_repeat);
 
-    private final transient Pin secondPin = new Pin(new PinExecute(), R.string.pin_execute, true);
+    // 默认的前两个分支针脚，和动态添加的分支一样可以移除
+    private final transient Pin outPin = new Pin(new PinExecute(), R.string.pin_execute, true, true);
+    private final transient Pin secondPin = new Pin(new PinExecute(), R.string.pin_execute, true, true);
     private final transient Pin addPin = new AlwaysShowPin(new PinAdd(morePin), R.string.pin_add_execute, true);
     private final transient Pin completePin = new Pin(new PinExecute(), R.string.random_action_complete, true);
 
@@ -34,14 +36,19 @@ public class RandomExecuteAction extends ExecuteAction implements DynamicPinsAct
 
     public RandomExecuteAction() {
         super(ActionType.RANDOM_LOGIC);
-        addPins(timesPin, allowRepeatPin, secondPin, addPin, completePin);
+        addPins(inPin, outPin, timesPin, allowRepeatPin, secondPin, addPin, completePin);
     }
 
     public RandomExecuteAction(JsonObject jsonObject) {
         super(jsonObject);
-        reAddPins(timesPin, allowRepeatPin, secondPin);
+        reAddPins(inPin, outPin, timesPin, allowRepeatPin, secondPin);
         reAddPins(morePin);
         reAddPins(addPin, completePin);
+    }
+
+    @Override
+    public void calculate(TaskRunnable runnable, Pin pin) {
+
     }
 
     @Override

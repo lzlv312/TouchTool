@@ -14,18 +14,13 @@ import top.bogey.touch_tool.databinding.PinBottomBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 
 @SuppressLint("ViewConstructor")
-public class PinBottomView extends PinView implements PinDragAble {
+public class PinBottomView extends PinView {
     private final PinBottomBinding binding;
 
     public PinBottomView(@NonNull Context context, ActionCard card, Pin pin) {
-        this(context, card, pin, null);
-    }
-
-    public PinBottomView(@NonNull Context context, ActionCard card, Pin pin, OnStartDragListener listener) {
         super(context, card, pin, false);
 
         binding = PinBottomBinding.inflate(LayoutInflater.from(context), this, true);
-        initDragView(binding.dragButton, this, listener);
         init();
     }
 
@@ -37,6 +32,11 @@ public class PinBottomView extends PinView implements PinDragAble {
     @Override
     public TextView getTitleView() {
         return binding.title;
+    }
+
+    @Override
+    public Button getDragButton() {
+        return binding.dragButton;
     }
 
     @Override
