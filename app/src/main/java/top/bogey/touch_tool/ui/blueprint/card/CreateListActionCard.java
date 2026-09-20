@@ -55,8 +55,8 @@ public class CreateListActionCard extends ActionCard implements IDynamicPinCard 
     public void init() {
         binding = CardCreateListBinding.inflate(LayoutInflater.from(getContext()), this, true);
 
-        // 列表的输入项可以拖动调换顺序
-        if (action instanceof MakeListAction) {
+        // 列表、字典的输入项可以拖动调换顺序
+        if (action instanceof MakeListAction || action instanceof MakeMapAction) {
             pinAdapter = new CreateListActionAdapter(this);
             pinAdapter.attachToRecyclerView(binding.inPinBox);
         }
@@ -188,7 +188,9 @@ public class CreateListActionCard extends ActionCard implements IDynamicPinCard 
     public void addPinView(Pin pin, int offset) {
         PinView pinView;
         if (isListItem(pin)) {
-            pinView = pinAdapter.addPin(pin);
+            // 字典的值针脚要和前面的键针脚同一行，其余输入项各占一行
+            boolean sameRow = action instanceof MakeMapAction makeMapAction && makeMapAction.getDynamicValueTypePins().contains(pin);
+            pinView = sameRow ? pinAdapter.addPinToLast(pin) : pinAdapter.addPin(pin);
         } else if (pin.isOut()) {
             if (pin.isVertical()) {
                 pinView = new PinBottomView(getContext(), this, pin);
