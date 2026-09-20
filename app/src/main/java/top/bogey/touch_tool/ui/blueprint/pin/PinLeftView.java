@@ -14,13 +14,24 @@ import top.bogey.touch_tool.databinding.PinLeftBinding;
 import top.bogey.touch_tool.ui.blueprint.card.ActionCard;
 
 @SuppressLint("ViewConstructor")
-public class PinLeftView extends PinView {
+public class PinLeftView extends PinView implements PinDragAble {
     private final PinLeftBinding binding;
 
     public PinLeftView(@NonNull Context context, ActionCard card, Pin pin) {
+        this(context, card, pin, null);
+    }
+
+    public PinLeftView(@NonNull Context context, ActionCard card, Pin pin, OnStartDragListener listener) {
         super(context, card, pin, false);
         binding = PinLeftBinding.inflate(LayoutInflater.from(context), this, true);
+        initDragView(binding.dragButton, this, listener);
         init();
+    }
+
+    @Override
+    public void refreshPin() {
+        super.refreshPin();
+        binding.pinBox.setVisibility(pin.isLinked() ? GONE : VISIBLE);
     }
 
     @Override
@@ -46,11 +57,5 @@ public class PinLeftView extends PinView {
     @Override
     public Button getCopyAndPasteButton() {
         return binding.cpButton;
-    }
-
-    @Override
-    public void refreshPin() {
-        super.refreshPin();
-        binding.pinBox.setVisibility(pin.isLinked() ? GONE : VISIBLE);
     }
 }

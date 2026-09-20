@@ -50,7 +50,7 @@ public class PointPickerPreview extends BasePicker<Point> {
         binding.backButton.setOnClickListener(v -> dismiss());
 
         binding.saveButton.setOnClickListener(v -> {
-            callback.onResult(point);
+            if (callback != null) callback.onResult(point);
             dismiss();
         });
 

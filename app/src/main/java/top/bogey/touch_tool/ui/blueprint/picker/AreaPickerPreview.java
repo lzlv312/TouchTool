@@ -119,7 +119,7 @@ public class AreaPickerPreview extends BasePicker<Rect> {
         binding.backButton.setOnClickListener(v -> dismiss());
 
         binding.saveButton.setOnClickListener(v -> {
-            callback.onResult(area);
+            if (callback != null) callback.onResult(area);
             dismiss();
         });
 

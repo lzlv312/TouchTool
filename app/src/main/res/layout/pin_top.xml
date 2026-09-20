@@ -35,4 +35,10 @@
         app:icon="@drawable/icon_remove"
         app:iconTint="?attr/colorOutline" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dragButton"
+        style="?attr/iconButton"
+        android:visibility="gone"
+        app:icon="@drawable/icon_drag_pan" />
+
 </LinearLayout>
