@@ -23,7 +23,7 @@ import top.bogey.touch_tool.utils.ui.DragViewHolderHelper;
 import top.bogey.touch_tool.utils.ui.IDragAbleRecycleViewAdapter;
 
 // 一个方位上的全部针脚，界面顺序与动作的针脚列表保持一致
-// 动态添加的针脚按住拖动柄可以调换顺序，默认针脚没有拖动柄、位置固定
+// 动态添加的针脚长按可以调换顺序，默认针脚没有拖动柄、位置固定
 // 一次添加多个针脚时（如点加时长）同组的针脚并作一行，拖动时整行一起移动
 public class DynamicPinsActionAdapter extends RecyclerView.Adapter<DynamicPinsActionAdapter.ViewHolder> implements IDragAbleRecycleViewAdapter {
     private final List<List<PinView>> rows = new ArrayList<>();
