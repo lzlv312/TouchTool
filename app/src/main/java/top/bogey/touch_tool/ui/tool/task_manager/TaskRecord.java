@@ -57,7 +57,9 @@ public record TaskRecord(Set<Task> tasks, Set<Variable> variables) {
         }
 
         for (Task childTask : task.getTasks()) {
-            variables.addAll(childTask.getVariableReferences());
+            // 这里必须递归 TaskRecord 自己的版本：Task.getVariableReferences() 走的是 VariableSaver 全局表，
+            // 而导入时文件里的变量还没入库，子任务引用的变量会全部查不到而丢失
+            variables.addAll(getVariableReferences(childTask));
         }
         return variables;
     }
