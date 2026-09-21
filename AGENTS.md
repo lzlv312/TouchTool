@@ -1,6 +1,6 @@
 # AGENTS.md
 
-本文件记录本项目的开发约定与关键改造记录，供后续开发参考。
+本文件记录本项目的开发约定与注意事项，供后续开发参考。
 
 ## 项目概览
 
@@ -15,111 +15,14 @@
 3. 提交保持未推送状态，除非明确要求推送。
 4. 真机行为（手势、布局观感）无法用构建验证，涉及这类改动需说明待验证项。
 
-## 针脚卡片开发约定
+## 注意事项
 
-### 针脚顺序与界面顺序必须一致
+书写规则：每条只陈述**当前事实**——现在是什么样、有什么约束、有什么已知隐患，据此可判断能不能做、该怎么做。不写成改造记录：不写改动动机、提交号、变更前后对比与待验证清单；已由 `## 约定` 覆盖的事项不重复。
 
-动作的 `pins` 列表顺序即运行期取值顺序。任何拖动排序都必须**回写 `action.getPins()`**，否则界面与取值顺序脱节。
+- **针脚卡片**：`pins` 顺序即运行期取值顺序，任何拖动排序都必须回写 `action.getPins()`，且一个方位只能有一个容器；拖动一律用长按整行（柄只是视觉提示），不可拖动的行由 `getMovementFlags()` 返回 `(0, 0)` 从机制上排除；针脚视图的 `pins` 声明顺序不能变（`reAddPins` 按类顺序匹配，变了老任务丢针脚）；把默认针脚改成可移除时必须同步检查取值逻辑——不能硬编码 `pins.add(firstPin)`，要按标志针脚界定范围，被固定针脚（如 `resultPin`）隔成两段的不适合改；删 `android:visibility="gone"` 前确认它不是该控件的唯一隐藏机制。
 
-- 一个方位**只能有一个容器**。用两个容器分别装默认针脚和动态针脚，会导致动态针脚在 `pins` 里的位置与界面顺序无法对应。
-- 参与排序的针脚在 `pins` 里**可能不连续**（例如 `ChoiceExecuteAction`）。做法是：记下它们原本占用的下标槽位，排序后按新顺序**写回原槽位**，默认针脚不动。
-- 成组添加的针脚（如 `MakeMapAction` 一次加键值两条）必须整组一起移动，否则会打乱配对与运行期按下标取值的逻辑。
+- **动态针脚动作的卡片**：开关、选择、顺序、随机、并行、数值相加、数值相乘、文本拼接、或、与、短路与、短路或、位置转手势这 13 项由 `DynamicPinsActionCard` 承载，四个方位各一个 RecyclerView，一次添加多条针脚的动作同组并作一行拖动；`SwitchAction` 与数值相减、相除、取模仍用 `NormalActionCard`；数值加/乘与文本拼接的动态针脚被 `resultPin` 隔成两段，其默认针脚不可移除。
 
-### 拖动触发方式
+- **导入任务**：导入对话框有「导入副本」开关，默认关闭。关闭时按任务 id 写入（本地同 id 任务会被覆盖）；开启时本地任务不变，导入任务以新 id 落库，标题冲突依次取 `原名_复制`、`原名_复制_2`。`TaskRecord.duplicate()` 换根任务 id 并递归改写副本内的 `PinTaskString`；变量 id 不变，也不覆盖本地已有的全局变量；`ExportTaskDialog` 隐藏该开关。该流程要求先调 `getTaskRecord()` 再 `duplicate()`（前者就地做 `cleanInvalidTag()`）。`Identity` 以 uid+id 做 hash，对象进入 Set/Map 后不能再 `setId`。
 
-- **长按整行拖动**是当前采用的方案（与 `CustomActionCardAdapter` 一致），拖动柄只是给用户看的**视觉提示**，不注册任何事件。
-- 不许用长按之外的自定义监听器机制；曾短暂引入 `PinDragAble` 接口 + `OnStartDragListener`，已移除。
-- 不可拖动的行要通过 `getMovementFlags()` 返回 `(0, 0)` 从机制上排除，不能只在 `swap` 里判断。
-- 拖动柄的显隐由 `PinView.init()` 统一控制：`card instanceof IDynamicPinCard && pin.isDynamic()`，与移除按钮的判断保持一致。
-
-### 针脚放进 RecyclerView 的注意点
-
-- 长按拖动开启后，RecyclerView 会抢走针脚连线的触摸事件。需要 `IDynamicPinCard.suppressLayout()` 在按下时抑制列表滚动——该逻辑已上移到 `PinView.onTouchEvent`，普通针脚也具备。
-- itemView 若两个方向都是 `WRAP_CONTENT`，容器内没有余量，`gravity` 与 `layout_gravity` 都不会生效。需要在交叉轴方向撑满才能做顶部/底部、左侧/右侧对齐。
-
-### 默认针脚可移除的前提
-
-把默认针脚改成可移除（`new Pin(..., false, true)`）时，必须同步检查取值逻辑：
-
-- 取值**不能硬编码** `pins.add(firstPin)`——针脚被删除后仍会被读取到陈旧值。应按标志针脚界定范围（`start` 标志 + `addPin`），自然跳过已删除的针脚。
-- 若动态针脚被某个固定针脚（如 `resultPin`）**隔成两段**，则默认针脚不适合改成可移除，硬改会破坏原有的分段取值写法。
-
-## 改造记录：动态针脚动作改用独立卡片
-
-提交 `3408a72`（22 个文件，+717 / -161）。
-
-### 背景
-
-原先大量带动态针脚的动作共用 `NormalActionCard`，针脚不可拖动排序。改造分两步：先给列表、字典做了专用卡片（`1d77530`、`f5e9115`），再新建通用卡片承载其余动作。
-
-### 新卡片
-
-- `DynamicPinsActionCard` + `DynamicPinsActionAdapter` + `card_dynamic_pins.xml`。
-- 按上、下、左、右**四个方位各一个 RecyclerView**，每个方位只有一个容器，保证界面顺序与 `pins` 顺序一致。
-- `getGroupSize()` 读取 `PinAdd.getPins().size()`：一次添加多条针脚的动作，同组并作一行一起拖。
-- 拖动排序只作用于动态针脚，默认针脚位置固定。
-
-### 迁入该卡片的动作
-
-`ActionInfo` 中 13 项改为 `DynamicPinsActionCard.class`：开关、选择、顺序、随机、并行、数值相加、数值相乘、文本拼接、或、与、短路与、短路或、位置转手势（数值相减、相除、取模不在其中，仍用 `NormalActionCard`）。
-
-配套的动作改动：
-
-- `SequenceExecuteAction`、`RandomExecuteAction`、`ParallelExecuteAction` 由继承 `ExecuteAction` 改为继承 `Action`，各自声明 `inPin` / `outPin`（`dynamic = true`），并补一个空的 `calculate()`（与 `SwitchAction` 的写法一致）。默认分支针脚改为可移除，因此放开竖直方向拖动。
-- `ChoiceExecuteAction` 的 `outPin`、`secondPin` 改为可移除。**`SwitchAction` 有意保持不变。**
-- 或、与、短路与、短路或四个布尔动作的默认条件针脚改为可移除；`getDynamicPins()` 改为按 `addPin` 界定范围。这四个动作的空集语义天然成立：或返回 false、与返回 true。
-- **数值加/乘、文本拼接放弃改造**：它们的动态针脚被 `resultPin` 隔成两段，默认针脚不适合改成可移除。
-
-### 针脚视图整理
-
-- 拖动能力（`initDragView`、`OnStartDragListener`）曾放在独立接口 `PinDragAble`，**该接口已删除**，相关能力并入 `PinView`，自定义针脚也能直接调用。
-- 按住抑制滚动逻辑从 `PinCustomView` 上移到 `PinView`。
-- 上下方位的 `pinSlotBox` 改为 `layout_gravity="center_horizontal"`，与标题、针脚控件对齐在同一轴线上；去掉原先的 `marginStart="15dp"`。槽位位置由 `PinView.getSlotPosInLayout()` 实时读取，连线的接点会自动跟随。
-- 竖直针脚的移除按钮与拖动柄合并为一行（`MaterialButtonGroup`）。
-
-### 改动顺序上的坑
-
-1. 针脚视图的 `pins` 声明顺序不能变。`reAddPins(...)` 按类**顺序**匹配，顺序一变老任务的针脚会丢失。
-2. 先建视图、再按动作针脚顺序重建列表：`addPinView` 里 `getPinView(id)` 需要视图已存在。
-3. 移除 `android:visibility="gone"` 时要注意：它可能是该控件的**唯一隐藏机制**，删掉又没有代码接管，控件就会常显。拖动柄就踩过这个坑。
-4. 在共享父类上改默认针脚要确认继承范围：`NumberAction` 同时是除法、取模、减法的父类，只应在 `DynamicNumberAction` 上改。
-
-### 待真机验证
-
-构建只能证明编译通过。以下需真机确认：长按拖动排序、针脚连线不被抢手势、默认针脚拖不动、仅动态针脚显示拖动柄、各动作删除针脚后的计算结果、卡片在各方位的布局观感。
-
-## 改造记录：导入任务支持导入副本
-
-### 背景
-
-导入任务原先一律按任务 id 写入，本地已有同 id 任务会被静默覆盖。想「只看一下」或「拿别人的任务做参考」时没有退路。现在导入对话框多了「导入副本」开关，默认关闭（行为与原先一致），打开后本地任务完全不被动，导入的任务作为新任务落入。
-
-### 关键事实：`Task.newCopy()` 只换根任务的 id
-
-`Task.newCopy()`（`bean/task/Task.java`）会换根任务 id，但内部走的是 `copy()`：
-
-- `ActionManager.newCopy()` 调 `action.copy()`，**保留 action 与 pin 的 id、links** —— 所以副本蓝图连线是完整的，不需要额外重建。
-- `TaskManager.setNewParent` / `VariableManager.setNewParent` 用 `copy()`，子任务与局部变量**保留 id**。这是「复制任务」按钮的既有语义，副本沿用。
-
-因此覆盖风险只集中在**根任务 id**：`ExecuteTaskAction`、`StopTaskAction`、`IsTaskRunningAction` 的 `PinTaskString` 存的是任务 id，`ExecuteTaskAction.getTask()` 最终走 `TaskSaver.upFindTask` 全局查找。副本不重写这些值就会指回被保护的原任务（自引用直接串台）。
-
-### 改动
-
-- `TaskRecord.duplicate()`：对所有根任务 `newCopy()`，建 `原 id -> 新 id` 映射，再递归改写副本内所有 `PinTaskString` 针脚值（按类型识别，不区分具体动作类，`ALL_TASK_ID` 的空值自然跳过）。
-- `ImportTaskDialog`：开关打开时先 `duplicate()` 再写入；标题冲突时依次尝试 `原名_复制`、`原名_复制_2`（复用既有 `R.string.copy_title`）。**必须先 `getTaskRecord()` 再 `duplicate()`** —— 前者会就地做 `cleanInvalidTag()`，顺序反了副本会漏掉标签清洗。
-- `ImportTaskDialogAdapter.setImportCopy()`：只负责把条目下方的提示从「将覆盖本地任务」换成「将导入为副本」。
-- `ExportTaskDialog` 复用同一布局，需同步 `binding.importCopy.setVisibility(View.GONE)`。
-
-### 明确的设计取舍
-
-- **变量不换 id。** 变量 id 是 UUID，「同 id 即同一个全局变量」，换 id 只会凭空多出一个重复的全局变量。但副本模式**不覆盖本地已存在的变量**（`variableSaver.getVar(id) != null` 就跳过），否则「覆盖」只是从任务挪到了变量。
-- **不做「仅冲突任务改名、不冲突保持原 id」的分支**：语义混杂，收益只体现在不可见的 id 上，统一走「全部新 id」。
-- **不记忆开关状态**，不做每任务粒度选择。
-
-### 坑
-
-`Identity.equals/hashCode` 用 uid+id（`bean/base/Identity.java`），**绝不能在对象已进入 HashSet/Map 之后再 `setId`**，否则集合去重失效。本方案只对 `newCopy()` 返回的新对象插入集合，不触发；`setTitle` 不参与 hash，改名安全。
-
-### 待真机验证
-
-构建只能证明编译通过。以下需真机确认：开关关闭时导入老文件行为与升级前一致；开关打开连续导入两次，本地原任务内容/标签/启用状态不变而新增 `_复制`、`_复制_2`；副本蓝图连线完整且执行任务/停止任务/判断任务是否运行指向副本；被引用的全局变量未被改写；窄屏大字体下「导入分类 + 导入副本 + 全选」同排是否挤压。
+- **NodePicker**：选中结果没有快照回退——`roots` 由 `NodeInfo.getWindows()` 现场抓取，打开前已被移除的控件找不回（`findNode` 返回 null），只有手动导入 .ttl 才走离线树；打开后才移除的反而选得到，因为整棵树在构造时已物化冻结。已知隐患：`getChildCount()` 实时而 `getChild(i)` 优先返回缓存，会跳过末尾节点或错位返回兄弟节点；`PinNode.nodeInfo` 是 `transient`，选中结果不参与序列化。
