@@ -87,3 +87,39 @@
 ### 待真机验证
 
 构建只能证明编译通过。以下需真机确认：长按拖动排序、针脚连线不被抢手势、默认针脚拖不动、仅动态针脚显示拖动柄、各动作删除针脚后的计算结果、卡片在各方位的布局观感。
+
+## 改造记录：导入任务支持导入副本
+
+### 背景
+
+导入任务原先一律按任务 id 写入，本地已有同 id 任务会被静默覆盖。想「只看一下」或「拿别人的任务做参考」时没有退路。现在导入对话框多了「导入副本」开关，默认关闭（行为与原先一致），打开后本地任务完全不被动，导入的任务作为新任务落入。
+
+### 关键事实：`Task.newCopy()` 只换根任务的 id
+
+`Task.newCopy()`（`bean/task/Task.java`）会换根任务 id，但内部走的是 `copy()`：
+
+- `ActionManager.newCopy()` 调 `action.copy()`，**保留 action 与 pin 的 id、links** —— 所以副本蓝图连线是完整的，不需要额外重建。
+- `TaskManager.setNewParent` / `VariableManager.setNewParent` 用 `copy()`，子任务与局部变量**保留 id**。这是「复制任务」按钮的既有语义，副本沿用。
+
+因此覆盖风险只集中在**根任务 id**：`ExecuteTaskAction`、`StopTaskAction`、`IsTaskRunningAction` 的 `PinTaskString` 存的是任务 id，`ExecuteTaskAction.getTask()` 最终走 `TaskSaver.upFindTask` 全局查找。副本不重写这些值就会指回被保护的原任务（自引用直接串台）。
+
+### 改动
+
+- `TaskRecord.duplicate()`：对所有根任务 `newCopy()`，建 `原 id -> 新 id` 映射，再递归改写副本内所有 `PinTaskString` 针脚值（按类型识别，不区分具体动作类，`ALL_TASK_ID` 的空值自然跳过）。
+- `ImportTaskDialog`：开关打开时先 `duplicate()` 再写入；标题冲突时依次尝试 `原名_复制`、`原名_复制_2`（复用既有 `R.string.copy_title`）。**必须先 `getTaskRecord()` 再 `duplicate()`** —— 前者会就地做 `cleanInvalidTag()`，顺序反了副本会漏掉标签清洗。
+- `ImportTaskDialogAdapter.setImportCopy()`：只负责把条目下方的提示从「将覆盖本地任务」换成「将导入为副本」。
+- `ExportTaskDialog` 复用同一布局，需同步 `binding.importCopy.setVisibility(View.GONE)`。
+
+### 明确的设计取舍
+
+- **变量不换 id。** 变量 id 是 UUID，「同 id 即同一个全局变量」，换 id 只会凭空多出一个重复的全局变量。但副本模式**不覆盖本地已存在的变量**（`variableSaver.getVar(id) != null` 就跳过），否则「覆盖」只是从任务挪到了变量。
+- **不做「仅冲突任务改名、不冲突保持原 id」的分支**：语义混杂，收益只体现在不可见的 id 上，统一走「全部新 id」。
+- **不记忆开关状态**，不做每任务粒度选择。
+
+### 坑
+
+`Identity.equals/hashCode` 用 uid+id（`bean/base/Identity.java`），**绝不能在对象已进入 HashSet/Map 之后再 `setId`**，否则集合去重失效。本方案只对 `newCopy()` 返回的新对象插入集合，不触发；`setTitle` 不参与 hash，改名安全。
+
+### 待真机验证
+
+构建只能证明编译通过。以下需真机确认：开关关闭时导入老文件行为与升级前一致；开关打开连续导入两次，本地原任务内容/标签/启用状态不变而新增 `_复制`、`_复制_2`；副本蓝图连线完整且执行任务/停止任务/判断任务是否运行指向副本；被引用的全局变量未被改写；窄屏大字体下「导入分类 + 导入副本 + 全选」同排是否挤压。

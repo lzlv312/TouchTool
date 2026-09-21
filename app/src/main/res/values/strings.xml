@@ -72,8 +72,10 @@
 
     <string name="task_import">导入任务</string>
     <string name="task_import_tag">导入分类</string>
+    <string name="task_import_copy">导入副本</string>
     <string name="task_import_desc">从你选择的文件中选择需要导入的任务配置和通用自定义卡片</string>
     <string name="task_import_error_tips">将覆盖本地任务“%s”</string>
+    <string name="task_import_copy_tips">本地已存在“%s”，将导入为副本</string>
 
     <string name="task_export">导出任务</string>
     <string name="task_export_desc">选择需要导出的任务配置和通用自定义卡片到你选择的文件夹中</string>
