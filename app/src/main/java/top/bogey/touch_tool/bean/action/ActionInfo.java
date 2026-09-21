@@ -184,6 +184,7 @@ import top.bogey.touch_tool.bean.action.task.ExecuteTaskAction;
 import top.bogey.touch_tool.bean.action.task.GetAllRunningTaskAction;
 import top.bogey.touch_tool.bean.action.task.IsTaskRunningAction;
 import top.bogey.touch_tool.bean.action.task.StopTaskAction;
+import top.bogey.touch_tool.bean.action.task.SwitchTaskAction;
 import top.bogey.touch_tool.bean.action.variable.GetOrSetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.GetVariableAction;
 import top.bogey.touch_tool.bean.action.variable.SetVariableAction;
@@ -217,6 +218,7 @@ public class ActionInfo {
     private final static ActionInfo CUSTOM_END_INFO = new ActionInfo(ActionType.CUSTOM_END, CustomEndAction.class, R.drawable.icon_input, R.string.custom_end_action, R.string.custom_end_action_desc, 0, CustomActionCard.class);
     private final static ActionInfo EXECUTE_TASK_INFO = new ActionInfo(ActionType.EXECUTE_TASK, ExecuteTaskAction.class, R.drawable.icon_assignment, R.string.execute_task_action, 0, 0, ExecuteCustomActionCard.class);
     private final static ActionInfo STOP_TASK_INFO = new ActionInfo(ActionType.STOP_TASK, StopTaskAction.class, R.drawable.icon_stop, R.string.stop_task_action, R.string.stop_task_action_desc, 0, NormalActionCard.class);
+    private final static ActionInfo SWITCH_TASK_INFO = new ActionInfo(ActionType.SWITCH_TASK, SwitchTaskAction.class, R.drawable.icon_visibility, R.string.switch_task_action, R.string.switch_task_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo IS_TASK_RUNNING_INFO = new ActionInfo(ActionType.IS_TASK_RUNNING, IsTaskRunningAction.class, R.drawable.icon_assignment, R.string.is_task_running_action, R.string.is_task_running_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_ALL_RUNNING_TASK_INFO = new ActionInfo(ActionType.GET_ALL_RUNNING_TASK, GetAllRunningTaskAction.class, R.drawable.icon_assignment, R.string.get_all_running_task_action, R.string.get_all_running_task_action_desc, 0, NormalActionCard.class);
     private final static ActionInfo GET_VARIABLE_INFO = new ActionInfo(ActionType.GET_VARIABLE, GetVariableAction.class, R.drawable.icon_upload, R.string.get_value_action, 0, 0, NormalActionCard.class);
@@ -450,6 +452,7 @@ public class ActionInfo {
             case CUSTOM_END -> CUSTOM_END_INFO;
             case EXECUTE_TASK -> EXECUTE_TASK_INFO;
             case STOP_TASK -> STOP_TASK_INFO;
+            case SWITCH_TASK -> SWITCH_TASK_INFO;
             case IS_TASK_RUNNING -> IS_TASK_RUNNING_INFO;
             case GET_ALL_RUNNING_TASK -> GET_ALL_RUNNING_TASK_INFO;
             case GET_VARIABLE -> GET_VARIABLE_INFO;
